@@ -1,3 +1,5 @@
+Giving Tree is a website that provides public access to grant giving opportunites.
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
