@@ -6,7 +6,7 @@ import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/styles';
 import Text from '../components/Text.js';
 import firebase from '../firebase.js';
-import Snack from '../components/Snack.js';
+import * as naughtyFirebase from 'firebase';
 import {
   CardElement,
   injectStripe
@@ -57,23 +57,33 @@ const useStyles = makeStyles(theme => ({
 function Stripe(props) {
   const classes = useStyles();
 
-  const db = firebase.firestore();
-
-  const [complete, setComplete] = React.useState(false);
-  const [amount, setAmount] = React.useState('');
-  const [grantName] = React.useState('Test Grant'); //React.useState(props.grantName);
-  const [given, setGiven] = React.useState('');
-  const [goal, setGoal] = React.useState('');
+  // TODO: will receive props describing grant
+  // Grant details received as props
   const [grantID] = React.useState('wJArP9RCeQY9vDvsfIA2') //React.useState(props.grantID);
 
+
+  // Record transaction state
+  const [complete, setComplete] = React.useState(false);
+  const [amount, setAmount] = React.useState('');
+
+  // Details about the grant we will get from the database
+  const [given, setGiven] = React.useState('');
+  const [goal, setGoal] = React.useState('');
+  const [grantName, setGrantName] = React.useState('');
+
+
+  // Initialize database and specific grant in database
+  const db = firebase.firestore();
   const docRef = db.collection('grants').doc(grantID);
 
 
   useEffect(() => {
+    // Load the grant details from the database
     docRef.onSnapshot((doc) => {
       if (doc.exists) {
         setGoal(doc.data().goal_amt);
         setGiven(doc.data().money_raised);
+        setGrantName(doc.data().title);
       } else {
         console.log('No such grant!');
       }
@@ -81,33 +91,28 @@ function Stripe(props) {
   });
 
   const submit = async (ev) => {
-    let { token } = await props.stripe.createToken({ name: 'Giving Tree Donor' });
-    let response = await fetch('/charge', {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain' },
-      body: token.id + ' amount: ' + (amount * 100) + ' description: ' + grantName,
-    });
-
-    if (response.ok) {
-      // docRef.update({
-      //   money_raised: firebase.firestore.FieldValue.increment(amount)
-      // });
-      db.runTransaction(function (transaction) {
-        // This code may get re-run multiple times if there are conflicts.
-        return transaction.get(docRef).then(function (doc) {
-          if (!doc.exists) {
-            throw new Error("Document does not exist!");
-          }
-
-          // Note: this could be done without a transaction by updating the population using FieldValue.increment()
-          var newMoneyRaised = doc.data().money_raised + Number.parseInt(amount);
-          transaction.update(docRef, { money_raised: newMoneyRaised });
-        });
-      }).then(function () {
-        setComplete(true);
-      }).catch(function (error) {
-        console.log("Transaction failed: ", error);
+    // Confirm payment amount is in bounds
+    if (Number.parseInt(amount) > 0 &&
+      !Number.parseInt(amount).isNaN &&
+      Number.parseInt(amount) < (goal - given)) {
+        
+      // Make the payment
+      let { token } = await props.stripe.createToken({ name: 'Giving Tree Donor' });
+      let response = await fetch('/charge', {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain' },
+        body: token.id + ' amount: ' + (amount * 100) + ' description: ' + grantName,
       });
+
+      if (response.ok) {
+        // Update the amount in firebase
+        docRef.update({
+          money_raised: naughtyFirebase.firestore.FieldValue.increment(Number.parseInt(amount))
+        }).then(function () {
+          // Record transaction complete
+          setComplete(true);
+        });
+      }
     }
   }
 
