@@ -1,8 +1,8 @@
-// https://stripe.com/docs/recipes/elements-react
+// TODO: will receive props describing grant
+// TODO: split up elements to make it look nicer
 
 import React, { useEffect } from 'react';
 import Container from '@material-ui/core/Container';
-import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/styles';
 import Text from '../components/Text.js';
 import firebase from '../firebase.js';
@@ -12,8 +12,6 @@ import {
   injectStripe
 } from 'react-stripe-elements';
 import Button from '@material-ui/core/Button';
-
-//const FieldValue = require('firebase-admin').firestore.FieldValue;
 
 const useStyles = makeStyles(theme => ({
   pageLayout: {
@@ -25,18 +23,8 @@ const useStyles = makeStyles(theme => ({
       marginLeft: 'auto',
       marginRight: 'auto',
     },
-    marginTop: theme.spacing(8),
+    marginTop: theme.spacing(4),
     marginBottom: theme.spacing(2),
-  },
-  paymentPaper: {
-    marginTop: theme.spacing(3),
-    marginBottom: theme.spacing(3),
-    padding: theme.spacing(2),
-    [theme.breakpoints.up(600 + theme.spacing(3) * 2)]: {
-      marginTop: theme.spacing(6),
-      marginBottom: theme.spacing(6),
-      padding: theme.spacing(3),
-    },
   },
   stripeElement: {
     display: 'block',
@@ -57,7 +45,6 @@ const useStyles = makeStyles(theme => ({
 function Stripe(props) {
   const classes = useStyles();
 
-  // TODO: will receive props describing grant
   // Grant details received as props
   const [grantID] = React.useState('wJArP9RCeQY9vDvsfIA2') //React.useState(props.grantID);
 
@@ -95,7 +82,7 @@ function Stripe(props) {
     if (Number.parseInt(amount) > 0 &&
       !Number.parseInt(amount).isNaN &&
       Number.parseInt(amount) < (goal - given)) {
-        
+
       // Make the payment
       let { token } = await props.stripe.createToken({ name: 'Giving Tree Donor' });
       let response = await fetch('/charge', {
@@ -120,28 +107,27 @@ function Stripe(props) {
   return (
     <Container className={classes.pageLayout}>
       <React.Fragment>
-        <Paper elevation={3} className={classes.paymentPaper}>
-          <Text type='card-heading' text={grantName} />
-          {complete ?
-            <Text type='card-subheading' text={'Thank you for your donation! Thanks to your gift of $' + amount + ', ' + grantName + ' is now only  $' + (goal - given) + ' from meeting its goal of $' + goal + '!'} />
-            :
-            <div>
-              <Text type='card-subheading' text={'So far, $' + given + ' has been raised out of $' + goal} />
-              <CardElement className={classes.stripeElement} />
-              <input
-                className={classes.stripeElement}
-                placeholder="Amount"
-                onInput={e => setAmount(e.target.value)} />
-              <Button
-                color="primary"
-                className={classes.button}
-                variant="contained"
-                onClick={submit}>
-                Donate
+        <Text type='card-heading' text={grantName} />
+        {complete ?
+          <Text type='card-subheading' text={'Thank you for your donation! Thanks to your gift of $' + amount + ', ' + grantName + ' is now only  $' + (goal - given) + ' from meeting its goal of $' + goal + '!'} />
+          :
+          <div>
+            <Text type='card-subheading' text={'So far, $' + given + ' has been raised out of $' + goal} />
+            <CardElement className={classes.stripeElement} />
+            <input
+              className={classes.stripeElement}
+              placeholder="Amount"
+              onInput={e => setAmount(e.target.value)} />
+            <Button
+              fullWidth
+              color="primary"
+              className={classes.button}
+              variant="contained"
+              onClick={submit}>
+              Donate
               </Button>
-            </div>
-          }
-        </Paper>
+          </div>
+        }
       </React.Fragment>
     </Container>
   );
