@@ -1,18 +1,21 @@
 // https://stripe.com/docs/recipes/elements-react
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/styles';
 import Text from '../components/Text.js';
+import firebase from '../firebase.js';
 import Snack from '../components/Snack.js';
 import {
   CardElement,
   injectStripe
 } from 'react-stripe-elements';
 import Button from '@material-ui/core/Button';
+
+//const FieldValue = require('firebase-admin').firestore.FieldValue;
 
 const useStyles = makeStyles(theme => ({
   pageLayout: {
@@ -56,9 +59,28 @@ const useStyles = makeStyles(theme => ({
 function Stripe(props) {
   const classes = useStyles();
 
+  const db = firebase.firestore();
+
   const [complete, setComplete] = React.useState(false);
   const [amount, setAmount] = React.useState('');
   const [description] = React.useState('sample description- replace with grant name later')
+  const [given, setGiven] = React.useState(0);
+  const [goal, setGoal] = React.useState(0);
+  const [grantID] = React.useState('wJArP9RCeQY9vDvsfIA2') //React.useState(props.grantID);
+
+  const docRef = db.collection('grants').doc(grantID);
+
+
+  useEffect(() => {
+    docRef.onSnapshot((doc) => {
+      if (doc.exists) {
+        setGoal(doc.data().goal_amt);
+        setGiven(doc.data().money_raised);
+      } else {
+        console.log('No such grant!');
+      }
+    })
+  });
 
   const submit = async (ev) => {
     let { token } = await props.stripe.createToken({ name: 'Giving Tree Donor' });
@@ -68,7 +90,12 @@ function Stripe(props) {
       body: token.id + ' amount: ' + (amount * 100) + ' description: ' + description,
     });
 
-    if (response.ok) setComplete(true);
+    if (response.ok) {
+      setComplete(true);
+      // docRef.update({
+      //   money_raised: firebase.firestore.FieldValue.increment(amount)
+      // });
+    }
   }
 
   return (
@@ -77,13 +104,14 @@ function Stripe(props) {
         <p>Payment Complete</p> :
         <React.Fragment>
           <Paper elevation={3} className={classes.paymentPaper}>
-            <Text type="card-heading" text="Make a Donation" />
+            <Text type='card-heading' text='Make a Donation' />
             <Typography
               component="h1"
               color="textSecondary"
               variant="subtitle1">
               Refer to <Link color="secondary" href="https://stripe.com/docs/testing" > Stripe testing information</Link> to try this out
             </Typography>
+            <Text type='card-subheading' text={'So far, $' + given + ' has been raised out of $' + goal} />
             <React.Fragment>
               <React.Fragment>
                 <CardElement className={classes.stripeElement} />

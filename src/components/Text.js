@@ -19,25 +19,6 @@ class Text extends React.Component {
   render() {
     return (
       <div>
-        {this.state.type === "heading" &&
-          <Typography
-            component="h1"
-            variant="h2"
-            align="center"
-            color="textPrimary"
-            gutterBottom>
-            {this.state.text}
-          </Typography>
-        }
-        {this.state.type === "subheading" &&
-          <Typography
-            variant="h5"
-            align="center"
-            color="textSecondary"
-            paragraph>
-            {this.state.text}
-          </Typography>
-        }
         {this.state.type === "card-heading" &&
           <Typography
             component="h1"
@@ -49,34 +30,10 @@ class Text extends React.Component {
           <Typography
             component="h1"
             color="textSecondary"
-            variant="h5">
+            variant="subtitle1">
             {this.state.text}
           </Typography>
         }
-        {this.state.type === "card-labels" &&
-          <Typography
-            color="textSecondary"
-            variant="caption">
-            {this.state.text}
-          </Typography>
-        }
-        {/* {this.state.type === "small-heading" &&
-          <Typography
-            variant="h6"
-            align="center"
-            gutterBottom>
-            {this.state.text}
-          </Typography>
-        }
-        {this.state.type === "small-subheading" &&
-          <Typography
-            variant="subtitle1"
-            align="center"
-            color="textSecondary"
-            component="p">
-            {this.state.text}
-          </Typography>
-        } */}
       </div>
     );
   }
