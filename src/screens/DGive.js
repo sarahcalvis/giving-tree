@@ -95,6 +95,24 @@ function Stripe(props) {
       // docRef.update({
       //   money_raised: firebase.firestore.FieldValue.increment(amount)
       // });
+      db.runTransaction(function (transaction) {
+        // This code may get re-run multiple times if there are conflicts.
+        return transaction.get(docRef).then(function (doc) {
+          if (!doc.exists) {
+            throw "Document does not exist!";
+          }
+
+          // Add one person to the city population.
+          // Note: this could be done without a transaction
+          //       by updating the population using FieldValue.increment()
+          var newMoneyRaised = doc.data().money_raised + Number.parseInt(amount);
+          transaction.update(docRef, { money_raised: newMoneyRaised });
+        });
+      }).then(function () {
+        console.log("Transaction successfully committed!");
+      }).catch(function (error) {
+        console.log("Transaction failed: ", error);
+      });
     }
   }
 
