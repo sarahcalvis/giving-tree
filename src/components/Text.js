@@ -29,7 +29,7 @@ export default function Text(props) {
       }
       {type === "progress-bold" &&
         <Typography
-          variant="body">
+          variant="subtitle1">
           <Box fontWeight="fontWeightBold">
             {text}
           </Box>
@@ -37,7 +37,7 @@ export default function Text(props) {
       }
       {type === "progress" &&
         <Typography
-          variant="body">
+          variant="subtitle1">
           {text}
         </Typography>
       }

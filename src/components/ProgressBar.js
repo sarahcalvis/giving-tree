@@ -34,11 +34,10 @@ export default function ProgressBar(props) {
   return (
     <div>
       <StyledLinearProgress value={progress} variant="determinate" />
-      <Grid container>
+      <Grid container spacing={1} direction="row" justify="flex-start" alignItems="flex-end">
         <Grid item>
           <Text type='progress-bold' text={'$' + raised + ' raised \t'} />
         </Grid>
-        <Grid item/>
         <Grid item>
           <Text type='progress' text={' of $' + goal} />
         </Grid>
