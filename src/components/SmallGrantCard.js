@@ -52,9 +52,9 @@ export default function SmallGrantCard(props) {
         /> */}
           <Text type='card-heading' text='Image here' />
           <CardContent className={classes.cardContent}>
+            <Text type='card-aboveheading' text={nonprofit} />
             <Text type='card-heading' text={grant} />
             <Text type='card-subheading' text={foundation} />
-            <Text type='card-subheading' text={nonprofit} />
             <ProgressBar goal={goal} raised={raised} />
           </CardContent>
         </CardActionArea>

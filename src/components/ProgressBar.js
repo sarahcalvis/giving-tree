@@ -3,8 +3,17 @@ import Text from './Text.js';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/styles';
+import { makeStyles } from '@material-ui/styles';
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    marginTop: theme.spacing(2),
+  }
+}))
 
 export default function ProgressBar(props) {
+  const classes = useStyles();
+
   const [raised, setRaised] = React.useState(props.raised);
   const [goal, setGoal] = React.useState(props.goal);
   const [progress, setProgress] = React.useState(0);
@@ -36,7 +45,7 @@ export default function ProgressBar(props) {
   })(LinearProgress);
 
   return (
-    <div>
+    <div className={classes.root}>
       <StyledLinearProgress value={progress} variant="determinate" />
       <Grid container spacing={1} direction="row" justify="flex-start" alignItems="flex-end">
         <Grid item>
@@ -47,5 +56,6 @@ export default function ProgressBar(props) {
         </Grid>
       </Grid>
     </div>
+
   );
 }

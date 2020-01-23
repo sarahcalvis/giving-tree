@@ -14,16 +14,25 @@ export default function Text(props) {
     <div>
       {type === "card-heading" &&
         <Typography
-          component="h1"
-          variant="h4">
+          variant="h6"
+          component="h2">
+          {text}
+        </Typography>
+      }
+      {type === "card-aboveheading" &&
+        <Typography
+          variant="button"
+          color="primary" 
+          component="p">
           {text}
         </Typography>
       }
       {type === "card-subheading" &&
         <Typography
-          component="h1"
-          color="textSecondary"
-          variant="subtitle1">
+          variant="subtitle"
+          color="textSecondary" 
+          component="p"
+          gutterBottom>
           {text}
         </Typography>
       }
