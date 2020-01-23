@@ -124,7 +124,7 @@ function Stripe(props) {
               className={classes.button}
               variant="contained"
               onClick={submit}>
-              Donate
+              Donate {Number.parseInt(amount) > 0 && '$' + amount}
               </Button>
           </div>
         }
