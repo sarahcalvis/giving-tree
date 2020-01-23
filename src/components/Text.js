@@ -1,42 +1,47 @@
-// https://stripe.com/docs/recipes/elements-react
-
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
+import { useEffect } from 'react';
 
-class Text extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      text: this.props.text,
-      type: this.props.type
-    };
-  }
+export default function Text(props) {
+  const [text, setText] = React.useState(props.text);
+  const [type, setType] = React.useState(props.type);
 
-  componentDidUpdate(prevProps) {
-    if (this.props.text !== prevProps.text) this.setState({ text: this.props.text });
-  }
+  useEffect(() => { setText(props.text); }, [props.text]);
+  useEffect(() => { setType(props.type); }, [props.type]);
 
-  render() {
-    return (
-      <div>
-        {this.state.type === "card-heading" &&
-          <Typography
-            component="h1"
-            variant="h4">
-            {this.state.text}
-          </Typography>
-        }
-        {this.state.type === "card-subheading" &&
-          <Typography
-            component="h1"
-            color="textSecondary"
-            variant="subtitle1">
-            {this.state.text}
-          </Typography>
-        }
-      </div>
-    );
-  }
+  return (
+    <div>
+      {type === "card-heading" &&
+        <Typography
+          component="h1"
+          variant="h4">
+          {text}
+        </Typography>
+      }
+      {type === "card-subheading" &&
+        <Typography
+          component="h1"
+          color="textSecondary"
+          variant="subtitle1">
+          {text}
+        </Typography>
+      }
+      {type === "progress-bold" &&
+        <Typography
+          variant="body">
+          <Box fontWeight="fontWeightBold">
+            {text}
+          </Box>
+        </Typography>
+      }
+      {type === "progress" &&
+        <Typography
+          variant="body">
+          {text}
+        </Typography>
+      }
+    </div>
+  );
 }
 
-export default Text;
