@@ -28,6 +28,10 @@ export default function ProgressBar(props) {
     },
     root: {
       height: 5,
+      borderRadius: 20,
+    },
+    bar: {
+      borderRadius: 20,
     },
   })(LinearProgress);
 
