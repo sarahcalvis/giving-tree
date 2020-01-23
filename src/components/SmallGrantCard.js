@@ -34,22 +34,12 @@ export default function SmallGrantCard(props) {
   const [goal, setGoal] = React.useState(props.goal);
   const [raised, setRaised] = React.useState(props.raised);
 
-  useEffect(() => {
-    if (grant !== props.grant) setGrant(props.grant);
-    if (foundation !== props.foundation) setFoundation(props.foundation);
-    if (nonprofit !== props.nonprofit) setNonprofit(props.nonprofit);
-    if (goal !== props.goal) setGoal(props.goal);
-    if (raised !== props.raised) setRaised(props.raised);
-  }, [props.grant,
-      props.foundation,
-      props.nonprofit,
-      props.goal,
-      props.raised,
-      grant, foundation,
-      nonprofit,
-      goal,
-      raised]
-  );
+  // Observe grant details
+  useEffect(() => { setGrant(props.grant); }, [props.grant]);
+  useEffect(() => { setFoundation(props.foundation); }, [props.foundation]);
+  useEffect(() => { setNonprofit(props.nonprofit); }, [props.nonprofit]);
+  useEffect(() => { setGoal(props.goal); }, [props.goal]);
+  useEffect(() => { setRaised(props.raised); }, [props.raised]);
 
   return (
     <Grid item xs={12} sm={6} md={4}>
