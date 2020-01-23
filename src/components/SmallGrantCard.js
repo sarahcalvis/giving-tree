@@ -51,13 +51,10 @@ export default function SmallGrantCard(props) {
       raised]
   );
 
-  const linkTo = '/' + grant.split(' ').join('-');
-  console.log(linkTo);
-
   return (
     <Grid item xs={12} sm={6} md={4}>
       <Card className={classes.card}>
-        <CardActionArea component={Link} to={linkTo}>
+        <CardActionArea component={Link} to={'/' + grant.split(' ').join('-')}>
           {/* <CardMedia
           className={classes.cardMedia}
           image={pictures[this.state.execPosition]}
