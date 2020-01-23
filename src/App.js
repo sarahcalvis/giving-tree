@@ -4,7 +4,9 @@ import './App.css';
 import { ThemeProvider, CssBaseline } from '@material-ui/core';
 import theme from './theme';
 import { Elements, StripeProvider } from 'react-stripe-elements';
-import DGive from './screens/DGive.js';
+import DDashboard from './screens/DDashboard.js';
+import Header from './components/Header.js';
+import Footer from './components/Footer.js';
 
 export default function App() {
   return (
@@ -13,9 +15,11 @@ export default function App() {
         <BrowserRouter>
           <ThemeProvider theme={theme}>
             <CssBaseline />
+            <Header />
             <Elements>
-              <DGive/>
+              <DDashboard />
             </Elements>
+            <Footer />
           </ThemeProvider>
         </BrowserRouter>
       </div>
