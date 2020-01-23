@@ -25,6 +25,9 @@ export default function ProgressBar(props) {
     colorPrimary: {
       backgroundColor: '#bbbbbb',
     },
+    root: {
+      height: 10,
+    },
   })(LinearProgress);
   console.log((100.0 * (Number.parseFloat(raised) / Number.parseFloat(goal))))
   return (
