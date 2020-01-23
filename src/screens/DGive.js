@@ -6,6 +6,7 @@ import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/styles';
 import Text from '../components/Text.js';
 import firebase from '../firebase.js';
+import ProgressBar from '../components/ProgressBar.js';
 import * as naughtyFirebase from 'firebase';
 import {
   CardElement,
@@ -54,7 +55,7 @@ function Stripe(props) {
   const [amount, setAmount] = React.useState('');
 
   // Details about the grant we will get from the database
-  const [given, setGiven] = React.useState('');
+  const [raised, setRaised] = React.useState('');
   const [goal, setGoal] = React.useState('');
   const [grantName, setGrantName] = React.useState('');
 
@@ -69,7 +70,7 @@ function Stripe(props) {
     docRef.onSnapshot((doc) => {
       if (doc.exists) {
         setGoal(doc.data().goal_amt);
-        setGiven(doc.data().money_raised);
+        setRaised(doc.data().money_raised);
         setGrantName(doc.data().title);
       } else {
         console.log('No such grant!');
@@ -81,7 +82,7 @@ function Stripe(props) {
     // Confirm payment amount is in bounds
     if (Number.parseInt(amount) > 0 &&
       !Number.parseInt(amount).isNaN &&
-      Number.parseInt(amount) < (goal - given)) {
+      Number.parseInt(amount) <= (goal - raised)) {
 
       // Make the payment
       let { token } = await props.stripe.createToken({ name: 'Giving Tree Donor' });
@@ -108,11 +109,11 @@ function Stripe(props) {
     <Container className={classes.pageLayout}>
       <React.Fragment>
         <Text type='card-heading' text={grantName} />
+        <ProgressBar raised={raised} goal={goal} />
         {complete ?
-          <Text type='card-subheading' text={'Thank you for your donation! Thanks to your gift of $' + amount + ', ' + grantName + ' is now only  $' + (goal - given) + ' from meeting its goal of $' + goal + '!'} />
+          <Text type='card-subheading' text={'Thank you for your donation! Thanks to your gift of $' + amount + ', ' + grantName + ' is now only  $' + (goal - raised) + ' from meeting its goal of $' + goal + '!'} />
           :
           <div>
-            <Text type='card-subheading' text={'So far, $' + given + ' has been raised out of $' + goal} />
             <CardElement className={classes.stripeElement} />
             <input
               className={classes.stripeElement}

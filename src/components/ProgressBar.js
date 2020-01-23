@@ -1,22 +1,36 @@
 import React, { useEffect } from 'react';
 import Text from './Text.js';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import { withStyles } from '@material-ui/styles';
 
 export default function ProgressBar(props) {
   const [raised, setRaised] = React.useState(props.raised);
   const [goal, setGoal] = React.useState(props.goal);
-  const [progress, setProgress] = React.useState(100 * Number.parseFloat(raised) / Number.parseFloat(goal))
+  const [progress, setProgress] = React.useState(0);
 
-  useEffect(() => { setRaised(props.raised); }, [props.raised]);
 
-  useEffect(() => { setGoal(props.goal); }, [props.goal]);
+  useEffect(() => { 
+    setGoal(props.goal);
+  }, [props.goal, goal]);
 
-  useEffect(() => { setProgress(100 * Number.parseFloat(raised) / Number.parseFloat(goal)); }, [props.goal, props.raised]);
+  useEffect(() => { 
+    setRaised(props.raised);
+  }, [props.raised, raised]);
 
+  useEffect(() => { 
+    setProgress(100.0 * (Number.parseFloat(raised) / Number.parseFloat(goal)));
+  }, [props.raised, raised, props.goal, goal]);
+  
+  const StyledLinearProgress = withStyles({
+    colorPrimary: {
+      backgroundColor: '#bbbbbb',
+    },
+  })(LinearProgress);
+  console.log((100.0 * (Number.parseFloat(raised) / Number.parseFloat(goal))))
   return (
     <div>
-      <Text type='card-subheading' text={'$' + props.raised + ' raised out of $' + props.goal} />
-      <LinearProgress value={progress} variant="determinate" />
+      <Text type='card-subheading' text={'$' + raised + ' raised out of $' + goal} />
+      <StyledLinearProgress value={progress} variant="determinate" />
     </div>
   );
 }
