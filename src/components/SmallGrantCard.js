@@ -44,24 +44,19 @@ export default function SmallGrantCard(props) {
   useEffect(() => { setGoal(props.goal); }, [props.goal]);
   useEffect(() => { setRaised(props.raised); }, [props.raised]);
 
-  // Get a reference to the storage service, which is used to create references in your storage bucket
+  // Create reference to firebase storage
   let storage = firebase.storage();
-
-  // Create a storage reference from our storage service
   let storageRef = storage.ref();
 
-
+  // Get image
+  // TODO: query database to get image name
   useEffect(() => {
-    // Create a child reference
-    // console.log('hi' +JSON.stringify(storageRef.child('GivingTree.png').getDownloadURL()))
     storageRef.child('GivingTree.png').getDownloadURL().then((u) => {
       setUrl(u)
     }).catch( (error) => { 
       console.log(error);
     });
   }, []);
-
-
 
   return (
     <Grid item xs={12} sm={6} md={4}>
@@ -72,7 +67,6 @@ export default function SmallGrantCard(props) {
             image={url}
             title="Grant Image"
           />
-          {/* <img src={url} alt='no image'></img> */}
           <CardContent className={classes.cardContent}>
             <Text type='card-aboveheading' text={nonprofit} />
             <Text type='card-heading' text={grant} />

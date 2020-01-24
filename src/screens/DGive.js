@@ -95,8 +95,11 @@ function Stripe(props) {
       if (response.ok) {
         // Update the amount in firebase
         docRef.update({
-          money_raised: naughtyFirebase.firestore.FieldValue.increment(Number.parseInt(amount)),
-          donations: naughtyFirebase.firestore.FieldValue.arrayUnion(Number.parseInt(amount)),
+          // TODO: use a cloud function
+          //money_raised: naughtyFirebase.firestore.FieldValue.increment(Number.parseInt(amount)),
+
+          // TODO: make this a collection
+          //donations: naughtyFirebase.firestore.FieldValue.arrayUnion(Number.parseInt(amount)),
         }).then(function () {
           // Record transaction complete
           setComplete(true);
