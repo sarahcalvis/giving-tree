@@ -6,8 +6,20 @@ import Container from '@material-ui/core/Container';
 export default function DDashboard() {
   return (
     <Container maxWidth='md'>
-      <Grid container spacing={4} >
+      <Grid container spacing={2} >
         <SmallGrantCard
+          grant='Grant Name'
+          foundation='Foundation Name'
+          nonprofit='Nonprofit Name'
+          goal='100'
+          raised='10' />
+      <SmallGrantCard
+          grant='Grant Name'
+          foundation='Foundation Name'
+          nonprofit='Nonprofit Name'
+          goal='100'
+          raised='10' />
+      <SmallGrantCard
           grant='Grant Name'
           foundation='Foundation Name'
           nonprofit='Nonprofit Name'

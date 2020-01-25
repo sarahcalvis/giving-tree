@@ -17,7 +17,6 @@ const useStyles = makeStyles(theme => ({
     flexDirection: 'column',
   },
   cardMedia: {
-    paddingTop: '56.25%',
     height: 250,
   },
   cardContent: {
@@ -34,7 +33,6 @@ export default function SmallGrantCard(props) {
   const [nonprofit, setNonprofit] = React.useState(props.nonprofit);
   const [goal, setGoal] = React.useState(props.goal);
   const [raised, setRaised] = React.useState(props.raised);
-  const [image, setImage] = React.useState('');
   const [url, setUrl] = React.useState('');
 
   // Observe grant details
@@ -53,10 +51,10 @@ export default function SmallGrantCard(props) {
   useEffect(() => {
     storageRef.child('GivingTree.png').getDownloadURL().then((u) => {
       setUrl(u)
-    }).catch( (error) => { 
+    }).catch((error) => {
       console.log(error);
     });
-  }, []);
+  }, [storageRef]);
 
   return (
     <Grid item xs={12} sm={6} md={4}>
