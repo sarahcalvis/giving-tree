@@ -10,14 +10,12 @@ import Footer from './components/Footer.js';
 export default function App() {
   return (
     <BrowserRouter>
-        <div>
-          <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <Header />
-              <Routes />
-            <Footer />
-          </ThemeProvider>
-        </div>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Header />
+        <Routes />
+        <Footer />
+      </ThemeProvider>
     </BrowserRouter>
   );
 }

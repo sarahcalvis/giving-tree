@@ -33,6 +33,7 @@ export default function SmallGrantCard(props) {
   const [nonprofit, setNonprofit] = React.useState(props.nonprofit);
   const [goal, setGoal] = React.useState(props.goal);
   const [raised, setRaised] = React.useState(props.raised);
+  const [img, setImg] = React.useState(props.img);
   const [url, setUrl] = React.useState('');
 
   // Observe grant details
@@ -41,6 +42,7 @@ export default function SmallGrantCard(props) {
   useEffect(() => { setNonprofit(props.nonprofit); }, [props.nonprofit]);
   useEffect(() => { setGoal(props.goal); }, [props.goal]);
   useEffect(() => { setRaised(props.raised); }, [props.raised]);
+  useEffect(() => { setImg(props.img) }, [props.img]);
 
   // Create reference to firebase storage
   let storage = firebase.storage();
@@ -49,12 +51,12 @@ export default function SmallGrantCard(props) {
   // Get image
   // TODO: query database to get image name
   useEffect(() => {
-    storageRef.child('GivingTree.png').getDownloadURL().then((u) => {
+    storageRef.child(img).getDownloadURL().then((u) => {
       setUrl(u)
     }).catch((error) => {
       console.log(error);
     });
-  }, [storageRef]);
+  }, [storageRef, img]);
 
   return (
     <Grid item xs={12} sm={6} md={4}>

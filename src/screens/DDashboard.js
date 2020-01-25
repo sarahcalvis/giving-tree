@@ -12,19 +12,22 @@ export default function DDashboard() {
           foundation='Foundation Name'
           nonprofit='Nonprofit Name'
           goal='100'
-          raised='10' />
+          raised='10'
+          img='GivingTree.png' />
       <SmallGrantCard
           grant='Grant Name'
           foundation='Foundation Name'
           nonprofit='Nonprofit Name'
           goal='100'
-          raised='10' />
+          raised='10'
+          img='GivingTree.png' />
       <SmallGrantCard
           grant='Grant Name'
           foundation='Foundation Name'
           nonprofit='Nonprofit Name'
           goal='100'
-          raised='10' />
+          raised='10'
+          img='GivingTree.png' />
       </Grid>
     </Container>
   );
