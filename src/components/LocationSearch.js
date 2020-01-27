@@ -79,16 +79,8 @@ export default function getDistance(props) {
         }
     );
   } 
-  //dists.sort((a, b) => (a[0] > b[0] ? 1 : -1));
+  dists.sort((a, b) => (a.dist > b.dist ? 1 : -1));
   return (<div>{JSON.stringify(dists)}</div>);
-  /*
-  var dist = distance(loc[0], loc[1], myHouse[0], myHouse[1], "M");
-  return (
-    <div>
-      <div>{dist}</div>
-    </div>
-  );
-  */
 }
 
 /*
