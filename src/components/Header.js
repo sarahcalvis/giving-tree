@@ -4,7 +4,7 @@ import Search from './Search';
 export default function Header() {
   return (
     <div>
-      <p>Header!</p>
+      <p>Giving Tree Header!</p>
       <Search/>
     </div>
   );
