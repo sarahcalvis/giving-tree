@@ -28,6 +28,7 @@ export default function SmallGrantCard(props) {
   const classes = useStyles();
 
   // Grant details
+  const [id, setId] = React.useState(props.id);
   const [grant, setGrant] = React.useState(props.grant);
   const [foundation, setFoundation] = React.useState(props.foundation);
   const [nonprofit, setNonprofit] = React.useState(props.nonprofit);
@@ -37,6 +38,7 @@ export default function SmallGrantCard(props) {
   const [url, setUrl] = React.useState('');
 
   // Observe grant details
+  useEffect(() => { setGrant(props.id); }, [props.id]);
   useEffect(() => { setGrant(props.grant); }, [props.grant]);
   useEffect(() => { setFoundation(props.foundation); }, [props.foundation]);
   useEffect(() => { setNonprofit(props.nonprofit); }, [props.nonprofit]);
