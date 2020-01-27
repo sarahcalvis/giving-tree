@@ -1,14 +1,14 @@
 // from hamzaq aisrani medium article
 // Imports
 import React, { Component } from 'react';
-
+import AutoComplete from 'material-ui/AutoComplete';
 // Import Search Bar Components
 import SearchBar from 'material-ui-search-bar';
 
 // Import React Scrit Libraray to load Google object
 import Script from 'react-load-script';
 
-class Search extends Component {
+class AutoCompleteSearchBar extends Component {
   // Define Constructor
   constructor(props) {
     super(props);
@@ -79,7 +79,7 @@ class Search extends Component {
   }
 }
 
-export default Search;
+export default AutoCompleteSearchBar;
 
 /*
 

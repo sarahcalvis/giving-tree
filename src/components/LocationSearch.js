@@ -1,4 +1,5 @@
 import React from "react";
+import AutoCompleteSearchBar from "./AutoCompleteSearchBar";
 //import { makeStyles } from "@material-ui/styles";
 
 /*
@@ -8,6 +9,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 */
+
 //from Geo Data Source
 function distance(lat1, lon1, lat2, lon2, unit) {
   if (lat1 === lat2 && lon1 === lon2) {
@@ -80,7 +82,15 @@ export default function getDistance(props) {
     );
   } 
   dists.sort((a, b) => (a.dist > b.dist ? 1 : -1));
-  return (<div>{JSON.stringify(dists)}</div>);
+  return (
+    <div>
+        <div>
+            {JSON.stringify(dists)}
+        </div>
+        <div>
+            <AutoCompleteSearchBar/>
+        </div>
+    </div>);
 }
 
 /*
