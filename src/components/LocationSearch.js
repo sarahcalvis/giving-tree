@@ -48,13 +48,13 @@ export default function getDistance(props) {
     {
         "lat": 36.8909, 
         "long" : -76.30892, 
-        "name": "Home", 
+        "name": "Bathroom Supplies", 
         "address": "1421 Bolling Ave, Norfolk, VA 23508"
     },
     {
         "lat": 38.89308, 
         "long": -76.97667, 
-        "name": "Rhys", 
+        "name": "Emotional Support", 
         "address": "1911 C Street NE Washington DC 20002"
     },
     {    

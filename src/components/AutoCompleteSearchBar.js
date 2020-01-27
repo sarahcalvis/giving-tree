@@ -1,7 +1,7 @@
 // from hamzaq aisrani medium article
 // Imports
 import React, { Component } from 'react';
-import AutoComplete from 'material-ui/AutoComplete';
+// import AutoComplete from 'material-ui/AutoComplete';
 // Import Search Bar Components
 import SearchBar from 'material-ui-search-bar';
 
