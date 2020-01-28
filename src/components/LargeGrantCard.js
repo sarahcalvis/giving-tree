@@ -3,11 +3,14 @@ import { Link, useParams } from 'react-router-dom';
 
 export default function LargeGrantCard(props) {
   let { grant } = useParams();
-  console.log(grant);
+  let grantId = props.grantId;
   return (
     <div>
-      <p>Large grant card!</p>
-      <Link to={'/' + grant + '/give'}>click to donate</Link>
+      <p>Large grant card for the grant with ID {grantId}</p>
+      <Link to={{
+        pathname: '/grants/' + grant + '/give',
+        state: { grantId: grantId }
+      }}>Donate</Link>
     </div>
   );
 }

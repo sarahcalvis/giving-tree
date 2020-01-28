@@ -17,11 +17,9 @@ export default function DDashboard() {
     db.collection('grants').get().then((querySnapshot) => {
       querySnapshot.forEach(function (doc) {
         // doc.data() is never undefined for query doc snapshots
-        console.log(doc.id, " => ", doc.data());
-
         newGrants.push(
           <SmallGrantCard
-            id={doc.id}
+            grantId={doc.id}
             grant={doc.data().title}
             foundation={doc.data().cf_name}
             nonprofit={doc.data().nonprofit_name}
@@ -31,6 +29,9 @@ export default function DDashboard() {
       });
       setGrants(newGrants);
     });
+    return function cleanup() {
+      // TODO: unsubscribe from Firebase query
+    };
   });
 
   return (
