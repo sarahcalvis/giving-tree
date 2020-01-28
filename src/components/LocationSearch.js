@@ -1,14 +1,5 @@
 import React from "react";
-import AutoCompleteSearchBar from "./AutoCompleteSearchBar";
-//import { makeStyles } from "@material-ui/styles";
 
-/*
-const useStyles = makeStyles(theme => ({
-  card: {
-    height: "100%"
-  }
-}));
-*/
 
 //from Geo Data Source
 function distance(lat1, lon1, lat2, lon2, unit) {
@@ -86,9 +77,6 @@ export default function getDistance(props) {
     <div>
         <div>
             {JSON.stringify(dists)}
-        </div>
-        <div>
-            <AutoCompleteSearchBar/>
         </div>
     </div>);
 }
