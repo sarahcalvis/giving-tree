@@ -5,7 +5,7 @@ import React, { useEffect } from 'react';
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/styles';
 import Text from '../components/Text.js';
-// import firebase from '../firebase.js';
+import firebase from '../firebase.js';
 import ProgressBar from '../components/ProgressBar.js';
 import * as naughtyFirebase from 'firebase';
 import {
@@ -13,6 +13,7 @@ import {
   injectStripe
 } from 'react-stripe-elements';
 import Button from '@material-ui/core/Button';
+import { useDocumentOnce } from 'react-firebase-hooks/firestore';
 
 const useStyles = makeStyles(theme => ({
   pageLayout: {
@@ -61,22 +62,18 @@ function PaymentForm(props) {
 
 
   // Initialize database and specific grant in database
-  // const db = firebase.firestore();
-  // const docRef = db.collection('grants').doc(grantId);
+  const db = firebase.firestore();
+  const [value, loading, error] = useDocumentOnce(db.doc('grants/' + grantId));
 
 
-  // useEffect(() => {
-  //   // Load the grant details from the database
-  //   docRef.onSnapshot((doc) => {
-  //     if (doc.exists) {
-  //       setGoal(doc.data().goal_amt);
-  //       setRaised(doc.data().money_raised);
-  //       setGrantName(doc.data().title);
-  //     } else {
-  //       console.log('No such grant!');
-  //     }
-  //   })
-  // });
+
+  useEffect(() => {
+    if (!loading && !error) {
+      setGoal(value.data().goal_amt);
+      setRaised(value.data().money_raised);
+      setGrantName(value.data().title);
+    }
+  }, [value]);
 
   const submit = async (ev) => {
     // Confirm payment amount is in bounds
@@ -129,7 +126,7 @@ function PaymentForm(props) {
               variant="contained"
               onClick={submit}>
               Donate {Number.parseInt(amount) > 0 && '$' + amount}
-              </Button>
+            </Button>
           </div>
         }
       </React.Fragment>
