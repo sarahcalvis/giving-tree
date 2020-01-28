@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import SmallGrantCard from '../components/SmallGrantCard.js';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
+import { useCollectionOnce } from 'react-firebase-hooks/firestore';
 import firebase from '../firebase.js';
-import * as naughtyFirebase from 'firebase';
 
 export default function DDashboard() {
   // List of small grant cards
@@ -12,10 +12,12 @@ export default function DDashboard() {
   // Initialize database and specific grant in database
   const db = firebase.firestore();
 
+  const [snapshot, loading, error] = useCollectionOnce(db.collection('grants'));
+
   useEffect(() => {
     var newGrants = [];
-    db.collection('grants').get().then((querySnapshot) => {
-      querySnapshot.forEach(function (doc) {
+    if (!loading && !error) {
+      snapshot.forEach(function (doc) {
         // doc.data() is never undefined for query doc snapshots
         newGrants.push(
           <SmallGrantCard
@@ -27,12 +29,8 @@ export default function DDashboard() {
             raised={doc.data().money_raised}
             img={doc.data().images[0] || 'GivingTree.png'} />);
       });
-      setGrants(newGrants);
-    });
-    return function cleanup() {
-      // TODO: unsubscribe from Firebase query
-    };
-  });
+    }
+  }, [snapshot]);
 
   return (
     <Container maxWidth='md'>

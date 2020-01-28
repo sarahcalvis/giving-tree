@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import Text from './Text.js';
 import ProgressBar from './ProgressBar.js';
 import { makeStyles } from '@material-ui/styles';
+import { useDownloadURL } from 'react-firebase-hooks/storage';
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -50,15 +51,8 @@ export default function SmallGrantCard(props) {
   let storage = firebase.storage();
   let storageRef = storage.ref();
 
-  // Get image
-  // TODO: query database to get image name
-  useEffect(() => {
-    storageRef.child(img).getDownloadURL().then((u) => {
-      setUrl(u)
-    }).catch((error) => {
-      console.log(error);
-    });
-  }, [storageRef, img]);
+  // Get image URL
+  const [downloadUrl, loading, error] = useDownloadURL(storageRef.child(img));
 
   return (
     <Grid item xs={12} sm={6} md={4}>
@@ -71,7 +65,7 @@ export default function SmallGrantCard(props) {
           }}>
           <CardMedia
             className={classes.cardMedia}
-            image={url}
+            image={downloadUrl}
             title="Grant Image"
           />
           <CardContent className={classes.cardContent}>

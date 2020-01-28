@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import LargeGrantCard from '../components/LargeGrantCard.js';
 import firebase from '../firebase.js';
+import { useDocumentOnce } from 'react-firebase-hooks/firestore';
+
 
 
 export default function DGrant(props) {
@@ -10,22 +12,21 @@ export default function DGrant(props) {
 
   // Initialize database and specific grant in database
   const db = firebase.firestore();
+  const [snapshot, loading, error] = useDocumentOnce(db.collection('grants'));
 
   useEffect(() => {
-    db.collection('grants').get(grantId).then((doc) => {
-      // doc.data() is never undefined for query doc snapshots
+    // doc.data() is never undefined for query doc snapshots
+    if (!loading && !error) {
       setGrant(<LargeGrantCard
-        grant={doc.data().title}
-        foundation={doc.data().cf_name}
-        nonprofit={doc.data().nonprofit_name}
-        goal={doc.data().goal_amt}
-        raised={doc.data().money_raised}
-        img={doc.data().images[0] || 'GivingTree.png'} />);
-    })
-    return function cleanup() {
-      // TODO: unsubscribe from Firebase query
+        grantId={grantId}
+        grant={snapshot.data().title}
+        foundation={snapshot.data().cf_name}
+        nonprofit={snapshot.data().nonprofit_name}
+        goal={snapshot.data().goal_amt}
+        raised={snapshot.data().money_raised}
+        img={snapshot.data().images[0] || 'GivingTree.png'} />);
     }
-  });
+  }, [snapshot, loading, error]);
 
   return (
     <div>
