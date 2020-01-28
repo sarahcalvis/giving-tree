@@ -47,7 +47,7 @@ function PaymentForm(props) {
   const classes = useStyles();
 
   // Grant details received as props
-  const [grantID] = React.useState('wJArP9RCeQY9vDvsfIA2') //React.useState(props.grantID);
+  const [grantId] = React.useState(props.grantId);
 
 
   // Record transaction state
@@ -62,7 +62,7 @@ function PaymentForm(props) {
 
   // Initialize database and specific grant in database
   const db = firebase.firestore();
-  const docRef = db.collection('grants').doc(grantID);
+  const docRef = db.collection('grants').doc(grantId);
 
 
   useEffect(() => {

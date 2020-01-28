@@ -28,6 +28,7 @@ export default function SmallGrantCard(props) {
   const classes = useStyles();
 
   // Grant details
+  const [grantId, setGrantId] = React.useState(props.id);
   const [grant, setGrant] = React.useState(props.grant);
   const [foundation, setFoundation] = React.useState(props.foundation);
   const [nonprofit, setNonprofit] = React.useState(props.nonprofit);
@@ -37,6 +38,7 @@ export default function SmallGrantCard(props) {
   const [url, setUrl] = React.useState('');
 
   // Observe grant details
+  useEffect(() => { setGrantId(props.grantId); }, [props.grantId]);
   useEffect(() => { setGrant(props.grant); }, [props.grant]);
   useEffect(() => { setFoundation(props.foundation); }, [props.foundation]);
   useEffect(() => { setNonprofit(props.nonprofit); }, [props.nonprofit]);
@@ -61,7 +63,12 @@ export default function SmallGrantCard(props) {
   return (
     <Grid item xs={12} sm={6} md={4}>
       <Card className={classes.card}>
-        <CardActionArea component={Link} to={'/' + grant.split(' ').join('-')}>
+        <CardActionArea
+          component={Link}
+          to={{
+            pathname: '/grants/' + grant.split(' ').join('-'),
+            state: { grantId: grantId }
+          }}>
           <CardMedia
             className={classes.cardMedia}
             image={url}
@@ -75,6 +82,6 @@ export default function SmallGrantCard(props) {
           </CardContent>
         </CardActionArea>
       </Card>
-    </Grid>
+    </Grid >
   );
 }
