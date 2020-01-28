@@ -18,8 +18,8 @@ export default function Routes() {
     return (
         <Switch>
             <Route exact path='/' component={DDashboard} />
-            <Route exact path='/:grant' component={DGrant} />
-            <Route exact path='/:grant/give' component={DGive} />
+            <Route exact path='/grants/:grant' component={DGrant} />
+            <Route exact path='/grants/:grant/give' component={DGive} />
             <Route exact path='/request-account' component={FAccountRequest} />
             <Route exact path='/request-sent' component={FRequestSent} />
             <Route exact path='/foundation' component={FGrants} />

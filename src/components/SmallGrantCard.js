@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import Text from './Text.js';
 import ProgressBar from './ProgressBar.js';
 import { makeStyles } from '@material-ui/styles';
+import { useDownloadURL } from 'react-firebase-hooks/storage';
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -28,7 +29,7 @@ export default function SmallGrantCard(props) {
   const classes = useStyles();
 
   // Grant details
-  const [id, setId] = React.useState(props.id);
+  const [grantId, setGrantId] = React.useState(props.id);
   const [grant, setGrant] = React.useState(props.grant);
   const [foundation, setFoundation] = React.useState(props.foundation);
   const [nonprofit, setNonprofit] = React.useState(props.nonprofit);
@@ -38,7 +39,7 @@ export default function SmallGrantCard(props) {
   const [url, setUrl] = React.useState('');
 
   // Observe grant details
-  useEffect(() => { setGrant(props.id); }, [props.id]);
+  useEffect(() => { setGrantId(props.grantId); }, [props.grantId]);
   useEffect(() => { setGrant(props.grant); }, [props.grant]);
   useEffect(() => { setFoundation(props.foundation); }, [props.foundation]);
   useEffect(() => { setNonprofit(props.nonprofit); }, [props.nonprofit]);
@@ -50,23 +51,21 @@ export default function SmallGrantCard(props) {
   let storage = firebase.storage();
   let storageRef = storage.ref();
 
-  // Get image
-  // TODO: query database to get image name
-  useEffect(() => {
-    storageRef.child(img).getDownloadURL().then((u) => {
-      setUrl(u)
-    }).catch((error) => {
-      console.log(error);
-    });
-  }, [storageRef, img]);
+  // Get image URL
+  const [downloadUrl, loading, error] = useDownloadURL(storageRef.child(img));
 
   return (
     <Grid item xs={12} sm={6} md={4}>
       <Card className={classes.card}>
-        <CardActionArea component={Link} to={'/' + grant.split(' ').join('-')}>
+        <CardActionArea
+          component={Link}
+          to={{
+            pathname: '/grants/' + grant.split(' ').join('-'),
+            state: { grantId: grantId }
+          }}>
           <CardMedia
             className={classes.cardMedia}
-            image={url}
+            image={downloadUrl}
             title="Grant Image"
           />
           <CardContent className={classes.cardContent}>
@@ -77,6 +76,6 @@ export default function SmallGrantCard(props) {
           </CardContent>
         </CardActionArea>
       </Card>
-    </Grid>
+    </Grid >
   );
 }

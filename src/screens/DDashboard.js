@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import SmallGrantCard from '../components/SmallGrantCard.js';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
+import { useCollectionOnce } from 'react-firebase-hooks/firestore';
 import firebase from '../firebase.js';
-import * as naughtyFirebase from 'firebase';
 
 export default function DDashboard() {
   // List of small grant cards
@@ -12,16 +12,19 @@ export default function DDashboard() {
   // Initialize database and specific grant in database
   const db = firebase.firestore();
 
-  useEffect(() => {
-    var newGrants = [];
-    db.collection('grants').get().then((querySnapshot) => {
-      querySnapshot.forEach(function (doc) {
-        // doc.data() is never undefined for query doc snapshots
-        console.log(doc.id, " => ", doc.data());
+  const [snapshot, loading, error] = useCollectionOnce(db.collection('grants'));
 
+  useEffect(() => {
+    console.log('use effect');
+
+    var newGrants = [];
+    if (!loading && !error) {
+      snapshot.forEach(function (doc) {
+        console.log(doc.data())
+        // doc.data() is never undefined for query doc snapshots
         newGrants.push(
           <SmallGrantCard
-            id={doc.id}
+            grantId={doc.id}
             grant={doc.data().title}
             foundation={doc.data().cf_name}
             nonprofit={doc.data().nonprofit_name}
@@ -30,8 +33,8 @@ export default function DDashboard() {
             img={doc.data().images[0] || 'GivingTree.png'} />);
       });
       setGrants(newGrants);
-    });
-  });
+    }
+  }, [snapshot]);
 
   return (
     <Container maxWidth='md'>
