@@ -61,22 +61,22 @@ function PaymentForm(props) {
 
 
   // Initialize database and specific grant in database
-  const db = firebase.firestore();
-  const docRef = db.collection('grants').doc(grantId);
+  // const db = firebase.firestore();
+  // const docRef = db.collection('grants').doc(grantId);
 
 
-  useEffect(() => {
-    // Load the grant details from the database
-    docRef.onSnapshot((doc) => {
-      if (doc.exists) {
-        setGoal(doc.data().goal_amt);
-        setRaised(doc.data().money_raised);
-        setGrantName(doc.data().title);
-      } else {
-        console.log('No such grant!');
-      }
-    })
-  });
+  // useEffect(() => {
+  //   // Load the grant details from the database
+  //   docRef.onSnapshot((doc) => {
+  //     if (doc.exists) {
+  //       setGoal(doc.data().goal_amt);
+  //       setRaised(doc.data().money_raised);
+  //       setGrantName(doc.data().title);
+  //     } else {
+  //       console.log('No such grant!');
+  //     }
+  //   })
+  // });
 
   const submit = async (ev) => {
     // Confirm payment amount is in bounds
@@ -92,19 +92,19 @@ function PaymentForm(props) {
         body: token.id + ' amount: ' + (amount * 100) + ' description: ' + grantName,
       });
 
-      if (response.ok) {
-        // Update the amount in firebase
-        docRef.update({
-          // TODO: use a cloud function
-          //money_raised: naughtyFirebase.firestore.FieldValue.increment(Number.parseInt(amount)),
+      // if (response.ok) {
+      //   // Update the amount in firebase
+      //   docRef.update({
+      //     // TODO: use a cloud function
+      //     //money_raised: naughtyFirebase.firestore.FieldValue.increment(Number.parseInt(amount)),
 
-          // TODO: make this a collection
-          //donations: naughtyFirebase.firestore.FieldValue.arrayUnion(Number.parseInt(amount)),
-        }).then(function () {
-          // Record transaction complete
-          setComplete(true);
-        });
-      }
+      //     // TODO: make this a collection
+      //     //donations: naughtyFirebase.firestore.FieldValue.arrayUnion(Number.parseInt(amount)),
+      //   }).then(function () {
+      //     // Record transaction complete
+      //     setComplete(true);
+      //   });
+      // }
     }
   }
 

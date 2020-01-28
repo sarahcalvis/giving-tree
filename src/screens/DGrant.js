@@ -28,7 +28,7 @@ export default function DGrant(props) {
         raised={value.data().money_raised}
         img={value.data().images[0] || 'GivingTree.png'} />);
     }
-  });
+  },[value]);
 
   return (
     <div>
