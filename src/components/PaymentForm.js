@@ -52,7 +52,7 @@ function PaymentForm(props) {
 
 
   // Record transaction state
-  const [complete, setComplete] = React.useState(false);
+  const [status, setStatus] = React.useState('incomplete');
   const [amount, setAmount] = React.useState('');
 
   // Details about the grant we will get from the database
@@ -88,20 +88,21 @@ function PaymentForm(props) {
         headers: { 'Content-Type': 'text/plain' },
         body: token.id + ' amount: ' + (amount * 100) + ' description: ' + grantName,
       });
+      console.log(response);
+      if (response.ok) {
+        // // Update the amount in firebase
+        // docRef.update({
+        //   // TODO: use a cloud function
+        //   //money_raised: naughtyFirebase.firestore.FieldValue.increment(Number.parseInt(amount)),
 
-      // if (response.ok) {
-      //   // Update the amount in firebase
-      //   docRef.update({
-      //     // TODO: use a cloud function
-      //     //money_raised: naughtyFirebase.firestore.FieldValue.increment(Number.parseInt(amount)),
-
-      //     // TODO: make this a collection
-      //     //donations: naughtyFirebase.firestore.FieldValue.arrayUnion(Number.parseInt(amount)),
-      //   }).then(function () {
-      //     // Record transaction complete
-      //     setComplete(true);
-      //   });
-      // }
+        //   // TODO: make this a collection
+        //   //donations: naughtyFirebase.firestore.FieldValue.arrayUnion(Number.parseInt(amount)),
+        // }).then(function () {
+        // Record transaction complete
+        setStatus('complete');
+      } else {
+        setStatus('error');
+      }
     }
   }
 
@@ -110,9 +111,7 @@ function PaymentForm(props) {
       <React.Fragment>
         <Text type='card-heading' text={grantName} />
         <ProgressBar raised={raised} goal={goal} />
-        {complete ?
-          <Text type='card-subheading' text={'Thank you for your donation! Thanks to your gift of $' + amount + ', ' + grantName + ' is now only  $' + (goal - raised) + ' from meeting its goal of $' + goal + '!'} />
-          :
+        {status === 'incomplete' && 
           <div>
             <CardElement className={classes.stripeElement} />
             <input
@@ -128,6 +127,12 @@ function PaymentForm(props) {
               Donate {Number.parseInt(amount) > 0 && '$' + amount}
             </Button>
           </div>
+        }
+        {status === 'complete' &&
+          <Text type='card-subheading' text={'Thank you for your donation! Thanks to your gift of $' + amount + ', ' + grantName + ' is now only  $' + (goal - raised) + ' from meeting its goal of $' + goal + '!'} />
+        }
+        {status === 'error' &&
+          <Text type='card-subheading' text={'Sorry, an error occurred 🤡'} />
         }
       </React.Fragment>
     </Container>

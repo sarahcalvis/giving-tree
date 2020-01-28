@@ -27,9 +27,6 @@ const useStyles = makeStyles(theme => ({
 export default function LargeGrantCard(props) {
   const classes = useStyles();
 
-  let { grantName } = useParams();
-
-
   // Grant details
   const [grantId, setGrantId] = React.useState(props.grantId);
   const [grant, setGrant] = React.useState(props.grant);
@@ -72,7 +69,7 @@ export default function LargeGrantCard(props) {
             <Text type='card-subheading' text={foundation} />
             <ProgressBar goal={goal} raised={raised} />
             <Link to={{
-              pathname: '/grants/' + grantName + '/give',
+              pathname: '/grants/' + grant.split(' ').join('-') + '/give',
               state: { grantId: grantId }
             }}>Donate</Link>
           </CardContent>

@@ -4,6 +4,7 @@ import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
 import { useCollectionOnce } from 'react-firebase-hooks/firestore';
 import firebase from '../firebase.js';
+import Search from '../components/Search';
 
 export default function DDashboard() {
   // List of small grant cards
@@ -38,6 +39,7 @@ export default function DDashboard() {
 
   return (
     <Container maxWidth='md'>
+      <Search />
       <Grid container spacing={2} >
         {grants}
       </Grid>
