@@ -15,6 +15,7 @@ export default function DGrant(props) {
   const [value, loading, error] = useDocumentOnce(db.doc('grants/'+ grantId));
 
   useEffect(() => {
+    console.log('use effect');
     // doc.data() is never undefined for query doc snapshots
     if (!loading && !error) {
       console.log('val ' + value);

@@ -15,6 +15,8 @@ export default function DDashboard() {
   const [snapshot, loading, error] = useCollectionOnce(db.collection('grants'));
 
   useEffect(() => {
+    console.log('use effect');
+
     var newGrants = [];
     if (!loading && !error) {
       snapshot.forEach(function (doc) {

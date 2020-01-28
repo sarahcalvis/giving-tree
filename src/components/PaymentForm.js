@@ -5,7 +5,7 @@ import React, { useEffect } from 'react';
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/styles';
 import Text from '../components/Text.js';
-import firebase from '../firebase.js';
+// import firebase from '../firebase.js';
 import ProgressBar from '../components/ProgressBar.js';
 import * as naughtyFirebase from 'firebase';
 import {
