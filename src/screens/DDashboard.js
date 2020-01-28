@@ -18,6 +18,7 @@ export default function DDashboard() {
     var newGrants = [];
     if (!loading && !error) {
       snapshot.forEach(function (doc) {
+        console.log(doc.data())
         // doc.data() is never undefined for query doc snapshots
         newGrants.push(
           <SmallGrantCard
@@ -29,6 +30,7 @@ export default function DDashboard() {
             raised={doc.data().money_raised}
             img={doc.data().images[0] || 'GivingTree.png'} />);
       });
+      setGrants(newGrants);
     }
   }, [snapshot]);
 
