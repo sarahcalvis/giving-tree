@@ -16,8 +16,6 @@ export default function DDashboard() {
   const [snapshot, loading, error] = useCollectionOnce(db.collection('grants'));
 
   useEffect(() => {
-    console.log('use effect');
-
     var newGrants = [];
     if (!loading && !error) {
       snapshot.forEach(function (doc) {
@@ -33,7 +31,7 @@ export default function DDashboard() {
       });
       setGrants(newGrants);
     }
-  }, [snapshot]);
+  }, [snapshot, error, loading]);
 
   return (
     <Container maxWidth='md'>

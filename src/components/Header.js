@@ -21,7 +21,7 @@ export default function Header() {
     <div className={classes.headerRoot}>
       <header className={classes.header}>
         <Container maxWidth="sm">
-          <Typography fontColor='#45a329' variant="body1">Header stub</Typography>
+          <Typography variant="body1">Header stub</Typography>
         </Container>
       </header>
     </div>

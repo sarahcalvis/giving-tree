@@ -73,7 +73,7 @@ function PaymentForm(props) {
       setGoal(value.data().goal_amt);
       setRaised(value.data().money_raised);
     }
-  }, [value]);
+  }, [value, error, loading]);
 
   const submit = async (ev) => {
     // Confirm payment amount is in bounds
