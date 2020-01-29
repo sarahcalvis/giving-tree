@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom';
 
 
 export default function DGrant(props) {
-  let grantId = useParams().grant;
+  let grantId = useParams().grantId;
   let [grant, setGrant] = React.useState('');
 
   // Initialize database and specific grant in database

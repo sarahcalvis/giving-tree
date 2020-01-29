@@ -21,12 +21,12 @@ export default function DDashboard() {
       snapshot.forEach(function (doc) {
         newGrants.push(
           <SmallGrantCard
-            grantId={doc.id}
-            grant={doc.data().title}
-            foundation={doc.data().cf_name}
-            nonprofit={doc.data().nonprofit_name}
-            goal={doc.data().goal_amt}
-            raised={doc.data().money_raised}
+            id={doc.id}
+            title={doc.data().title}
+            cfName={doc.data().cf_name}
+            nonprofitName={doc.data().nonprofit_name}
+            goalAmt={doc.data().goal_amt}
+            moneyRaised={doc.data().money_raised}
             img={doc.data().images[0] || 'GivingTree.png'} />);
       });
       setGrants(newGrants);
