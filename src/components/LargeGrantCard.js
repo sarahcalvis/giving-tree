@@ -44,7 +44,7 @@ export default function LargeGrantCard(props) {
   const [downloadUrl, loading, error] = useDownloadURL(storageRef.child(img));
 
   // Observe grant details
-  useEffect(() => { setGrantId(props.grant); }, [props.grantId]);
+  useEffect(() => { setGrantId(props.grantId); }, [props.grantId]);
   useEffect(() => { setGrant(props.grant); }, [props.grant]);
   useEffect(() => { setFoundation(props.foundation); }, [props.foundation]);
   useEffect(() => { setNonprofit(props.nonprofit); }, [props.nonprofit]);

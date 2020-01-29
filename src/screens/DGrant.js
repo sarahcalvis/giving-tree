@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom';
 
 
 export default function DGrant(props) {
-  let [grantId] = React.useState(useParams().grant.split('-').join(' '));
+  let grantId = useParams().grant;
   let [grant, setGrant] = React.useState('');
 
   // Initialize database and specific grant in database
@@ -17,7 +17,7 @@ export default function DGrant(props) {
   useEffect(() => {
     if (!loading && !error) {
       setGrant(<LargeGrantCard
-        grantId={value.id}
+        grantId={grantId}
         grant={value.data().title}
         foundation={value.data().cf_name}
         nonprofit={value.data().nonprofit_name}
