@@ -5,6 +5,7 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import $ from 'jquery';
 import { Button } from '@material-ui/core';
+import firebase from '../firebase.js';
 
 class TagSearch extends React.Component {
   constructor(props) {
@@ -13,10 +14,13 @@ class TagSearch extends React.Component {
       tags: [{}],
       //tagString: "",
       activeTags: [],
-      loading: false
+      loading: false,
     };
 
     this.updateRequest = this.updateRequest.bind(this);
+    this.setCached = this.setCached.bind(this);
+    this.retrieveCached = this.retrieveCached.bind(this);
+    this.updateSearch = this.updateSearch.bind(this);
 
   };
 
@@ -35,34 +39,73 @@ class TagSearch extends React.Component {
     });
   }
 
-  handleChange = (event) => {
+  handleClick = (event) => {
+    this.updateSearch();
+  }
 
-    this.setState({ loading: true });
 
-    var settings = {
-      async: "true",
-      crossDomain: "true",
-      url: "https://deezerdevs-deezer.p.rapidapi.com/search?q=" + event.target.value,
-      method: "GET",
-      headers: {
-        "x-rapidapi-host": "deezerdevs-deezer.p.rapidapi.com",
-        "x-rapidapi-key": "f33e47e69fmshe427476175d1511p18d30djsn436f42242136"
-      },
-      context: this
+  setCached(key, val){
+    //var now = (new Date().getTime());
+    var stringVal = JSON.stringify({ value : val});
+    sessionStorage.setItem(key, stringVal);
+  }
+  
+  // If the cached value is present and it is less than
+  //    ttl seconds old, return it.
+  // Otherwise, return null
+  retrieveCached(key, ttl){
+              
+    if(key in sessionStorage){
+      var data = JSON.parse(sessionStorage.getItem(key));
+      /*var now = (new Date().getTime());
+      var timeCached = data.time;
+      if((now - timeCached) < (ttl*1000)){*/
+          return data.value;
+      //}
+    }
+    return null;
+    // TODO: complete this
+  }
+
+  updateSearch() {
+    
+    function displayResults(results){
+        $("#results").text(results.num_found + " results found.");
     }
 
-    $.ajax(settings).done(function (response) {
-      if (typeof response.data !== 'undefined') {
-        var newTags = [];
-        for (var i = 0; i < response.data.length; i++) {
-          newTags.push({ label: response.data[i].title + ' by ' + response.data[i].artist.name });
+    var query = "tagArray";
+    var cacheResult = this.retrieveCached(query, 600);
+    var tags = [];
+    if(cacheResult){
+      console.log("Getting from cache :)");
+      tags = cacheResult;
+      this.setState({ tags: tags })
+      displayResults(cacheResult);
+    }else{
+      console.log("Have to start over :(");
+      var db = firebase.firestore();
+      var dbRef = db.collection("tags");
+
+      dbRef.get().then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          var dbTags = doc.data().tags;
+          for (var i = 0; i < dbTags.length; i++) {
+            tags.push(dbTags[i]);
+          }
+        });
+
+        this.setState({ tags: tags })
+        this.setCached(query, tags);
+        displayResults(tags); 
+        
+        if(this.state.dataLoaded === false){
+          this.setState({ dataLoaded: true })
         }
+      });
+    }
+  }
 
-        this.setState({ tags: newTags, loading: false });
-      }
-    });
-
-  };
+  
 
   render() {
     return (
@@ -72,7 +115,8 @@ class TagSearch extends React.Component {
         autoComplete
         disableOpenOnFocus
         multiple
-        getOptionLabel={option => option.label}
+        freeSolo
+        getOptionLabel={option => option}
         onChange={this.handleAutoChange}
         style={{ top: "auto", bottom: "auto", height:"auto", postion: "absolute" }}
         renderInput={params => (
@@ -81,8 +125,7 @@ class TagSearch extends React.Component {
             label="Select Tags"
             variant="outlined"
             fullWidth
-            //value={this.state.tagString}
-            onChange={this.handleChange}
+            onClick={this.handleClick}
             InputProps={{
               ...params.InputProps,
               endAdornment: (
