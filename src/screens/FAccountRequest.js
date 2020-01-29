@@ -18,10 +18,6 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(4),
     marginBottom: theme.spacing(2),
   },
-  a: {
-    color: '#FFFFFF',
-    textDecoration: 'none',
-  },
 }))
 
 export default function FAccountRequest() {
@@ -41,7 +37,7 @@ export default function FAccountRequest() {
               target='_blank'
               rel='noopener noreferrer'
               href='https://connect.stripe.com/oauth/authorize?response_type=code&client_id=ca_32D88BD1qLklliziD7gYQvctJIhWBSQ7&scope=read_write'>
-              Click here to set up a Stripe account
+              Connect to Stripe
           </Link>
           </Button>
         </React.Fragment>
