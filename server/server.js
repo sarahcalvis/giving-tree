@@ -2,7 +2,7 @@
 // TODO: host this on firebase maybe?
 
 const app = require('express')();
-const stripe = require('stripe')('sk_test_avCwuzIvg45JxkjItTyqRGH600JEoryzyP');
+const stripe = require('stripe')('sk_test_iKDj5WxPhlc4Dz1JJUhDmosi0052mQo2A7');
 
 app.use(require('body-parser').text());
 
@@ -31,6 +31,7 @@ app.post('/charge', async (req, res) => {
 });
 
 app.post('/create', async (req, res) => {
+  console.log(req);
   try {
     let { status } = await stripe.oauth.token({
       grant_type: 'authorization_code',
