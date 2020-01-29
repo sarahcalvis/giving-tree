@@ -32,16 +32,16 @@ export default function FAccountRequest() {
             color='inherit'
             target='_blank'
             rel='noopener noreferrer'
-            href='https://connect.stripe.com/oauth/authorize?response_type=code&client_id=ca_32D88BD1qLklliziD7gYQvctJIhWBSQ7&scope=read_write'>
+            href='https://connect.stripe.com/oauth/authorize?response_type=code&client_id=ca_GblAQuuPHkvIstLgnPzWLGLhh4hMRV3h&scope=read_write&redirect_uri=http://localhost:3000/login'>
             <Button
-              fullWidth
-              color='primary'
-              variant='contained'>
-              Connect to Stripe
+            fullWidth
+            color='primary'
+            variant='contained'>
+            Connect to Stripe
             </Button>
           </Link>
         </React.Fragment>
       </Container>
-    </div>
+    </div >
   );
 }
