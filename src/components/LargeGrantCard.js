@@ -4,7 +4,7 @@ import CardContent from '@material-ui/core/CardContent';
 import firebase from '../firebase.js';
 import CardMedia from '@material-ui/core/CardMedia';
 import Grid from '@material-ui/core/Grid';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Text from './Text.js';
 import ProgressBar from './ProgressBar.js';
 import { makeStyles } from '@material-ui/styles';
@@ -28,7 +28,6 @@ export default function LargeGrantCard(props) {
   const classes = useStyles();
 
   // Grant details
-  const [grantId, setGrantId] = React.useState(props.grantId);
   const [grant, setGrant] = React.useState(props.grant);
   const [foundation, setFoundation] = React.useState(props.foundation);
   const [nonprofit, setNonprofit] = React.useState(props.nonprofit);
@@ -44,7 +43,6 @@ export default function LargeGrantCard(props) {
   const [downloadUrl, loading, error] = useDownloadURL(storageRef.child(img));
 
   // Observe grant details
-  useEffect(() => { setGrantId(props.grantId); }, [props.grantId]);
   useEffect(() => { setGrant(props.grant); }, [props.grant]);
   useEffect(() => { setFoundation(props.foundation); }, [props.foundation]);
   useEffect(() => { setNonprofit(props.nonprofit); }, [props.nonprofit]);
@@ -57,21 +55,18 @@ export default function LargeGrantCard(props) {
       <Grid item xs={12} sm={6} md={4}>
         <Card className={classes.card}>
           {!loading && !error &&
-              <CardMedia
-                className={classes.cardMedia}
-                image={downloadUrl}
-                title="Grant Image"
-              />
+            <CardMedia
+              className={classes.cardMedia}
+              image={downloadUrl}
+              title="Grant Image"
+            />
           }
           <CardContent className={classes.cardContent}>
             <Text type='card-aboveheading' text={nonprofit} />
             <Text type='card-heading' text={grant} />
             <Text type='card-subheading' text={foundation} />
             <ProgressBar goal={goal} raised={raised} />
-            <Link to={{
-              pathname: '/grants/' + grant.split(' ').join('-') + '/give',
-              state: { grantId: grantId }
-            }}>Donate</Link>
+            <Link to={'/grants/' + grant.split(' ').join('-') + '/give'}>Donate</Link>
           </CardContent>
         </Card>
       </Grid >

@@ -48,7 +48,7 @@ function PaymentForm(props) {
   const classes = useStyles();
 
   // Grant details received as props
-  const [grantId] = React.useState(props.grantId);
+  const [grantName] = React.useState(props.grantId);
 
 
   // Record transaction state
@@ -58,12 +58,11 @@ function PaymentForm(props) {
   // Details about the grant we will get from the database
   const [raised, setRaised] = React.useState('');
   const [goal, setGoal] = React.useState('');
-  const [grantName, setGrantName] = React.useState('');
 
 
   // Initialize database and specific grant in database
   const db = firebase.firestore();
-  const [value, loading, error] = useDocumentOnce(db.doc('grants/' + grantId));
+  const [value, loading, error] = useDocumentOnce(db.doc('grants/' + grantName));
 
 
 
@@ -71,7 +70,6 @@ function PaymentForm(props) {
     if (!loading && !error) {
       setGoal(value.data().goal_amt);
       setRaised(value.data().money_raised);
-      setGrantName(value.data().title);
     }
   }, [value]);
 
