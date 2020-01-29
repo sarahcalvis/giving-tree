@@ -17,10 +17,6 @@ app.post('/charge', async (req, res) => {
       currency: 'usd',
       description: description,
       source: source,
-    }, {
-      stripeAccount: 'acct_1G5OvkF10BCBL4io',
-    }).then(function(charge) {
-      // asynchronously called
     });
 
     res.json({status});

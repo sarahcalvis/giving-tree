@@ -14,8 +14,8 @@ export default function Text(props) {
     <div>
       {type === "card-heading" &&
         <Typography
-          variant="h6"
-          component="h2">
+          variant="h5"
+        >
           {text}
         </Typography>
       }
