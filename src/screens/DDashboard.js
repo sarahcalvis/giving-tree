@@ -21,12 +21,9 @@ export default function DDashboard() {
     var newGrants = [];
     if (!loading && !error) {
       snapshot.forEach(function (doc) {
-        console.log(doc.data())
-        // doc.data() is never undefined for query doc snapshots
         newGrants.push(
           <SmallGrantCard
-            grantId={doc.id}
-            grant={doc.data().title}
+            grant={doc.id}
             foundation={doc.data().cf_name}
             nonprofit={doc.data().nonprofit_name}
             goal={doc.data().goal_amt}

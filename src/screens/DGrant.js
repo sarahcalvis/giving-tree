@@ -2,12 +2,12 @@ import React, { useEffect } from 'react';
 import LargeGrantCard from '../components/LargeGrantCard.js';
 import firebase from '../firebase.js';
 import { useDocumentOnce } from 'react-firebase-hooks/firestore';
+import { useParams } from 'react-router-dom';
 
 
 
 export default function DGrant(props) {
-  let grantId = props.location.state.grantId;
-
+  let [grantId] = React.useState(useParams().grant.split('-').join(' '));
   let [grant, setGrant] = React.useState('');
 
   // Initialize database and specific grant in database
@@ -17,8 +17,7 @@ export default function DGrant(props) {
   useEffect(() => {
     if (!loading && !error) {
       setGrant(<LargeGrantCard
-        grantId={grantId}
-        grant={value.data().title}
+        grant={grantId}
         foundation={value.data().cf_name}
         nonprofit={value.data().nonprofit_name}
         goal={value.data().goal_amt}

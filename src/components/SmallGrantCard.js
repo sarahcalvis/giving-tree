@@ -13,7 +13,6 @@ import { useDownloadURL } from 'react-firebase-hooks/storage';
 
 const useStyles = makeStyles(theme => ({
   card: {
-    height: '100%',
     display: 'flex',
     flexDirection: 'column',
   },
@@ -29,17 +28,14 @@ export default function SmallGrantCard(props) {
   const classes = useStyles();
 
   // Grant details
-  const [grantId, setGrantId] = React.useState(props.id);
   const [grant, setGrant] = React.useState(props.grant);
   const [foundation, setFoundation] = React.useState(props.foundation);
   const [nonprofit, setNonprofit] = React.useState(props.nonprofit);
   const [goal, setGoal] = React.useState(props.goal);
   const [raised, setRaised] = React.useState(props.raised);
   const [img, setImg] = React.useState(props.img);
-  const [url, setUrl] = React.useState('');
 
   // Observe grant details
-  useEffect(() => { setGrantId(props.grantId); }, [props.grantId]);
   useEffect(() => { setGrant(props.grant); }, [props.grant]);
   useEffect(() => { setFoundation(props.foundation); }, [props.foundation]);
   useEffect(() => { setNonprofit(props.nonprofit); }, [props.nonprofit]);
@@ -52,17 +48,14 @@ export default function SmallGrantCard(props) {
   let storageRef = storage.ref();
 
   // Get image URL
-  const [downloadUrl, loading, error] = useDownloadURL(storageRef.child(img));
+  const [downloadUrl] = useDownloadURL(storageRef.child(img));
 
   return (
     <Grid item xs={12} sm={6} md={4}>
       <Card className={classes.card}>
         <CardActionArea
           component={Link}
-          to={{
-            pathname: '/grants/' + grant.split(' ').join('-'),
-            state: { grantId: grantId }
-          }}>
+          to={'/grants/' + grant.split(' ').join('-')}>
           <CardMedia
             className={classes.cardMedia}
             image={downloadUrl}
