@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import LocationSearch from './LocationSearch';
+// import LocationSearch from './LocationSearch';
 import AutoCompleteMapsSearchBar from "./AutoCompleteMapsSearchBar";
 import { makeStyles } from "@material-ui/styles";
 
@@ -16,7 +16,7 @@ export default function Search() {
   return (
       <div className={classes.searchbox}>
         <AutoCompleteMapsSearchBar ref={locBarRef}/>
-        <LocationSearch/>
+        {/* <LocationSearch/> */}
       </div>
       
   );

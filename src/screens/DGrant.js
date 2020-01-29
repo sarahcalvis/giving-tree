@@ -17,7 +17,8 @@ export default function DGrant(props) {
   useEffect(() => {
     if (!loading && !error) {
       setGrant(<LargeGrantCard
-        grant={grantId}
+        grantId={value.id}
+        grant={value.data().title}
         foundation={value.data().cf_name}
         nonprofit={value.data().nonprofit_name}
         goal={value.data().goal_amt}

@@ -28,6 +28,7 @@ export default function LargeGrantCard(props) {
   const classes = useStyles();
 
   // Grant details
+  const [grantId, setGrantId] = React.useState(props.grantId);
   const [grant, setGrant] = React.useState(props.grant);
   const [foundation, setFoundation] = React.useState(props.foundation);
   const [nonprofit, setNonprofit] = React.useState(props.nonprofit);
@@ -43,6 +44,7 @@ export default function LargeGrantCard(props) {
   const [downloadUrl, loading, error] = useDownloadURL(storageRef.child(img));
 
   // Observe grant details
+  useEffect(() => { setGrantId(props.grant); }, [props.grantId]);
   useEffect(() => { setGrant(props.grant); }, [props.grant]);
   useEffect(() => { setFoundation(props.foundation); }, [props.foundation]);
   useEffect(() => { setNonprofit(props.nonprofit); }, [props.nonprofit]);
@@ -66,7 +68,7 @@ export default function LargeGrantCard(props) {
             <Text type='card-heading' text={grant} />
             <Text type='card-subheading' text={foundation} />
             <ProgressBar goal={goal} raised={raised} />
-            <Link to={'/grants/' + grant.split(' ').join('-') + '/give'}>Donate</Link>
+            <Link to={'/grants/' + grantId + '/give'}>Donate</Link>
           </CardContent>
         </Card>
       </Grid >

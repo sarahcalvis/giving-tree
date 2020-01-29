@@ -23,7 +23,8 @@ export default function DDashboard() {
       snapshot.forEach(function (doc) {
         newGrants.push(
           <SmallGrantCard
-            grant={doc.id}
+            grantId={doc.id}
+            grant={doc.data().title}
             foundation={doc.data().cf_name}
             nonprofit={doc.data().nonprofit_name}
             goal={doc.data().goal_amt}
