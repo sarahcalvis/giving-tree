@@ -2,7 +2,6 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import Search from './Search';
 
 
 const useStyles = makeStyles(theme => ({
@@ -25,7 +24,6 @@ export default function Header() {
           <Typography fontColor='#45a329' variant="body1">Header stub</Typography>
         </Container>
       </header>
-      <Search/>
     </div>
   );
 }

@@ -12,14 +12,10 @@ export default function DGrant(props) {
 
   // Initialize database and specific grant in database
   const db = firebase.firestore();
-  const [value, loading, error] = useDocumentOnce(db.doc('grants/'+ grantId));
+  const [value, loading, error] = useDocumentOnce(db.doc('grants/' + grantId));
 
   useEffect(() => {
-    console.log('use effect');
-    // doc.data() is never undefined for query doc snapshots
     if (!loading && !error) {
-      console.log('val ' + value);
-
       setGrant(<LargeGrantCard
         grantId={grantId}
         grant={value.data().title}
@@ -29,7 +25,7 @@ export default function DGrant(props) {
         raised={value.data().money_raised}
         img={value.data().images[0] || 'GivingTree.png'} />);
     }
-  },[value]);
+  }, [value]);
 
   return (
     <div>
