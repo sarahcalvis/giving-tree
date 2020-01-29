@@ -20,26 +20,36 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-export default function FAccountRequest() {
+export default function FAccountRequest(props) {
   const classes = useStyles();
+
+  // If the user is entering this page redirected from the account creation page,
+  // then the url will have two parameters:
+  // scope- I don't think we really care about scope. hopefully it is read/write
+  // code- the user's code we can use to connect their stripe
+  const qs = require('query-string');
+  const code = qs.parse(props.location.search).code;
 
   return (
     <div>
       <Container className={classes.pageLayout}>
         <React.Fragment>
-          <Link
-            textDecoration='none'
-            color='inherit'
-            target='_blank'
-            rel='noopener noreferrer'
-            href='https://connect.stripe.com/oauth/authorize?response_type=code&client_id=ca_GblAQuuPHkvIstLgnPzWLGLhh4hMRV3h&scope=read_write&redirect_uri=http://localhost:3000/login'>
-            <Button
-            fullWidth
-            color='primary'
-            variant='contained'>
-            Connect to Stripe
+          {code ?
+            <p>Connected to Stripe!</p>
+            :
+            <Link
+              textDecoration='none'
+              color='inherit'
+              target='_blank'
+              rel='noopener noreferrer'
+              href='https://connect.stripe.com/oauth/authorize?response_type=code&client_id=ca_GblAQuuPHkvIstLgnPzWLGLhh4hMRV3h&scope=read_write&redirect_uri=http://localhost:3000/request-account'>
+              <Button
+                fullWidth
+                color='primary'
+                variant='contained'>
+                Connect to Stripe
             </Button>
-          </Link>
+            </Link>}
         </React.Fragment>
       </Container>
     </div >
