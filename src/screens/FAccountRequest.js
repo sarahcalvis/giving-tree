@@ -27,19 +27,19 @@ export default function FAccountRequest() {
     <div>
       <Container className={classes.pageLayout}>
         <React.Fragment>
-          <Button
-            fullWidth
-            color="primary"
-            variant="contained">
-            <Link
-              textDecoration='none'
-              color='inherit'
-              target='_blank'
-              rel='noopener noreferrer'
-              href='https://connect.stripe.com/oauth/authorize?response_type=code&client_id=ca_32D88BD1qLklliziD7gYQvctJIhWBSQ7&scope=read_write'>
+          <Link
+            textDecoration='none'
+            color='inherit'
+            target='_blank'
+            rel='noopener noreferrer'
+            href='https://connect.stripe.com/oauth/authorize?response_type=code&client_id=ca_32D88BD1qLklliziD7gYQvctJIhWBSQ7&scope=read_write'>
+            <Button
+              fullWidth
+              color='primary'
+              variant='contained'>
               Connect to Stripe
+            </Button>
           </Link>
-          </Button>
         </React.Fragment>
       </Container>
     </div>

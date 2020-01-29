@@ -4,6 +4,7 @@ import CardContent from '@material-ui/core/CardContent';
 import firebase from '../firebase.js';
 import CardMedia from '@material-ui/core/CardMedia';
 import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
 import Text from './Text.js';
 import ProgressBar from './ProgressBar.js';
@@ -46,7 +47,7 @@ export default function LargeGrantCard(props) {
   useEffect(() => { setGoalAmt(props.goalAmt); }, [props.goalAmt]);
   useEffect(() => { setMoneyRaised(props.moneyRaised); }, [props.moneyRaised]);
   useEffect(() => { setImg(props.img) }, [props.img]);
-  
+
   // Create reference to firebase storage
   let storage = firebase.storage();
   let storageRef = storage.ref();
@@ -69,9 +70,20 @@ export default function LargeGrantCard(props) {
             <Text type='card-aboveheading' text={nonprofitName} />
             <Text type='card-heading' text={title} />
             <Text type='card-subheading' text={cfName} />
-            <Text type='card-subheading' text={desc} />
             <ProgressBar goal={goalAmt} raised={moneyRaised} />
-            <Link to={'/grants/' + id + '/give'}>Donate</Link>
+            <Text type='card-subheading' text={desc} />
+            <Grid container direction='row' justify='space-between' alignItems='flex-end'>
+              <Grid item>
+                <Link to={'/grants/' + id + '/give'}>Report</Link>
+              </Grid>
+              <Grid item  >
+                <Link to={'/grants/' + id + '/give'}>
+                  <Button color='primary' variant='contained'>
+                    Donate
+                  </Button>
+                </Link>
+              </Grid>
+            </Grid>
           </CardContent>
         </Card>
       </Grid >
