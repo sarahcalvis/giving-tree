@@ -31,6 +31,7 @@ export default function LargeGrantCard(props) {
   const [id, setId] = React.useState(props.id);
   const [title, setTitle] = React.useState(props.title);
   const [cfName, setCfName] = React.useState(props.cfName);
+  const [desc, setDesc] = React.useState(props.desc);
   const [nonprofitName, setNonprofitName] = React.useState(props.nonprofitName);
   const [goalAmt, setGoalAmt] = React.useState(props.goalAmt);
   const [moneyRaised, setMoneyRaised] = React.useState(props.moneyRaised);
@@ -40,6 +41,7 @@ export default function LargeGrantCard(props) {
   useEffect(() => { setId(props.id); }, [props.id]);
   useEffect(() => { setTitle(props.title); }, [props.title]);
   useEffect(() => { setCfName(props.cfName); }, [props.cfName]);
+  useEffect(() => { setDesc(props.desc); }, [props.desc]);
   useEffect(() => { setNonprofitName(props.nonprofitName); }, [props.nonprofitName]);
   useEffect(() => { setGoalAmt(props.goalAmt); }, [props.goalAmt]);
   useEffect(() => { setMoneyRaised(props.moneyRaised); }, [props.moneyRaised]);
@@ -67,6 +69,7 @@ export default function LargeGrantCard(props) {
             <Text type='card-aboveheading' text={nonprofitName} />
             <Text type='card-heading' text={title} />
             <Text type='card-subheading' text={cfName} />
+            <Text type='card-subheading' text={desc} />
             <ProgressBar goal={goalAmt} raised={moneyRaised} />
             <Link to={'/grants/' + id + '/give'}>Donate</Link>
           </CardContent>
