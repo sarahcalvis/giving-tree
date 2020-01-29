@@ -89,7 +89,7 @@ export default function GoogleMaps() {
 
   return (
     <Autocomplete
-      id="google-map-demo"
+      id="loc-bar"
       style={{ width: 300 }}
       getOptionLabel={option =>
         typeof option === "string" ? option : option.description
@@ -100,10 +100,13 @@ export default function GoogleMaps() {
       includeInputInList
       freeSolo
       disableOpenOnFocus
+      onChange={(event, value) => console.log(value)}
       renderInput={params => (
         <TextField
+          name="loc-textfield"
+          id="loc-textfield"
           {...params}
-          label="Add a location"
+          label="Search from a location"
           variant="outlined"
           fullWidth
           onChange={handleChange}
