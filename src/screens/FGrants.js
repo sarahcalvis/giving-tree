@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/styles';
-
+import Button from '@material-ui/core/Button';
+import Link from '@material-ui/core/Link';
 
 const useStyles = makeStyles(theme => ({
   pageLayout: {
@@ -60,7 +61,22 @@ export default function FGrants(props) {
             <p>You can look at your grants now</p>
           }
           {error &&
-            <p>Error 404: you gotta connect to stripe for this to work my dude</p>
+            <div>
+              <p>Error 404: you gotta connect to stripe for this to work my dude</p>
+              <Link
+                textDecoration='none'
+                color='inherit'
+                //target='_blank'
+                //rel='noopener noreferrer'
+                href='https://connect.stripe.com/oauth/authorize?response_type=code&client_id=ca_GblAQuuPHkvIstLgnPzWLGLhh4hMRV3h&scope=read_write'>
+                <Button
+                  fullWidth
+                  color='primary'
+                  variant='contained'>
+                  Connect to Stripe
+                </Button>
+              </Link>
+            </div>
           }
         </React.Fragment>
       </Container>
