@@ -21,6 +21,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function FGrants(props) {
   const classes = useStyles();
+  const [acctID, setAcctID] = React.useState('');
 
   // If the user is entering this page redirected from the account creation page,
   // then the url will have two parameters:
@@ -38,10 +39,10 @@ export default function FGrants(props) {
         headers: { 'Content-Type': 'text/plain' },
         body: code,
       });
-      console.log('request response: ' + JSON.stringify(response));
+
       if (response.ok) {
-        console.log('did good');
-        console.log(response);
+        let resJSON = await response.json();
+        setAcctID(resJSON.acctID);
         //send the id to the database
       } else {
         console.log('did not do good');
@@ -61,7 +62,7 @@ export default function FGrants(props) {
       <Container className={classes.pageLayout}>
         <React.Fragment>
           {code &&
-            <p>You can look at your grants now</p>
+            <p>Connected to Stripe with Account ID {acctID}. You can look at your grants now.</p>
           }
           {error &&
             <div>
