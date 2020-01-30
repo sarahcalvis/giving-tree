@@ -38,9 +38,10 @@ export default function FGrants(props) {
         headers: { 'Content-Type': 'text/plain' },
         body: code,
       });
-      console.log(response);
+      console.log('request response: ' + JSON.stringify(response));
       if (response.ok) {
         console.log('did good');
+        console.log(response);
         //send the id to the database
       } else {
         console.log('did not do good');
@@ -50,8 +51,10 @@ export default function FGrants(props) {
   }
 
   useEffect(() => {
-    submit();
-  }, [code, submit]);
+    if (code) {
+      submit();
+    }
+  }, []);
 
   return (
     <div>
