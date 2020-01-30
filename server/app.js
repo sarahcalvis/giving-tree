@@ -43,9 +43,7 @@ app.post('/create', async (req, res) => {
     
     res.json({ status });
   } catch (err) {
-    console.log(err)
+    console.log(err + "ghifdhnh HI")
     res.status(500).end
   }
 })
-
-app.listen(9000, () => console.log('Listening on port 9000'));
