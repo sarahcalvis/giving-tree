@@ -75,12 +75,15 @@ export default function FGrants(props) {
     <div>
       <Container className={classes.pageLayout}>
         <React.Fragment>
-          {code &&
-            <Snack message='Connected to Stripe'/>
+          {code && acctId !== '' &&
+            <Snack message='Connected to Stripe' />
+          }
+          {code && acctId === '' &&
+            <Snack message='Sorry- our server failed! Try again later' />
           }
           {error &&
             <div>
-              <p>Error 404: you gotta connect to stripe for this to work my dude</p>
+              <Snack message='You gotta connect to stripe for this to work my dude 🤡' />
               <Link
                 textDecoration='none'
                 color='inherit'
