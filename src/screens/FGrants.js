@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/styles';
 import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
 import firebase from '../firebase.js';
+import Snack from '../components/Snack.js';
 
 const useStyles = makeStyles(theme => ({
   pageLayout: {
@@ -75,7 +76,7 @@ export default function FGrants(props) {
       <Container className={classes.pageLayout}>
         <React.Fragment>
           {code &&
-            <p>Connected to Stripe with Account ID {acctId}. You can look at your grants now.</p>
+            <Snack message='Connected to Stripe'/>
           }
           {error &&
             <div>

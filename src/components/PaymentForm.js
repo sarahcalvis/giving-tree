@@ -50,7 +50,6 @@ function PaymentForm(props) {
   // Grant details received as props
   const [grantId] = React.useState(props.grantId);
 
-
   // Record transaction state
   const [status, setStatus] = React.useState('incomplete');
   const [amount, setAmount] = React.useState('');
@@ -60,35 +59,60 @@ function PaymentForm(props) {
   const [raised, setRaised] = React.useState('');
   const [goal, setGoal] = React.useState('');
 
+  // Payment details we will get from the database
+  const [cfId, setCfId] = React.useState('');
+  const [acctId, setAcctId] = React.useState('');
 
   // Initialize database and specific grant in database
   const db = firebase.firestore();
   const [value, loading, error] = useDocumentOnce(db.doc('grants/' + grantId));
 
 
-
+  // Load grant details from the database
   useEffect(() => {
     if (!loading && !error) {
       setGrant(value.data().title);
       setGoal(value.data().goal_amt);
       setRaised(value.data().money_raised);
+      setCfId(value.data().cf_id);
     }
   }, [value, error, loading]);
+
+  // Load community foundation details from the database
+  useEffect(() => {
+    if (cfId !== '' && cfId) {
+      db.collection('communityFoundations').doc(cfId).get()
+        .then(doc => {
+          if (!doc.exists) {
+            console.log('No such document for CF ' + cfId);
+          } else {
+            setAcctId(doc.data().acct_id)
+          }
+        })
+        .catch(err => {
+          console.log('Error getting document', err);
+        });
+    }
+  }, [cfId])
 
   const submit = async (ev) => {
     // Confirm payment amount is in bounds
     if (Number.parseInt(amount) > 0 &&
       !Number.parseInt(amount).isNaN &&
-      Number.parseInt(amount) <= (goal - raised)) {
+      Number.parseInt(amount) <= (goal - raised) && 
+      acctId !== '') {
 
       // Make the payment
       let { token } = await props.stripe.createToken({ name: 'Giving Tree Donor' });
+      console.log('token created')
       let response = await fetch('/charge', {
         method: 'POST',
         headers: { 'Content-Type': 'text/plain' },
-        body: token.id + ' amount: ' + (amount * 100) + ' description: ' + grant,
+        body: token.id + ' amount: ' + (amount * 100) + ' description: ' + grant + ' account: ' + acctId,
       });
       console.log(response);
+      let resJSON = await response.json();
+      console.log(JSON.stringify(resJSON));
       if (response.ok) {
         // // Update the amount in firebase
         // docRef.update({
@@ -111,7 +135,7 @@ function PaymentForm(props) {
       <React.Fragment>
         <Text type='card-heading' text={grant} />
         <ProgressBar raised={raised} goal={goal} />
-        {status === 'incomplete' && 
+        {status === 'incomplete' &&
           <div>
             <CardElement className={classes.stripeElement} />
             <input

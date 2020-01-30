@@ -10,7 +10,8 @@ app.post('/charge', async (req, res) => {
   console.log('request body: ' + req.body);
   let source = req.body.split(' amount: ')[0];
   let amount = req.body.split(' amount: ')[1].split(' description: ')[0];
-  let description = req.body.split(' amount: ')[1].split(' description: ')[1];
+  let description = req.body.split(' amount: ')[1].split(' description: ')[1].split(' account: ')[0];
+  let account = req.body.split(' amount: ')[1].split(' description: ')[1].split(' account: ')[1];
   try {
     let { status } = await stripe.charges.create({
       amount: amount,
@@ -18,9 +19,10 @@ app.post('/charge', async (req, res) => {
       description: description,
       source: source,
     }, {
-      stripeAccount: 'acct_1G5OvkF10BCBL4io',
+      stripeAccount: account,
     }).then(function (charge) {
       // asynchronously called
+      return charge;
     });
 
     res.json({ status });
@@ -48,5 +50,3 @@ app.post('/create', async (req, res) => {
     res.status(500).end;
   }
 })
-
-app.listen(9000, () => console.log('Listening on port 9000'));
