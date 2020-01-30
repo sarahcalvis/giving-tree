@@ -52,7 +52,7 @@ export default function AutoCompleteMapsSearchBar(props) {
   const handleChange = (event) => {
     setInputValue(event.target.value);
     console.log(event.target.value);
-    props.parentCallback(inputValue);
+    props.parentCallback(event.target.value);
   };
 
   const fetch = React.useMemo(

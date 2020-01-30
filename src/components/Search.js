@@ -2,6 +2,7 @@ import React, {Component, useState } from 'react';
 // import LocationSearch from './LocationSearch';
 import AutoCompleteMapsSearchBar from "./AutoCompleteMapsSearchBar";
 import SearchRadius from "./SearchRadius";
+import firebase from "../firebase.js";
 
 class Search extends Component {
   constructor(props) {
@@ -13,6 +14,7 @@ class Search extends Component {
         "lat" : 41.15559, 
         "long" : -80.08209
       },
+      searchResults: [],
       // lat and then long
       grantLocs: [
         {
@@ -38,16 +40,42 @@ class Search extends Component {
     };
   }
 
+  componentDidMount() {
+    var grantSearchResults = [];
+    var db = firebase.firestore();
+    db.collection("grants").get().then((querySnapshot) => {
+        querySnapshot.forEach(function (doc) {
+          var cf_name = doc.data().cf_name;
+          var cf_id = doc.data().cf_id;
+          var title = doc.data().title;
+          var nonprofit_name = doc.data().nonprofit_name;
+          var address = doc.data().address;
+          var lat = doc.data().lat;
+          var long = doc.data().long;
+          var date_posted = doc.data().date_posted;
+          var date_deadline = doc.data().date_deadline;
+          var money_raised = doc.data().money_raised;
+          var goal_amt = doc.data().goal_amt;
+          var desc = doc.data().desc;
+          var tags = doc.data().tags;
+          var images = doc.data().images;
+          grantSearchResults.push({cf_name, cf_id, title, nonprofit_name, address, lat, long, date_posted, date_deadline, money_raised, goal_amt, desc, tags, images});
+        });
+        this.setState({ searchResults: grantSearchResults})
+        console.log(grantSearchResults);
+    });
+  };
+
   locationCallback = (childData) => {      
     this.setState({centralLocation: childData});
-    console.log("In parent in callback. New Location: ", this.state.centralLocation);
+    console.log("In parent in callback. New Location: ", childData);
     this.setDists();
     // NEED TO RERENDER THE CARDS
   }
 
   radiusCallback = (childData) => {      
     this.setState({radius: childData});
-    console.log("In parent in callback. New Radius: ", this.state.radius);
+    console.log("In parent in callback. New Radius: ", childData);
     // NEED TO RERENDER THE CARDS
   }
   //from Geo Data Source
