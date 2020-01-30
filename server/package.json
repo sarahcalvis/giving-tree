@@ -1,0 +1,25 @@
+{
+  "name": "givingtree",
+  "version": "1.0.0",
+  "description": "Backend services for using Stripe on Giving Tree",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sarahcalvis/giving-tree.git"
+  },
+  "author": "GivingTree",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sarahcalvis/giving-tree/issues"
+  },
+  "homepage": "https://github.com/sarahcalvis/giving-tree#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "stripe": "^8.8.0"
+  }
+}
