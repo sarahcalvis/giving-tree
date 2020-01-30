@@ -3,6 +3,7 @@ import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/styles';
 import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
+import firebase from '../firebase.js';
 
 const useStyles = makeStyles(theme => ({
   pageLayout: {
@@ -21,7 +22,13 @@ const useStyles = makeStyles(theme => ({
 
 export default function FGrants(props) {
   const classes = useStyles();
-  const [acctID, setAcctID] = React.useState('');
+
+  const [acctId, setAcctId] = React.useState('');
+
+  // Foundation ID
+  const [id] = React.useState('1fbyawFlFR0YdMYPZbtG'); //React.useState(props.id);
+
+  const docRef = firebase.firestore().doc('communityFoundations/' + id);
 
   // If the user is entering this page redirected from the account creation page,
   // then the url will have two parameters:
@@ -30,6 +37,11 @@ export default function FGrants(props) {
   const qs = require('query-string');
   const code = qs.parse(props.location.search).code;
   const error = qs.parse(props.location.search).error;
+
+  const updateAcctIDDB = (acctId) => {
+    console.log('updating account ID to ' + acctId);
+    docRef.update({ "acct_id": acctId });
+  }
 
   const submit = async () => {
     if (code) {
@@ -42,7 +54,8 @@ export default function FGrants(props) {
 
       if (response.ok) {
         let resJSON = await response.json();
-        setAcctID(resJSON.acctID);
+        setAcctId(resJSON.acctID);
+        updateAcctIDDB(resJSON.acctID);
         //send the id to the database
       } else {
         console.log('did not do good');
@@ -62,7 +75,7 @@ export default function FGrants(props) {
       <Container className={classes.pageLayout}>
         <React.Fragment>
           {code &&
-            <p>Connected to Stripe with Account ID {acctID}. You can look at your grants now.</p>
+            <p>Connected to Stripe with Account ID {acctId}. You can look at your grants now.</p>
           }
           {error &&
             <div>
