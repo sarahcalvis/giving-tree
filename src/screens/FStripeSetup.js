@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
 import Container from '@material-ui/core/Container';
@@ -23,62 +23,23 @@ const useStyles = makeStyles(theme => ({
 export default function FStripeSetup(props) {
   const classes = useStyles();
 
-  // If the user is entering this page redirected from the account creation page,
-  // then the url will have two parameters:
-  // scope- I don't think we really care about scope. hopefully it is read/write
-  // code- the user's code we can use to connect their stripe
-  const qs = require('query-string');
-  const code = qs.parse(props.location.search).code;
-  const error = qs.parse(props.location.search).error;
-
-  const submit = async () => {
-    if (code) {
-      // Make the payment
-      let response = await fetch('/create', {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain' },
-        body: code,
-      });
-      console.log(response);
-      if (response.ok) {
-        console.log('did good');
-        //send the id to the database
-      } else {
-        console.log('did not do good');
-        //it went wrong and idk what to do in this case
-      }
-    }
-  }
-
-  useEffect(() => {
-   submit();
-  }, [code, submit]);
-
   return (
     <div>
       <Container className={classes.pageLayout}>
         <React.Fragment>
-          {code &&
-            <p>Connected to Stripe!</p>
-          }
-          {!code && !error &&
-            <Link
-              textDecoration='none'
-              color='inherit'
-              //target='_blank'
-              //rel='noopener noreferrer'
-              href='https://connect.stripe.com/oauth/authorize?response_type=code&client_id=ca_GblAQuuPHkvIstLgnPzWLGLhh4hMRV3h&scope=read_write'>
-              <Button
-                fullWidth
-                color='primary'
-                variant='contained'>
-                Connect to Stripe
+          <Link
+            textDecoration='none'
+            color='inherit'
+            //target='_blank'
+            //rel='noopener noreferrer'
+            href='https://connect.stripe.com/oauth/authorize?response_type=code&client_id=ca_GblAQuuPHkvIstLgnPzWLGLhh4hMRV3h&scope=read_write'>
+            <Button
+              fullWidth
+              color='primary'
+              variant='contained'>
+              Connect to Stripe
             </Button>
-            </Link>
-          }
-          {error &&
-            <p>Error 404: you gotta connect to stripe for this to work my dude</p>
-          }
+          </Link>
         </React.Fragment>
       </Container>
     </div >
