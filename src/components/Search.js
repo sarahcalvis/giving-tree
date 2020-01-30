@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-//import LocationSearch from './LocationSearch';
+import React, {Component, useState } from 'react';
+// import LocationSearch from './LocationSearch';
 import AutoCompleteMapsSearchBar from "./AutoCompleteMapsSearchBar";
 import SearchRadius from "./SearchRadius";
 
@@ -106,3 +106,4 @@ class Search extends Component {
 }
 
 export default Search;
+

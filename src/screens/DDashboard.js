@@ -16,23 +16,22 @@ export default function DDashboard() {
   const [snapshot, loading, error] = useCollectionOnce(db.collection('grants'));
 
   useEffect(() => {
-    console.log('use effect');
-
     var newGrants = [];
     if (!loading && !error) {
       snapshot.forEach(function (doc) {
         newGrants.push(
           <SmallGrantCard
-            grant={doc.id}
-            foundation={doc.data().cf_name}
-            nonprofit={doc.data().nonprofit_name}
-            goal={doc.data().goal_amt}
-            raised={doc.data().money_raised}
+            id={doc.id}
+            title={doc.data().title}
+            cfName={doc.data().cf_name}
+            nonprofitName={doc.data().nonprofit_name}
+            goalAmt={doc.data().goal_amt}
+            moneyRaised={doc.data().money_raised}
             img={doc.data().images[0] || 'GivingTree.png'} />);
       });
       setGrants(newGrants);
     }
-  }, [snapshot]);
+  }, [snapshot, error, loading]);
 
   return (
     <Container maxWidth='md'>

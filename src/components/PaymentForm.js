@@ -48,7 +48,7 @@ function PaymentForm(props) {
   const classes = useStyles();
 
   // Grant details received as props
-  const [grantName] = React.useState(props.grantId);
+  const [grantId] = React.useState(props.grantId);
 
 
   // Record transaction state
@@ -56,22 +56,24 @@ function PaymentForm(props) {
   const [amount, setAmount] = React.useState('');
 
   // Details about the grant we will get from the database
+  const [grant, setGrant] = React.useState('');
   const [raised, setRaised] = React.useState('');
   const [goal, setGoal] = React.useState('');
 
 
   // Initialize database and specific grant in database
   const db = firebase.firestore();
-  const [value, loading, error] = useDocumentOnce(db.doc('grants/' + grantName));
+  const [value, loading, error] = useDocumentOnce(db.doc('grants/' + grantId));
 
 
 
   useEffect(() => {
     if (!loading && !error) {
+      setGrant(value.data().title);
       setGoal(value.data().goal_amt);
       setRaised(value.data().money_raised);
     }
-  }, [value]);
+  }, [value, error, loading]);
 
   const submit = async (ev) => {
     // Confirm payment amount is in bounds
@@ -84,7 +86,7 @@ function PaymentForm(props) {
       let response = await fetch('/charge', {
         method: 'POST',
         headers: { 'Content-Type': 'text/plain' },
-        body: token.id + ' amount: ' + (amount * 100) + ' description: ' + grantName,
+        body: token.id + ' amount: ' + (amount * 100) + ' description: ' + grant,
       });
       console.log(response);
       if (response.ok) {
@@ -107,7 +109,7 @@ function PaymentForm(props) {
   return (
     <Container className={classes.pageLayout}>
       <React.Fragment>
-        <Text type='card-heading' text={grantName} />
+        <Text type='card-heading' text={grant} />
         <ProgressBar raised={raised} goal={goal} />
         {status === 'incomplete' && 
           <div>
@@ -127,7 +129,7 @@ function PaymentForm(props) {
           </div>
         }
         {status === 'complete' &&
-          <Text type='card-subheading' text={'Thank you for your donation! Thanks to your gift of $' + amount + ', ' + grantName + ' is now only  $' + (goal - raised) + ' from meeting its goal of $' + goal + '!'} />
+          <Text type='card-subheading' text={'Thank you for your donation! Thanks to your gift of $' + amount + ', ' + grant + ' is now only  $' + (goal - raised) + ' from meeting its goal of $' + goal + '!'} />
         }
         {status === 'error' &&
           <Text type='card-subheading' text={'Sorry, an error occurred 🤡'} />

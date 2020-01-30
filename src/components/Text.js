@@ -29,7 +29,7 @@ export default function Text(props) {
       }
       {type === "card-subheading" &&
         <Typography
-          variant="subtitle"
+          variant="body2"
           color="textSecondary" 
           component="p"
           gutterBottom>

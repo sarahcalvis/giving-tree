@@ -4,6 +4,7 @@ import CardContent from '@material-ui/core/CardContent';
 import firebase from '../firebase.js';
 import CardMedia from '@material-ui/core/CardMedia';
 import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
 import Text from './Text.js';
 import ProgressBar from './ProgressBar.js';
@@ -28,12 +29,24 @@ export default function LargeGrantCard(props) {
   const classes = useStyles();
 
   // Grant details
-  const [grant, setGrant] = React.useState(props.grant);
-  const [foundation, setFoundation] = React.useState(props.foundation);
-  const [nonprofit, setNonprofit] = React.useState(props.nonprofit);
-  const [goal, setGoal] = React.useState(props.goal);
-  const [raised, setRaised] = React.useState(props.raised);
+  const [id, setId] = React.useState(props.id);
+  const [title, setTitle] = React.useState(props.title);
+  const [cfName, setCfName] = React.useState(props.cfName);
+  const [desc, setDesc] = React.useState(props.desc);
+  const [nonprofitName, setNonprofitName] = React.useState(props.nonprofitName);
+  const [goalAmt, setGoalAmt] = React.useState(props.goalAmt);
+  const [moneyRaised, setMoneyRaised] = React.useState(props.moneyRaised);
   const [img, setImg] = React.useState(props.img);
+
+  // Observe grant details
+  useEffect(() => { setId(props.id); }, [props.id]);
+  useEffect(() => { setTitle(props.title); }, [props.title]);
+  useEffect(() => { setCfName(props.cfName); }, [props.cfName]);
+  useEffect(() => { setDesc(props.desc); }, [props.desc]);
+  useEffect(() => { setNonprofitName(props.nonprofitName); }, [props.nonprofitName]);
+  useEffect(() => { setGoalAmt(props.goalAmt); }, [props.goalAmt]);
+  useEffect(() => { setMoneyRaised(props.moneyRaised); }, [props.moneyRaised]);
+  useEffect(() => { setImg(props.img) }, [props.img]);
 
   // Create reference to firebase storage
   let storage = firebase.storage();
@@ -41,14 +54,6 @@ export default function LargeGrantCard(props) {
 
   // Get image URL
   const [downloadUrl, loading, error] = useDownloadURL(storageRef.child(img));
-
-  // Observe grant details
-  useEffect(() => { setGrant(props.grant); }, [props.grant]);
-  useEffect(() => { setFoundation(props.foundation); }, [props.foundation]);
-  useEffect(() => { setNonprofit(props.nonprofit); }, [props.nonprofit]);
-  useEffect(() => { setGoal(props.goal); }, [props.goal]);
-  useEffect(() => { setRaised(props.raised); }, [props.raised]);
-  useEffect(() => { setImg(props.img) }, [props.img]);
 
   return (
     <div>
@@ -62,11 +67,23 @@ export default function LargeGrantCard(props) {
             />
           }
           <CardContent className={classes.cardContent}>
-            <Text type='card-aboveheading' text={nonprofit} />
-            <Text type='card-heading' text={grant} />
-            <Text type='card-subheading' text={foundation} />
-            <ProgressBar goal={goal} raised={raised} />
-            <Link to={'/grants/' + grant.split(' ').join('-') + '/give'}>Donate</Link>
+            <Text type='card-aboveheading' text={nonprofitName} />
+            <Text type='card-heading' text={title} />
+            <Text type='card-subheading' text={cfName} />
+            <ProgressBar goal={goalAmt} raised={moneyRaised} />
+            <Text type='card-subheading' text={desc} />
+            <Grid container direction='row' justify='space-between' alignItems='flex-end'>
+              <Grid item>
+                <Link to={'/grants/' + id + '/give'}>Report</Link>
+              </Grid>
+              <Grid item  >
+                <Link to={'/grants/' + id + '/give'}>
+                  <Button color='primary' variant='contained'>
+                    Donate
+                  </Button>
+                </Link>
+              </Grid>
+            </Grid>
           </CardContent>
         </Card>
       </Grid >

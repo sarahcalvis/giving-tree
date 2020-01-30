@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
 import Container from '@material-ui/core/Container';
@@ -18,34 +18,69 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(4),
     marginBottom: theme.spacing(2),
   },
-  a: {
-    color: '#FFFFFF',
-    textDecoration: 'none',
-  },
 }))
 
-export default function FAccountRequest() {
+export default function FAccountRequest(props) {
   const classes = useStyles();
+
+  // If the user is entering this page redirected from the account creation page,
+  // then the url will have two parameters:
+  // scope- I don't think we really care about scope. hopefully it is read/write
+  // code- the user's code we can use to connect their stripe
+  const qs = require('query-string');
+  const code = qs.parse(props.location.search).code;
+  const error = qs.parse(props.location.search).error;
+
+  const submit = async () => {
+    if (code) {
+      // Make the payment
+      let response = await fetch('/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain' },
+        body: code,
+      });
+      console.log(response);
+      if (response.ok) {
+        console.log('did good');
+        //send the id to the database
+      } else {
+        console.log('did not do good');
+        //it went wrong and idk what to do in this case
+      }
+    }
+  }
+
+  useEffect(() => {
+   submit();
+  }, [code, submit]);
 
   return (
     <div>
       <Container className={classes.pageLayout}>
         <React.Fragment>
-          <Button
-            fullWidth
-            color="primary"
-            variant="contained">
+          {code &&
+            <p>Connected to Stripe!</p>
+          }
+          {!code && !error &&
             <Link
               textDecoration='none'
               color='inherit'
-              target='_blank'
-              rel='noopener noreferrer'
-              href='https://connect.stripe.com/oauth/authorize?response_type=code&client_id=ca_32D88BD1qLklliziD7gYQvctJIhWBSQ7&scope=read_write'>
-              Click here to set up a Stripe account
-          </Link>
-          </Button>
+              //target='_blank'
+              //rel='noopener noreferrer'
+              href='https://connect.stripe.com/oauth/authorize?response_type=code&client_id=ca_GblAQuuPHkvIstLgnPzWLGLhh4hMRV3h&scope=read_write&redirect_uri=http://localhost:3000/request-account'>
+              <Button
+                fullWidth
+                color='primary'
+                variant='contained'>
+                Connect to Stripe
+            </Button>
+            </Link>
+          }
+          {error &&
+            <p>you gotta connect to stripe for this to work my dude</p>
+          }
         </React.Fragment>
       </Container>
-    </div>
+    </div >
   );
 }
