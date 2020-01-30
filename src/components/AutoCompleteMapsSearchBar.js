@@ -29,7 +29,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function GoogleMaps() {
+export default function AutoCompleteMapsSearchBar(props) {
   const classes = useStyles();
   const [inputValue, setInputValue] = React.useState("");
   const [options, setOptions] = React.useState([]);
@@ -40,7 +40,7 @@ export default function GoogleMaps() {
     console.log(document.querySelector("#google-maps"));
     if (!document.querySelector("#google-maps")) {
       loadScript(
-        "https://maps.googleapis.com/maps/api/js?key=AIzaSyBDjbgf2bmed-JXEkYh6zxluDoRmoQyEkc&libraries=places",
+        "https://maps.googleapis.com/maps/api/js?key=AIzaSyDntA49IGS_w5ZRD3ijey8OVS8CNYpqXqA&libraries=places",
         document.querySelector("head"),
         "google-maps"
       );
@@ -49,8 +49,10 @@ export default function GoogleMaps() {
     loaded.current = true;
   }
 
-  const handleChange = event => {
+  const handleChange = (event) => {
     setInputValue(event.target.value);
+    console.log(event.target.value);
+    props.parentCallback(inputValue);
   };
 
   const fetch = React.useMemo(
@@ -100,7 +102,7 @@ export default function GoogleMaps() {
       includeInputInList
       freeSolo
       disableOpenOnFocus
-      onChange={(event, value) => console.log(value)}
+      onChange={handleChange}
       renderInput={params => (
         <TextField
           name="loc-textfield"
@@ -109,7 +111,6 @@ export default function GoogleMaps() {
           label="Search from a location"
           variant="outlined"
           fullWidth
-          onChange={handleChange}
         />
       )}
       renderOption={option => {

@@ -1,6 +1,6 @@
 import React from "react";
 
-class Distance extends React.Component {
+class LocationSearch {
   constructor(props) {
     super(props);
     this.state = {
@@ -91,6 +91,8 @@ class Distance extends React.Component {
     */
   }
 }
+
+export default LocationSearch;
 /*
 
 }
