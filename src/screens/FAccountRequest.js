@@ -29,19 +29,21 @@ export default function FAccountRequest(props) {
   // code- the user's code we can use to connect their stripe
   const qs = require('query-string');
   const code = qs.parse(props.location.search).code;
+  const error = qs.parse(props.location.search).error;
 
   return (
     <div>
       <Container className={classes.pageLayout}>
         <React.Fragment>
-          {code ?
+          {code &&
             <p>Connected to Stripe!</p>
-            :
+          }
+          {!code && !error &&
             <Link
               textDecoration='none'
               color='inherit'
-              target='_blank'
-              rel='noopener noreferrer'
+              //target='_blank'
+              //rel='noopener noreferrer'
               href='https://connect.stripe.com/oauth/authorize?response_type=code&client_id=ca_GblAQuuPHkvIstLgnPzWLGLhh4hMRV3h&scope=read_write&redirect_uri=http://localhost:3000/request-account'>
               <Button
                 fullWidth
@@ -49,7 +51,11 @@ export default function FAccountRequest(props) {
                 variant='contained'>
                 Connect to Stripe
             </Button>
-            </Link>}
+            </Link>
+          }
+          {error &&
+            <p>you gotta connect to stripe for this to work my dude</p>
+          }
         </React.Fragment>
       </Container>
     </div >
