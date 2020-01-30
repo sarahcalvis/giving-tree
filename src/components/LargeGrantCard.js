@@ -8,6 +8,7 @@ import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
 import Text from './Text.js';
 import ProgressBar from './ProgressBar.js';
+import ContactPopout from './ContactPopout.js';
 import { makeStyles } from '@material-ui/styles';
 import { useDownloadURL } from 'react-firebase-hooks/storage';
 
@@ -23,6 +24,9 @@ const useStyles = makeStyles(theme => ({
   cardContent: {
     flexGrow: 1,
   },
+  a: {
+    cursor: 'pointer',
+  }
 }))
 
 export default function LargeGrantCard(props) {
@@ -37,6 +41,9 @@ export default function LargeGrantCard(props) {
   const [goalAmt, setGoalAmt] = React.useState(props.goalAmt);
   const [moneyRaised, setMoneyRaised] = React.useState(props.moneyRaised);
   const [img, setImg] = React.useState(props.img);
+
+  // Control whether contact popout is visible
+  const [popout, setPopout] = React.useState(false);
 
   // Observe grant details
   useEffect(() => { setId(props.id); }, [props.id]);
@@ -54,6 +61,11 @@ export default function LargeGrantCard(props) {
 
   // Get image URL
   const [downloadUrl, loading, error] = useDownloadURL(storageRef.child(img));
+
+  // Make popout visible or invisible
+  const togglePopout = () => {
+    popout ? setPopout(false) : setPopout(true);
+  }
 
   return (
     <div>
@@ -74,7 +86,10 @@ export default function LargeGrantCard(props) {
             <Text type='card-subheading' text={desc} />
             <Grid container direction='row' justify='space-between' alignItems='flex-end'>
               <Grid item>
-                <Link to={'/grants/' + id + '/give'}>Report</Link>
+                {popout &&
+                  <ContactPopout />
+                }
+                <a className={classes.a} onClick={togglePopout}>Contact</a>
               </Grid>
               <Grid item  >
                 <Link to={'/grants/' + id + '/give'}>
