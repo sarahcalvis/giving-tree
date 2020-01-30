@@ -74,7 +74,7 @@ export default function LargeGrantCard(props) {
             <Text type='card-subheading' text={desc} />
             <Grid container direction='row' justify='space-between' alignItems='flex-end'>
               <Grid item>
-                <Link to={'/grants/' + id + '/give'}>Report</Link>
+                <Link to={'/grants/' + id + '/give'}>Contact</Link>
               </Grid>
               <Grid item  >
                 <Link to={'/grants/' + id + '/give'}>
