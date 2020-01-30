@@ -16,26 +16,7 @@ class Search extends Component {
       },
       searchResults: [],
       // lat and then long
-      grantLocs: [
-        {
-          "lat": 36.8909, 
-          "long" : -76.30892, 
-          "name": "Bathroom Supplies", 
-          "address": "1421 Bolling Ave, Norfolk, VA 23508"
-        },
-        {
-          "lat": 38.89308, 
-          "long": -76.97667, 
-          "name": "Emotional Support", 
-          "address": "1911 C Street NE Washington DC 20002"
-        },
-        {    
-          "lat" : 41.16895,
-          "long": -80.1132,
-          "name": "Taco Bell",
-          "address" : "1560 W. Main Street, Grove City, PA 16127"
-        }
-      ],
+      
       dists: [],
     };
   }
@@ -70,6 +51,7 @@ class Search extends Component {
     this.setState({centralLocation: childData});
     console.log("In parent in callback. New Location: ", childData);
     this.setDists();
+    console.log("logging the dists: ", this.state.dists);
     // NEED TO RERENDER THE CARDS
   }
 
@@ -106,22 +88,30 @@ class Search extends Component {
     }
   }
 
-  addDist = (grantLoc) => {
+  addDist = (grant) => {
+    console.log("in addDist. the distance: ", this.calcDistance(this.state.centerLoc.lat, this.state.centerLoc.long, grant.lat, grant.long, "M"));
+    console.log("grant: ", grant);
+    this.setState( {dists: {
+        "dist" : this.calcDistance(this.state.centerLoc.lat, this.state.centerLoc.long, grant.lat, grant.long, "M"),
+        "grant" : grant
+    }});
+    /*
     this.setState(prevState => ({
-      dists: [...prevState.dists,
-                {
-                  "dist" : this.calcDistance(this.state.centerLoc.lat, this.state.centerLoc.long, grantLoc.lat, grantLoc.long, "M"),
-                  "grantLoc" : grantLoc
-                }
-              ]
-    }))
+      dists: [...prevState.dists, 
+        {
+            "dist" : this.calcDistance(this.state.centerLoc.lat, this.state.centerLoc.long, grant.lat, grant.long, "M"),
+            "grant" : grant
+        }]
+    }));
+    */
   }
 
   setDists = () => {  
-    this.state.grantLocs.forEach(this.addDist); 
-    this.setState(prevState => ({
-      dists: prevState.dists.sort((a, b) => (a.dist > b.dist ? 1 : -1))
-    }))
+    this.setState({dists: []});
+    this.state.searchResults.forEach(this.addDist); 
+    console.log("in setDists with dists: ", this.state.dists);
+    //var sortedByDist = this.state.dists.sort((a, b) => (a.dist > b.dist ? 1 : -1));
+    //this.setState({ dists: sortedByDist});
   }
   render() {
     return (
