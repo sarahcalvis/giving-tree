@@ -31,15 +31,17 @@ app.post('/charge', async (req, res) => {
 });
 
 app.post('/create', async (req, res) => {
-  console.log(req);
+  console.log('request code ' + req.body);
   try {
     let { status } = await stripe.oauth.token({
       grant_type: 'authorization_code',
-      code: 'ac_123456789',
+      code: req.body,
     }).then(function (response) {
       // asynchronously called
       var connected_account_id = response.stripe_user_id;
     });
+    
+    res.json({ status });
   } catch (err) {
     console.log(err)
     res.status(500).end

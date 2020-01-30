@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
 import Container from '@material-ui/core/Container';
@@ -30,6 +30,29 @@ export default function FAccountRequest(props) {
   const qs = require('query-string');
   const code = qs.parse(props.location.search).code;
   const error = qs.parse(props.location.search).error;
+
+  const submit = async () => {
+    if (code) {
+      // Make the payment
+      let response = await fetch('/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain' },
+        body: code,
+      });
+      console.log(response);
+      if (response.ok) {
+        console.log('did good');
+        //send the id to the database
+      } else {
+        console.log('did not do good');
+        //it went wrong and idk what to do in this case
+      }
+    }
+  }
+
+  useEffect(() => {
+   submit();
+  }, [code, submit]);
 
   return (
     <div>
