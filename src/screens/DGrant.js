@@ -4,8 +4,6 @@ import firebase from '../firebase.js';
 import { useDocumentOnce } from 'react-firebase-hooks/firestore';
 import { useParams } from 'react-router-dom';
 
-
-
 export default function DGrant(props) {
   let id = useParams().grantId;
   let [grant, setGrant] = React.useState('');
@@ -20,7 +18,9 @@ export default function DGrant(props) {
         id={id}
         title={value.data().title}
         cfName={value.data().cf_name}
+        cfId={value.data().cf_id}
         nonprofitName={value.data().nonprofit_name}
+        nonprofitId={value.data().nonprofit_id}
         desc={value.data().desc}
         goalAmt={value.data().goal_amt}
         moneyRaised={value.data().money_raised}

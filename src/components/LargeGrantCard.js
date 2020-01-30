@@ -32,7 +32,7 @@ const useStyles = makeStyles(theme => ({
 export default function LargeGrantCard(props) {
   const classes = useStyles();
 
-  // Grant details
+  // Grant details- from the grant collection
   const [id, setId] = React.useState(props.id);
   const [title, setTitle] = React.useState(props.title);
   const [cfName, setCfName] = React.useState(props.cfName);
@@ -41,6 +41,12 @@ export default function LargeGrantCard(props) {
   const [goalAmt, setGoalAmt] = React.useState(props.goalAmt);
   const [moneyRaised, setMoneyRaised] = React.useState(props.moneyRaised);
   const [img, setImg] = React.useState(props.img);
+
+  // Communtiy foundation details- from the CF collection
+  const [cfId] = React.useState(props.cfId);
+
+  // Communtiy foundation details- from the CF collection
+  const [nonprofitId] = React.useState(props.nonprofitId);
 
   // Control whether contact popout is visible
   const [popout, setPopout] = React.useState(false);
@@ -87,7 +93,7 @@ export default function LargeGrantCard(props) {
             <Grid container direction='row' justify='space-between' alignItems='flex-end'>
               <Grid item>
                 {popout &&
-                  <ContactPopout />
+                  <ContactPopout cfId={cfId} nonprofitId={nonprofitId} />
                 }
                 <a className={classes.a} onClick={togglePopout}>Contact</a>
               </Grid>
