@@ -1,6 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+
 export default function LInputNewPassword() {
-  return(
+  // Set tab title
+  useEffect(() => { document.title = 'Input new password' }, []);
+
+  return (
     <p>Input a new password</p>
   );
 }

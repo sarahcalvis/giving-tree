@@ -41,7 +41,7 @@ export default function DGrant(props) {
   const [cfUrl, setCfUrl] = React.useState('');
   const [cfPublicPhone, setCfPublicPhone] = React.useState('');
   const [cfPublicEmail, setCfPublicEmail] = React.useState('');
- 
+
   useEffect(() => {
     if (cfId !== '') {
       // query CF here
@@ -84,6 +84,9 @@ export default function DGrant(props) {
         });
     }
   }, [nonprofitId])
+
+  // Set tab title
+  useEffect(() => { document.title = title; }, [title]);
 
   return (
     <div>

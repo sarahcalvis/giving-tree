@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
 import Container from '@material-ui/core/Container';
@@ -22,6 +22,10 @@ const useStyles = makeStyles(theme => ({
 
 export default function FStripeSetup(props) {
   const classes = useStyles();
+
+  // Set tab title
+  useEffect(() => { document.title = 'Connect to Stripe' }, []);
+
 
   return (
     <div>

@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 export default function LRequestNewPassword() {
-  return(
+  // Set tab title
+  useEffect(() => { document.title = 'Request New Password'}, []);
+
+  return (
     <p>Request a new password</p>
   );
 }

@@ -93,7 +93,10 @@ function PaymentForm(props) {
           console.log('Error getting document', err);
         });
     }
-  }, [cfId])
+  }, [cfId]);
+
+  // Set tab title
+  useEffect(() => { document.title = 'Give to ' + grant; }, [grant]);
 
   const submit = async (ev) => {
     // Confirm payment amount is in bounds
