@@ -45,16 +45,15 @@ export default function DDashboard() {
     var newGrants = [];
     console.log("childData in Dashboard: ", childData);
     childData.forEach(function outputThis(data) {
-      console.log(data.grant);
+      console.log("data: ", data);
+      console.log("data.grant: ", data.grant);
     });
-    newGrants = childData.forEach(function addStuff(data) {
-      var junk;
-    });
+    
     /*
     childData.forEach(function (data) {
       newGrants.push(
         <SmallGrantCard
-          id={data.grant[cf_id]}
+          id={data.grant.cf_id}
           title={data.grant.title}
           cfName={data.grant.cf_name}
           nonprofitName={data.grant.nonprofit_name}
@@ -65,20 +64,6 @@ export default function DDashboard() {
     });
     */
     console.log("newGrants: ", newGrants);
-    /*
-    childData.forEach(function (grant) {
-      newGrants.push(
-        <SmallGrantCard
-          id={grant.cf_id}
-          title={grant.title}
-          cfName={grant.cf_name}
-          nonprofitName={grant.nonprofit_name}
-          goalAmt={grant.goal_amt}
-          moneyRaised={grant.money_raised}
-          img={'GivingTree.png'} />
-          );
-    });
-    */
     setGrants(newGrants);
   }
 
