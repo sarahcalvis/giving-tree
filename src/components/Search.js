@@ -16,7 +16,7 @@ class Search extends Component {
       },
       distResults: [],
       // lat and then long
-      grants: [],
+      
       dists: [],
     };
   }
@@ -42,7 +42,7 @@ class Search extends Component {
           var images = doc.data().images;
           grantSearchResults.push({cf_name, cf_id, title, nonprofit_name, address, lat, long, date_posted, date_deadline, money_raised, goal_amt, desc, tags, images});
         });
-        this.setState({ grants: grantSearchResults})
+        this.setState({ distResults: grantSearchResults})
         console.log(grantSearchResults);
     });
   };
@@ -91,26 +91,30 @@ class Search extends Component {
   addDist = (grant) => {
     console.log("in addDist. the distance: ", this.calcDistance(this.state.centerLoc.lat, this.state.centerLoc.long, grant.lat, grant.long, "M"));
     console.log("grant: ", grant);
-    //append new distance to the results
+    this.setState( {dists: {
+        "dist" : this.calcDistance(this.state.centerLoc.lat, this.state.centerLoc.long, grant.lat, grant.long, "M"),
+        "grant" : grant
+    }});
+    /*
     this.setState(prevState => ({
-      distResults: [...prevState.distResults, 
+      dists: [...prevState.dists, 
         {
             "dist" : this.calcDistance(this.state.centerLoc.lat, this.state.centerLoc.long, grant.lat, grant.long, "M"),
             "grant" : grant
         }]
     }));
+    */
   }
 
   setDists = () => { 
-    //empty old results
-    console.log("grants: ", this.state.grants);
-    this.setState({distResults: []}); 
-    //loop through each grant and calculate the distance
-    this.state.grants.forEach(this.addDist); 
+    this.setState({distResults: this.state.dists}); 
+    this.setState({dists: []});
+    console.log("in setDists with init distResults: ", this.state.distResults);
+    console.log("in setDists with init dists: ", this.state.dists);
+    this.state.distResults.forEach(this.addDist); 
     console.log("in setDists with distResults: ", this.state.distResults);
-    //sort results by distance
     var sortedByDist = this.state.distResults.sort((a, b) => (a.dist > b.dist ? 1 : -1));
-    console.log("sorted array: ", sortedByDist);
+    console.log(sortedByDist);
     //this.setState({ dists: sortedByDist});
   }
 
