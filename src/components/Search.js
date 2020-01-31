@@ -14,8 +14,10 @@ class Search extends Component {
         "lat" : 41.15559, 
         "long" : -80.08209
       },
-      distResults: {},
-      grants: {},
+      tempResults: [],
+      distResults: [],
+      radiusResults: [],
+      grants: [],
     };
   }
 
@@ -59,7 +61,10 @@ class Search extends Component {
   radiusCallback = (childData) => {      
     this.setState({radius: childData});
     console.log("In parent in callback. New Radius: ", childData);
+    // limit results by radius
+
     // NEED TO RERENDER THE CARDS
+    this.props.parentCallback(this.state.grants);
   }
   //from Geo Data Source
   calcDistance(lat1, lon1, lat2, lon2, unit) {
@@ -77,7 +82,7 @@ class Search extends Component {
         dist = 1;
       }
       dist = Math.acos(dist);
-      dist = (dist * 180) / Math.PI;
+      dist = (dist * 180 ) / Math.PI;
       dist = dist * 60 * 1.1515;
       return dist;
     }
@@ -87,18 +92,13 @@ class Search extends Component {
     //console.log("centerLoc: ", this.state.centerLoc);
     console.log("in addDist. the distance: ", this.calcDistance(this.state.centerLoc.lat, this.state.centerLoc.long, grant.lat, grant.long));
     console.log("grant: ", grant);
-    var dist = 0;
-    this.setState( {distResults: {}});
-    
-    /*
-    this.setState(prevState => ({
-      distResults: [...prevState.distResults, 
-        {
-            "dist" : this.calcDistance(this.state.centerLoc.lat, this.state.centerLoc.long, grant.lat, grant.long),
-            "grant" : grant
-        }]
-    }));
-    */
+    //this.setState( {distResults: {}});
+    var temp = this.state.tempResults;
+    temp.push({
+      "dist" : this.calcDistance(this.state.centerLoc.lat, this.state.centerLoc.long, grant.lat, grant.long),
+      "grant" : grant
+    });
+    this.setState({tempResults: temp});
   }
 
   setDists = () => { 
@@ -106,9 +106,10 @@ class Search extends Component {
     this.state.distResults.forEach(this.addDist); 
     console.log("in setDists with distResults: ", this.state.distResults);
     //var sortedByDist = this.state.distResults.sort((a, b) => (a.dist > b.dist ? 1 : -1));
+    console.log("temp: ", this.state.tempResults);
     var sortedByDist = [{dist: 3,grant: {junk: 0}}, {dist: 2,grant: {junk: 0}}, {dist: 5,grant: {junk: 0}}, {dist: 1, grant: {junk: 0}}].sort((a, b) => (a.dist > b.dist ? 1 : -1));
     console.log(sortedByDist);
-    console.log("grants altered? ", this.state.grants);
+    console.log("grants altered? ", this.state.tempResults);
   }
 
   render() {
