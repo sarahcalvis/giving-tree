@@ -125,21 +125,33 @@ function PaymentForm(props) {
       if (response.ok) {
         let resJSON = await response.json();
         console.log(JSON.stringify(resJSON));
+
+        let grantRef = db.collection('grants').doc(grantId);
+
         // Update the donation collection for the grant in firebase
-        db.collection('communityFoundations')
-          .doc(cfId)
-          .collection('donations')
-          .add({
-            donation: Number.parseInt(amount),
-            timestamp: firebase.firestore.Timestamp.fromDate(new Date()),
-          }).then(ref => {
-            console.log('Added donation of ' + amount + ' with ID ' + ref.id + ' to the donations collection');
+        grantRef.collection('donations').add({
+          donation: Number.parseInt(amount),
+          timestamp: firebase.firestore.Timestamp.fromDate(new Date()),
+        }).then(ref => {
+          console.log('Added donation of ' + amount + ' with ID ' + ref.id + ' to the donations collection');
+          // Update the total donation amount for the grant in firebase
+          // TODO: make a docref!
+          let transaction = db.runTransaction(t => {
+            return t.get(grantRef)
+              .then(doc => {
+                let newMoneyRaised = doc.data().money_raised + Number.parseInt(amount);
+                t.update(grantRef, { money_raised: newMoneyRaised });
+              });
+          }).then(result => {
+            console.log('Grant total updated!');
+
+            // Record transaction complete
+            setStatus('complete');
+          }).catch(err => {
+            console.log('Grant total update error:', err);
           });
 
-        // Update the total donation amount for the grant in firebase
-
-        // Record transaction complete
-        setStatus('complete');
+        });
       } else {
         setStatus('error');
       }
