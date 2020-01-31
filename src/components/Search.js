@@ -28,7 +28,7 @@ class Search extends Component {
         querySnapshot.forEach(function (doc) {
           var cf_name = doc.data().cf_name;
           var cf_id = doc.data().cf_id;
-          var title = doc.data().title;
+          var title = doc.data().title +"oh";
           var nonprofit_name = doc.data().nonprofit_name;
           var address = doc.data().address;
           var lat = doc.data().lat;
@@ -104,12 +104,15 @@ class Search extends Component {
   setDists = () => { 
     console.log("in setDists with init distResults: ", this.state.distResults);
     this.state.distResults.forEach(this.addDist); 
-    console.log("in setDists with distResults: ", this.state.distResults);
-    //var sortedByDist = this.state.distResults.sort((a, b) => (a.dist > b.dist ? 1 : -1));
-    console.log("temp: ", this.state.tempResults);
-    var sortedByDist = [{dist: 3,grant: {junk: 0}}, {dist: 2,grant: {junk: 0}}, {dist: 5,grant: {junk: 0}}, {dist: 1, grant: {junk: 0}}].sort((a, b) => (a.dist > b.dist ? 1 : -1));
-    console.log(sortedByDist);
-    console.log("grants altered? ", this.state.tempResults);
+    //console.log("in setDists with distResults: ", this.state.distResults);
+    //console.log("temp: ", this.state.tempResults);
+    var sortedByDist = this.state.tempResults.sort((a, b) => (a.dist > b.dist ? 1 : -1));
+    //var sortedByDist = [{dist: 3,grant: {junk: 0}}, {dist: 2,grant: {junk: 0}}, {dist: 5,grant: {junk: 0}}, {dist: 1, grant: {junk: 0}}].sort((a, b) => (a.dist > b.dist ? 1 : -1));
+    //console.log(sortedByDist);
+    this.setState({distResults: this.state.tempResults});
+    this.setState({tempResults: []});
+    console.log("distRes altered? ", this.state.distResults);
+    console.log("temp cleared? ", this.state.tempResults);
   }
 
   render() {
