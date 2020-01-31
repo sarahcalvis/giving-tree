@@ -8,6 +8,7 @@ import Text from '../components/Text.js';
 import firebase from '../firebase.js';
 import ProgressBar from '../components/ProgressBar.js';
 import LinearProgress from '@material-ui/core/LinearProgress';
+// FYI: removing this unused import does make the whole project crash, do not know why
 import * as naughtyFirebase from 'firebase';
 import {
   CardElement,

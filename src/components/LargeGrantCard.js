@@ -75,7 +75,9 @@ export default function LargeGrantCard(props) {
   const [downloadUrl, loading, error] = useDownloadURL(storageRef.child(img));
 
   // Make popout visible or invisible
-  const togglePopout = () => {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const togglePopout = event => {
     popout ? setPopout(false) : setPopout(true);
   }
 
@@ -98,17 +100,17 @@ export default function LargeGrantCard(props) {
             <Text type='card-subheading' text={desc} />
             <Grid container direction='row' justify='space-between' alignItems='flex-end'>
               <Grid item>
-                {popout &&
-                  <ContactPopout
-                    cfName={cfName}
-                    cfPhone={cfPhone}
-                    cfUrl={cfUrl}
-                    cfEmail={cfEmail}
-                    nonprofitName={nonprofitName}
-                    nonprofitPhone={nonprofitPhone}
-                    nonprofitUrl={nonprofitUrl}
-                    nonprofitEmail={nonprofitEmail} />
-                }
+                <ContactPopout
+                  cfName={cfName}
+                  cfPhone={cfPhone}
+                  cfUrl={cfUrl}
+                  cfEmail={cfEmail}
+                  nonprofitName={nonprofitName}
+                  nonprofitPhone={nonprofitPhone}
+                  nonprofitUrl={nonprofitUrl}
+                  nonprofitEmail={nonprofitEmail}
+                  anchorEl={anchorEl}
+                  open={popout} />
                 <a className={classes.a} onClick={togglePopout}>Contact</a>
               </Grid>
               <Grid item  >
@@ -122,6 +124,6 @@ export default function LargeGrantCard(props) {
           </CardContent>
         </Card>
       </Grid >
-    </div>
+    </div >
   );
 }

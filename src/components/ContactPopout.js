@@ -1,7 +1,10 @@
 import React, { useEffect } from 'react';
 import Link from '@material-ui/core/Link';
+import Popover from '@material-ui/core/Popover';
 
 export default function ContactPopout(props) {
+  const [open, setOpen] = React.useState(props.open);
+  const [anchorEl, setAnchorEl] = React.useState(props.anchorEl);
   const [cfName, setCfName] = React.useState(props.cfName);
   const [cfUrl, setCfUrl] = React.useState(props.cfUrl);
   const [cfEmail, setCfEmail] = React.useState(props.cfEmail);
@@ -11,6 +14,8 @@ export default function ContactPopout(props) {
   const [nonprofitEmail, setNonprofitEmail] = React.useState(props.nonprofitEmail);
   const [nonprofitPhone, setNonprofitPhone] = React.useState(props.nonprofitPhone);
 
+  useEffect(() => { setOpen(props.open) }, [props.open]);
+  useEffect(() => { setAnchorEl(props.anchorEl) }, [props.anchorEl]);
   useEffect(() => { setCfName(props.cfName); }, [props.cfName]);
   useEffect(() => { setCfUrl(props.cfUrl) }, [props.cfUrl]);
   useEffect(() => { setCfEmail(props.cfEmail) }, [props.cfEmail]);
@@ -20,8 +25,22 @@ export default function ContactPopout(props) {
   useEffect(() => { setNonprofitEmail(props.nonprofitEmail) }, [props.nonprofitEmail]);
   useEffect(() => { setNonprofitPhone(props.nonprofitPhone) }, [props.nonprofitPhone]);
 
+  const id = 'simple-popover';
+
   return (
-    <div>
+    <Popover
+      id={id}
+      open={open}
+      anchorEl={anchorEl}
+      anchorOrigin={{
+        vertical: 'bottom',
+        horizontal: 'center',
+      }}
+      transformOrigin={{
+        vertical: 'top',
+        horizontal: 'center',
+      }}
+    >
       <p>Please contact <Link
         textDecoration='none'
         color='inherit'
@@ -34,6 +53,6 @@ export default function ContactPopout(props) {
         target='_blank'
         rel='noopener noreferrer'
         href={nonprofitUrl}>{nonprofitName}</Link> can be reached at {nonprofitPhone} or {nonprofitEmail}</p>
-    </div>
+    </Popover>
   )
 }
