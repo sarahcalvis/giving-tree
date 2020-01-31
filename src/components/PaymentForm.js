@@ -7,6 +7,7 @@ import { makeStyles } from '@material-ui/styles';
 import Text from '../components/Text.js';
 import firebase from '../firebase.js';
 import ProgressBar from '../components/ProgressBar.js';
+import LinearProgress from '@material-ui/core/LinearProgress';
 import * as naughtyFirebase from 'firebase';
 import {
   CardElement,
@@ -100,6 +101,9 @@ function PaymentForm(props) {
   useEffect(() => { document.title = 'Give to ' + grant; }, [grant]);
 
   const submit = async (ev) => {
+    // Set the status to waiting
+    setStatus('waiting');
+
     // Disable the donate button to avoid double payments
     setClicked(true);
 
@@ -181,6 +185,12 @@ function PaymentForm(props) {
         }
         {status === 'error' &&
           <Text type='card-subheading' text={'Sorry, an error occurred 🤡'} />
+        }
+        {status === 'waiting' &&
+          <div>
+            <Text type='card-subheading' text={'Sending your donation in...'} />
+            <LinearProgress />
+          </div>
         }
       </React.Fragment>
     </Container>
