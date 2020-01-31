@@ -41,7 +41,7 @@ class Search extends Component {
           var desc = doc.data().desc;
           var tags = doc.data().tags;
           var images = doc.data().images;
-          grantSearchResults.push({dist: -1, grant: {cf_name, cf_id, title, nonprofit_name, address, lat, long, date_posted, date_deadline, money_raised, goal_amt, desc, tags, images}});
+          grantSearchResults.push( {cf_name, cf_id, title, nonprofit_name, address, lat, long, date_posted, date_deadline, money_raised, goal_amt, desc, tags, images});
         });
         this.setState({ distResults: grantSearchResults})
         this.setState({ grants: grantSearchResults})
@@ -54,6 +54,7 @@ class Search extends Component {
     console.log("In parent in callback. New Location: ", childData);
     this.setDists();
     console.log("logging the dists: ", this.state.dists);
+    console.log("logging the distResults: ", this.state.distResults);
     // NEED TO RERENDER THE CARDS
   }
 
@@ -86,18 +87,11 @@ class Search extends Component {
 
   addDist = (grant) => {
     console.log("centerLoc: ", this.state.centerLoc);
-    console.log("in addDist. the distance: ", this.calcDistance(this.state.centerLoc.lat, this.state.centerLoc.long, grant.grant.lat, grant.grant.long));
+    console.log("in addDist. the distance: ", this.calcDistance(this.state.centerLoc.lat, this.state.centerLoc.long, grant.lat, grant.long));
     console.log("grant: ", grant);
     var dist = 0;
-    this.setState({
-      grants: this.state.grants.map(el => (el.grant.cf_id === grant.cf_id ? {...el, dist} : el))
-    });
-    /*
-    this.setState( {grants: {
-        "dist" : this.calcDistance(this.state.centerLoc.lat, this.state.centerLoc.long, grant.lat, grant.long,
-        "grant" : grant
-    }});
-    */
+    this.setState( {distResults: {}});
+    
     /*
     this.setState(prevState => ({
       dists: [...prevState.dists, 
@@ -116,7 +110,8 @@ class Search extends Component {
     console.log("in setDists with init dists: ", this.state.dists);
     this.state.distResults.forEach(this.addDist); 
     console.log("in setDists with distResults: ", this.state.distResults);
-    var sortedByDist = this.state.distResults.sort((a, b) => (a.dist > b.dist ? 1 : -1));
+    //var sortedByDist = this.state.distResults.sort((a, b) => (a.dist > b.dist ? 1 : -1));
+    var sortedByDist = [{dist: 3,grant: {junk: 0}}, {dist: 2,grant: {junk: 0}}, {dist: 5,grant: {junk: 0}}, {dist: 1, grant: {junk: 0}}].sort((a, b) => (a.dist > b.dist ? 1 : -1));
     console.log(sortedByDist);
     console.log("grants altered? ", this.state.grants);
     //this.setState({ dists: sortedByDist});
