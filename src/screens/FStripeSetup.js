@@ -36,7 +36,7 @@ export default function FStripeSetup(props) {
             color='inherit'
             //target='_blank'
             //rel='noopener noreferrer'
-            href='https://connect.stripe.com/oauth/authorize?response_type=code&client_id=ca_GblAQuuPHkvIstLgnPzWLGLhh4hMRV3h&scope=read_write'>
+            href='https://connect.stripe.com/oauth/authorize?response_type=code&client_id=ca_GdKhmkaiFmOndJQ4UU6LTUm6pyfJcpQj&scope=read_write'>
             <Button
               fullWidth
               color='primary'

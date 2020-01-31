@@ -1,7 +1,7 @@
 // Stripe Server
 
 const app = require('express')();
-const stripe = require('stripe')('sk_test_iKDj5WxPhlc4Dz1JJUhDmosi0052mQo2A7');
+const stripe = require('stripe')('sk_test_avCwuzIvg45JxkjItTyqRGH600JEoryzyP');
 
 app.use(require('body-parser').text());
 

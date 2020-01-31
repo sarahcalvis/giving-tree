@@ -88,12 +88,14 @@ function PaymentForm(props) {
         .then(doc => {
           if (!doc.exists) {
             console.log('No such document for CF ' + cfId);
+            setStatus('error')
           } else {
             setAcctId(doc.data().acct_id)
           }
         })
         .catch(err => {
           console.log('Error getting document', err);
+          setStatus('error')
         });
     }
   }, [cfId]);
