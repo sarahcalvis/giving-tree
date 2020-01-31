@@ -32,21 +32,21 @@ const useStyles = makeStyles(theme => ({
 export default function LargeGrantCard(props) {
   const classes = useStyles();
 
-  // Grant details- from the grant collection
+  // Grant details
   const [id, setId] = React.useState(props.id);
   const [title, setTitle] = React.useState(props.title);
-  const [cfName, setCfName] = React.useState(props.cfName);
   const [desc, setDesc] = React.useState(props.desc);
-  const [nonprofitName, setNonprofitName] = React.useState(props.nonprofitName);
   const [goalAmt, setGoalAmt] = React.useState(props.goalAmt);
   const [moneyRaised, setMoneyRaised] = React.useState(props.moneyRaised);
   const [img, setImg] = React.useState(props.img);
-
-  // Communtiy foundation details- from the CF collection
-  const [cfId] = React.useState(props.cfId);
-
-  // Communtiy foundation details- from the CF collection
-  const [nonprofitId] = React.useState(props.nonprofitId);
+  const [cfName, setCfName] = React.useState(props.cfName);
+  const [cfUrl, setCfUrl] = React.useState(props.cfUrl);
+  const [cfEmail, setCfEmail] = React.useState(props.cfEmail);
+  const [cfPhone, setCfPhone] = React.useState(props.cfPhone);
+  const [nonprofitName, setNonprofitName] = React.useState(props.nonprofitName);
+  const [nonprofitUrl, setNonprofitUrl] = React.useState(props.nonprofitUrl);
+  const [nonprofitEmail, setNonprofitEmail] = React.useState(props.nonprofitEmail);
+  const [nonprofitPhone, setNonprofitPhone] = React.useState(props.nonprofitPhone);
 
   // Control whether contact popout is visible
   const [popout, setPopout] = React.useState(false);
@@ -54,12 +54,18 @@ export default function LargeGrantCard(props) {
   // Observe grant details
   useEffect(() => { setId(props.id); }, [props.id]);
   useEffect(() => { setTitle(props.title); }, [props.title]);
-  useEffect(() => { setCfName(props.cfName); }, [props.cfName]);
   useEffect(() => { setDesc(props.desc); }, [props.desc]);
-  useEffect(() => { setNonprofitName(props.nonprofitName); }, [props.nonprofitName]);
   useEffect(() => { setGoalAmt(props.goalAmt); }, [props.goalAmt]);
   useEffect(() => { setMoneyRaised(props.moneyRaised); }, [props.moneyRaised]);
   useEffect(() => { setImg(props.img) }, [props.img]);
+  useEffect(() => { setCfName(props.cfName); }, [props.cfName]);
+  useEffect(() => { setCfUrl(props.cfUrl) }, [props.cfUrl]);
+  useEffect(() => { setCfEmail(props.cfEmail) }, [props.cfEmail]);
+  useEffect(() => { setCfPhone(props.cfPhone) }, [props.cfPhone]);
+  useEffect(() => { setNonprofitName(props.nonprofitName); }, [props.nonprofitName]);
+  useEffect(() => { setNonprofitUrl(props.nonprofitUrl) }, [props.nonprofitUrl]);
+  useEffect(() => { setNonprofitEmail(props.nonprofitEmail) }, [props.nonprofitEmail]);
+  useEffect(() => { setNonprofitPhone(props.nonprofitPhone) }, [props.nonprofitPhone]);
 
   // Create reference to firebase storage
   let storage = firebase.storage();
@@ -93,7 +99,15 @@ export default function LargeGrantCard(props) {
             <Grid container direction='row' justify='space-between' alignItems='flex-end'>
               <Grid item>
                 {popout &&
-                  <ContactPopout cfId={cfId} nonprofitId={nonprofitId} />
+                  <ContactPopout
+                    cfName={cfName}
+                    cfPhone={cfPhone}
+                    cfUrl={cfUrl}
+                    cfEmail={cfEmail}
+                    nonprofitName={nonprofitName}
+                    nonprofitPhone={nonprofitPhone}
+                    nonprofitUrl={nonprofitUrl}
+                    nonprofitEmail={nonprofitEmail} />
                 }
                 <a className={classes.a} onClick={togglePopout}>Contact</a>
               </Grid>

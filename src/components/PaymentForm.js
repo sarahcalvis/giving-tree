@@ -99,7 +99,7 @@ function PaymentForm(props) {
     // Confirm payment amount is in bounds
     if (Number.parseInt(amount) > 0 &&
       !Number.parseInt(amount).isNaN &&
-      Number.parseInt(amount) <= (goal - raised) && 
+      Number.parseInt(amount) <= (goal - raised) &&
       acctId !== '') {
 
       // Make the payment
