@@ -114,9 +114,10 @@ function PaymentForm(props) {
         body: token.id + ' amount: ' + (amount * 100) + ' description: ' + grant + ' account: ' + acctId,
       });
       console.log(response);
-      let resJSON = await response.json();
-      console.log(JSON.stringify(resJSON));
+
       if (response.ok) {
+        let resJSON = await response.json();
+        console.log(JSON.stringify(resJSON));
         // // Update the amount in firebase
         // docRef.update({
         //   // TODO: use a cloud function
