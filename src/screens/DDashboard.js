@@ -37,10 +37,35 @@ export default function DDashboard() {
     var useless = 0;
   }, [grants]);
   */
+  
+  function outputThis(data) {
+    console.log(data);
+  }
   function searchCallback(childData) {      
     var newGrants = [];
     console.log("childData in Dashboard: ", childData);
-
+    childData.forEach(function outputThis(data) {
+      console.log(data.grant);
+    });
+    newGrants = childData.forEach(function addStuff(data) {
+      var junk;
+    });
+    /*
+    childData.forEach(function (data) {
+      newGrants.push(
+        <SmallGrantCard
+          id={data.grant[cf_id]}
+          title={data.grant.title}
+          cfName={data.grant.cf_name}
+          nonprofitName={data.grant.nonprofit_name}
+          goalAmt={data.grant.goal_amt}
+          moneyRaised={data.grant.money_raised}
+          img={'GivingTree.png'} />
+          );
+    });
+    */
+    console.log("newGrants: ", newGrants);
+    /*
     childData.forEach(function (grant) {
       newGrants.push(
         <SmallGrantCard
@@ -53,6 +78,7 @@ export default function DDashboard() {
           img={'GivingTree.png'} />
           );
     });
+    */
     setGrants(newGrants);
   }
 
