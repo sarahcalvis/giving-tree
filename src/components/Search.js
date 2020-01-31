@@ -15,9 +15,6 @@ class Search extends Component {
         "long" : -80.08209
       },
       distResults: [],
-      // lat and then long
-      
-      dists: [],
       grants: [],
     };
   }
@@ -53,7 +50,6 @@ class Search extends Component {
     this.setState({centralLocation: childData});
     console.log("In parent in callback. New Location: ", childData);
     this.setDists();
-    console.log("logging the dists: ", this.state.dists);
     console.log("logging the distResults: ", this.state.distResults);
     // NEED TO RERENDER THE CARDS
   }
@@ -86,7 +82,7 @@ class Search extends Component {
   }
 
   addDist = (grant) => {
-    console.log("centerLoc: ", this.state.centerLoc);
+    //console.log("centerLoc: ", this.state.centerLoc);
     console.log("in addDist. the distance: ", this.calcDistance(this.state.centerLoc.lat, this.state.centerLoc.long, grant.lat, grant.long));
     console.log("grant: ", grant);
     var dist = 0;
@@ -94,7 +90,7 @@ class Search extends Component {
     
     /*
     this.setState(prevState => ({
-      dists: [...prevState.dists, 
+      distResults: [...prevState.distResults, 
         {
             "dist" : this.calcDistance(this.state.centerLoc.lat, this.state.centerLoc.long, grant.lat, grant.long),
             "grant" : grant
@@ -104,17 +100,13 @@ class Search extends Component {
   }
 
   setDists = () => { 
-    this.setState({distResults: this.state.dists}); 
-    this.setState({dists: []});
     console.log("in setDists with init distResults: ", this.state.distResults);
-    console.log("in setDists with init dists: ", this.state.dists);
     this.state.distResults.forEach(this.addDist); 
     console.log("in setDists with distResults: ", this.state.distResults);
     //var sortedByDist = this.state.distResults.sort((a, b) => (a.dist > b.dist ? 1 : -1));
     var sortedByDist = [{dist: 3,grant: {junk: 0}}, {dist: 2,grant: {junk: 0}}, {dist: 5,grant: {junk: 0}}, {dist: 1, grant: {junk: 0}}].sort((a, b) => (a.dist > b.dist ? 1 : -1));
     console.log(sortedByDist);
     console.log("grants altered? ", this.state.grants);
-    //this.setState({ dists: sortedByDist});
   }
 
   render() {
