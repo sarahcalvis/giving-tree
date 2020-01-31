@@ -15,7 +15,7 @@ import {
   injectStripe
 } from 'react-stripe-elements';
 import Button from '@material-ui/core/Button';
-import { useDocumentOnce } from 'react-firebase-hooks/firestore';
+import { useDocument } from 'react-firebase-hooks/firestore';
 
 const useStyles = makeStyles(theme => ({
   pageLayout: {
@@ -68,7 +68,7 @@ function PaymentForm(props) {
 
   // Initialize database and specific grant in database
   const db = firebase.firestore();
-  const [value, loading, error] = useDocumentOnce(db.doc('grants/' + grantId));
+  const [value, loading, error] = useDocument(db.doc('grants/' + grantId));
 
 
   // Load grant details from the database
@@ -104,9 +104,6 @@ function PaymentForm(props) {
   useEffect(() => { document.title = 'Give to ' + grant; }, [grant]);
 
   const submit = async (ev) => {
-    // Set the status to waiting
-    setStatus('waiting');
-
     // Disable the donate button to avoid double payments
     setClicked(true);
 
@@ -115,6 +112,9 @@ function PaymentForm(props) {
 
       // Make the token
       let { token } = await props.stripe.createToken({ name: 'Giving Tree Donor' });
+
+      // Set the status to waiting
+      setStatus('waiting');
 
       // Send the payment to the server
       let response = await fetch('/charge', {
@@ -134,7 +134,7 @@ function PaymentForm(props) {
         // Update the donation collection for the grant in firebase
         grantRef.collection('donations').add({
           donation: Number.parseInt(amount),
-          timestamp: firebase.firestore.Timestamp.fromDate(new Date()),
+          timestamp: naughtyFirebase.firestore.Timestamp.fromDate(new Date()),
         }).then(ref => {
           console.log('Added donation of ' + amount + ' with ID ' + ref.id + ' to the donations collection');
           // Update the total donation amount for the grant in firebase
