@@ -53,6 +53,7 @@ function PaymentForm(props) {
   // Record transaction state
   const [status, setStatus] = React.useState('incomplete');
   const [amount, setAmount] = React.useState('');
+  const [clicked, setClicked] = React.useState(false);
 
   // Details about the grant we will get from the database
   const [grant, setGrant] = React.useState('');
@@ -99,11 +100,9 @@ function PaymentForm(props) {
   useEffect(() => { document.title = 'Give to ' + grant; }, [grant]);
 
   const submit = async (ev) => {
+    setClicked(true);
     // Confirm payment amount is in bounds
-    if (Number.parseInt(amount) > 0 &&
-      !Number.parseInt(amount).isNaN &&
-      Number.parseInt(amount) <= (goal - raised) &&
-      acctId !== '') {
+    if (amountIsGood() && acctId !== '') {
 
       // Make the payment
       let { token } = await props.stripe.createToken({ name: 'Giving Tree Donor' });
@@ -113,6 +112,7 @@ function PaymentForm(props) {
         headers: { 'Content-Type': 'text/plain' },
         body: token.id + ' amount: ' + (amount * 100) + ' description: ' + grant + ' account: ' + acctId,
       });
+      
       console.log(response);
 
       if (response.ok) {
@@ -134,6 +134,19 @@ function PaymentForm(props) {
     }
   }
 
+  const amountIsGood = () => {
+    if (Number.parseInt(amount) > 0 &&
+      !Number.parseInt(amount).isNaN &&
+      Number.parseInt(amount) <= (goal - raised)) {
+        console.log('es')
+      return true;
+    } else {
+      console.log('no')
+
+      return false;
+    }
+  }
+
   return (
     <Container className={classes.pageLayout}>
       <React.Fragment>
@@ -147,12 +160,13 @@ function PaymentForm(props) {
               placeholder="Amount"
               onInput={e => setAmount(e.target.value)} />
             <Button
+              disabled={!amountIsGood() || clicked}
               fullWidth
               color="primary"
               className={classes.button}
               variant="contained"
               onClick={submit}>
-              Donate {Number.parseInt(amount) > 0 && '$' + amount}
+              Donate {amountIsGood() && !clicked ? ('$' + amount) : ''}
             </Button>
           </div>
         }
