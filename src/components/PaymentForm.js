@@ -100,32 +100,40 @@ function PaymentForm(props) {
   useEffect(() => { document.title = 'Give to ' + grant; }, [grant]);
 
   const submit = async (ev) => {
+    // Disable the donate button to avoid double payments
     setClicked(true);
+
     // Confirm payment amount is in bounds
     if (amountIsGood() && acctId !== '') {
 
-      // Make the payment
+      // Make the token
       let { token } = await props.stripe.createToken({ name: 'Giving Tree Donor' });
-      console.log('token created')
+
+      // Send the payment to the server
       let response = await fetch('/charge', {
         method: 'POST',
         headers: { 'Content-Type': 'text/plain' },
         body: token.id + ' amount: ' + (amount * 100) + ' description: ' + grant + ' account: ' + acctId,
       });
-      
+
       console.log(response);
 
       if (response.ok) {
         let resJSON = await response.json();
         console.log(JSON.stringify(resJSON));
-        // // Update the amount in firebase
-        // docRef.update({
-        //   // TODO: use a cloud function
-        //   //money_raised: naughtyFirebase.firestore.FieldValue.increment(Number.parseInt(amount)),
+        // Update the donation collection for the grant in firebase
+        db.collection('communityFoundations')
+          .doc(cfId)
+          .collection('donations')
+          .add({
+            donation: Number.parseInt(amount),
+            timestamp: firebase.firestore.Timestamp.fromDate(new Date()),
+          }).then(ref => {
+            console.log('Added donation of ' + amount + ' with ID ' + ref.id + ' to the donations collection');
+          });
 
-        //   // TODO: make this a collection
-        //   //donations: naughtyFirebase.firestore.FieldValue.arrayUnion(Number.parseInt(amount)),
-        // }).then(function () {
+        // Update the total donation amount for the grant in firebase
+
         // Record transaction complete
         setStatus('complete');
       } else {
@@ -134,15 +142,13 @@ function PaymentForm(props) {
     }
   }
 
+  // Tell whether donation amount is valid
   const amountIsGood = () => {
     if (Number.parseInt(amount) > 0 &&
       !Number.parseInt(amount).isNaN &&
       Number.parseInt(amount) <= (goal - raised)) {
-        console.log('es')
       return true;
     } else {
-      console.log('no')
-
       return false;
     }
   }
