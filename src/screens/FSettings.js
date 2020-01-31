@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 export default function FSettings() {
-  return(
+  // Set tab title
+  useEffect(() => { document.title = 'Settings- Giving Tree'; }, []);
+
+  return (
     <p>Foundation settings!</p>
   );
 }

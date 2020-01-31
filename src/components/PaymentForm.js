@@ -93,13 +93,16 @@ function PaymentForm(props) {
           console.log('Error getting document', err);
         });
     }
-  }, [cfId])
+  }, [cfId]);
+
+  // Set tab title
+  useEffect(() => { document.title = 'Give to ' + grant; }, [grant]);
 
   const submit = async (ev) => {
     // Confirm payment amount is in bounds
     if (Number.parseInt(amount) > 0 &&
       !Number.parseInt(amount).isNaN &&
-      Number.parseInt(amount) <= (goal - raised) && 
+      Number.parseInt(amount) <= (goal - raised) &&
       acctId !== '') {
 
       // Make the payment
@@ -111,9 +114,10 @@ function PaymentForm(props) {
         body: token.id + ' amount: ' + (amount * 100) + ' description: ' + grant + ' account: ' + acctId,
       });
       console.log(response);
-      let resJSON = await response.json();
-      console.log(JSON.stringify(resJSON));
+
       if (response.ok) {
+        let resJSON = await response.json();
+        console.log(JSON.stringify(resJSON));
         // // Update the amount in firebase
         // docRef.update({
         //   // TODO: use a cloud function
