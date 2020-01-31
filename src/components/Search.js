@@ -80,19 +80,13 @@ class Search extends Component {
       dist = Math.acos(dist);
       dist = (dist * 180) / Math.PI;
       dist = dist * 60 * 1.1515;
-      if (unit === "K") {
-        dist = dist * 1.609344;
-      }
-      if (unit === "N") {
-        dist = dist * 0.8684;
-      }
       return dist;
     }
   }
 
   addDist = (grant) => {
     console.log("centerLoc: ", this.state.centerLoc);
-    console.log("in addDist. the distance: ", this.calcDistance(this.state.centerLoc.lat, this.state.centerLoc.long, grant.grant.lat, grant.grant.long, "M"));
+    console.log("in addDist. the distance: ", this.calcDistance(this.state.centerLoc.lat, this.state.centerLoc.long, grant.grant.lat, grant.grant.long));
     console.log("grant: ", grant);
     var dist = 0;
     this.setState({
@@ -100,7 +94,7 @@ class Search extends Component {
     });
     /*
     this.setState( {grants: {
-        "dist" : this.calcDistance(this.state.centerLoc.lat, this.state.centerLoc.long, grant.lat, grant.long, "M"),
+        "dist" : this.calcDistance(this.state.centerLoc.lat, this.state.centerLoc.long, grant.lat, grant.long,
         "grant" : grant
     }});
     */
@@ -108,7 +102,7 @@ class Search extends Component {
     this.setState(prevState => ({
       dists: [...prevState.dists, 
         {
-            "dist" : this.calcDistance(this.state.centerLoc.lat, this.state.centerLoc.long, grant.lat, grant.long, "M"),
+            "dist" : this.calcDistance(this.state.centerLoc.lat, this.state.centerLoc.long, grant.lat, grant.long),
             "grant" : grant
         }]
     }));
