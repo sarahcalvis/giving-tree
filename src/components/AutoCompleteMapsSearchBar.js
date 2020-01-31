@@ -34,8 +34,6 @@ export default function AutoCompleteMapsSearchBar(props) {
   const [inputValue, setInputValue] = React.useState("");
   const [options, setOptions] = React.useState([]);
   const loaded = React.useRef(false);
-
-  console.log(loaded);
   if (typeof window !== "undefined" && !loaded.current) {
     console.log(document.querySelector("#google-maps"));
     if (!document.querySelector("#google-maps")) {

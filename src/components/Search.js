@@ -14,29 +14,8 @@ class Search extends Component {
         "lat" : 41.15559, 
         "long" : -80.08209
       },
-      searchResults: [],
-      // lat and then long
-      grantLocs: [
-        {
-          "lat": 36.8909, 
-          "long" : -76.30892, 
-          "name": "Bathroom Supplies", 
-          "address": "1421 Bolling Ave, Norfolk, VA 23508"
-        },
-        {
-          "lat": 38.89308, 
-          "long": -76.97667, 
-          "name": "Emotional Support", 
-          "address": "1911 C Street NE Washington DC 20002"
-        },
-        {    
-          "lat" : 41.16895,
-          "long": -80.1132,
-          "name": "Taco Bell",
-          "address" : "1560 W. Main Street, Grove City, PA 16127"
-        }
-      ],
-      dists: [],
+      distResults: {},
+      grants: {},
     };
   }
 
@@ -59,9 +38,11 @@ class Search extends Component {
           var desc = doc.data().desc;
           var tags = doc.data().tags;
           var images = doc.data().images;
-          grantSearchResults.push({cf_name, cf_id, title, nonprofit_name, address, lat, long, date_posted, date_deadline, money_raised, goal_amt, desc, tags, images});
+          grantSearchResults.push( {cf_name, cf_id, title, nonprofit_name, address, lat, long, date_posted, date_deadline, money_raised, goal_amt, desc, tags, images});
         });
-        this.setState({ searchResults: grantSearchResults})
+        this.setState({ distResults: grantSearchResults});
+        this.setState({ grants: grantSearchResults});
+        this.props.parentCallback(this.state.grants);
         console.log(grantSearchResults);
     });
   };
@@ -70,7 +51,9 @@ class Search extends Component {
     this.setState({centralLocation: childData});
     console.log("In parent in callback. New Location: ", childData);
     this.setDists();
+    console.log("logging the distResults: ", this.state.distResults);
     // NEED TO RERENDER THE CARDS
+    this.props.parentCallback(this.state.grants);
   }
 
   radiusCallback = (childData) => {      
@@ -96,33 +79,38 @@ class Search extends Component {
       dist = Math.acos(dist);
       dist = (dist * 180) / Math.PI;
       dist = dist * 60 * 1.1515;
-      if (unit === "K") {
-        dist = dist * 1.609344;
-      }
-      if (unit === "N") {
-        dist = dist * 0.8684;
-      }
       return dist;
     }
   }
 
-  addDist = (grantLoc) => {
+  addDist = (grant) => {
+    //console.log("centerLoc: ", this.state.centerLoc);
+    console.log("in addDist. the distance: ", this.calcDistance(this.state.centerLoc.lat, this.state.centerLoc.long, grant.lat, grant.long));
+    console.log("grant: ", grant);
+    var dist = 0;
+    this.setState( {distResults: {}});
+    
+    /*
     this.setState(prevState => ({
-      dists: [...prevState.dists,
-                {
-                  "dist" : this.calcDistance(this.state.centerLoc.lat, this.state.centerLoc.long, grantLoc.lat, grantLoc.long, "M"),
-                  "grantLoc" : grantLoc
-                }
-              ]
-    }))
+      distResults: [...prevState.distResults, 
+        {
+            "dist" : this.calcDistance(this.state.centerLoc.lat, this.state.centerLoc.long, grant.lat, grant.long),
+            "grant" : grant
+        }]
+    }));
+    */
   }
 
-  setDists = () => {  
-    this.state.grantLocs.forEach(this.addDist); 
-    this.setState(prevState => ({
-      dists: prevState.dists.sort((a, b) => (a.dist > b.dist ? 1 : -1))
-    }))
+  setDists = () => { 
+    console.log("in setDists with init distResults: ", this.state.distResults);
+    this.state.distResults.forEach(this.addDist); 
+    console.log("in setDists with distResults: ", this.state.distResults);
+    //var sortedByDist = this.state.distResults.sort((a, b) => (a.dist > b.dist ? 1 : -1));
+    var sortedByDist = [{dist: 3,grant: {junk: 0}}, {dist: 2,grant: {junk: 0}}, {dist: 5,grant: {junk: 0}}, {dist: 1, grant: {junk: 0}}].sort((a, b) => (a.dist > b.dist ? 1 : -1));
+    console.log(sortedByDist);
+    console.log("grants altered? ", this.state.grants);
   }
+
   render() {
     return (
       <div>
