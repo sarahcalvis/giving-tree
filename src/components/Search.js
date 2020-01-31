@@ -14,8 +14,8 @@ class Search extends Component {
         "lat" : 41.15559, 
         "long" : -80.08209
       },
-      distResults: [],
-      grants: [],
+      distResults: {},
+      grants: {},
     };
   }
 
@@ -40,8 +40,9 @@ class Search extends Component {
           var images = doc.data().images;
           grantSearchResults.push( {cf_name, cf_id, title, nonprofit_name, address, lat, long, date_posted, date_deadline, money_raised, goal_amt, desc, tags, images});
         });
-        this.setState({ distResults: grantSearchResults})
-        this.setState({ grants: grantSearchResults})
+        this.setState({ distResults: grantSearchResults});
+        this.setState({ grants: grantSearchResults});
+        this.props.parentCallback(this.state.grants);
         console.log(grantSearchResults);
     });
   };
@@ -52,6 +53,7 @@ class Search extends Component {
     this.setDists();
     console.log("logging the distResults: ", this.state.distResults);
     // NEED TO RERENDER THE CARDS
+    this.props.parentCallback(this.state.grants);
   }
 
   radiusCallback = (childData) => {      

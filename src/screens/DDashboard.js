@@ -14,7 +14,7 @@ export default function DDashboard() {
   const db = firebase.firestore();
 
   const [snapshot, loading, error] = useCollectionOnce(db.collection('grants'));
-
+  
   useEffect(() => {
     var newGrants = [];
     if (!loading && !error) {
@@ -32,10 +32,31 @@ export default function DDashboard() {
       setGrants(newGrants);
     }
   }, [snapshot, error, loading]);
+  /*
+  useEffect(() => {
+    var useless = 0;
+  }, [grants]);
+  */
+  function searchCallback(childData) {      
+    var newGrants = [];
+    childData.forEach( (grant) => {
+      newGrants.push(
+        <SmallGrantCard
+          id={grant.cf_id}
+          title={grant.title}
+          cfName={grant.cf_name}
+          nonprofitName={grant.nonprofit_name}
+          goalAmt={grant.goal_amt}
+          moneyRaised={grant.money_raised}
+          img={grant.images[0] || 'GivingTree.png'} />
+          );
+    });
+    setGrants(newGrants);
+  }
 
   return (
     <Container maxWidth='md'>
-      <Search />
+      <Search parentCallback={searchCallback}/>
       <Grid container spacing={2} >
         {grants}
       </Grid>
