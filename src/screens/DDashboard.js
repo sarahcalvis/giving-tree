@@ -39,7 +39,9 @@ export default function DDashboard() {
   */
   function searchCallback(childData) {      
     var newGrants = [];
-    childData.forEach( (grant) => {
+    console.log("childData in Dashboard: ", childData);
+
+    childData.forEach(function (grant) {
       newGrants.push(
         <SmallGrantCard
           id={grant.cf_id}
@@ -48,7 +50,7 @@ export default function DDashboard() {
           nonprofitName={grant.nonprofit_name}
           goalAmt={grant.goal_amt}
           moneyRaised={grant.money_raised}
-          img={grant.images[0] || 'GivingTree.png'} />
+          img={'GivingTree.png'} />
           );
     });
     setGrants(newGrants);

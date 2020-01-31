@@ -55,7 +55,7 @@ class Search extends Component {
     this.setDists();
     console.log("logging the distResults: ", this.state.distResults);
     // NEED TO RERENDER THE CARDS
-    this.props.parentCallback(this.state.grants);
+    this.props.parentCallback(this.state.tempResults);
   }
 
   radiusCallback = (childData) => {      
