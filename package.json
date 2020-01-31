@@ -2,7 +2,7 @@
   "name": "giving-tree",
   "version": "0.1.0",
   "private": true,
-  "proxy": "https://gcloud-givingtree.appspot.com",
+  "proxy": "http://us-central1-gcloud-givingtree.cloudfunctions.net",
   "dependencies": {
     "@material-ui/core": "^4.8.1",
     "@material-ui/icons": "^4.5.1",
