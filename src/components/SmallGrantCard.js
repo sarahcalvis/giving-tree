@@ -13,7 +13,6 @@ import { useDownloadURL } from 'react-firebase-hooks/storage';
 
 const useStyles = makeStyles(theme => ({
   card: {
-    height: '100%',
     display: 'flex',
     flexDirection: 'column',
   },
@@ -29,22 +28,21 @@ export default function SmallGrantCard(props) {
   const classes = useStyles();
 
   // Grant details
-  const [grantId, setGrantId] = React.useState(props.id);
-  const [grant, setGrant] = React.useState(props.grant);
-  const [foundation, setFoundation] = React.useState(props.foundation);
-  const [nonprofit, setNonprofit] = React.useState(props.nonprofit);
-  const [goal, setGoal] = React.useState(props.goal);
-  const [raised, setRaised] = React.useState(props.raised);
+  const [id, setId] = React.useState(props.id);
+  const [title, setTitle] = React.useState(props.title);
+  const [cfName, setCfName] = React.useState(props.cfName);
+  const [nonprofitName, setNonprofitName] = React.useState(props.nonprofitName);
+  const [goalAmt, setGoalAmt] = React.useState(props.goalAmt);
+  const [moneyRaised, setMoneyRaised] = React.useState(props.moneyRaised);
   const [img, setImg] = React.useState(props.img);
-  const [url, setUrl] = React.useState('');
 
   // Observe grant details
-  useEffect(() => { setGrantId(props.grantId); }, [props.grantId]);
-  useEffect(() => { setGrant(props.grant); }, [props.grant]);
-  useEffect(() => { setFoundation(props.foundation); }, [props.foundation]);
-  useEffect(() => { setNonprofit(props.nonprofit); }, [props.nonprofit]);
-  useEffect(() => { setGoal(props.goal); }, [props.goal]);
-  useEffect(() => { setRaised(props.raised); }, [props.raised]);
+  useEffect(() => { setId(props.id); }, [props.id]);
+  useEffect(() => { setTitle(props.title); }, [props.title]);
+  useEffect(() => { setCfName(props.cfName); }, [props.cfName]);
+  useEffect(() => { setNonprofitName(props.nonprofitName); }, [props.nonprofitName]);
+  useEffect(() => { setGoalAmt(props.goalAmt); }, [props.goalAmt]);
+  useEffect(() => { setMoneyRaised(props.moneyRaised); }, [props.moneyRaised]);
   useEffect(() => { setImg(props.img) }, [props.img]);
 
   // Create reference to firebase storage
@@ -59,20 +57,19 @@ export default function SmallGrantCard(props) {
       <Card className={classes.card}>
         <CardActionArea
           component={Link}
-          to={{
-            pathname: '/grants/' + grant.split(' ').join('-'),
-            state: { grantId: grantId }
-          }}>
-          <CardMedia
-            className={classes.cardMedia}
-            image={downloadUrl}
-            title="Grant Image"
-          />
+          to={'/grants/' + id}>
+          {!loading && !error &&
+            <CardMedia
+              className={classes.cardMedia}
+              image={downloadUrl}
+              title="Grant Image"
+            />
+          }
           <CardContent className={classes.cardContent}>
-            <Text type='card-aboveheading' text={nonprofit} />
-            <Text type='card-heading' text={grant} />
-            <Text type='card-subheading' text={foundation} />
-            <ProgressBar goal={goal} raised={raised} />
+            <Text type='card-aboveheading' text={nonprofitName} />
+            <Text type='card-heading' text={title} />
+            <Text type='card-subheading' text={cfName} />
+            <ProgressBar goal={goalAmt} raised={moneyRaised} />
           </CardContent>
         </CardActionArea>
       </Card>

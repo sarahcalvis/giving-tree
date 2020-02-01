@@ -13,19 +13,21 @@ import LInputNewPassword from '../screens/LInputNewPassword.js';
 import Login from '../screens/Login.js';
 import LRequestNewPassword from '../screens/LRequestNewPassword.js';
 import MetaAdmin from '../screens/MetaAdmin.js';
+import FStripeSetup from '../screens/FStripeSetup.js';
 
 export default function Routes() {
     return (
         <Switch>
             <Route exact path='/' component={DDashboard} />
-            <Route exact path='/grants/:grant' component={DGrant} />
-            <Route exact path='/grants/:grant/give' component={DGive} />
+            <Route exact path='/grants/:grantId' component={DGrant} />
+            <Route exact path='/grants/:grantId/give' component={DGive} />
             <Route exact path='/request-account' component={FAccountRequest} />
             <Route exact path='/request-sent' component={FRequestSent} />
             <Route exact path='/foundation' component={FGrants} />
-            <Route exact path='/foundation/:grant' component={FDetailedGrant} />
-            <Route exact path='/foundation/:grant/edit' component={FEditGrant} />
-            <Route exact path='/foundation/Settings' component={FSettings} />
+            <Route exact path='/foundation/stripe-setup' component={FStripeSetup} />
+            <Route exact path='/foundation/:grantId' component={FDetailedGrant} />
+            <Route exact path='/foundation/:grantId/edit' component={FEditGrant} />
+            <Route exact path='/foundation/settings' component={FSettings} />
             <Route exact path='/login' component={Login} />
             <Route exact path='/request-new-password' component={LRequestNewPassword} />
             <Route exact path='/input-new-password' component={LInputNewPassword} />

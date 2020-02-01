@@ -29,10 +29,16 @@ export default function Text(props) {
       }
       {type === "card-subheading" &&
         <Typography
-          variant="subtitle"
+          variant="body2"
           color="textSecondary" 
           component="p"
           gutterBottom>
+          {text}
+        </Typography>
+      }
+      {type === "tag" &&
+        <Typography
+          variant="body2">
           {text}
         </Typography>
       }
