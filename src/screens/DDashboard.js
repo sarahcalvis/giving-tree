@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import SmallGrantCard from '../components/SmallGrantCard.js';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
-import { useCollectionOnce } from 'react-firebase-hooks/firestore';
+import { useCollection } from 'react-firebase-hooks/firestore';
 import firebase from '../firebase.js';
 import Search from '../components/Search';
 
@@ -13,7 +13,7 @@ export default function DDashboard() {
   // Initialize database and specific grant in database
   const db = firebase.firestore();
 
-  const [snapshot, loading, error] = useCollectionOnce(db.collection('grants'));
+  const [snapshot, loading, error] = useCollection(db.collection('grants'));
   
   useEffect(() => {
     var newGrants = [];

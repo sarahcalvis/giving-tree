@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import LargeGrantCard from '../components/LargeGrantCard.js';
 import firebase from '../firebase.js';
-import { useDocumentOnce } from 'react-firebase-hooks/firestore';
+import { useDocument } from 'react-firebase-hooks/firestore';
 import { useParams } from 'react-router-dom';
 
 export default function DGrant(props) {
@@ -22,7 +22,7 @@ export default function DGrant(props) {
   const [tags, setTags] = React.useState('');
   const [img, setImg] = React.useState('GivingTree.png');
 
-  const [value, loading, error] = useDocumentOnce(db.doc('grants/' + id));
+  const [value, loading, error] = useDocument(db.doc('grants/' + id));
 
   useEffect(() => {
     if (!loading && !error) {
