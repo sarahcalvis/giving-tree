@@ -9,6 +9,6 @@ export default function Tag(props) {
   useEffect(() => { setRemovable(props.removable) }, [props.removable]);
 
   return (
-    <Text type='tag' text={removable ? 'removable ' : 'not removable ' + tag}/>
+    <Text type='tag' text={tag}/>
   )
 }

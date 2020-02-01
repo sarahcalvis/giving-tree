@@ -88,7 +88,21 @@ export default function LargeGrantCard(props) {
             <Text type='card-subheading' text={cfName} />
             <ProgressBar goal={goalAmt} raised={moneyRaised} />
             <Text type='card-subheading' text={desc} />
-            {tags.length > 0 && tags.map((tag) => <Tag removable={false} tag={tag} />)}
+            <Grid
+              container
+              direction="row"
+              justify="flex-start"
+              alignItems="flex-start"
+              spacing={2}
+            >
+              {
+                tags.length > 0 && tags.map((tag) =>
+                  <Grid item>
+                    <Tag removable={false} tag={tag} />
+                  </Grid>
+                )
+              }
+            </Grid>
             <Grid container direction='row' justify='space-between' alignItems='flex-end'>
               <Grid item>
                 <ContactPopout

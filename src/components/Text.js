@@ -38,9 +38,7 @@ export default function Text(props) {
       }
       {type === "tag" &&
         <Typography
-          variant="body2"
-          component="p"
-          gutterBottom>
+          variant="body2">
           {text}
         </Typography>
       }
