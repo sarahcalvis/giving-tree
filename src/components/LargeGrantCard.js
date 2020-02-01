@@ -24,9 +24,6 @@ const useStyles = makeStyles(theme => ({
   cardContent: {
     flexGrow: 1,
   },
-  a: {
-    cursor: 'pointer',
-  }
 }))
 
 export default function LargeGrantCard(props) {
@@ -111,7 +108,6 @@ export default function LargeGrantCard(props) {
                   nonprofitEmail={nonprofitEmail}
                   anchorEl={anchorEl}
                   open={popout} />
-                <a className={classes.a} onClick={togglePopout}>Contact</a>
               </Grid>
               <Grid item  >
                 <Link to={'/grants/' + id + '/give'}>
