@@ -5,9 +5,6 @@ import Container from '@material-ui/core/Container';
 
 
 const useStyles = makeStyles(theme => ({
-  headerRoot: {
-    paddingBottom: theme.spacing(2),
-  },
   header: {
     padding: theme.spacing(3, 2),
     marginTop: 'auto',
@@ -18,7 +15,7 @@ const useStyles = makeStyles(theme => ({
 export default function Header() {
   const classes = useStyles();
   return (
-    <div className={classes.headerRoot}>
+    <div>
       <header className={classes.header}>
         <Container maxWidth="sm">
           <Typography variant="body1">Header stub</Typography>

@@ -15,9 +15,7 @@ import { useDownloadURL } from 'react-firebase-hooks/storage';
 
 const useStyles = makeStyles(theme => ({
   card: {
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
+    maxWidth: 500,
   },
   cardMedia: {
     height: 250,
@@ -72,60 +70,52 @@ export default function LargeGrantCard(props) {
   const [downloadUrl, loading, error] = useDownloadURL(storageRef.child(img));
 
   return (
-    <div>
-      <Grid item xs={12} sm={6} md={4}>
-        <Card className={classes.card}>
-          {!loading && !error &&
-            <CardMedia
-              className={classes.cardMedia}
-              image={downloadUrl}
-              title="Grant Image"
-            />
-          }
-          <CardContent className={classes.cardContent}>
-            <Text type='card-aboveheading' text={nonprofitName} />
-            <Text type='card-heading' text={title} />
-            <Text type='card-subheading' text={cfName} />
-            <ProgressBar goal={goalAmt} raised={moneyRaised} />
-            <Text type='card-subheading' text={desc} />
-            <Grid
-              container
-              direction="row"
-              justify="flex-start"
-              alignItems="flex-start"
-              spacing={2}
-            >
-              {
-                tags.length > 0 && tags.map((tag) =>
-                  <Grid item>
-                    <Tag removable={false} tag={tag} />
-                  </Grid>
-                )
-              }
-            </Grid>
-            <Grid container direction='row' justify='space-between' alignItems='flex-end'>
-              <Grid item>
-                <ContactPopout
-                  cfName={cfName}
-                  cfPhone={cfPhone}
-                  cfUrl={cfUrl}
-                  cfEmail={cfEmail}
-                  nonprofitName={nonprofitName}
-                  nonprofitPhone={nonprofitPhone}
-                  nonprofitUrl={nonprofitUrl}
-                  nonprofitEmail={nonprofitEmail} />
-              </Grid>
-              <Grid item  >
-                <Link to={'/grants/' + id + '/give'}>
-                  <Button color='primary' variant='contained'>
-                    Donate
+    <div className={classes.card}>
+      {!loading && !error &&
+        <CardMedia
+          className={classes.cardMedia}
+          image={downloadUrl}
+          title="Grant Image"
+        />
+      }
+      <CardContent className={classes.cardContent}>
+        <Text type='card-aboveheading' text={nonprofitName} />
+        <Text type='card-heading' text={title} />
+        <Text type='card-subheading' text={cfName} />
+        <ProgressBar goal={goalAmt} raised={moneyRaised} />
+        <Text type='card-subheading' text={desc} />
+        <Grid
+          container
+          direction="row"
+          justify="flex-start"
+          alignItems="flex-start"
+          spacing={2}
+        > {tags.length > 0 && tags.map((tag) =>
+          <Grid item>
+            <Tag removable={false} tag={tag} />
+          </Grid>
+        )} </Grid>
+        <Grid container direction='row' justify='space-between' alignItems='flex-end'>
+          <Grid item>
+            <ContactPopout
+              cfName={cfName}
+              cfPhone={cfPhone}
+              cfUrl={cfUrl}
+              cfEmail={cfEmail}
+              nonprofitName={nonprofitName}
+              nonprofitPhone={nonprofitPhone}
+              nonprofitUrl={nonprofitUrl}
+              nonprofitEmail={nonprofitEmail} />
+          </Grid>
+          <Grid item  >
+            <Link to={'/grants/' + id + '/give'}>
+              <Button color='primary' variant='contained'>
+                Donate
                   </Button>
-                </Link>
-              </Grid>
-            </Grid>
-          </CardContent>
-        </Card>
-      </Grid >
+            </Link>
+          </Grid>
+        </Grid>
+      </CardContent>
     </div >
   );
 }

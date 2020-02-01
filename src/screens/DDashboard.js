@@ -5,6 +5,13 @@ import Container from '@material-ui/core/Container';
 import { useCollection } from 'react-firebase-hooks/firestore';
 import firebase from '../firebase.js';
 import Search from '../components/Search';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles(theme => ({
+  container: {
+    paddingBottom: theme.spacing(2),
+  },
+}));
 
 export default function DDashboard() {
   // List of small grant cards
@@ -54,8 +61,10 @@ export default function DDashboard() {
     setGrants(newGrants);
   }
 
+  const classes = useStyles();
+
   return (
-    <Container maxWidth='md'>
+    <Container maxWidth='md' className={classes.container}>
       <Search parentCallback={searchCallback}/>
       <Grid container spacing={2} >
         {grants}

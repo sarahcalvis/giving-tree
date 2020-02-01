@@ -22,7 +22,6 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     flexDirection: 'column',
     minHeight: '10vh',
-    paddingTop: theme.spacing(2),
   },
   footer: {
     padding: theme.spacing(3, 2),
