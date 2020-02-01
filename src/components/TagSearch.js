@@ -4,8 +4,9 @@ import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import $ from 'jquery';
-import { Button } from '@material-ui/core';
+import PropTypes from "prop-types";
 import firebase from '../firebase.js';
+import { withRouter } from 'react-router-dom';
 
 class TagSearch extends React.Component {
   constructor(props) {
@@ -15,8 +16,9 @@ class TagSearch extends React.Component {
       //tagString: "",
       activeTags: [],
       loading: false,
+      //incomingTag: null
     };
-
+    
     this.updateRequest = this.updateRequest.bind(this);
     this.setCached = this.setCached.bind(this);
     this.retrieveCached = this.retrieveCached.bind(this);
@@ -24,8 +26,29 @@ class TagSearch extends React.Component {
 
   };
 
+  static propTypes = {
+    match: PropTypes.object.isRequired,
+    location: PropTypes.object.isRequired,
+    history: PropTypes.object.isRequired
+  }
+
+  componentDidMount () {
+    const { match, location, history } = this.props;
+    //this.setState((state, props) => {
+    if(location){
+      console.log(location);
+      let a = this.state.activeTags.slice(); //creates the clone of the state
+      a[0] = location.state.incomingTag;
+      console.log(a);
+      this.setState({activeTags: a}, () => {
+        console.log(this.state.activeTags);
+      });
+      
+    }
+  }
+
   updateRequest() {
-		this.props.getTag(this.state);
+		this.props.updateTags(this.state.activeTags);
   }
 
   handleAutoChange = (event, values) => {
@@ -36,6 +59,7 @@ class TagSearch extends React.Component {
       // This will output an array of objects
       // given by Autocompelte options property.
       console.log(this.state.activeTags);
+      //this.updateRequest();
     });
   }
 
@@ -113,6 +137,7 @@ class TagSearch extends React.Component {
         id="combo-box-demo"
         options={this.state.tags}
         autoComplete
+        defaultValue={this.componentDidMount}
         disableOpenOnFocus
         multiple
         freeSolo
@@ -143,4 +168,4 @@ class TagSearch extends React.Component {
   }
 }
 
-export default(TagSearch);
+export default withRouter(TagSearch);
