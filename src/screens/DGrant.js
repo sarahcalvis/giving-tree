@@ -19,6 +19,7 @@ export default function DGrant(props) {
   const [desc, setDesc] = React.useState('');
   const [goalAmt, setGoalAmt] = React.useState('');
   const [moneyRaised, setMoneyRaised] = React.useState('');
+  const [tags, setTags] = React.useState('');
   const [img, setImg] = React.useState('GivingTree.png');
 
   const [value, loading, error] = useDocumentOnce(db.doc('grants/' + id));
@@ -33,6 +34,7 @@ export default function DGrant(props) {
       setDesc(value.data().desc);
       setGoalAmt(value.data().goal_amt);
       setMoneyRaised(value.data().money_raised);
+      setTags(value.data().tags);
       setImg(value.data().images[0]);
     }
   }, [value, error, loading, id]);
@@ -96,6 +98,7 @@ export default function DGrant(props) {
         desc={desc}
         goalAmt={goalAmt}
         moneyRaised={moneyRaised}
+        tags={tags}
         img={img}
         cfName={cfName}
         cfUrl={cfUrl}

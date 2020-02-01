@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import Text from './Text.js';
 import ProgressBar from './ProgressBar.js';
 import ContactPopout from './ContactPopout.js';
+import Tag from './Tag.js';
 import { makeStyles } from '@material-ui/styles';
 import { useDownloadURL } from 'react-firebase-hooks/storage';
 
@@ -35,6 +36,7 @@ export default function LargeGrantCard(props) {
   const [desc, setDesc] = React.useState(props.desc);
   const [goalAmt, setGoalAmt] = React.useState(props.goalAmt);
   const [moneyRaised, setMoneyRaised] = React.useState(props.moneyRaised);
+  const [tags, setTags] = React.useState(props.tags);
   const [img, setImg] = React.useState(props.img);
   const [cfName, setCfName] = React.useState(props.cfName);
   const [cfUrl, setCfUrl] = React.useState(props.cfUrl);
@@ -45,15 +47,13 @@ export default function LargeGrantCard(props) {
   const [nonprofitEmail, setNonprofitEmail] = React.useState(props.nonprofitEmail);
   const [nonprofitPhone, setNonprofitPhone] = React.useState(props.nonprofitPhone);
 
-  // Control whether contact popout is visible
-  const [popout, setPopout] = React.useState(false);
-
   // Observe grant details
   useEffect(() => { setId(props.id); }, [props.id]);
   useEffect(() => { setTitle(props.title); }, [props.title]);
   useEffect(() => { setDesc(props.desc); }, [props.desc]);
   useEffect(() => { setGoalAmt(props.goalAmt); }, [props.goalAmt]);
   useEffect(() => { setMoneyRaised(props.moneyRaised); }, [props.moneyRaised]);
+  useEffect(() => { setTags(props.tags); }, [props.tags]);
   useEffect(() => { setImg(props.img) }, [props.img]);
   useEffect(() => { setCfName(props.cfName); }, [props.cfName]);
   useEffect(() => { setCfUrl(props.cfUrl) }, [props.cfUrl]);
@@ -70,7 +70,6 @@ export default function LargeGrantCard(props) {
 
   // Get image URL
   const [downloadUrl, loading, error] = useDownloadURL(storageRef.child(img));
-
 
   return (
     <div>
@@ -89,6 +88,7 @@ export default function LargeGrantCard(props) {
             <Text type='card-subheading' text={cfName} />
             <ProgressBar goal={goalAmt} raised={moneyRaised} />
             <Text type='card-subheading' text={desc} />
+            {tags.length > 0 && tags.map((tag) => <Tag removable={false} tag={tag} />)}
             <Grid container direction='row' justify='space-between' alignItems='flex-end'>
               <Grid item>
                 <ContactPopout
