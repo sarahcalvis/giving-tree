@@ -5,11 +5,11 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/styles';
 
 const useStyles = makeStyles(theme => ({
-  typography: {
-    padding: theme.spacing(2),
-  },
   a: {
     cursor: 'pointer',
+  },
+  popover: {
+    width: '300px',
   }
 }));
 
@@ -54,37 +54,46 @@ export default function ContactPopout(props) {
         Contact
       </a>
       <Popover
+        className={classes.popover}
         id={id}
         open={open}
         anchorEl={anchorEl}
         onClose={handleClose}
         anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center',
+          vertical: 'top',
+          horizontal: 'left',
         }}
         transformOrigin={{
-          vertical: 'top',
-          horizontal: 'center',
+          vertical: 'bottom',
+          horizontal: 'left',
         }}
       >
-        <Typography>
+        <Typography
+          variant="body2">
           Please contact <Link
             textDecoration='none'
-            color='inherit'
             target='_blank'
             rel='noopener noreferrer'
             href={cfUrl}>
             {cfName}
-          </Link> with any concerns at {cfPhone} or {cfEmail}
+          </Link> with any concerns at <Link href={'tel:' + cfPhone}>
+            {cfPhone}
+          </Link> or <Link href={'mailto:' + cfEmail}>
+            {cfEmail}
+          </Link>
         </Typography>
-        <Typography>
+        <Typography
+          variant="body2">
           <Link
             textDecoration='none'
-            color='inherit'
             target='_blank'
             rel='noopener noreferrer'
             href={nonprofitUrl}>{nonprofitName}
-          </Link> can be reached at {nonprofitPhone} or {nonprofitEmail}
+          </Link> can be reached at <Link href={'tel:' + nonprofitPhone}>
+            {nonprofitPhone}
+          </Link> or <Link href={'mailto:' + nonprofitEmail}>
+            {nonprofitEmail}
+          </Link>
         </Typography>
       </Popover>
     </div>

@@ -51,8 +51,8 @@ export default function DGrant(props) {
             console.log('No such document for CF ' + cfId);
           } else {
             setCfUrl(doc.data().foundation_url);
-            setCfPublicPhone(doc.data().foudation_public_phone);
-            setCfPublicEmail(doc.data().foundation_public_email);
+            setCfPublicPhone(doc.data().public_phone);
+            setCfPublicEmail(doc.data().public_email);
           }
         })
         .catch(err => {

@@ -71,12 +71,6 @@ export default function LargeGrantCard(props) {
   // Get image URL
   const [downloadUrl, loading, error] = useDownloadURL(storageRef.child(img));
 
-  // Make popout visible or invisible
-  const [anchorEl, setAnchorEl] = React.useState(null);
-
-  const togglePopout = event => {
-    popout ? setPopout(false) : setPopout(true);
-  }
 
   return (
     <div>
@@ -105,9 +99,7 @@ export default function LargeGrantCard(props) {
                   nonprofitName={nonprofitName}
                   nonprofitPhone={nonprofitPhone}
                   nonprofitUrl={nonprofitUrl}
-                  nonprofitEmail={nonprofitEmail}
-                  anchorEl={anchorEl}
-                  open={popout} />
+                  nonprofitEmail={nonprofitEmail} />
               </Grid>
               <Grid item  >
                 <Link to={'/grants/' + id + '/give'}>
