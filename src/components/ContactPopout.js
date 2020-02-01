@@ -10,6 +10,14 @@ const useStyles = makeStyles(theme => ({
   },
   popover: {
     width: '300px',
+  },
+  typographyTop: {
+    padding: theme.spacing(2),
+  },
+  typographyBottom: {
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
   }
 }));
 
@@ -69,6 +77,7 @@ export default function ContactPopout(props) {
         }}
       >
         <Typography
+          className={classes.typographyTop}
           variant="body2">
           Please contact <Link
             textDecoration='none'
@@ -83,6 +92,7 @@ export default function ContactPopout(props) {
           </Link>
         </Typography>
         <Typography
+          className={classes.typographyBottom}
           variant="body2">
           <Link
             textDecoration='none'
