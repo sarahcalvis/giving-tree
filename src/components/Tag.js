@@ -1,4 +1,6 @@
 import React, { useEffect } from 'react';
+import Text from './Text.js';
+
 export default function Tag(props) {
   const [tag, setTag] = React.useState(props.tag);
   const [removable, setRemovable] = React.useState(props.removable);
@@ -7,6 +9,6 @@ export default function Tag(props) {
   useEffect(() => { setRemovable(props.removable) }, [props.removable]);
 
   return (
-    <p>{removable ? 'removable ' : 'not removable '} {tag}</p>
+    <Text type='tag' text={removable ? 'removable ' : 'not removable ' + tag}/>
   )
 }

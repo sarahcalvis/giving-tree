@@ -36,6 +36,14 @@ export default function Text(props) {
           {text}
         </Typography>
       }
+      {type === "tag" &&
+        <Typography
+          variant="body2"
+          component="p"
+          gutterBottom>
+          {text}
+        </Typography>
+      }
       {type === "progress-bold" &&
         <Typography
           variant="subtitle1">
