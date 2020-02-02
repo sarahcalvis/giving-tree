@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import MobileStepper from '@material-ui/core/MobileStepper';
 import Button from '@material-ui/core/Button';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
@@ -17,11 +17,7 @@ const useStyles = makeStyles({
 });
 
 export default function ImageCarousel(props) {
-  const [img, setImg] = React.useState(props.img);
-  useEffect(() => { setImg(props.img) }, [props.img]);
-
   const classes = useStyles();
-  const theme = useTheme();
   const [activeStep, setActiveStep] = React.useState(0);
 
   const handleNext = () => {
@@ -36,24 +32,24 @@ export default function ImageCarousel(props) {
     <div>
       <CardMedia
         className={classes.cardMedia}
-        image={img[activeStep]}
+        image={props.img[activeStep]}
         title="Grant Image"
       />
-      {img.length > 1 && <MobileStepper
+      {props.img.length > 1 && <MobileStepper
         variant="dots"
-        steps={img.length}
+        steps={props.img.length}
         position="static"
         activeStep={activeStep}
         className={classes.root}
         nextButton={
-          <Button size="small" onClick={handleNext} disabled={activeStep === img.length - 1}>
+          <Button size="small" onClick={handleNext} disabled={activeStep === props.img.length - 1}>
             Next
-          {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+          <KeyboardArrowRight />
           </Button>
         }
         backButton={
           <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
-            {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+            <KeyboardArrowLeft />
             Back
         </Button>
         }
