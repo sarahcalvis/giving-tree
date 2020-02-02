@@ -76,9 +76,7 @@ export default function DGrant(props) {
   useEffect(() => {
     let newImg = [];
     for (let imgName of imgNames) {
-      console.log(imgName);
       storageRef.child(imgName).getDownloadURL().then(function (url) {
-        console.log(url);
         newImg.push(url);
       }).catch(function (error) {
         console.log('error getting image url')

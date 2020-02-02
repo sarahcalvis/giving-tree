@@ -5,8 +5,6 @@ import Button from '@material-ui/core/Button';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import CardMedia from '@material-ui/core/CardMedia';
-import { useDownloadURL } from 'react-firebase-hooks/storage';
-import firebase from '../firebase.js';
 
 const useStyles = makeStyles({
   root: {
