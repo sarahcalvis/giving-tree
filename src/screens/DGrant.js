@@ -35,7 +35,7 @@ export default function DGrant(props) {
       setGoalAmt(value.data().goal_amt);
       setMoneyRaised(value.data().money_raised);
       setTags(value.data().tags);
-      setImg(value.data().images[0]);
+      setImg(value.data().images);
     }
   }, [value, error, loading, id]);
 

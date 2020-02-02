@@ -1,24 +1,19 @@
 import React, { useEffect } from 'react';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import firebase from '../firebase.js';
-import CardMedia from '@material-ui/core/CardMedia';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
 import Text from './Text.js';
 import ProgressBar from './ProgressBar.js';
 import ContactPopout from './ContactPopout.js';
+import ImageCarousel from './ImageCarousel.js'
 import Tag from './Tag.js';
 import { makeStyles } from '@material-ui/styles';
-import { useDownloadURL } from 'react-firebase-hooks/storage';
 
 const useStyles = makeStyles(theme => ({
   card: {
     maxWidth: 500,
-  },
-  cardMedia: {
-    height: 250,
   },
   cardContent: {
     flexGrow: 1,
@@ -62,22 +57,10 @@ export default function LargeGrantCard(props) {
   useEffect(() => { setNonprofitEmail(props.nonprofitEmail) }, [props.nonprofitEmail]);
   useEffect(() => { setNonprofitPhone(props.nonprofitPhone) }, [props.nonprofitPhone]);
 
-  // Create reference to firebase storage
-  let storage = firebase.storage();
-  let storageRef = storage.ref();
-
-  // Get image URL
-  const [downloadUrl, loading, error] = useDownloadURL(storageRef.child(img));
 
   return (
     <div className={classes.card}>
-      {!loading && !error &&
-        <CardMedia
-          className={classes.cardMedia}
-          image={downloadUrl}
-          title="Grant Image"
-        />
-      }
+      <ImageCarousel img={img} />
       <CardContent className={classes.cardContent}>
         <Text type='card-aboveheading' text={nonprofitName} />
         <Text type='card-heading' text={title} />
