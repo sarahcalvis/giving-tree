@@ -1,183 +1,146 @@
 import React from "react";
+import TextField from "@material-ui/core/TextField";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+import LocationOnIcon from "@material-ui/icons/LocationOn";
+import Grid from "@material-ui/core/Grid";
+import Typography from "@material-ui/core/Typography";
+import { makeStyles } from "@material-ui/core/styles";
+import parse from "autosuggest-highlight/parse";
+import throttle from "lodash/throttle";
 
-class LocationSearch {
-  constructor(props) {
-    super(props);
-    this.state = {
-      centerLoc: {
-        "lat" : 41.15559, 
-        "long" : -80.08209
-      },
-      // lat and then long
-       grantLocs: [
-      {
-        "lat": 36.8909, 
-        "long" : -76.30892, 
-        "name": "Bathroom Supplies", 
-        "address": "1421 Bolling Ave, Norfolk, VA 23508"
-      },
-      {
-        "lat": 38.89308, 
-        "long": -76.97667, 
-        "name": "Emotional Support", 
-        "address": "1911 C Street NE Washington DC 20002"
-      },
-      {    
-      "lat" : 41.16895,
-      "long": -80.1132,
-      "name": "Taco Bell",
-      "address" : "1560 W. Main Street, Grove City, PA 16127"
-      }
-    ],
-      dists: [],
-    };
+function loadScript(src, position, id) {
+  if (!position) {
+    return;
   }
 
-  //from Geo Data Source
-  calcDistance(lat1, lon1, lat2, lon2, unit) {
-    if (lat1 === lat2 && lon1 === lon2) {
-      return 0;
-    } else {
-      var radlat1 = (Math.PI * lat1) / 180;
-      var radlat2 = (Math.PI * lat2) / 180;
-      var theta = lon1 - lon2;
-      var radtheta = (Math.PI * theta) / 180;
-      var dist =
-        Math.sin(radlat1) * Math.sin(radlat2) +
-        Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
-      if (dist > 1) {
-        dist = 1;
-      }
-      dist = Math.acos(dist);
-      dist = (dist * 180) / Math.PI;
-      dist = dist * 60 * 1.1515;
-      if (unit === "K") {
-        dist = dist * 1.609344;
-      }
-      if (unit === "N") {
-        dist = dist * 0.8684;
-      }
-      return dist;
-    }
-  }
+  const script = document.createElement("script");
+  script.setAttribute("async", "");
+  script.setAttribute("id", id);
+  script.src = src;
+  position.appendChild(script);
+}
 
-  fillDists() {  
-    this.state.grantLocs.forEach(addDist); 
-    function addDist(grantLoc) {
-      this.setState(prevState => ({
-        dists: [...prevState.dists,
-                  {
-                    "dist" : this.calcDistance(this.state.centerLoc.lat, this.state.centerLoc.long, this.state.grantLoc.lat, this.state.grantLoc.long, "M"),
-                    "grantLoc" : grantLoc
-                  }
-                ]
-      }))
-      /*
-      this.state.dists.push(
-          {
-              "dist" : this.calcDistance(this.state.centerLoc.lat, this.state.centerLoc.long, this.state.grantLoc.lat, this.state.grantLoc.long, "M"),
-              "grantLoc" : grantLoc
-          }
+const autocompleteService = { current: null };
+
+const useStyles = makeStyles(theme => ({
+  icon: {
+    color: theme.palette.text.secondary,
+    marginRight: theme.spacing(2)
+  }
+}));
+
+export default function AutoCompleteMapsSearchBar(props) {
+  const classes = useStyles();
+  const [inputValue, setInputValue] = React.useState("");
+  const [options, setOptions] = React.useState([]);
+  const loaded = React.useRef(false);
+  if (typeof window !== "undefined" && !loaded.current) {
+    console.log(document.querySelector("#google-maps"));
+    if (!document.querySelector("#google-maps")) {
+      loadScript(
+        "https://maps.googleapis.com/maps/api/js?key=AIzaSyDntA49IGS_w5ZRD3ijey8OVS8CNYpqXqA&libraries=places",
+        document.querySelector("head"),
+        "google-maps"
       );
-      */
     }
-    this.setState(prevState => ({
-      dists: prevState.dists.sort((a, b) => (a.dist > b.dist ? 1 : -1))
-    }))
-    /*
-    this.setState({
-      dists: this.state.dists.sort((a, b) => (a.dist > b.dist ? 1 : -1))
-    }) 
-    */
+
+    loaded.current = true;
   }
-}
 
-export default LocationSearch;
-/*
-
-}
-//from Geo Data Source
-function calcDistance(lat1, lon1, lat2, lon2, unit) {
-  if (lat1 === lat2 && lon1 === lon2) {
-    return 0;
-  } else {
-    var radlat1 = (Math.PI * lat1) / 180;
-    var radlat2 = (Math.PI * lat2) / 180;
-    var theta = lon1 - lon2;
-    var radtheta = (Math.PI * theta) / 180;
-    var dist =
-      Math.sin(radlat1) * Math.sin(radlat2) +
-      Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
-    if (dist > 1) {
-      dist = 1;
-    }
-    dist = Math.acos(dist);
-    dist = (dist * 180) / Math.PI;
-    dist = dist * 60 * 1.1515;
-    if (unit === "K") {
-      dist = dist * 1.609344;
-    }
-    if (unit === "N") {
-      dist = dist * 0.8684;
-    }
-    return dist;
-  }
-}
-
-// props includes
-// 1. a location (centerLoc)
-// 2. an array of the grant locations (grantLocs)
-export default function getDistance(props) {
-  // lat and then long
-  const grantLocs = [
-    
-    {
-        "lat": 36.8909, 
-        "long" : -76.30892, 
-        "name": "Bathroom Supplies", 
-        "address": "1421 Bolling Ave, Norfolk, VA 23508"
-    },
-    {
-        "lat": 38.89308, 
-        "long": -76.97667, 
-        "name": "Emotional Support", 
-        "address": "1911 C Street NE Washington DC 20002"
-    },
-    {    
-      "lat" : 41.16895,
-      "long": -80.1132,
-      "name": "Taco Bell",
-      "address" : "1560 W. Main Street, Grove City, PA 16127"
-    }
-  ];
-
-  //var myHouse = [36.8909, -76.30892];
-  var dists = [];
-  var centerLoc = {
-      "lat" : 41.15559, 
-      "long" : -80.08209
+  const handleChange = (event) => {
+    setInputValue(event.target.value);
+    console.log(event.target.value);
+    props.parentCallback(event.target.value);
   };
-  
-  grantLocs.forEach(addDist); 
-  function addDist(grantLoc) {
-    dists.push(
-        {
-            "dist" : calcDistance(centerLoc.lat, centerLoc.long, grantLoc.lat, grantLoc.long, "M"),
-            "grantLoc" : grantLoc
-        }
-    );
-  } 
-  dists.sort((a, b) => (a.dist > b.dist ? 1 : -1));
+
+  const fetch = React.useMemo(
+    () =>
+      throttle((input, callback) => {
+        autocompleteService.current.getPlacePredictions(input, callback);
+      }, 200),
+    []
+  );
+
+  React.useEffect(() => {
+    let active = true;
+
+    if (!autocompleteService.current && window.google) {
+      autocompleteService.current = new window.google.maps.places.AutocompleteService();
+    }
+    if (!autocompleteService.current) {
+      return undefined;
+    }
+
+    if (inputValue === "") {
+      setOptions([]);
+      return undefined;
+    }
+
+    fetch({ input: inputValue }, results => {
+      if (active) {
+        setOptions(results || []);
+      }
+    });
+
+    return () => {
+      active = false;
+    };
+  }, [inputValue, fetch]);
+
   return (
-    <div>
-        <div>
-            {JSON.stringify(dists)}
-        </div>
-    </div>);
+    <Autocomplete
+      id="loc-bar"
+      style={{ width: 300 }}
+      getOptionLabel={option =>
+        typeof option === "string" ? option : option.description
+      }
+      filterOptions={x => x}
+      options={options}
+      autoComplete
+      includeInputInList
+      freeSolo
+      disableOpenOnFocus
+      onChange={handleChange}
+      renderInput={params => (
+        <TextField
+          name="loc-textfield"
+          id="loc-textfield"
+          {...params}
+          label="Search from a location"
+          variant="outlined"
+          fullWidth
+        />
+      )}
+      renderOption={option => {
+        const matches =
+          option.structured_formatting.main_text_matched_substrings;
+        const parts = parse(
+          option.structured_formatting.main_text,
+          matches.map(match => [match.offset, match.offset + match.length])
+        );
+
+        return (
+          <Grid container alignItems="center">
+            <Grid item>
+              <LocationOnIcon className={classes.icon} />
+            </Grid>
+            <Grid item xs>
+              {parts.map((part, index) => (
+                <span
+                  key={index}
+                  style={{ fontWeight: part.highlight ? 700 : 400 }}
+                >
+                  {part.text}
+                </span>
+              ))}
+
+              <Typography variant="body2" color="textSecondary">
+                {option.structured_formatting.secondary_text}
+              </Typography>
+            </Grid>
+          </Grid>
+        );
+      }}
+    />
+  );
 }
-
-get the central location
-store it
-
-get the
-*/
