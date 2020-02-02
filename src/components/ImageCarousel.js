@@ -41,14 +41,14 @@ export default function ImageCarousel(props) {
         image={img[activeStep]}
         title="Grant Image"
       />
-      <MobileStepper
+      {img.length > 1 && <MobileStepper
         variant="dots"
         steps={img.length}
         position="static"
         activeStep={activeStep}
         className={classes.root}
         nextButton={
-          <Button size="small" onClick={handleNext} disabled={activeStep === 5}>
+          <Button size="small" onClick={handleNext} disabled={activeStep === img.length - 1}>
             Next
           {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
           </Button>
@@ -60,6 +60,7 @@ export default function ImageCarousel(props) {
         </Button>
         }
       />
+      }
     </div>
   );
 }
