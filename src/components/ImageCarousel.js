@@ -14,7 +14,7 @@ const useStyles = makeStyles({
     flexGrow: 1,
   },
   cardMedia: {
-    height: 250,
+    height: 400,
   },
 });
 
@@ -34,23 +34,13 @@ export default function ImageCarousel(props) {
     setActiveStep(prevActiveStep => prevActiveStep - 1);
   };
 
-  // Create reference to firebase storage
-  let storage = firebase.storage();
-  let storageRef = storage.ref();
-
-  // Get image URL
-  const [downloadUrl, loading, error] = useDownloadURL(storageRef.child(img[activeStep]));
-  console.log(downloadUrl)
-
   return (
     <div>
-      {!loading && !error &&
-        <CardMedia
-          className={classes.cardMedia}
-          image={downloadUrl}
-          title="Grant Image"
-        />
-      }
+      <CardMedia
+        className={classes.cardMedia}
+        image={img[activeStep]}
+        title="Grant Image"
+      />
       <MobileStepper
         variant="dots"
         steps={img.length}

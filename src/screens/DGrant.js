@@ -20,7 +20,8 @@ export default function DGrant(props) {
   const [goalAmt, setGoalAmt] = React.useState('');
   const [moneyRaised, setMoneyRaised] = React.useState('');
   const [tags, setTags] = React.useState('');
-  const [img, setImg] = React.useState('GivingTree.png');
+  const [imgNames, setImgNames] = React.useState('');
+  const [img, setImg] = React.useState(['GivingTree.png']);
 
   const [value, loading, error] = useDocument(db.doc('grants/' + id));
 
@@ -35,7 +36,7 @@ export default function DGrant(props) {
       setGoalAmt(value.data().goal_amt);
       setMoneyRaised(value.data().money_raised);
       setTags(value.data().tags);
-      setImg(value.data().images);
+      setImgNames(value.data().images);
     }
   }, [value, error, loading, id]);
 
@@ -67,6 +68,24 @@ export default function DGrant(props) {
   const [url, setUrl] = React.useState('');
   const [number, setNumber] = React.useState('');
   const [email, setEmail] = React.useState('');
+
+  // Get an array of image urls
+  let storage = firebase.storage();
+  let storageRef = storage.ref();
+
+  useEffect(() => {
+    let newImg = [];
+    for (let imgName of imgNames) {
+      console.log(imgName);
+      storageRef.child(imgName).getDownloadURL().then(function (url) {
+        console.log(url);
+        newImg.push(url);
+      }).catch(function (error) {
+        console.log('error getting image url')
+      })
+    }
+    setImg(newImg);
+  }, [imgNames])
 
   useEffect(() => {
     if (nonprofitId !== '') {

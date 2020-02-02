@@ -60,7 +60,7 @@ export default function LargeGrantCard(props) {
 
   return (
     <div className={classes.card}>
-      <ImageCarousel img={img} />
+      {img && img.length > 0 && <ImageCarousel img={img} />}
       <CardContent className={classes.cardContent}>
         <Text type='card-aboveheading' text={nonprofitName} />
         <Text type='card-heading' text={title} />
