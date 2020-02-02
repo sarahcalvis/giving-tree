@@ -39,6 +39,8 @@ export default function LargeGrantCard(props) {
   const [nonprofitUrl, setNonprofitUrl] = React.useState(props.nonprofitUrl);
   const [nonprofitEmail, setNonprofitEmail] = React.useState(props.nonprofitEmail);
   const [nonprofitPhone, setNonprofitPhone] = React.useState(props.nonprofitPhone);
+  const [datePosted, setDatePosted] = React.useState(props.datePosted);
+  const [dateDeadline, setDateDeadline] = React.useState('');
 
   // Observe grant details
   useEffect(() => { setId(props.id); }, [props.id]);
@@ -56,6 +58,8 @@ export default function LargeGrantCard(props) {
   useEffect(() => { setNonprofitUrl(props.nonprofitUrl) }, [props.nonprofitUrl]);
   useEffect(() => { setNonprofitEmail(props.nonprofitEmail) }, [props.nonprofitEmail]);
   useEffect(() => { setNonprofitPhone(props.nonprofitPhone) }, [props.nonprofitPhone]);
+  useEffect(() => { setDatePosted(props.datePosted) }, [props.datePosted]);
+  useEffect(() => { setDateDeadline(props.dateDeadline) }, [props.dateDeadline]);
 
 
   return (
@@ -65,6 +69,14 @@ export default function LargeGrantCard(props) {
         <Text type='card-aboveheading' text={nonprofitName} />
         <Text type='card-heading' text={title} />
         <Text type='card-subheading' text={cfName} />
+        <Grid container direction='row' justify='space-between' alignItems='flex-end'>
+          <Grid item>
+            <Text type='date' text={'Posted ' + datePosted} />
+          </Grid>
+          <Grid item  >
+            <Text type='date' text={'Deadline ' + dateDeadline} />
+          </Grid>
+        </Grid>
         <ProgressBar goal={goalAmt} raised={moneyRaised} />
         <Text type='card-subheading' text={desc} />
         <Grid
@@ -94,7 +106,7 @@ export default function LargeGrantCard(props) {
             <Link to={'/grants/' + id + '/give'}>
               <Button color='primary' variant='contained'>
                 Donate
-                  </Button>
+                </Button>
             </Link>
           </Grid>
         </Grid>

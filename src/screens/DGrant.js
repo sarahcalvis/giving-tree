@@ -22,6 +22,8 @@ export default function DGrant(props) {
   const [tags, setTags] = React.useState('');
   const [imgNames, setImgNames] = React.useState('');
   const [img, setImg] = React.useState(['GivingTree.png']);
+  const [datePosted, setDatePosted] = React.useState('');
+  const [dateDeadline, setDateDeadline] = React.useState('');
 
   const [value, loading, error] = useDocument(db.doc('grants/' + id));
 
@@ -37,6 +39,8 @@ export default function DGrant(props) {
       setMoneyRaised(value.data().money_raised);
       setTags(value.data().tags);
       setImgNames(value.data().images);
+      setDatePosted(new Date(value.data().date_posted.seconds * 1000).toString());
+      setDateDeadline(new Date(value.data().date_deadline.seconds * 1000).toString());
     }
   }, [value, error, loading, id]);
 
@@ -124,7 +128,9 @@ export default function DGrant(props) {
         nonprofitName={nonprofitName}
         nonprofitUrl={url}
         nonprofitEmail={email}
-        nonprofitPhone={number} />
+        nonprofitPhone={number}
+        datePosted={datePosted}
+        dateDeadline={dateDeadline} />
     </div>
   );
 }
