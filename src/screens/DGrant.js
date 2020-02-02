@@ -10,7 +10,7 @@ export default function DGrant(props) {
   // Initialize database and specific grant in database
   const db = firebase.firestore();
 
-  const dateOptions = {  year: 'numeric', month: 'long', day: 'numeric' };
+  const dateOptions = {  year: 'numeric', month: 'numeric', day: 'numeric' };
 
   // Query from grant collection
   const [nonprofitId, setNonprofitId] = React.useState('');

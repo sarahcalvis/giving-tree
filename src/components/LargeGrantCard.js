@@ -32,18 +32,10 @@ export default function LargeGrantCard(props) {
         <Text type='card-subheading' text={props.cfName} />
         <Grid container direction='row' justify='space-between' alignItems='flex-end' spacing={0}>
           <Grid item>
-            <Text type='date' text={'Posted '} />
+            <Text type='date' text={'Posted ' + props.datePosted} />
           </Grid>
           <Grid item  >
-            <Text type='date' text={'Deadline '} />
-          </Grid>
-        </Grid>
-        <Grid container direction='row' justify='space-between' alignItems='flex-end'>
-          <Grid item>
-            <Text type='date' text={props.datePosted} />
-          </Grid>
-          <Grid item  >
-            <Text type='date' text={props.dateDeadline} />
+            <Text type='date' text={'Deadline ' + props.dateDeadline} />
           </Grid>
         </Grid>
         <ProgressBar goal={props.goalAmt} raised={props.moneyRaised} />
