@@ -10,6 +10,8 @@ export default function DGrant(props) {
   // Initialize database and specific grant in database
   const db = firebase.firestore();
 
+  const dateOptions = {  year: 'numeric', month: 'long', day: 'numeric' };
+
   // Query from grant collection
   const [nonprofitId, setNonprofitId] = React.useState('');
   const [cfId, setCfId] = React.useState('');
@@ -39,8 +41,8 @@ export default function DGrant(props) {
       setMoneyRaised(value.data().money_raised);
       setTags(value.data().tags);
       setImgNames(value.data().images);
-      setDatePosted(new Date(value.data().date_posted.seconds * 1000).toString());
-      setDateDeadline(new Date(value.data().date_deadline.seconds * 1000).toString());
+      setDatePosted(new Date(value.data().date_posted.seconds * 1000).toLocaleDateString("en-US", dateOptions));
+      setDateDeadline(new Date(value.data().date_deadline.seconds * 1000).toLocaleDateString("en-US", dateOptions));
     }
   }, [value, error, loading, id]);
 
