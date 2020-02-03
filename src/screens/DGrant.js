@@ -10,7 +10,7 @@ export default function DGrant(props) {
   // Initialize database and specific grant in database
   const db = firebase.firestore();
 
-  const dateOptions = {  year: 'numeric', month: 'numeric', day: 'numeric' };
+  const dateOptions = { year: 'numeric', month: 'numeric', day: 'numeric' };
 
   // Query from grant collection
   const [nonprofitId, setNonprofitId] = React.useState('');
@@ -27,24 +27,33 @@ export default function DGrant(props) {
   const [datePosted, setDatePosted] = React.useState('');
   const [dateDeadline, setDateDeadline] = React.useState('');
 
-  const [value, loading, error] = useDocument(db.doc('grants/' + id));
-
   useEffect(() => {
-    if (!loading && !error) {
-      setCfId(value.data().cf_id);
-      setNonprofitId(value.data().nonprofit_id);
-      setTitle(value.data().title);
-      setCfName(value.data().cf_name);
-      setNonprofitName(value.data().nonprofit_name);
-      setDesc(value.data().desc);
-      setGoalAmt(value.data().goal_amt);
-      setMoneyRaised(value.data().money_raised);
-      setTags(value.data().tags);
-      setImgNames(value.data().images);
-      setDatePosted(new Date(value.data().date_posted.seconds * 1000).toLocaleDateString("en-US", dateOptions));
-      setDateDeadline(new Date(value.data().date_deadline.seconds * 1000).toLocaleDateString("en-US", dateOptions));
+    if (id) {
+      console.log(id);
+      db.collection('grants').doc(id).get()
+        .then(doc => {
+          if (!doc.exists) {
+            console.log('No such document for grant ' + id);
+          } else {
+            setCfId(doc.data().cf_id);
+            setNonprofitId(doc.data().nonprofit_id);
+            setTitle(doc.data().title);
+            setCfName(doc.data().cf_name);
+            setNonprofitName(doc.data().nonprofit_name);
+            setDesc(doc.data().desc);
+            setGoalAmt(doc.data().goal_amt);
+            setMoneyRaised(doc.data().money_raised);
+            setTags(doc.data().tags);
+            setImgNames(doc.data().images);
+            setDatePosted(new Date(doc.data().date_posted.seconds * 1000).toLocaleDateString("en-US", dateOptions));
+            setDateDeadline(new Date(doc.data().date_deadline.seconds * 1000).toLocaleDateString("en-US", dateOptions));
+          }
+        })
+        .catch(err => {
+          console.log('Error getting CF', err);
+        });
     }
-  }, [value, error, loading, id]);
+  }, []);
 
   // Query from CF collection
   const [cfUrl, setCfUrl] = React.useState('');

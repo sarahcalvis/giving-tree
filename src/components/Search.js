@@ -24,6 +24,7 @@ class Search extends Component {
     var db = firebase.firestore();
     db.collection("grants").get().then((querySnapshot) => {
         querySnapshot.forEach(function (doc) {
+          var id= doc.id;
           var cf_name = doc.data().cf_name;
           var cf_id = doc.data().cf_id;
           var title = doc.data().title;
@@ -38,7 +39,7 @@ class Search extends Component {
           var desc = doc.data().desc;
           var tags = doc.data().tags;
           var images = doc.data().images;
-          grantSearchResults.push( {cf_name, cf_id, title, nonprofit_name, address, lat, long, date_posted, date_deadline, money_raised, goal_amt, desc, tags, images});
+          grantSearchResults.push( {id, cf_name, cf_id, title, nonprofit_name, address, lat, long, date_posted, date_deadline, money_raised, goal_amt, desc, tags, images});
         });
         this.setState({ distResults: grantSearchResults});
         this.setState({ grants: grantSearchResults});

@@ -12,7 +12,7 @@ const useStyles = makeStyles({
     flexGrow: 1,
   },
   cardMedia: {
-    height: 400,
+    height: 250,
   },
 });
 

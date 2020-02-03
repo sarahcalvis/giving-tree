@@ -21,7 +21,7 @@ export default function DDashboard() {
   const db = firebase.firestore();
 
   const [snapshot, loading, error] = useCollection(db.collection('grants'));
-  
+
   useEffect(() => {
     var newGrants = [];
     if (!loading && !error) {
@@ -34,7 +34,8 @@ export default function DDashboard() {
             nonprofitName={doc.data().nonprofit_name}
             goalAmt={doc.data().goal_amt}
             moneyRaised={doc.data().money_raised}
-            img={doc.data().images[0] || 'GivingTree.png'} />);
+            img={doc.data().images[0] || 'GivingTree.png'} />
+        );
       });
       setGrants(newGrants);
     }
@@ -44,19 +45,19 @@ export default function DDashboard() {
     var useless = 0;
   }, [grants]);
   */
-  function searchCallback(childData) {      
+  function searchCallback(childData) {
     var newGrants = [];
-    childData.forEach( (grant) => {
+    childData.forEach((grant) => {
       newGrants.push(
         <SmallGrantCard
-          id={grant.cf_id}
+          id={grant.id}
           title={grant.title}
           cfName={grant.cf_name}
           nonprofitName={grant.nonprofit_name}
           goalAmt={grant.goal_amt}
           moneyRaised={grant.money_raised}
           img={grant.images[0] || 'GivingTree.png'} />
-          );
+      );
     });
     setGrants(newGrants);
   }
@@ -65,7 +66,7 @@ export default function DDashboard() {
 
   return (
     <Container maxWidth='md' className={classes.container}>
-      <Search parentCallback={searchCallback}/>
+      <Search parentCallback={searchCallback} />
       <Grid container spacing={2} >
         {grants}
       </Grid>

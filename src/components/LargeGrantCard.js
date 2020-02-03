@@ -15,7 +15,8 @@ import { makeStyles } from '@material-ui/styles';
 const useStyles = makeStyles(theme => ({
   card: {
     maxWidth: 500,
-    padding: 0,
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
   },
   cardContent: {
     flexGrow: 1,
@@ -24,6 +25,9 @@ const useStyles = makeStyles(theme => ({
 
 export default function LargeGrantCard(props) {
   const classes = useStyles();
+
+  // Set tab title
+  useEffect(() => { document.title = props.title; }, [props.title]);
 
   return (
     <Container className={classes.card}>
