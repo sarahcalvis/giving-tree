@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Grid from '@material-ui/core/Grid';
+import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
 import Text from './Text.js';
@@ -14,6 +15,7 @@ import { makeStyles } from '@material-ui/styles';
 const useStyles = makeStyles(theme => ({
   card: {
     maxWidth: 500,
+    padding: 0,
   },
   cardContent: {
     flexGrow: 1,
@@ -24,54 +26,56 @@ export default function LargeGrantCard(props) {
   const classes = useStyles();
 
   return (
-    <div className={classes.card}>
-      {props.img && props.img.length > 0 && <ImageCarousel img={props.img} />}
-      <CardContent className={classes.cardContent}>
-        <Text type='card-aboveheading' text={props.nonprofitName} />
-        <Text type='card-heading' text={props.title} />
-        <Text type='card-subheading' text={props.cfName} />
-        <Grid container direction='row' justify='space-between' alignItems='flex-end' spacing={0}>
-          <Grid item>
-            <Text type='date' text={'Posted ' + props.datePosted} />
+    <Container className={classes.card}>
+      <Card>
+        {props.img && props.img.length > 0 && <ImageCarousel img={props.img} />}
+        <CardContent className={classes.cardContent}>
+          <Text type='card-aboveheading' text={props.nonprofitName} />
+          <Text type='card-heading' text={props.title} />
+          <Text type='card-subheading' text={props.cfName} />
+          <Grid container direction='row' justify='space-between' alignItems='flex-end' spacing={0}>
+            <Grid item>
+              <Text type='date' text={'Posted ' + props.datePosted} />
+            </Grid>
+            <Grid item  >
+              <Text type='date' text={'Deadline ' + props.dateDeadline} />
+            </Grid>
           </Grid>
-          <Grid item  >
-            <Text type='date' text={'Deadline ' + props.dateDeadline} />
-          </Grid>
-        </Grid>
-        <ProgressBar goal={props.goalAmt} raised={props.moneyRaised} />
-        <Text type='card-subheading' text={props.desc} />
-        <Grid
-          container
-          direction="row"
-          justify="flex-start"
-          alignItems="flex-start"
-          spacing={2}
-        > {props.tags.length > 0 && props.tags.map((tag) =>
-          <Grid item>
-            <Tag removable={false} tag={props.tag} />
-          </Grid>
-        )} </Grid>
-        <Grid container direction='row' justify='space-between' alignItems='flex-end'>
-          <Grid item>
-            <ContactPopout
-              cfName={props.cfName}
-              cfPhone={props.cfPhone}
-              cfUrl={props.cfUrl}
-              cfEmail={props.cfEmail}
-              nonprofitName={props.nonprofitName}
-              nonprofitPhone={props.nonprofitPhone}
-              nonprofitUrl={props.nonprofitUrl}
-              nonprofitEmail={props.nonprofitEmail} />
-          </Grid>
-          <Grid item  >
-            <Link to={'/grants/' + props.id + '/give'}>
-              <Button color='primary' variant='contained'>
-                Donate
+          <ProgressBar goal={props.goalAmt} raised={props.moneyRaised} />
+          <Text type='card-subheading' text={props.desc} />
+          <Grid
+            container
+            direction="row"
+            justify="flex-start"
+            alignItems="flex-start"
+            spacing={2}
+          > {props.tags.length > 0 && props.tags.map((tag) =>
+            <Grid item>
+              <Tag removable={false} tag={props.tag} />
+            </Grid>
+          )} </Grid>
+          <Grid container direction='row' justify='space-between' alignItems='flex-end'>
+            <Grid item>
+              <ContactPopout
+                cfName={props.cfName}
+                cfPhone={props.cfPhone}
+                cfUrl={props.cfUrl}
+                cfEmail={props.cfEmail}
+                nonprofitName={props.nonprofitName}
+                nonprofitPhone={props.nonprofitPhone}
+                nonprofitUrl={props.nonprofitUrl}
+                nonprofitEmail={props.nonprofitEmail} />
+            </Grid>
+            <Grid item  >
+              <Link to={'/grants/' + props.id + '/give'}>
+                <Button color='primary' variant='contained'>
+                  Donate
                 </Button>
-            </Link>
+              </Link>
+            </Grid>
           </Grid>
-        </Grid>
-      </CardContent>
-    </div >
+        </CardContent>
+      </Card>
+    </Container>
   );
 }
