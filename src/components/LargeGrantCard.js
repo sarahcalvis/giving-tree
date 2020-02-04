@@ -27,14 +27,21 @@ export default function LargeGrantCard(props) {
   console.log(props.img);
 
   const classes = useStyles();
+  const [imgKey, setImgKey] = React.useState(0);
 
   // Set tab title
   useEffect(() => { document.title = props.title + '-Giving Tree'; }, [props.title]);
 
+  useEffect(() => {
+    //Force image carousel to rerender after 500ms
+    //TODO: Find better way to fix
+    setTimeout(function () { setImgKey(1);}, 500)
+  }, []);
+
   return (
     <Container className={classes.card}>
       <Card>
-        <ImageCarousel img={props.img} />
+        <ImageCarousel key={imgKey} img={props.img} />
         <CardContent className={classes.cardContent}>
           <Text type='card-aboveheading' text={props.nonprofitName} />
           <Text type='card-heading' text={props.title} />
