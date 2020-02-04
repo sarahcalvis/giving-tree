@@ -4,8 +4,19 @@ import firebase from '../firebase.js';
 import { useParams } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
+import { makeStyles } from '@material-ui/styles';
+import Container from '@material-ui/core/Container';
+
+const useStyles = makeStyles(theme => ({
+  card: {
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
+  },
+}))
 
 export default function DGrant(props) {
+  const classes = useStyles();
+
   // Find out if we are a foundation or a donor
   const [user] = React.useState(window.location.pathname.split('/')[1] === 'grants' ? 'donor' : 'foundation');
 
@@ -111,8 +122,8 @@ export default function DGrant(props) {
   }, [grantData])
 
   return (
-    <div>
-      <Grid container direction='row' justify='space-between' alignItems='flex-end'>
+    <div className={classes.card}>
+      <Grid container direction='row' justify='center' alignItems='flex-end'>
         {dataLoaded &&
           <Grid item>
             <LargeGrantCard
@@ -133,11 +144,21 @@ export default function DGrant(props) {
         }
         {user === 'foundation' &&
           <Grid item>
-            <div>
-              <Button>Delete</Button>
-              <Button>Edit</Button>
-              <Button>Unpublish and save to drafts</Button>
-            </div>
+            <Grid container
+              spacing={2}
+              direction="column"
+              justify="flex-end"
+              alignItems="flex-start">
+              <Grid item>
+                <Button color='primary' variant='contained'>Delete</Button>
+              </Grid>
+              <Grid item>
+                <Button color='primary' variant='contained'>Edit</Button>
+              </Grid>
+              <Grid item>
+                <Button color='primary' variant='contained'>Unpublish and save to drafts</Button>
+              </Grid>
+            </Grid>
           </Grid>
         }
       </Grid>

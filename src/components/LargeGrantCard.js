@@ -15,8 +15,6 @@ import { makeStyles } from '@material-ui/styles';
 const useStyles = makeStyles(theme => ({
   card: {
     maxWidth: 500,
-    paddingTop: theme.spacing(2),
-    paddingBottom: theme.spacing(2),
   },
   cardContent: {
     flexGrow: 1,
