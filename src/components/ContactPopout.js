@@ -9,7 +9,7 @@ const useStyles = makeStyles(theme => ({
     cursor: 'pointer',
   },
   popover: {
-    width: '300px',
+    width: '800px',
   },
   typographyTop: {
     padding: theme.spacing(2),
@@ -22,26 +22,6 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function ContactPopout(props) {
-  // Foundation and nonprofit info
-  const [cfName, setCfName] = React.useState(props.cfName);
-  const [cfUrl, setCfUrl] = React.useState(props.cfUrl);
-  const [cfEmail, setCfEmail] = React.useState(props.cfEmail);
-  const [cfPhone, setCfPhone] = React.useState(props.cfPhone);
-  const [nonprofitName, setNonprofitName] = React.useState(props.nonprofitName);
-  const [nonprofitUrl, setNonprofitUrl] = React.useState(props.nonprofitUrl);
-  const [nonprofitEmail, setNonprofitEmail] = React.useState(props.nonprofitEmail);
-  const [nonprofitPhone, setNonprofitPhone] = React.useState(props.nonprofitPhone);
-
-  // Foundation and nonprofit observers (might delete later)
-  useEffect(() => { setCfName(props.cfName); }, [props.cfName]);
-  useEffect(() => { setCfUrl(props.cfUrl) }, [props.cfUrl]);
-  useEffect(() => { setCfEmail(props.cfEmail) }, [props.cfEmail]);
-  useEffect(() => { setCfPhone(props.cfPhone) }, [props.cfPhone]);
-  useEffect(() => { setNonprofitName(props.nonprofitName); }, [props.nonprofitName]);
-  useEffect(() => { setNonprofitUrl(props.nonprofitUrl) }, [props.nonprofitUrl]);
-  useEffect(() => { setNonprofitEmail(props.nonprofitEmail) }, [props.nonprofitEmail]);
-  useEffect(() => { setNonprofitPhone(props.nonprofitPhone) }, [props.nonprofitPhone]);
-
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -54,7 +34,7 @@ export default function ContactPopout(props) {
   };
 
   const open = Boolean(anchorEl);
-  const id = open ? 'simple-popover' : undefined;
+  const id = open ? 'Contact information' : undefined;
 
   return (
     <div>

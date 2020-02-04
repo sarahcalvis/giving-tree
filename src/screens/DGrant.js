@@ -1,147 +1,132 @@
 import React, { useEffect } from 'react';
 import LargeGrantCard from '../components/LargeGrantCard.js';
 import firebase from '../firebase.js';
-import { useDocument } from 'react-firebase-hooks/firestore';
 import { useParams } from 'react-router-dom';
 
 export default function DGrant(props) {
+  // Get grant ID from URL params
   let id = useParams().grantId;
 
-  // Initialize database and specific grant in database
+  // Initialize database
   const db = firebase.firestore();
 
-  const dateOptions = { year: 'numeric', month: 'numeric', day: 'numeric' };
+  // Initialize storage
+  const storage = firebase.storage();
+  const storageRef = storage.ref();
 
-  // Query from grant collection
-  const [nonprofitId, setNonprofitId] = React.useState('');
-  const [cfId, setCfId] = React.useState('');
-  const [title, setTitle] = React.useState('');
-  const [cfName, setCfName] = React.useState('');
-  const [nonprofitName, setNonprofitName] = React.useState('');
-  const [desc, setDesc] = React.useState('');
-  const [goalAmt, setGoalAmt] = React.useState('');
-  const [moneyRaised, setMoneyRaised] = React.useState('');
-  const [tags, setTags] = React.useState('');
-  const [imgNames, setImgNames] = React.useState('');
-  const [img, setImg] = React.useState(['GivingTree.png']);
-  const [datePosted, setDatePosted] = React.useState('');
-  const [dateDeadline, setDateDeadline] = React.useState('');
+  // Data we load
+  const [grantData, setGrantData] = React.useState();
+  const [cfData, setCfData] = React.useState();
+  const [nonprofitData, setNonprofitData] = React.useState();
+  const [img, setImg] = React.useState();
 
+  // Tell if we are ready to load a LargeGrantCard
+  const [dataLoaded, setDataLoaded] = React.useState(false);
   useEffect(() => {
-    if (id) {
-      console.log(id);
-      db.collection('grants').doc(id).get()
-        .then(doc => {
-          if (!doc.exists) {
-            console.log('No such document for grant ' + id);
-          } else {
-            setCfId(doc.data().cf_id);
-            setNonprofitId(doc.data().nonprofit_id);
-            setTitle(doc.data().title);
-            setCfName(doc.data().cf_name);
-            setNonprofitName(doc.data().nonprofit_name);
-            setDesc(doc.data().desc);
-            setGoalAmt(doc.data().goal_amt);
-            setMoneyRaised(doc.data().money_raised);
-            setTags(doc.data().tags);
-            setImgNames(doc.data().images);
-            setDatePosted(new Date(doc.data().date_posted.seconds * 1000).toLocaleDateString("en-US", dateOptions));
-            setDateDeadline(new Date(doc.data().date_deadline.seconds * 1000).toLocaleDateString("en-US", dateOptions));
-          }
-        })
-        .catch(err => {
-          console.log('Error getting CF', err);
-        });
-    }
-  }, []);
+    setDataLoaded(grantData && cfData && nonprofitData && img);
+  }, [grantData, cfData, nonprofitData, img])
 
-  // Query from CF collection
-  const [cfUrl, setCfUrl] = React.useState('');
-  const [cfPublicPhone, setCfPublicPhone] = React.useState('');
-  const [cfPublicEmail, setCfPublicEmail] = React.useState('');
+  // Format dates from Firebase Timestamps
+  const formatDate = (time) => {
+    let dateOptions = { year: 'numeric', month: 'numeric', day: 'numeric' };
+    return new Date(time * 1000).toLocaleDateString("en-US", dateOptions);
+  }
 
-  useEffect(() => {
-    if (cfId !== '') {
-      // query CF here
-      db.collection('communityFoundations').doc(cfId).get()
-        .then(doc => {
-          if (!doc.exists) {
-            console.log('No such document for CF ' + cfId);
-          } else {
-            setCfUrl(doc.data().foundation_url);
-            setCfPublicPhone(doc.data().public_phone);
-            setCfPublicEmail(doc.data().public_email);
-          }
-        })
-        .catch(err => {
-          console.log('Error getting CF', err);
-        });
-    }
-  }, [cfId]);
-
-  // Query from nonprofit collection
-  const [url, setUrl] = React.useState('');
-  const [number, setNumber] = React.useState('');
-  const [email, setEmail] = React.useState('');
-
-  // Get an array of image urls
-  let storage = firebase.storage();
-  let storageRef = storage.ref();
-
-  useEffect(() => {
+  // Load image URLs from image names
+  const getUrls = (imgNames) => {
     let newImg = [];
     for (let imgName of imgNames) {
       storageRef.child(imgName).getDownloadURL().then(function (url) {
         newImg.push(url);
       }).catch(function (error) {
-        console.log('error getting image url')
+        console.log('error getting image url: ', error)
       })
     }
-    setImg(newImg);
-  }, [imgNames])
+    return newImg;
+  }
 
+  // Query from grant collection
   useEffect(() => {
-    if (nonprofitId !== '') {
-      // query nonprofit here
-      db.collection('nonprofits').doc(nonprofitId).get()
+    if (id) {
+      db.collection('grants').doc(id).get()
         .then(doc => {
           if (!doc.exists) {
-            console.log('No such document for nonprofit ' + nonprofitId);
+            console.log('No such document for grant ' + id);
           } else {
-            setUrl(doc.data().url);
-            setNumber(doc.data().number);
-            setEmail(doc.data().email);
+            setGrantData(doc.data());
+          }
+        })
+        .catch(err => {
+          console.log('Error getting grant', err);
+        });
+    }
+  }, []);
+
+  // Query from CF collection
+  useEffect(() => {
+    if (grantData) {
+      db.collection('communityFoundations').doc(grantData.cf_id).get()
+        .then(doc => {
+          if (!doc.exists) {
+            console.log('No such document for CF ' + grantData.cf_id);
+          } else {
+            setCfData(doc.data());
+          }
+        })
+        .catch(err => {
+          console.log('Error getting CF', err);
+        });
+    }
+  }, [grantData]);
+
+  // Query from nonprofit collection
+  useEffect(() => {
+    if (grantData) {
+      db.collection('nonprofits').doc(grantData.nonprofit_id).get()
+        .then(doc => {
+          if (!doc.exists) {
+            console.log('No such document for nonprofit ' + grantData.nonprofit_id);
+          } else {
+            setNonprofitData(doc.data());
           }
         })
         .catch(err => {
           console.log('Error getting document', err);
         });
     }
-  }, [nonprofitId])
+  }, [grantData])
 
-  // Set tab title
-  useEffect(() => { document.title = title; }, [title]);
+  // Query image urls
+  useEffect(() => {
+    if (grantData) {
+      let imag = getUrls(grantData.images);
+      console.log(imag);
+      setImg(imag);
+    }
+  }, [grantData])
 
   return (
     <div>
-      <LargeGrantCard
-        id={id}
-        title={title}
-        desc={desc}
-        goalAmt={goalAmt}
-        moneyRaised={moneyRaised}
-        tags={tags}
-        img={img}
-        cfName={cfName}
-        cfUrl={cfUrl}
-        cfEmail={cfPublicEmail}
-        cfPhone={cfPublicPhone}
-        nonprofitName={nonprofitName}
-        nonprofitUrl={url}
-        nonprofitEmail={email}
-        nonprofitPhone={number}
-        datePosted={datePosted}
-        dateDeadline={dateDeadline} />
+      {dataLoaded &&
+        <LargeGrantCard
+          id={id}
+          title={grantData.title}
+          desc={grantData.desc}
+          goalAmt={grantData.goal_amt}
+          moneyRaised={grantData.money_raised}
+          tags={grantData.tags}
+          img={img}
+          cfName={cfData.name}
+          cfUrl={cfData.url}
+          cfEmail={cfData.public_email}
+          cfPhone={cfData.public_phone}
+          nonprofitName={nonprofitData.name}
+          nonprofitUrl={nonprofitData.url}
+          nonprofitEmail={nonprofitData.email}
+          nonprofitPhone={nonprofitData.number}
+          datePosted={formatDate(grantData.date_posted.seconds)}
+          dateDeadline={formatDate(grantData.date_deadline.seconds)} />
+      }
     </div>
   );
 }

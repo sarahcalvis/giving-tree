@@ -35,25 +35,26 @@ export default function ImageCarousel(props) {
         image={props.img[activeStep]}
         title="Grant Image"
       />
-      {props.img.length > 1 && <MobileStepper
-        variant="dots"
-        steps={props.img.length}
-        position="static"
-        activeStep={activeStep}
-        className={classes.root}
-        nextButton={
-          <Button size="small" onClick={handleNext} disabled={activeStep === props.img.length - 1}>
-            Next
-          <KeyboardArrowRight />
-          </Button>
-        }
-        backButton={
-          <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
-            <KeyboardArrowLeft />
-            Back
-        </Button>
-        }
-      />
+      {props.img.length > 1 && 
+        <MobileStepper
+          variant="dots"
+          steps={props.img.length}
+          position="static"
+          activeStep={activeStep}
+          className={classes.root}
+          nextButton={
+            <Button size="small" onClick={handleNext} disabled={activeStep === props.img.length - 1}>
+              Next
+            <KeyboardArrowRight />
+            </Button>
+          }
+          backButton={
+            <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
+              <KeyboardArrowLeft />
+              Back
+            </Button>
+          }
+        />
       }
     </div>
   );
