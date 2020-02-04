@@ -12,6 +12,7 @@ import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
 import Card from '@material-ui/core/Card';
 import Text from '../components/Text.js';
+import Snack from '../components/Snack.js';
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -36,6 +37,9 @@ export default function DGrant(props) {
 
   // Tell whether modal is open
   const [deleteModal, setDeleteModal] = React.useState(false);
+
+  // Tell whether grant has been moved to grants for snack
+  const [draftified, setDraftified] = React.useState(false);
 
   // Find out if we are a foundation or a donor
   const [user] = React.useState(window.location.pathname.split('/')[1] === 'grants' ? 'donor' : 'foundation');
@@ -88,6 +92,7 @@ export default function DGrant(props) {
     db.collection('grants').doc(id).update({
       status: 'drafted'
     }).then(function () {
+      setDraftified(true);
       console.log('Grant moved to drafts');
     });
   }
@@ -253,6 +258,10 @@ export default function DGrant(props) {
             </Card>
           </Fade>
         </Modal>
+      }
+
+      { draftified &&
+        <Snack message={grantData.title + ' has been moved to drafts'} />
       }
     </div>
   );
