@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/styles';
-import Container from '@material-ui/core/Container';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -153,7 +153,13 @@ export default function DGrant(props) {
                 <Button color='primary' variant='contained'>Delete</Button>
               </Grid>
               <Grid item>
-                <Button color='primary' variant='contained'>Edit</Button>
+                <Link to={'/foundation/' + id + '/edit'}>
+                  <Button
+                    color='primary'
+                    variant='contained'>
+                    Edit
+                  </Button>
+                </Link>
               </Grid>
               <Grid item>
                 <Button color='primary' variant='contained'>Unpublish and save to drafts</Button>
