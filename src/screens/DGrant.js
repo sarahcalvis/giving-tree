@@ -119,7 +119,7 @@ export default function DGrant(props) {
           dateDeadline={formatDate(grantData.date_deadline.seconds)}
           img={img}
           cfData={cfData}
-          nonProfitData={nonprofitData}
+          nonprofitData={nonprofitData}
            />
       }
     </div>
