@@ -22,6 +22,9 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export default function FGrants(props) {
+  // Set tab title
+  useEffect(() => { document.title = 'Giving Tree Grants'; }, [props.title]);
+
   const classes = useStyles();
 
   const [acctId, setAcctId] = React.useState('');

@@ -38,9 +38,6 @@ function Grant(props) {
   // Tell whether modal is open
   const [deleteModal, setDeleteModal] = React.useState(false);
 
-  // Tell whether grant has been moved to grants for snack
-  const [draftified, setDraftified] = React.useState(false);
-
   // Find out if we are a foundation or a donor
   const [user] = React.useState(window.location.pathname.split('/')[1] === 'grants' ? 'donor' : 'foundation');
 
@@ -91,10 +88,19 @@ function Grant(props) {
   // Make a grant a draft if the foundation clicks the button
   const draftifyGrant = () => {
     db.collection('grants').doc(id).update({
-      status: 'drafted'
+      status: 'draft'
     }).then(function () {
-      setDraftified(true);
       console.log('Grant moved to drafts');
+      props.history.push('/foundation')
+    });
+  }
+
+  // Publish a grant
+  const publishGrant = () => {
+    db.collection('grants').doc(id).update({
+      status: 'current'
+    }).then(function () {
+      console.log('Grant published');
       props.history.push('/foundation')
     });
   }
@@ -174,96 +180,153 @@ function Grant(props) {
 
   return (
     <div className={classes.card}>
-      <Grid container direction='row' justify='center' alignItems='flex-end'>
-        {dataLoaded &&
-          <Grid item>
-            <LargeGrantCard
-              user={user}
-              id={id}
-              title={grantData.title}
-              desc={grantData.desc}
-              goalAmt={grantData.goal_amt}
-              moneyRaised={grantData.money_raised}
-              tags={grantData.tags}
-              datePosted={formatDate(grantData.date_posted.seconds)}
-              dateDeadline={formatDate(grantData.date_deadline.seconds)}
-              img={img}
-              cfData={cfData}
-              nonprofitData={nonprofitData}
-            />
-          </Grid>
-        }
-        {user === 'foundation' &&
-          <Grid item>
-            <Grid container
-              spacing={2}
-              direction="column"
-              justify="flex-end"
-              alignItems="flex-start">
-              <Grid item>
-                <Button
-                  color='primary'
-                  variant='contained'
-                  onClick={toggleModal}>
-                  Delete
-                </Button>
-              </Grid>
-              <Grid item>
-                <Link to={'/foundation/' + id + '/edit'}>
-                  <Button
-                    color='primary'
-                    variant='contained'>
-                    Edit
-                  </Button>
-                </Link>
-              </Grid>
-              <Grid item>
-                <Button
-                  color='primary'
-                  variant='contained'
-                  onClick={draftifyGrant}>
-                  Unpublish and save to drafts
-                </Button>
-              </Grid>
-            </Grid>
-          </Grid>
-        }
-      </Grid>
+      {dataLoaded &&
+        <div>
+          {grantData.status !== 'deleted' &&
+            <div>
+              <Grid container direction='row' justify='center' alignItems='flex-end'>
+                <Grid item>
+                  <LargeGrantCard
+                    user={user}
+                    id={id}
+                    title={grantData.title}
+                    desc={grantData.desc}
+                    status={grantData.status}
+                    goalAmt={grantData.goal_amt}
+                    moneyRaised={grantData.money_raised}
+                    tags={grantData.tags}
+                    datePosted={formatDate(grantData.date_posted.seconds)}
+                    dateDeadline={formatDate(grantData.date_deadline.seconds)}
+                    img={img}
+                    cfData={cfData}
+                    nonprofitData={nonprofitData}
+                  />
+                </Grid>
 
-      {deleteModal &&
-        <Modal
-          open={true}
-          className={classes.modal}
-          BackdropComponent={Backdrop}
-          BackdropProps={{
-            timeout: 500
-          }}>
-          <Fade in={true}>
-            <Card>
-              <CardContent>
-                <Text type='card-heading' text='WARNING' />
-                <Text type='tag' text={'Are you sure you want to delete ' + grantData.title + '? This cannot be undone!'} />
-                <Button
-                  variant='contained'
-                  color='error'
-                  type='submit'
-                  onClick={deleteGrant}
-                  className={classes.button}
-                >YES</Button>
-                <Button
-                  variant='contained'
-                  color='primary'
-                  onClick={toggleModal}
-                  className={classes.button}
-                >NO</Button>
-              </CardContent>
-            </Card>
-          </Fade>
-        </Modal>
-      }
+                {user === 'foundation' &&
+                  <Grid item>
+                    {grantData.status === 'current' &&
+                      <Grid container
+                        spacing={2}
+                        direction="column"
+                        justify="flex-end"
+                        alignItems="flex-start">
+                        <Grid item>
+                          <Button
+                            color='primary'
+                            variant='contained'
+                            onClick={toggleModal}>
+                            Delete
+                      </Button>
+                        </Grid>
+                        <Grid item>
+                          <Link to={'/foundation/' + id + '/edit'}>
+                            <Button
+                              color='primary'
+                              variant='contained'>
+                              Edit
+                        </Button>
+                          </Link>
+                        </Grid>
+                        <Grid item>
+                          <Button
+                            color='primary'
+                            variant='contained'
+                            onClick={draftifyGrant}>
+                            Unpublish and save to drafts
+                      </Button>
+                        </Grid>
+                      </Grid>
+                    }
+                    {grantData.status === 'draft' &&
+                      <Grid container
+                        spacing={2}
+                        direction="column"
+                        justify="flex-end"
+                        alignItems="flex-start">
+                        <Grid item>
+                          <Button
+                            color='primary'
+                            variant='contained'
+                            onClick={toggleModal}>
+                            Delete
+                      </Button>
+                        </Grid>
+                        <Grid item>
+                          <Link to={'/foundation/' + id + '/edit'}>
+                            <Button
+                              color='primary'
+                              variant='contained'>
+                              Edit
+                        </Button>
+                          </Link>
+                        </Grid>
+                        <Grid item>
+                          <Button
+                            color='primary'
+                            variant='contained'
+                            onClick={publishGrant}>
+                            Publish
+                      </Button>
+                        </Grid>
+                      </Grid>
+                    }
+                    {grantData.status === 'expired' &&
+                      <Grid container
+                        spacing={2}
+                        direction="column"
+                        justify="flex-end"
+                        alignItems="flex-start">
+                        <Grid item>
+                          <Button
+                            color='primary'
+                            variant='contained'>
+                            Copy to Drafts
+                      </Button>
+                        </Grid>
+                      </Grid>
+                    }
+                  </Grid>
+                }
+              </Grid>
 
-      {draftified &&
-        <Snack message={grantData.title + ' has been moved to drafts'} />
+              {deleteModal &&
+                <Modal
+                  open={true}
+                  className={classes.modal}
+                  BackdropComponent={Backdrop}
+                  BackdropProps={{
+                    timeout: 500
+                  }}>
+                  <Fade in={true}>
+                    <Card>
+                      <CardContent>
+                        <Text type='card-heading' text='WARNING' />
+                        <Text type='tag' text={'Are you sure you want to delete ' + grantData.title + '? This cannot be undone!'} />
+                        <Button
+                          variant='contained'
+                          color='error'
+                          type='submit'
+                          onClick={deleteGrant}
+                          className={classes.button}
+                        >YES</Button>
+                        <Button
+                          variant='contained'
+                          color='primary'
+                          onClick={toggleModal}
+                          className={classes.button}
+                        >NO</Button>
+                      </CardContent>
+                    </Card>
+                  </Fade>
+                </Modal>
+              }
+            </div>
+          }
+          {
+            grantData.status === 'deleted' && <Text type='tag' text={'We\'re sorry, that grant doesn\'t exist anymore.'}/>
+          }
+        </div>
       }
     </div>
   );

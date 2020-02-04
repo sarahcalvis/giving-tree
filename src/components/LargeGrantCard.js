@@ -44,7 +44,8 @@ export default function LargeGrantCard(props) {
       {props.user === 'foundation' &&
         <Card className={classes.topCard}>
           <CardContent>
-            <Text type='card-aboveheading' text={props.cfData.address} />
+            <Text type='card-aboveheading' text={'Address: ' + props.cfData.address} />
+            <Text type='card-aboveheading' text={'Status: ' + props.status} />
           </CardContent>
         </Card>
       }
