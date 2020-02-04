@@ -16,6 +16,9 @@ const useStyles = makeStyles(theme => ({
   card: {
     maxWidth: 500,
   },
+  topCard: {
+    marginBottom: theme.spacing(2),
+  },
   cardContent: {
     flexGrow: 1,
   },
@@ -38,6 +41,13 @@ export default function LargeGrantCard(props) {
 
   return (
     <Container className={classes.card}>
+      {props.user === 'foundation' &&
+        <Card className={classes.topCard}>
+          <CardContent>
+            <Text type='card-aboveheading' text={props.cfData.address} />
+          </CardContent>
+        </Card>
+      }
       <Card>
         <ImageCarousel key={imgKey} img={props.img} />
         <CardContent className={classes.cardContent}>
