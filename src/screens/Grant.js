@@ -48,6 +48,16 @@ export default function DGrant(props) {
     return new Date(time * 1000).toLocaleDateString("en-US", dateOptions);
   }
 
+  // Delete a grant if the foundation clicks the button
+  const deleteGrant = (event) => {
+    console.log('deleting grant')
+  }
+
+  // Make a grant a draft if the foundation clicks the button
+  const draftifyGrant = (event) => {
+    console.log('draftifying grant')
+  }
+
   // Load image URLs from image names
   const getUrls = (imgNames) => {
     let newImg = [];
@@ -150,7 +160,12 @@ export default function DGrant(props) {
               justify="flex-end"
               alignItems="flex-start">
               <Grid item>
-                <Button color='primary' variant='contained'>Delete</Button>
+                <Button 
+                  color='primary' 
+                  variant='contained'
+                  onClick={deleteGrant}>
+                  Delete
+                </Button>
               </Grid>
               <Grid item>
                 <Link to={'/foundation/' + id + '/edit'}>
@@ -162,7 +177,12 @@ export default function DGrant(props) {
                 </Link>
               </Grid>
               <Grid item>
-                <Button color='primary' variant='contained'>Unpublish and save to drafts</Button>
+                <Button 
+                  color='primary' 
+                  variant='contained'
+                  onClick={draftifyGrant}>
+                  Unpublish and save to drafts
+                </Button>
               </Grid>
             </Grid>
           </Grid>

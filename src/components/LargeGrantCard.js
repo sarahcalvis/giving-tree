@@ -76,7 +76,7 @@ export default function LargeGrantCard(props) {
                 <Link to={'/grants/' + props.id + '/give'}>
                   <Button color='primary' variant='contained'>
                     Donate
-                </Button>
+                  </Button>
                 </Link>
               </Grid>
             </Grid>
