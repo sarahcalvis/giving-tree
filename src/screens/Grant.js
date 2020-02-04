@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { Link, withRouter, useParams } from 'react-router-dom';
 import LargeGrantCard from '../components/LargeGrantCard.js';
 import Text from '../components/Text.js';
-import Snack from '../components/Snack.js';
 import firebase from '../firebase.js';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
@@ -105,6 +104,15 @@ function Grant(props) {
     });
   }
 
+  // Copy a grant to drafts
+  const createDraft = () => {
+    let newData = grantData;
+    newData.status = 'draft';
+    db.collection('grants').add(newData).then(ref => {
+      console.log('Added document with ID: ' + ref.id + ' to drafts');
+    });
+  }
+
   // Load image URLs from image names
   const getUrls = (imgNames) => {
     let newImg = [];
@@ -126,6 +134,7 @@ function Grant(props) {
           if (!doc.exists) {
             console.log('No such document for grant ' + id);
           } else {
+            console.log('Got the grant; here is the data: ' + doc.data());
             setGrantData(doc.data());
           }
         })
@@ -217,7 +226,7 @@ function Grant(props) {
                             variant='contained'
                             onClick={toggleModal}>
                             Delete
-                      </Button>
+                          </Button>
                         </Grid>
                         <Grid item>
                           <Link to={'/foundation/' + id + '/edit'}>
@@ -225,7 +234,7 @@ function Grant(props) {
                               color='primary'
                               variant='contained'>
                               Edit
-                        </Button>
+                            </Button>
                           </Link>
                         </Grid>
                         <Grid item>
@@ -234,7 +243,7 @@ function Grant(props) {
                             variant='contained'
                             onClick={draftifyGrant}>
                             Unpublish and save to drafts
-                      </Button>
+                          </Button>
                         </Grid>
                       </Grid>
                     }
@@ -250,7 +259,7 @@ function Grant(props) {
                             variant='contained'
                             onClick={toggleModal}>
                             Delete
-                      </Button>
+                          </Button>
                         </Grid>
                         <Grid item>
                           <Link to={'/foundation/' + id + '/edit'}>
@@ -258,7 +267,7 @@ function Grant(props) {
                               color='primary'
                               variant='contained'>
                               Edit
-                        </Button>
+                            </Button>
                           </Link>
                         </Grid>
                         <Grid item>
@@ -267,7 +276,7 @@ function Grant(props) {
                             variant='contained'
                             onClick={publishGrant}>
                             Publish
-                      </Button>
+                          </Button>
                         </Grid>
                       </Grid>
                     }
@@ -279,10 +288,11 @@ function Grant(props) {
                         alignItems="flex-start">
                         <Grid item>
                           <Button
+                            onClick={createDraft}
                             color='primary'
                             variant='contained'>
                             Copy to Drafts
-                      </Button>
+                          </Button>
                         </Grid>
                       </Grid>
                     }
@@ -324,7 +334,7 @@ function Grant(props) {
             </div>
           }
           {
-            grantData.status === 'deleted' && <Text type='tag' text={'We\'re sorry, that grant doesn\'t exist anymore.'}/>
+            grantData.status === 'deleted' && <Text type='tag' text={'We\'re sorry, that grant doesn\'t exist anymore.'} />
           }
         </div>
       }
