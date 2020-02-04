@@ -2,11 +2,16 @@ import React, { useEffect } from 'react';
 import LargeGrantCard from '../components/LargeGrantCard.js';
 import firebase from '../firebase.js';
 import { useParams } from 'react-router-dom';
+import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
 
 export default function DGrant(props) {
+  // Find out if we are a foundation or a donor
+  const [user] = React.useState(window.location.pathname.split('/')[1] === 'grants' ? 'donor' : 'foundation');
+
   // Get grant ID from URL params
   let id = useParams().grantId;
-  
+
   // Initialize database
   const db = firebase.firestore();
 
@@ -107,22 +112,35 @@ export default function DGrant(props) {
 
   return (
     <div>
-      {dataLoaded &&
-        <LargeGrantCard
-          user={window.location.pathname.split('/')[1] === 'grant' ? 'donor' : 'foundation'}
-          id={id}
-          title={grantData.title}
-          desc={grantData.desc}
-          goalAmt={grantData.goal_amt}
-          moneyRaised={grantData.money_raised}
-          tags={grantData.tags}
-          datePosted={formatDate(grantData.date_posted.seconds)}
-          dateDeadline={formatDate(grantData.date_deadline.seconds)}
-          img={img}
-          cfData={cfData}
-          nonprofitData={nonprofitData}
-           />
-      }
+      <Grid container direction='row' justify='space-between' alignItems='flex-end'>
+        {dataLoaded &&
+          <Grid item>
+            <LargeGrantCard
+              user={user}
+              id={id}
+              title={grantData.title}
+              desc={grantData.desc}
+              goalAmt={grantData.goal_amt}
+              moneyRaised={grantData.money_raised}
+              tags={grantData.tags}
+              datePosted={formatDate(grantData.date_posted.seconds)}
+              dateDeadline={formatDate(grantData.date_deadline.seconds)}
+              img={img}
+              cfData={cfData}
+              nonprofitData={nonprofitData}
+            />
+          </Grid>
+        }
+        {user === 'foundation' &&
+          <Grid item>
+            <div>
+              <Button>Delete</Button>
+              <Button>Edit</Button>
+              <Button>Unpublish and save to drafts</Button>
+            </div>
+          </Grid>
+        }
+      </Grid>
     </div>
   );
 }
