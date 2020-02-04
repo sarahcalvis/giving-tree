@@ -70,14 +70,8 @@ export default function LargeGrantCard(props) {
           <Grid container direction='row' justify='space-between' alignItems='flex-end'>
             <Grid item>
               <ContactPopout
-                cfName={props.cfName}
-                cfPhone={props.cfPhone}
-                cfUrl={props.cfUrl}
-                cfEmail={props.cfEmail}
-                nonprofitName={props.nonprofitName}
-                nonprofitPhone={props.nonprofitPhone}
-                nonprofitUrl={props.nonprofitUrl}
-                nonprofitEmail={props.nonprofitEmail} />
+                cfData={props.cfData}
+                nonprofitData={props.nonprofitData} />
             </Grid>
             <Grid item  >
               <Link to={'/grants/' + props.id + '/give'}>

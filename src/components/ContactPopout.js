@@ -63,12 +63,12 @@ export default function ContactPopout(props) {
             textDecoration='none'
             target='_blank'
             rel='noopener noreferrer'
-            href={props.cfUrl}>
-            {props.cfName}
-          </Link> with any concerns at <Link href={'tel:' + props.cfPhone}>
-            {props.cfPhone}
-          </Link> or <Link href={'mailto:' + props.cfEmail}>
-            {props.cfEmail}
+            href={props.cfData.url}>
+            {props.cfData.name}
+          </Link> with any concerns at <Link href={'tel:' + props.cfData.phone}>
+            {props.cfData.public_phone}
+          </Link> or <Link href={'mailto:' + props.cfData.public_email}>
+            {props.cfData.email}
           </Link>
         </Typography>
         <Typography
@@ -78,11 +78,11 @@ export default function ContactPopout(props) {
             textDecoration='none'
             target='_blank'
             rel='noopener noreferrer'
-            href={props.nonprofitUrl}>{props.nonprofitName}
-          </Link> can be reached at <Link href={'tel:' + props.nonprofitPhone}>
-            {props.nonprofitPhone}
-          </Link> or <Link href={'mailto:' + props.nonprofitEmail}>
-            {props.nonprofitEmail}
+            href={props.nonprofitData.url}>{props.nonprofitData.name}
+          </Link> can be reached at <Link href={'tel:' + props.nonprofitData.phone}>
+            {props.nonprofitData.phone}
+          </Link> or <Link href={'mailto:' + props.nonprofitData.email}>
+            {props.nonprofitData.email}
           </Link>
         </Typography>
       </Popover>

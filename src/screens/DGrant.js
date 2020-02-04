@@ -115,17 +115,12 @@ export default function DGrant(props) {
           goalAmt={grantData.goal_amt}
           moneyRaised={grantData.money_raised}
           tags={grantData.tags}
-          img={img}
-          cfName={cfData.name}
-          cfUrl={cfData.url}
-          cfEmail={cfData.public_email}
-          cfPhone={cfData.public_phone}
-          nonprofitName={nonprofitData.name}
-          nonprofitUrl={nonprofitData.url}
-          nonprofitEmail={nonprofitData.email}
-          nonprofitPhone={nonprofitData.number}
           datePosted={formatDate(grantData.date_posted.seconds)}
-          dateDeadline={formatDate(grantData.date_deadline.seconds)} />
+          dateDeadline={formatDate(grantData.date_deadline.seconds)}
+          img={img}
+          cfData={cfData}
+          nonProfitData={nonprofitData}
+           />
       }
     </div>
   );
