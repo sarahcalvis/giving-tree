@@ -43,9 +43,9 @@ export default function LargeGrantCard(props) {
       <Card>
         <ImageCarousel key={imgKey} img={props.img} />
         <CardContent className={classes.cardContent}>
-          <Text type='card-aboveheading' text={props.nonprofitName} />
+          <Text type='card-aboveheading' text={props.nonprofitData.name} />
           <Text type='card-heading' text={props.title} />
-          <Text type='card-subheading' text={props.cfName} />
+          <Text type='card-subheading' text={props.cfData.name} />
           <Grid container direction='row' justify='space-between' alignItems='flex-end' spacing={0}>
             <Grid item>
               <Text type='date' text={'Posted ' + props.datePosted} />
