@@ -35,7 +35,7 @@ export default function LargeGrantCard(props) {
   useEffect(() => {
     //Force image carousel to rerender after 500ms
     //TODO: Find better way to fix
-    setTimeout(function () { setImgKey(1);}, 500)
+    setTimeout(function () { setImgKey(1); }, 500)
   }, []);
 
   return (
@@ -67,20 +67,22 @@ export default function LargeGrantCard(props) {
               <Tag removable={false} tag={props.tag} />
             </Grid>
           )} </Grid>
-          <Grid container direction='row' justify='space-between' alignItems='flex-end'>
-            <Grid item>
-              <ContactPopout
-                cfData={props.cfData}
-                nonprofitData={props.nonprofitData} />
-            </Grid>
-            <Grid item  >
-              <Link to={'/grants/' + props.id + '/give'}>
-                <Button color='primary' variant='contained'>
-                  Donate
+          {props.user == 'donor' &&
+            <Grid container direction='row' justify='space-between' alignItems='flex-end'>
+              <Grid item>
+                <ContactPopout
+                  cfData={props.cfData}
+                  nonprofitData={props.nonprofitData} />
+              </Grid>
+              <Grid item  >
+                <Link to={'/grants/' + props.id + '/give'}>
+                  <Button color='primary' variant='contained'>
+                    Donate
                 </Button>
-              </Link>
+                </Link>
+              </Grid>
             </Grid>
-          </Grid>
+          }
         </CardContent>
       </Card>
     </Container>

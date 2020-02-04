@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom';
 export default function DGrant(props) {
   // Get grant ID from URL params
   let id = useParams().grantId;
-
+  
   // Initialize database
   const db = firebase.firestore();
 
@@ -109,6 +109,7 @@ export default function DGrant(props) {
     <div>
       {dataLoaded &&
         <LargeGrantCard
+          user={window.location.pathname.split('/')[1] === 'grant' ? 'donor' : 'foundation'}
           id={id}
           title={grantData.title}
           desc={grantData.desc}
