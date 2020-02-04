@@ -4,18 +4,38 @@ import firebase from '../firebase.js';
 import { useParams } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
+import CardContent from '@material-ui/core/CardContent';
 import { makeStyles } from '@material-ui/styles';
 import { Link } from 'react-router-dom';
+import Modal from "@material-ui/core/Modal";
+import Backdrop from "@material-ui/core/Backdrop";
+import Fade from "@material-ui/core/Fade";
+import Card from '@material-ui/core/Card';
+import Text from '../components/Text.js';
 
 const useStyles = makeStyles(theme => ({
   card: {
     paddingTop: theme.spacing(2),
     paddingBottom: theme.spacing(2),
   },
+  button: {
+    paddingLeft: "4em",
+    paddingRight: "4em",
+    marginRight: "1em",
+  },
+  modal: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    // border: "none",
+  },
 }))
 
 export default function DGrant(props) {
   const classes = useStyles();
+
+  // Tell whether modal is open
+  const [deleteModal, setDeleteModal] = React.useState(false);
 
   // Find out if we are a foundation or a donor
   const [user] = React.useState(window.location.pathname.split('/')[1] === 'grants' ? 'donor' : 'foundation');
@@ -48,22 +68,28 @@ export default function DGrant(props) {
     return new Date(time * 1000).toLocaleDateString("en-US", dateOptions);
   }
 
+  // Open the delete grant modal
+  const toggleModal = () => {
+    deleteModal ? setDeleteModal(false) : setDeleteModal(true);
+  }
+
   // Delete a grant if the foundation clicks the button
-  const deleteGrant = (event) => {
+  const deleteGrant = () => {
     db.collection('grants').doc(id).update({
       status: 'deleted'
-    }).then(function() {
+    }).then(function () {
+      toggleModal();
       console.log('Grant deleted');
-    });    
+    });
   }
 
   // Make a grant a draft if the foundation clicks the button
-  const draftifyGrant = (event) => {
+  const draftifyGrant = () => {
     db.collection('grants').doc(id).update({
       status: 'drafted'
-    }).then(function() {
+    }).then(function () {
       console.log('Grant moved to drafts');
-    });   
+    });
   }
 
   // Load image URLs from image names
@@ -168,10 +194,10 @@ export default function DGrant(props) {
               justify="flex-end"
               alignItems="flex-start">
               <Grid item>
-                <Button 
-                  color='primary' 
+                <Button
+                  color='primary'
                   variant='contained'
-                  onClick={deleteGrant}>
+                  onClick={toggleModal}>
                   Delete
                 </Button>
               </Grid>
@@ -185,8 +211,8 @@ export default function DGrant(props) {
                 </Link>
               </Grid>
               <Grid item>
-                <Button 
-                  color='primary' 
+                <Button
+                  color='primary'
                   variant='contained'
                   onClick={draftifyGrant}>
                   Unpublish and save to drafts
@@ -196,6 +222,38 @@ export default function DGrant(props) {
           </Grid>
         }
       </Grid>
+
+      {deleteModal &&
+        <Modal
+          open={true}
+          className={classes.modal}
+          BackdropComponent={Backdrop}
+          BackdropProps={{
+            timeout: 500
+          }}>
+          <Fade in={true}>
+            <Card>
+              <CardContent>
+                <Text type='card-heading' text='WARNING' />
+                <Text type='tag' text={'Are you sure you want to delete ' + grantData.title + '? This cannot be undone!'} />
+                <Button
+                  variant='contained'
+                  color='error'
+                  type='submit'
+                  onClick={deleteGrant}
+                  className={classes.button}
+                >YES</Button>
+                <Button
+                  variant='contained'
+                  color='primary'
+                  onClick={toggleModal}
+                  className={classes.button}
+                >NO</Button>
+              </CardContent>
+            </Card>
+          </Fade>
+        </Modal>
+      }
     </div>
   );
 }
