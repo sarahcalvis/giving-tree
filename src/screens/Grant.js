@@ -32,16 +32,9 @@ const styles = theme => ({
 });
 
 function Grant(props) {
-  const { classes } = props;
-
-  // Tell whether modal is open
-  const [deleteModal, setDeleteModal] = React.useState(false);
-
-  // Find out if we are a foundation or a donor
-  const [user] = React.useState(window.location.pathname.split('/')[1] === 'grants' ? 'donor' : 'foundation');
-
-  // Get grant ID from URL params
-  let id = useParams().grantId;
+  //////////////////////
+  // Database Queries //
+  //////////////////////
 
   // Initialize database
   const db = firebase.firestore();
@@ -50,11 +43,82 @@ function Grant(props) {
   const storage = firebase.storage();
   const storageRef = storage.ref();
 
-  // Data we load
+  // Get grant ID from URL params
+  const id = useParams().grantId;
+
+  // Data to load
   const [grantData, setGrantData] = React.useState();
   const [cfData, setCfData] = React.useState();
   const [nonprofitData, setNonprofitData] = React.useState();
   const [img, setImg] = React.useState();
+
+  // Query from grant collection
+  useEffect(() => {
+    if (id) {
+      db.collection('grants').doc(id).get()
+        .then(doc => {
+          if (!doc.exists) {
+            console.log('No such document for grant ' + id);
+          } else {
+            console.log('Got the grant; here is the data: ' + doc.data());
+            setGrantData(doc.data());
+          }
+        })
+        .catch(err => {
+          console.log('Error getting grant', err);
+        });
+    }
+  }, []);
+
+  // Query from CF collection
+  useEffect(() => {
+    if (grantData) {
+      db.collection('communityFoundations').doc(grantData.cf_id).get()
+        .then(doc => {
+          if (!doc.exists) {
+            console.log('No such document for CF ' + grantData.cf_id);
+          } else {
+            setCfData(doc.data());
+          }
+        })
+        .catch(err => {
+          console.log('Error getting CF', err);
+        });
+    }
+  }, [grantData]);
+
+  // Query from nonprofit collection
+  useEffect(() => {
+    if (grantData) {
+      db.collection('nonprofits').doc(grantData.nonprofit_id).get()
+        .then(doc => {
+          if (!doc.exists) {
+            console.log('No such document for nonprofit ' + grantData.nonprofit_id);
+          } else {
+            setNonprofitData(doc.data());
+          }
+        })
+        .catch(err => {
+          console.log('Error getting document', err);
+        });
+    }
+  }, [grantData]);
+
+  // Query image urls
+  useEffect(() => {
+    if (grantData) {
+      let imag = getUrls(grantData.images);
+      console.log(imag);
+      setImg(imag);
+    }
+  }, [grantData]);
+
+  ////////////////////
+  // Click Handlers //
+  ////////////////////
+
+  // Tell whether modal is open
+  const [deleteModal, setDeleteModal] = React.useState(false);
 
   // Tell if we are ready to load a LargeGrantCard
   const [dataLoaded, setDataLoaded] = React.useState(false);
@@ -108,6 +172,7 @@ function Grant(props) {
   const createDraft = () => {
     let newData = grantData;
     newData.status = 'draft';
+    newData.money_raised = 0;
     db.collection('grants').add(newData).then(ref => {
       console.log('Added document with ID: ' + ref.id + ' to drafts');
     });
@@ -126,66 +191,15 @@ function Grant(props) {
     return newImg;
   }
 
-  // Query from grant collection
-  useEffect(() => {
-    if (id) {
-      db.collection('grants').doc(id).get()
-        .then(doc => {
-          if (!doc.exists) {
-            console.log('No such document for grant ' + id);
-          } else {
-            console.log('Got the grant; here is the data: ' + doc.data());
-            setGrantData(doc.data());
-          }
-        })
-        .catch(err => {
-          console.log('Error getting grant', err);
-        });
-    }
-  }, []);
+  //////////////////////
+  // The Visible Part //
+  //////////////////////
+  
+  // Styles variable
+  const { classes } = props;
 
-  // Query from CF collection
-  useEffect(() => {
-    if (grantData) {
-      db.collection('communityFoundations').doc(grantData.cf_id).get()
-        .then(doc => {
-          if (!doc.exists) {
-            console.log('No such document for CF ' + grantData.cf_id);
-          } else {
-            setCfData(doc.data());
-          }
-        })
-        .catch(err => {
-          console.log('Error getting CF', err);
-        });
-    }
-  }, [grantData]);
-
-  // Query from nonprofit collection
-  useEffect(() => {
-    if (grantData) {
-      db.collection('nonprofits').doc(grantData.nonprofit_id).get()
-        .then(doc => {
-          if (!doc.exists) {
-            console.log('No such document for nonprofit ' + grantData.nonprofit_id);
-          } else {
-            setNonprofitData(doc.data());
-          }
-        })
-        .catch(err => {
-          console.log('Error getting document', err);
-        });
-    }
-  }, [grantData])
-
-  // Query image urls
-  useEffect(() => {
-    if (grantData) {
-      let imag = getUrls(grantData.images);
-      console.log(imag);
-      setImg(imag);
-    }
-  }, [grantData])
+  // Find out if we are a foundation or a donor
+  const [user] = React.useState(window.location.pathname.split('/')[1] === 'grants' ? 'donor' : 'foundation');
 
   return (
     <div className={classes.card}>
