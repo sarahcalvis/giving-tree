@@ -50,12 +50,20 @@ export default function DGrant(props) {
 
   // Delete a grant if the foundation clicks the button
   const deleteGrant = (event) => {
-    console.log('deleting grant')
+    db.collection('grants').doc(id).update({
+      status: 'deleted'
+    }).then(function() {
+      console.log('Grant deleted');
+    });    
   }
 
   // Make a grant a draft if the foundation clicks the button
   const draftifyGrant = (event) => {
-    console.log('draftifying grant')
+    db.collection('grants').doc(id).update({
+      status: 'drafted'
+    }).then(function() {
+      console.log('Grant moved to drafts');
+    });   
   }
 
   // Load image URLs from image names
