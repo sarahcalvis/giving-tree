@@ -1,20 +1,20 @@
 import React, { useEffect } from 'react';
+import { Link, withRouter, useParams } from 'react-router-dom';
 import LargeGrantCard from '../components/LargeGrantCard.js';
+import Text from '../components/Text.js';
+import Snack from '../components/Snack.js';
 import firebase from '../firebase.js';
-import { useParams } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import CardContent from '@material-ui/core/CardContent';
-import { makeStyles } from '@material-ui/styles';
-import { Link } from 'react-router-dom';
+import { withStyles } from '@material-ui/styles';
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
 import Card from '@material-ui/core/Card';
-import Text from '../components/Text.js';
-import Snack from '../components/Snack.js';
 
-const useStyles = makeStyles(theme => ({
+
+const styles = theme => ({
   card: {
     paddingTop: theme.spacing(2),
     paddingBottom: theme.spacing(2),
@@ -28,12 +28,12 @@ const useStyles = makeStyles(theme => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    // border: "none",
+    border: "none",
   },
-}))
+});
 
-export default function DGrant(props) {
-  const classes = useStyles();
+function Grant(props) {
+  const { classes } = props;
 
   // Tell whether modal is open
   const [deleteModal, setDeleteModal] = React.useState(false);
@@ -84,6 +84,7 @@ export default function DGrant(props) {
     }).then(function () {
       toggleModal();
       console.log('Grant deleted');
+      props.history.push('/foundation')
     });
   }
 
@@ -94,6 +95,7 @@ export default function DGrant(props) {
     }).then(function () {
       setDraftified(true);
       console.log('Grant moved to drafts');
+      props.history.push('/foundation')
     });
   }
 
@@ -260,9 +262,11 @@ export default function DGrant(props) {
         </Modal>
       }
 
-      { draftified &&
+      {draftified &&
         <Snack message={grantData.title + ' has been moved to drafts'} />
       }
     </div>
   );
 }
+
+export default withRouter(withStyles(styles)(Grant));
