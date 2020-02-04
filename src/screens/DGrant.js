@@ -26,11 +26,13 @@ export default function DGrant(props) {
     setDataLoaded(grantData && cfData && nonprofitData && img);
   }, [grantData, cfData, nonprofitData, img])
 
+  // Format dates from Firebase Timestamps
   const formatDate = (time) => {
     let dateOptions = { year: 'numeric', month: 'numeric', day: 'numeric' };
     return new Date(time * 1000).toLocaleDateString("en-US", dateOptions);
   }
 
+  // Load image URLs from image names
   const getUrls = (imgNames) => {
     let newImg = [];
     for (let imgName of imgNames) {
@@ -95,8 +97,6 @@ export default function DGrant(props) {
   }, [grantData])
 
   // Query image urls
-
-
   useEffect(() => {
     if (grantData) {
       let imag = getUrls(grantData.images);
