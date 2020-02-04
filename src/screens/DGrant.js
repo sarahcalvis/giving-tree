@@ -14,6 +14,18 @@ export default function DGrant(props) {
   const storage = firebase.storage();
   const storageRef = storage.ref();
 
+  // Data we load
+  const [grantData, setGrantData] = React.useState();
+  const [cfData, setCfData] = React.useState();
+  const [nonprofitData, setNonprofitData] = React.useState();
+  const [img, setImg] = React.useState();
+
+  // Tell if we are ready to load a LargeGrantCard
+  const [dataLoaded, setDataLoaded] = React.useState(false);
+  useEffect(() => {
+    setDataLoaded(grantData && cfData && nonprofitData && img);
+  }, [grantData, cfData, nonprofitData, img])
+
   const formatDate = (time) => {
     let dateOptions = { year: 'numeric', month: 'numeric', day: 'numeric' };
     return new Date(time * 1000).toLocaleDateString("en-US", dateOptions);
@@ -30,13 +42,6 @@ export default function DGrant(props) {
     }
     return newImg;
   }
-
-
-  // Query from grant collection
-  const [grantData, setGrantData] = React.useState();
-  const [cfData, setCfData] = React.useState();
-  const [nonprofitData, setNonprofitData] = React.useState();
-  const [img, setImg] = React.useState();
 
   // Query from grant collection
   useEffect(() => {
@@ -100,11 +105,9 @@ export default function DGrant(props) {
     }
   }, [grantData])
 
-
-
   return (
     <div>
-      {grantData && cfData && nonprofitData && img &&
+      {dataLoaded &&
         <LargeGrantCard
           id={id}
           title={grantData.title}

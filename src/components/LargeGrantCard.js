@@ -24,15 +24,17 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export default function LargeGrantCard(props) {
+  console.log(props.img);
+
   const classes = useStyles();
 
   // Set tab title
-  useEffect(() => { document.title = props.title; }, [props.title]);
+  useEffect(() => { document.title = props.title + '-Giving Tree'; }, [props.title]);
 
   return (
     <Container className={classes.card}>
       <Card>
-        {props.img && props.img.length > 0 && <ImageCarousel img={props.img} />}
+        <ImageCarousel img={props.img} />
         <CardContent className={classes.cardContent}>
           <Text type='card-aboveheading' text={props.nonprofitName} />
           <Text type='card-heading' text={props.title} />
