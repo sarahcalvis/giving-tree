@@ -29,7 +29,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function AutoCompleteMapsSearchBar(props) {
+export default function LocationSearch(props) {
   const classes = useStyles();
   const [inputValue, setInputValue] = React.useState("");
   const [options, setOptions] = React.useState([]);
@@ -47,10 +47,10 @@ export default function AutoCompleteMapsSearchBar(props) {
     loaded.current = true;
   }
 
-  const handleChange = (event) => {
-    setInputValue(event.target.value);
-    console.log(event.target.value);
-    props.parentCallback(event.target.value);
+  const handleChange = (event, values) => {
+    setInputValue(values[0]);
+    console.log(values[0]);
+    props.parentCallback(values[0]);
   };
 
   const fetch = React.useMemo(

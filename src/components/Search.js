@@ -1,13 +1,16 @@
 import React, {Component } from 'react';
-// import LocationSearch from './LocationSearch';
+import { withStyles } from '@material-ui/styles';
 import LocationSearch from "./LocationSearch";
 import SearchRadius from "./SearchRadius";
 import SortBy from "./SortBy";
 
-/*
-display: flex;
-  flex-wrap: wrap;
-  */
+ const styles = theme => ({
+  searchWrapper: {
+    display: 'flex',
+    'flex-wrap': 'wrap',
+  },
+  
+});
 class Search extends Component {
   constructor(props) {
     super(props);
@@ -160,7 +163,7 @@ class Search extends Component {
 
   render() {
     return (
-      <div>
+      <div className={styles.searchWrapper}>
         <LocationSearch parentCallback={this.locationCallback}/>
         <SearchRadius parentCallback={this.radiusCallback}/>
         <SortBy parentCallback={this.sortByCallback}/>
@@ -169,5 +172,5 @@ class Search extends Component {
   }
 }
 
-export default Search;
+export default withStyles(styles)(Search);
 
