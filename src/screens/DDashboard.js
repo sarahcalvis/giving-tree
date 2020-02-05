@@ -64,6 +64,7 @@ export default function DDashboard() {
   }, [snapshot, error, loading]);
 
   function searchCallback(childData) {
+    console.log("childData in dashboard: ", childData);
     var newGrants = [];
     childData.forEach((grant) => {
       newGrants.push(

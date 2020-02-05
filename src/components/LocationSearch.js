@@ -47,10 +47,10 @@ export default function LocationSearch(props) {
     loaded.current = true;
   }
 
-  const handleChange = (event, values) => {
-    setInputValue(values[0]);
-    console.log(values[0]);
-    props.parentCallback(values[0]);
+  const handleChange = (event, value) => {
+    setInputValue(value);
+    console.log(value);
+    props.parentCallback(value);
   };
 
   const fetch = React.useMemo(
