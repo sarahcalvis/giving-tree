@@ -2,9 +2,16 @@ import React, { useEffect } from 'react';
 import SmallGrantCard from '../components/SmallGrantCard.js';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
-import { useCollectionOnce } from 'react-firebase-hooks/firestore';
+import { useCollection } from 'react-firebase-hooks/firestore';
 import firebase from '../firebase.js';
 import Search from '../components/Search';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles(theme => ({
+  container: {
+    paddingBottom: theme.spacing(2),
+  },
+}));
 
 export default function DDashboard() {
   // List of small grant cards
@@ -13,8 +20,8 @@ export default function DDashboard() {
   // Initialize database and specific grant in database
   const db = firebase.firestore();
   const [docs, setDocs] = React.useState([]);
-  const [snapshot, loading, error] = useCollectionOnce(db.collection('grants'));
-  
+  const [snapshot, loading, error] = useCollection(db.collection('grants'));
+
   useEffect(() => {
     var newGrants = [];
     var newDocs = [];
@@ -47,30 +54,37 @@ export default function DDashboard() {
             nonprofitName={doc.data().nonprofit_name}
             goalAmt={doc.data().goal_amt}
             moneyRaised={doc.data().money_raised}
-            img={doc.data().images[0] || 'GivingTree.png'} />);
+            img={doc.data().images[0] || 'GivingTree.png'} />
+        );
       });
       setGrants(newGrants);
       setDocs(newDocs);
     }
   }, [snapshot, error, loading]);
   
-  function outputThis(data) {
-    console.log(data);
-  }
-  function searchCallback(childData) {      
+  function searchCallback(childData) {
     var newGrants = [];
-    console.log("childData in Dashboard: ", childData);
-    childData.forEach(function outputThis(data) {
-      console.log("data: ", data);
-      console.log("data.grant: ", data.grant);
+    childData.forEach((grant) => {
+      newGrants.push(
+        <SmallGrantCard
+          id={grant.id}
+          title={grant.title}
+          cfName={grant.cf_name}
+          nonprofitName={grant.nonprofit_name}
+          goalAmt={grant.goal_amt}
+          moneyRaised={grant.money_raised}
+          img={grant.images[0] || 'GivingTree.png'} />
+      );
     });
     console.log("newGrants: ", newGrants);
     setGrants(newGrants);
   }
 
+  const classes = useStyles();
+
   return (
-    <Container maxWidth='md'>
-      <Search docs={docs} parentCallback={searchCallback}/>
+    <Container maxWidth='md' className={classes.container}>
+      <Search docs={docs} parentCallback={searchCallback} />
       <Grid container spacing={2} >
         {grants}
       </Grid>
