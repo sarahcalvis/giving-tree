@@ -90,8 +90,8 @@ class Search extends Component {
     console.log("temp contents", this.state.tempMeta);
     var sortedByDist = this.state.tempMeta;
     console.log("unsorted with dists: ", sortedByDist);
-    sortedByDist.sort((a, b) => (a.dist > b.dist ? 1 : -1));
-    this.setState({metaGrants: sortedByDist});
+    let actuallySorted = sortedByDist.sort((a, b) => (a.dist > b.dist ? 1 : -1));
+    this.setState({metaGrants: actuallySorted});
   }
 
   render() {

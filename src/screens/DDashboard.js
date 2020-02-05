@@ -74,7 +74,7 @@ export default function DDashboard() {
           nonprofitName={grant.nonprofit_name}
           goalAmt={grant.goal_amt}
           moneyRaised={grant.money_raised}
-          img={grant.images[0] || 'GivingTree.png'} />
+          img={grant.img} />
       );
     });
     console.log("newGrants: ", newGrants);
