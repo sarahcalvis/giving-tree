@@ -2,7 +2,12 @@ import React, {Component } from 'react';
 // import LocationSearch from './LocationSearch';
 import LocationSearch from "./LocationSearch";
 import SearchRadius from "./SearchRadius";
+import SortBy from "./SortBy";
 
+/*
+display: flex;
+  flex-wrap: wrap;
+  */
 class Search extends Component {
   constructor(props) {
     super(props);
@@ -14,7 +19,6 @@ class Search extends Component {
         long : -80.08209
       },
       tempMeta: [],
-      distResults: [],
       radiusResults: [],
       metaGrants: [],
     };
@@ -37,21 +41,78 @@ class Search extends Component {
     this.setState({centerLoc: { address: childData, lat: lat, long: long }});
     console.log("In parent in callback. New Location: ", childData);
     this.setDists();
-    console.log("logging the distResults: ", this.state.metaGrants);
     // NEED TO RERENDER THE CARDS
     //this.props.parentCallback(this.state.metaGrants);
   }
 
   radiusCallback = (radius) => {      
     console.log("In parent in callback. New Radius: ", radius);
-    var newDocs = [];
-    this.props.docs.forEach((doc) => {
-      if(doc.dist < radius) {
-        newDocs.push({ doc });
+    var newMeta = [];
+    this.state.metaGrants.forEach((meta) => {
+      if(meta.dist < radius) {
+        newMeta.push({ meta });
       }
     }); 
-    this.setState({ radiusResults: newDocs});
-    this.props.parentCallback(newDocs);
+    this.setState({ radiusResults: newMeta}, () => {
+      console.log("rad results: ", this.state.radiusResults);
+      this.props.parentCallback(this.state.radiusResults);
+    });
+  }
+
+  sortByCallback = (sortBy) => {
+    console.log("sort by: ", sortBy);
+    if(sortBy === "deadline") {this.sortByDeadline();}
+    else if(sortBy === "posting") {this.sortByPosting();}
+    else if(sortBy === "goalD") {this.sortByGoalDecreasing();}
+    else if(sortBy === "goalI") {this.sortByGoalIncreasing();}
+    else if(sortBy === "size") {this.sortBySize();}
+    else {console.log("nothing selected?");}
+  }
+
+  sortByDeadline = () => {
+    var sortedByDeadline = this.state.metaGrants;
+    sortedByDeadline.sort((a, b) => (a.grant.dateDeadline > b.grant.dateDeadline ? 1 : -1));
+    this.setState({metaGrants: sortedByDeadline}, () => {
+      console.log("meta set: ", this.state.metaGrants);
+      //this.props.parentCallback(this.state.metaGrants);
+    });
+  }
+  
+  sortByPosting = () => {
+    var sortedByPosted = this.state.metaGrants;
+    sortedByPosted.sort((a, b) => (a.grant.datePosted > b.grant.datePosted ? 1 : -1));
+    this.setState({metaGrants: sortedByPosted}, () => {
+      console.log("meta set: ", this.state.metaGrants);
+      //this.props.parentCallback(this.state.metaGrants);
+    });
+  }
+  
+  sortByGoalDecreasing = () => {
+    var sortedByGDec = this.state.metaGrants;
+    sortedByGDec.sort((a, b) => ((a.grant.moneyRaised / a.grant.goalAmt) < (b.grant.moneyRaised / b.grant.goalAmt) ? 1 : -1));
+    this.setState({metaGrants: sortedByGDec}, () => {
+      console.log("meta set: ", this.state.metaGrants);
+      //this.props.parentCallback(this.state.metaGrants);
+    });
+  }
+  
+  sortByGoalIncreasing = () => {
+    var sortedByGDec = this.state.metaGrants;
+    sortedByGDec.sort((a, b) => ((a.grant.moneyRaised / a.grant.goalAmt) > (b.grant.moneyRaised / b.grant.goalAmt) ? 1 : -1));
+    this.setState({metaGrants: sortedByGDec}, () => {
+      console.log("meta set: ", this.state.metaGrants);
+      //this.props.parentCallback(this.state.metaGrants);
+    });
+  }
+
+  sortBySize = () => {
+    var sortedBySize = this.state.metaGrants;
+    console.log("sortedbySize: ", sortedBySize);
+    sortedBySize.sort((a, b) => (a.grant.goalAmt > b.grant.goalAmt ? 1 : -1));
+    this.setState({metaGrants: sortedBySize}, () => {
+      console.log("meta set: ", this.state.metaGrants);
+      //this.props.parentCallback(this.state.metaGrants);
+    });
   }
 
   //from Geo Data Source
@@ -93,7 +154,7 @@ class Search extends Component {
     sortedByDist.sort((a, b) => (a.dist > b.dist ? 1 : -1));
     this.setState({metaGrants: sortedByDist}, () => {
       console.log("meta set: ", this.state.metaGrants);
-      this.props.parentCallback(this.state.metaGrants);
+      //this.props.parentCallback(this.state.metaGrants);
     });
   }
 
@@ -102,6 +163,7 @@ class Search extends Component {
       <div>
         <LocationSearch parentCallback={this.locationCallback}/>
         <SearchRadius parentCallback={this.radiusCallback}/>
+        <SortBy parentCallback={this.sortByCallback}/>
       </div>  
     );
   }
