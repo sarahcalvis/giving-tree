@@ -39,7 +39,7 @@ class Search extends Component {
     this.setDists();
     console.log("logging the distResults: ", this.state.metaGrants);
     // NEED TO RERENDER THE CARDS
-    this.props.parentCallback(this.state.metaGrants);
+    //this.props.parentCallback(this.state.metaGrants);
   }
 
   radiusCallback = (radius) => {      
@@ -87,11 +87,14 @@ class Search extends Component {
   setDists = () => { 
     this.setState({tempMeta: []});
     this.state.metaGrants.forEach(this.addDist); 
-    console.log("temp contents", this.state.tempMeta);
+    //console.log("temp contents", this.state.tempMeta);
     var sortedByDist = this.state.tempMeta;
-    console.log("unsorted with dists: ", sortedByDist);
-    let actuallySorted = sortedByDist.sort((a, b) => (a.dist > b.dist ? 1 : -1));
-    this.setState({metaGrants: actuallySorted});
+    //console.log("unsorted with dists: ", sortedByDist);
+    sortedByDist.sort((a, b) => (a.dist > b.dist ? 1 : -1));
+    this.setState({metaGrants: sortedByDist}, () => {
+      console.log("meta set: ", this.state.metaGrants);
+      this.props.parentCallback(this.state.metaGrants);
+    });
   }
 
   render() {
