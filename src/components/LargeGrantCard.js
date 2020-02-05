@@ -65,7 +65,7 @@ export default function LargeGrantCard(props) {
           </Grid>
           <ProgressBar goal={props.goalAmt} raised={props.moneyRaised} />
           <Text type='card-subheading' text={props.desc} />
-          <Tag removable={false} tag={props.tags} />
+          <Tag tag={props.tags} />
           {props.user == 'donor' &&
             <Grid container direction='row' justify='space-between' alignItems='flex-end'>
               <Grid item>
