@@ -11,6 +11,7 @@ import ProgressBar from './ProgressBar.js';
 import ContactPopout from './ContactPopout.js';
 import ImageCarousel from './ImageCarousel.js'
 import Tag from './Tag.js';
+import Validation from './Validation.js';
 import { makeStyles } from '@material-ui/styles';
 
 const useStyles = makeStyles(theme => ({
@@ -42,7 +43,7 @@ export default function EditGrant(props) {
     <Container className={classes.card}>
       <Card className={classes.topCard}>
         <CardContent>
-          <TextField fullWidth label='Address' />
+          <Validation fullWidth label='Address' type='address'/>
         </CardContent>
       </Card>
       <Card>
