@@ -9,7 +9,7 @@ import Text from './Text.js';
 import ProgressBar from './ProgressBar.js';
 import ContactPopout from './ContactPopout.js';
 import ImageCarousel from './ImageCarousel.js'
-import Tag from './Tag.js';
+import GrantTagBar from './GrantTagBar.js';
 import { makeStyles } from '@material-ui/styles';
 
 const useStyles = makeStyles(theme => ({
@@ -65,7 +65,7 @@ export default function LargeGrantCard(props) {
           </Grid>
           <ProgressBar goal={props.goalAmt} raised={props.moneyRaised} />
           <Text type='card-subheading' text={props.desc} />
-          <Tag tag={props.tags} />
+          <GrantTagBar tags={props.tags} />
           {props.user == 'donor' &&
             <Grid container direction='row' justify='space-between' alignItems='flex-end'>
               <Grid item>
