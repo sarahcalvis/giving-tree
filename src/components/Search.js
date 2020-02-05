@@ -76,8 +76,8 @@ class Search extends Component {
     var sortedByDeadline = this.state.metaGrants;
     sortedByDeadline.sort((a, b) => (a.grant.dateDeadline > b.grant.dateDeadline ? 1 : -1));
     this.setState({metaGrants: sortedByDeadline}, () => {
-      console.log("meta set: ", this.state.metaGrants);
-      //this.props.parentCallback(this.state.metaGrants);
+      //console.log("meta set: ", this.state.metaGrants);
+      this.props.parentCallback(this.state.metaGrants);
     });
   }
   
@@ -85,8 +85,8 @@ class Search extends Component {
     var sortedByPosted = this.state.metaGrants;
     sortedByPosted.sort((a, b) => (a.grant.datePosted > b.grant.datePosted ? 1 : -1));
     this.setState({metaGrants: sortedByPosted}, () => {
-      console.log("meta set: ", this.state.metaGrants);
-      //this.props.parentCallback(this.state.metaGrants);
+      //console.log("meta set: ", this.state.metaGrants);
+      this.props.parentCallback(this.state.metaGrants);
     });
   }
   
@@ -94,8 +94,8 @@ class Search extends Component {
     var sortedByGDec = this.state.metaGrants;
     sortedByGDec.sort((a, b) => ((a.grant.moneyRaised / a.grant.goalAmt) < (b.grant.moneyRaised / b.grant.goalAmt) ? 1 : -1));
     this.setState({metaGrants: sortedByGDec}, () => {
-      console.log("meta set: ", this.state.metaGrants);
-      //this.props.parentCallback(this.state.metaGrants);
+      //console.log("meta set: ", this.state.metaGrants);
+      this.props.parentCallback(this.state.metaGrants);
     });
   }
   
@@ -103,18 +103,18 @@ class Search extends Component {
     var sortedByGDec = this.state.metaGrants;
     sortedByGDec.sort((a, b) => ((a.grant.moneyRaised / a.grant.goalAmt) > (b.grant.moneyRaised / b.grant.goalAmt) ? 1 : -1));
     this.setState({metaGrants: sortedByGDec}, () => {
-      console.log("meta set: ", this.state.metaGrants);
-      //this.props.parentCallback(this.state.metaGrants);
+      //console.log("meta set: ", this.state.metaGrants);
+      this.props.parentCallback(this.state.metaGrants);
     });
   }
 
   sortBySize = () => {
     var sortedBySize = this.state.metaGrants;
-    console.log("sortedbySize: ", sortedBySize);
+    //console.log("sortedbySize: ", sortedBySize);
     sortedBySize.sort((a, b) => (a.grant.goalAmt > b.grant.goalAmt ? 1 : -1));
     this.setState({metaGrants: sortedBySize}, () => {
-      console.log("meta set: ", this.state.metaGrants);
-      //this.props.parentCallback(this.state.metaGrants);
+      //console.log("meta set: ", this.state.metaGrants);
+      this.props.parentCallback(this.state.metaGrants);
     });
   }
 
@@ -141,7 +141,7 @@ class Search extends Component {
 
   addDist = (doc) => {
     let newDist = this.calcDistance(this.state.centerLoc.lat, this.state.centerLoc.long, doc.grant.lat, doc.grant.long);
-    console.log("adding in add ", {dist: newDist, grant: doc.grant});
+    //console.log("adding in add ", {dist: newDist, grant: doc.grant});
     var tempTemp = this.state.tempMeta;
     tempTemp.push({dist: newDist, grant: doc.grant});
     this.setState({tempMeta: tempTemp});
@@ -149,14 +149,15 @@ class Search extends Component {
   }
 
   setDists = () => { 
-    this.setState({tempMeta: []});
-    this.state.metaGrants.forEach(this.addDist); 
+    this.setState({tempMeta: []}, () => {
+      this.state.metaGrants.forEach(this.addDist); 
+    });
     //console.log("temp contents", this.state.tempMeta);
     var sortedByDist = this.state.tempMeta;
     //console.log("unsorted with dists: ", sortedByDist);
     sortedByDist.sort((a, b) => (a.dist > b.dist ? 1 : -1));
     this.setState({metaGrants: sortedByDist}, () => {
-      console.log("meta set: ", this.state.metaGrants);
+      //console.log("meta set: ", this.state.metaGrants);
       this.props.parentCallback(this.state.metaGrants);
     });
   }

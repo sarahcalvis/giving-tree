@@ -67,14 +67,15 @@ export default function DDashboard() {
     console.log("childData in dashboard: ", childData);
     var newGrants = [];
     childData.forEach((meta) => {
+      console.log("dashboard card contents: ", meta.grant.id, meta.grant.title, meta.grant.cf_name, meta.grant.nonprofit_name, meta.grant.goal_amt, meta.grant.money_raised);
       newGrants.push(
         <SmallGrantCard
           id={meta.grant.id}
           title={meta.grant.title}
-          cfName={meta.grant.cf_name}
-          nonprofitName={meta.grant.nonprofit_name}
-          goalAmt={meta.grant.goal_amt}
-          moneyRaised={meta.grant.money_raised}
+          cfName={meta.grant.cfName}
+          nonprofitName={meta.grant.nonprofitName}
+          goalAmt={meta.grant.goalAmt}
+          moneyRaised={meta.grant.moneyRaised}
           img={meta.grant.img} />
       );
     });
