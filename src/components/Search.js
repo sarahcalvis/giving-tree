@@ -20,13 +20,15 @@ class Search extends Component {
     };
   }
 
-  componentDidMount() {
+  componentWillMount() {
     var newMetaDocs = [];
+    console.log("in mount");
     this.props.docs.forEach((doc) => {
       newMetaDocs.push({
         dist: -1,
         grant: doc,
-      })
+      });
+      console.log("pushing this doc: ", doc);
     });
     this.setState({metaDocs: newMetaDocs});
   }
@@ -34,6 +36,7 @@ class Search extends Component {
   locationCallback = (childData) => {   
     var lat = 40;
     var long = -80;   
+    console.log("metadocs: ", this.state.metaDocs);
     this.setState({centerLoc: { address: childData, lat: lat, long: long }});
     console.log("In parent in callback. New Location: ", childData);
     this.setDists();

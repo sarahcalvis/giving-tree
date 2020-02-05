@@ -19,7 +19,7 @@ export default function DDashboard() {
 
   // Initialize database and specific grant in database
   const db = firebase.firestore();
-  const [docs, setDocs] = React.useState([]);
+  const [docs, setDocs] = React.useState();
   const [snapshot, loading, error] = useCollection(db.collection('grants'));
 
   useEffect(() => {
@@ -34,7 +34,7 @@ export default function DDashboard() {
           title: doc.data().title,
           cfName: doc.data().cf_name,
           nonprofitName: doc.data().nonprofit_name,
-          goalAmt: doc.data().goal_amt, 
+          goalAmt: doc.data().goal_amt,
           moneyRaised: doc.data().money_raised,
           img: doc.data().images[0] || 'GivingTree.png',
           nonprofitId: doc.data().nonprofit_id,
@@ -58,10 +58,11 @@ export default function DDashboard() {
         );
       });
       setGrants(newGrants);
+      console.log("newDocs: ", newDocs);
       setDocs(newDocs);
     }
   }, [snapshot, error, loading]);
-  
+
   function searchCallback(childData) {
     var newGrants = [];
     childData.forEach((grant) => {
@@ -84,10 +85,14 @@ export default function DDashboard() {
 
   return (
     <Container maxWidth='md' className={classes.container}>
-      <Search docs={docs} parentCallback={searchCallback} />
-      <Grid container spacing={2} >
-        {grants}
-      </Grid>
+      {docs &&
+        <div>
+          <Search docs={docs} parentCallback={searchCallback} />
+          <Grid container spacing={2} >
+            {grants}
+          </Grid>
+        </div>
+      }
     </Container>
   );
 }
