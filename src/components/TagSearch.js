@@ -15,15 +15,17 @@ class TagSearch extends React.Component {
       tags: [{}],
       //tagString: "",
       activeTags: [],
+      activeTextSearch: [],
       loading: false,
-      //incomingTag: null
+      incomingTag: null
     };
     
-    this.updateRequest = this.updateRequest.bind(this);
+    //this.updateRequest = this.updateRequest.bind(this);
     this.setCached = this.setCached.bind(this);
     this.retrieveCached = this.retrieveCached.bind(this);
     this.updateSearch = this.updateSearch.bind(this);
-
+    this.updateRequest = this.updateRequest.bind(this);
+    
   };
 
   static propTypes = {
@@ -32,35 +34,54 @@ class TagSearch extends React.Component {
     history: PropTypes.object.isRequired
   }
 
-  componentDidMount () {
+  componentWillMount() {
+
+    this.updateSearch();
+    
     const { match, location, history } = this.props;
-    //this.setState((state, props) => {
-    if(location){
+
+    if(location.state){
       console.log(location);
-      let a = this.state.activeTags.slice(); //creates the clone of the state
-      a[0] = location.state.incomingTag;
-      console.log(a);
-      this.setState({activeTags: a}, () => {
-        console.log(this.state.activeTags);
-      });
-      
+      if(location && location.state.incomingTag){
+        let a = this.state.activeTags.slice(); //creates the clone of the state
+        a[0] = location.state.incomingTag;
+        console.log(a);
+        this.setState({activeTags: a}, () => { console.log(this.state.activeTags); });
+        this.setState({incomingTag: a[0]}, () => { 
+          console.log(this.state.incomingTag); 
+          
+          return React.createElement('TextField');
+          
+        });
+        this.updateRequest();
+      }
     }
+
   }
 
   updateRequest() {
-		this.props.updateTags(this.state.activeTags);
+    this.props.updateTags(this.state.activeTags);
+    this.props.updateFreeText(this.state.activeFreeText);
   }
 
   handleAutoChange = (event, values) => {
-    //this.setState({tagString: values}, this.updateRequest);
-    this.setState({
-      activeTags: values
-    }, () => {
-      // This will output an array of objects
-      // given by Autocompelte options property.
-      console.log(this.state.activeTags);
-      //this.updateRequest();
+    var tagArr = [];
+    var freeTextArr = [];
+    values.forEach(element => {
+      if(this.state.activeTags.includes(element)){
+        tagArr.push(element);
+      }else if(this.state.activeTextSearch.includes(element)){
+        freeTextArr.push(element);
+      }else if(this.state.tags.includes(element)){
+        tagArr.push(element);
+      }else{
+        freeTextArr.push(element);
+      }
     });
+    
+    this.setState({ activeTags: tagArr }, () => { console.log(this.state.activeTags); });
+    this.setState({ activeTextSearch: freeTextArr }, () => { console.log(this.state.activeTextSearch); });
+    this.updateRequest();
   }
 
   handleClick = (event) => {
@@ -69,8 +90,8 @@ class TagSearch extends React.Component {
 
 
   setCached(key, val){
-    //var now = (new Date().getTime());
-    var stringVal = JSON.stringify({ value : val});
+    var now = (new Date().getTime());
+    var stringVal = JSON.stringify({ time: now, value : val});
     sessionStorage.setItem(key, stringVal);
   }
   
@@ -81,14 +102,13 @@ class TagSearch extends React.Component {
               
     if(key in sessionStorage){
       var data = JSON.parse(sessionStorage.getItem(key));
-      /*var now = (new Date().getTime());
+      var now = (new Date().getTime());
       var timeCached = data.time;
-      if((now - timeCached) < (ttl*1000)){*/
-          return data.value;
-      //}
+      if((now - timeCached) < (ttl*10000)){ 
+        return data.value; 
+      }
     }
     return null;
-    // TODO: complete this
   }
 
   updateSearch() {
@@ -129,15 +149,24 @@ class TagSearch extends React.Component {
     }
   }
 
+  setDefaultAuto(incoming) {
+    if(incoming) {
+      return [incoming];
+    }else{
+      return null;
+    }
+  }
+
   
 
   render() {
     return (
       <Autocomplete
+        {...this.state}
         id="combo-box-demo"
         options={this.state.tags}
+        defaultValue={ this.setDefaultAuto(this.state.incomingTag) }
         autoComplete
-        defaultValue={this.componentDidMount}
         disableOpenOnFocus
         multiple
         freeSolo
@@ -150,7 +179,6 @@ class TagSearch extends React.Component {
             label="Select Tags"
             variant="outlined"
             fullWidth
-            onClick={this.handleClick}
             InputProps={{
               ...params.InputProps,
               endAdornment: (
