@@ -20,12 +20,11 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-export default function FStripeSetup(props) {
+export default function FStripeSetup() {
   const classes = useStyles();
 
   // Set tab title
   useEffect(() => { document.title = 'Connect to Stripe' }, []);
-
 
   return (
     <div>
@@ -34,8 +33,6 @@ export default function FStripeSetup(props) {
           <Link
             textDecoration='none'
             color='inherit'
-            //target='_blank'
-            //rel='noopener noreferrer'
             href='https://connect.stripe.com/oauth/authorize?response_type=code&client_id=ca_GdKhmkaiFmOndJQ4UU6LTUm6pyfJcpQj&scope=read_write'>
             <Button
               fullWidth

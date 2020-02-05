@@ -17,8 +17,8 @@ export default function Header() {
   return (
     <div>
       <header className={classes.header}>
-        <Container maxWidth="sm">
-          <Typography variant="body1">Header stub</Typography>
+        <Container>
+          <Typography variant="body1"></Typography>
         </Container>
       </header>
     </div>

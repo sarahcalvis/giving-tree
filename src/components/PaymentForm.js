@@ -16,8 +16,15 @@ import {
 } from 'react-stripe-elements';
 import Button from '@material-ui/core/Button';
 import { useDocument } from 'react-firebase-hooks/firestore';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
 
 const useStyles = makeStyles(theme => ({
+  card: {
+    maxWidth: 500,
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
+  },
   pageLayout: {
     width: 'auto',
     marginLeft: theme.spacing(2),
@@ -173,41 +180,44 @@ function PaymentForm(props) {
   }
 
   return (
-    <Container className={classes.pageLayout}>
-      <React.Fragment>
-        <Text type='card-heading' text={grant} />
-        <ProgressBar raised={raised} goal={goal} />
-        {status === 'incomplete' &&
-          <div>
-            <CardElement className={classes.stripeElement} />
-            <input
-              className={classes.stripeElement}
-              placeholder="Amount"
-              onInput={e => setAmount(e.target.value)} />
-            <Button
-              disabled={!amountIsGood() || clicked}
-              fullWidth
-              color="primary"
-              className={classes.button}
-              variant="contained"
-              onClick={submit}>
-              Donate {amountIsGood() && !clicked ? ('$' + amount) : ''}
-            </Button>
-          </div>
-        }
-        {status === 'complete' &&
-          <Text type='card-subheading' text={'Thank you for your donation! Thanks to your gift of $' + amount + ', ' + grant + ' is now only  $' + (goal - raised) + ' from meeting its goal of $' + goal + '!'} />
-        }
-        {status === 'error' &&
-          <Text type='card-subheading' text={'Sorry, an error occurred 🤡'} />
-        }
-        {status === 'waiting' &&
-          <div>
-            <Text type='card-subheading' text={'Sending your donation in...'} />
-            <LinearProgress />
-          </div>
-        }
-      </React.Fragment>
+    <Container className={classes.card}>
+      <Card>
+        <CardContent className={classes.cardContent}>
+
+          <Text type='card-heading' text={grant} />
+          <ProgressBar raised={raised} goal={goal} />
+          {status === 'incomplete' &&
+            <div>
+              <CardElement className={classes.stripeElement} />
+              <input
+                className={classes.stripeElement}
+                placeholder="Amount"
+                onInput={e => setAmount(e.target.value)} />
+              <Button
+                disabled={!amountIsGood() || clicked}
+                fullWidth
+                color="primary"
+                className={classes.button}
+                variant="contained"
+                onClick={submit}>
+                Donate {amountIsGood() && !clicked ? ('$' + amount) : ''}
+              </Button>
+            </div>
+          }
+          {status === 'complete' &&
+            <Text type='card-subheading' text={'Thank you for your donation! Thanks to your gift of $' + amount + ', ' + grant + ' is now only  $' + (goal - raised) + ' from meeting its goal of $' + goal + '!'} />
+          }
+          {status === 'error' &&
+            <Text type='card-subheading' text={'Sorry, an error occurred 🤡'} />
+          }
+          {status === 'waiting' &&
+            <div>
+              <Text type='card-subheading' text={'Sending your donation in...'} />
+              <LinearProgress />
+            </div>
+          }
+        </CardContent>
+      </Card>
     </Container>
   );
 }

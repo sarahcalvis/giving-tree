@@ -1,66 +1,62 @@
-import React, {Component, useState } from 'react';
+import React, {Component } from 'react';
 // import LocationSearch from './LocationSearch';
-import AutoCompleteMapsSearchBar from "./AutoCompleteMapsSearchBar";
+import LocationSearch from "./LocationSearch";
 import SearchRadius from "./SearchRadius";
-import firebase from "../firebase.js";
 
 class Search extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      centralLocation: [],
       radius: -1,
       centerLoc: {
-        "lat" : 41.15559, 
-        "long" : -80.08209
+        address: "111 Home St",
+        lat : 41.15559, 
+        long : -80.08209
       },
-      distResults: {},
-      grants: {},
+      tempResults: [],
+      distResults: [],
+      radiusResults: [],
+      metaDocs: [],
     };
   }
 
-  componentDidMount() {
-    var grantSearchResults = [];
-    var db = firebase.firestore();
-    db.collection("grants").get().then((querySnapshot) => {
-        querySnapshot.forEach(function (doc) {
-          var cf_name = doc.data().cf_name;
-          var cf_id = doc.data().cf_id;
-          var title = doc.data().title;
-          var nonprofit_name = doc.data().nonprofit_name;
-          var address = doc.data().address;
-          var lat = doc.data().lat;
-          var long = doc.data().long;
-          var date_posted = doc.data().date_posted;
-          var date_deadline = doc.data().date_deadline;
-          var money_raised = doc.data().money_raised;
-          var goal_amt = doc.data().goal_amt;
-          var desc = doc.data().desc;
-          var tags = doc.data().tags;
-          var images = doc.data().images;
-          grantSearchResults.push( {cf_name, cf_id, title, nonprofit_name, address, lat, long, date_posted, date_deadline, money_raised, goal_amt, desc, tags, images});
-        });
-        this.setState({ distResults: grantSearchResults});
-        this.setState({ grants: grantSearchResults});
-        this.props.parentCallback(this.state.grants);
-        console.log(grantSearchResults);
+  componentWillMount() {
+    var newMetaDocs = [];
+    console.log("in mount");
+    this.props.docs.forEach((doc) => {
+      newMetaDocs.push({
+        dist: -1,
+        grant: doc,
+      });
+      console.log("pushing this doc: ", doc);
     });
-  };
+    this.setState({metaDocs: newMetaDocs});
+  }
 
-  locationCallback = (childData) => {      
-    this.setState({centralLocation: childData});
+  locationCallback = (childData) => {   
+    var lat = 40;
+    var long = -80;   
+    console.log("metadocs: ", this.state.metaDocs);
+    this.setState({centerLoc: { address: childData, lat: lat, long: long }});
     console.log("In parent in callback. New Location: ", childData);
     this.setDists();
     console.log("logging the distResults: ", this.state.distResults);
     // NEED TO RERENDER THE CARDS
-    this.props.parentCallback(this.state.grants);
+    this.props.parentCallback(this.state.tempResults);
   }
 
-  radiusCallback = (childData) => {      
-    this.setState({radius: childData});
-    console.log("In parent in callback. New Radius: ", childData);
-    // NEED TO RERENDER THE CARDS
+  radiusCallback = (radius) => {      
+    console.log("In parent in callback. New Radius: ", radius);
+    var newDocs = [];
+    this.props.docs.forEach((doc) => {
+      if(doc.dist < radius) {
+        newDocs.push({ doc });
+      }
+    }); 
+    this.setState({ radiusResults: newDocs});
+    this.props.parentCallback(newDocs);
   }
+
   //from Geo Data Source
   calcDistance(lat1, lon1, lat2, lon2, unit) {
     if (lat1 === lat2 && lon1 === lon2) {
@@ -77,44 +73,31 @@ class Search extends Component {
         dist = 1;
       }
       dist = Math.acos(dist);
-      dist = (dist * 180) / Math.PI;
+      dist = (dist * 180 ) / Math.PI;
       dist = dist * 60 * 1.1515;
       return dist;
     }
   }
 
   addDist = (grant) => {
-    //console.log("centerLoc: ", this.state.centerLoc);
-    console.log("in addDist. the distance: ", this.calcDistance(this.state.centerLoc.lat, this.state.centerLoc.long, grant.lat, grant.long));
-    console.log("grant: ", grant);
-    var dist = 0;
-    this.setState( {distResults: {}});
-    
-    /*
-    this.setState(prevState => ({
-      distResults: [...prevState.distResults, 
-        {
-            "dist" : this.calcDistance(this.state.centerLoc.lat, this.state.centerLoc.long, grant.lat, grant.long),
-            "grant" : grant
-        }]
-    }));
-    */
+    this.setState({
+      "dist" : this.calcDistance(this.state.centerLoc.lat, this.state.centerLoc.long, grant.lat, grant.long),
+    });
   }
 
   setDists = () => { 
-    console.log("in setDists with init distResults: ", this.state.distResults);
-    this.state.distResults.forEach(this.addDist); 
-    console.log("in setDists with distResults: ", this.state.distResults);
-    //var sortedByDist = this.state.distResults.sort((a, b) => (a.dist > b.dist ? 1 : -1));
-    var sortedByDist = [{dist: 3,grant: {junk: 0}}, {dist: 2,grant: {junk: 0}}, {dist: 5,grant: {junk: 0}}, {dist: 1, grant: {junk: 0}}].sort((a, b) => (a.dist > b.dist ? 1 : -1));
-    console.log(sortedByDist);
-    console.log("grants altered? ", this.state.grants);
+    this.state.metaDocs.forEach(this.addDist); 
+    var sortedByDist = this.state.metaDocs;
+    sortedByDist.sort((a, b) => (a.dist > b.dist ? 1 : -1));
+    this.setState({metaDocs: sortedByDist});
+    this.setState({tempResults: sortedByDist});
+    this.setState({distResults: this.state.tempResults});
   }
 
   render() {
     return (
       <div>
-        <AutoCompleteMapsSearchBar parentCallback={this.locationCallback}/>
+        <LocationSearch parentCallback={this.locationCallback}/>
         <SearchRadius parentCallback={this.radiusCallback}/>
       </div>  
     );

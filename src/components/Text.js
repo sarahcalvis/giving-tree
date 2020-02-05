@@ -42,6 +42,12 @@ export default function Text(props) {
           {text}
         </Typography>
       }
+      {type === "date" &&
+        <Typography
+          variant="caption">
+          {text}
+        </Typography>
+      }
       {type === "progress-bold" &&
         <Typography
           variant="subtitle1">
