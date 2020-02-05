@@ -66,16 +66,16 @@ export default function DDashboard() {
   function searchCallback(childData) {
     console.log("childData in dashboard: ", childData);
     var newGrants = [];
-    childData.forEach((grant) => {
+    childData.forEach((meta) => {
       newGrants.push(
         <SmallGrantCard
-          id={grant.id}
-          title={grant.title}
-          cfName={grant.cf_name}
-          nonprofitName={grant.nonprofit_name}
-          goalAmt={grant.goal_amt}
-          moneyRaised={grant.money_raised}
-          img={grant.img} />
+          id={meta.grant.id}
+          title={meta.grant.title}
+          cfName={meta.grant.cf_name}
+          nonprofitName={meta.grant.nonprofit_name}
+          goalAmt={meta.grant.goal_amt}
+          moneyRaised={meta.grant.money_raised}
+          img={meta.grant.img} />
       );
     });
     console.log("newGrants: ", newGrants);

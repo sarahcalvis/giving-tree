@@ -157,7 +157,7 @@ class Search extends Component {
     sortedByDist.sort((a, b) => (a.dist > b.dist ? 1 : -1));
     this.setState({metaGrants: sortedByDist}, () => {
       console.log("meta set: ", this.state.metaGrants);
-      //this.props.parentCallback(this.state.metaGrants);
+      this.props.parentCallback(this.state.metaGrants);
     });
   }
 
