@@ -7,7 +7,7 @@ class GrantTagBar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      tags: ['one', 'two', 'three'],
+      tags: props.tags,
     };
   };
 
