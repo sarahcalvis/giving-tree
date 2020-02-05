@@ -13,36 +13,33 @@ class Search extends Component {
         lat : 41.15559, 
         long : -80.08209
       },
-      tempResults: [],
+      tempMeta: [],
       distResults: [],
       radiusResults: [],
-      metaDocs: [],
+      metaGrants: [],
     };
   }
 
   componentWillMount() {
-    var newMetaDocs = [];
-    console.log("in mount");
+    var newMetaGrants = [];
     this.props.docs.forEach((doc) => {
-      newMetaDocs.push({
+      newMetaGrants.push({
         dist: -1,
         grant: doc,
       });
-      console.log("pushing this doc: ", doc);
     });
-    this.setState({metaDocs: newMetaDocs});
+    this.setState({metaGrants: newMetaGrants});
   }
 
   locationCallback = (childData) => {   
     var lat = 40;
     var long = -80;   
-    console.log("metadocs: ", this.state.metaDocs);
     this.setState({centerLoc: { address: childData, lat: lat, long: long }});
     console.log("In parent in callback. New Location: ", childData);
     this.setDists();
-    console.log("logging the distResults: ", this.state.distResults);
+    console.log("logging the distResults: ", this.state.metaGrants);
     // NEED TO RERENDER THE CARDS
-    this.props.parentCallback(this.state.tempResults);
+    this.props.parentCallback(this.state.metaGrants);
   }
 
   radiusCallback = (radius) => {      
@@ -78,21 +75,23 @@ class Search extends Component {
     }
   }
 
-  addDist = (grant) => {
-    let newDist = this.calcDistance(this.state.centerLoc.lat, this.state.centerLoc.long, grant.grant.lat, grant.grant.long);
-    this.setState({
-      dist : newDist
-    });
+  addDist = (doc) => {
+    let newDist = this.calcDistance(this.state.centerLoc.lat, this.state.centerLoc.long, doc.grant.lat, doc.grant.long);
+    console.log("adding in add ", {dist: newDist, grant: doc.grant});
+    var tempTemp = this.state.tempMeta;
+    tempTemp.push({dist: newDist, grant: doc.grant});
+    this.setState({tempMeta: tempTemp});
+    console.log("temp in add: ", this.state.tempMeta);
   }
 
   setDists = () => { 
-    this.state.metaDocs.forEach(this.addDist); 
-    var sortedByDist = this.state.metaDocs;
+    this.setState({tempMeta: []});
+    this.state.metaGrants.forEach(this.addDist); 
+    console.log("temp contents", this.state.tempMeta);
+    var sortedByDist = this.state.tempMeta;
     console.log("unsorted with dists: ", sortedByDist);
     sortedByDist.sort((a, b) => (a.dist > b.dist ? 1 : -1));
-    this.setState({metaDocs: sortedByDist});
-    this.setState({tempResults: sortedByDist});
-    this.setState({distResults: this.state.tempResults});
+    this.setState({metaGrants: sortedByDist});
   }
 
   render() {
