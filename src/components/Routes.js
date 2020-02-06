@@ -10,6 +10,7 @@ import FRequestSent from '../screens/FRequestSent.js';
 import FSettings from '../screens/FSettings.js';
 import LInputNewPassword from '../screens/LInputNewPassword.js';
 import SignIn from '../screens/SignIn.js';
+import SignUp from '../screens/SignUp.js';
 import LRequestNewPassword from '../screens/LRequestNewPassword.js';
 import MetaAdmin from '../screens/MetaAdmin.js';
 import FStripeSetup from '../screens/FStripeSetup.js';
@@ -29,6 +30,7 @@ export default function Routes() {
       <Route exact path='/foundation/create-grant' component={FEditGrant} />
       <Route exact path='/foundation/settings' component={FSettings} />
       <Route exact path='/signin' component={SignIn} />
+      <Route exact path='/signup' component={SignUp} />
       <Route exact path='/request-new-password' component={LRequestNewPassword} />
       <Route exact path='/input-new-password' component={LInputNewPassword} />
       <Route exact path='/meta-admin' component={MetaAdmin} />

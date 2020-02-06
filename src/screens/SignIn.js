@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
-export default function Login() {
+
+export default function SignIn() {
   // Set tab title
   useEffect(() => { document.title = 'Log in to Giving Tree' }, []);
 
