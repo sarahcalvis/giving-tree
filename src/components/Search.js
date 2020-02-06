@@ -18,8 +18,8 @@ class Search extends Component {
       radius: -1,
       centerLoc: {
         address: "111 Home St",
-        lat : 41.15559, 
-        long : -80.08209
+        lat : 40, 
+        long : -80,
       },
       tempMeta: [],
       radiusResults: [],
@@ -31,7 +31,7 @@ class Search extends Component {
     var newMetaGrants = [];
     this.props.docs.forEach((doc) => {
       newMetaGrants.push({
-        dist: -1,
+        dist: this.calcDistance(this.state.centerLoc.lat, this.state.centerLoc.long, doc.lat, doc.long),
         grant: doc,
       });
     });
@@ -39,9 +39,7 @@ class Search extends Component {
   }
 
   locationCallback = (childData) => {   
-    var lat = 40;
-    var long = -80;   
-    this.setState({centerLoc: { address: childData, lat: lat, long: long }});
+    this.setState({centerLoc: { address: childData, lat: this.state.centerLoc.lat, long: this.state.centerLoc.long }});
     console.log("In parent in callback. New Location: ", childData);
     this.setDists();
     // NEED TO RERENDER THE CARDS
@@ -50,13 +48,14 @@ class Search extends Component {
 
   radiusCallback = (radius) => {      
     console.log("In parent in callback. New Radius: ", radius);
-    var newMeta = [];
+    var newRadRes = [];
     this.state.metaGrants.forEach((meta) => {
       if(meta.dist < radius) {
-        newMeta.push({ meta });
+        console.log("pushing in radCallback: ", meta);
+        newRadRes.push({ meta });
       }
     }); 
-    this.setState({ radiusResults: newMeta}, () => {
+    this.setState({ radiusResults: newRadRes}, () => {
       console.log("rad results: ", this.state.radiusResults);
       this.props.parentCallback(this.state.radiusResults);
     });
