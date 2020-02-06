@@ -32,7 +32,6 @@ export default function FEditGrant() {
           <EditGrant />
         </Grid>
         <Grid item>
-
           {grantStatus === 'edit' &&
             <Grid container
               spacing={2}
@@ -44,14 +43,14 @@ export default function FEditGrant() {
                   color='primary'
                   variant='contained'>
                   Cancel
-                  </Button>
+                </Button>
               </Grid>
               <Grid item>
                 <Button
                   color='primary'
                   variant='contained'>
                   Save
-                  </Button>
+                </Button>
               </Grid>
             </Grid>
           }
@@ -60,26 +59,27 @@ export default function FEditGrant() {
               spacing={2}
               direction="column"
               justify="flex-end"
-              alignItems="flex-start">                <Grid item>
+              alignItems="flex-start">                
+              <Grid item>
                 <Button
                   color='primary'
                   variant='contained'>
                   Discard
-                  </Button>
+                </Button>
               </Grid>
               <Grid item>
                 <Button
                   color='primary'
                   variant='contained'>
                   Save to Drafts
-                  </Button>
+                </Button>
               </Grid>
               <Grid item>
                 <Button
                   color='primary'
                   variant='contained'>
                   Publish
-                  </Button>
+                </Button>
               </Grid>
             </Grid>
           }

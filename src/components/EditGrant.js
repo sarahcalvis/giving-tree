@@ -50,7 +50,7 @@ export default function EditGrant(props) {
           <CardContent className={classes.cardContent}>
             <Text type='card-heading' text='Public Grant Information' />
             <Text type='card-subheading' text='This information will be visible to the public.' />
-            <p>Image upload here :)</p>
+            <input type='file' accept='image/png, image/jpeg'/>
             <TextField fullWidth label='Grant Title' />
             <TextField fullWidth label='Nonprofit Name' />
             <DatePicker fullWidth label='Deadine' variant="inline" value={selectedDate} onChange={handleDateChange} />
