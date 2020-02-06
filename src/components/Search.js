@@ -48,17 +48,25 @@ class Search extends Component {
 
   radiusCallback = (radius) => {      
     console.log("In parent in callback. New Radius: ", radius);
-    var newRadRes = [];
-    this.state.metaGrants.forEach((meta) => {
-      if(meta.dist < radius) {
-        console.log("pushing in radCallback: ", meta);
-        newRadRes.push({ meta });
-      }
-    }); 
-    this.setState({ radiusResults: newRadRes}, () => {
-      console.log("rad results: ", this.state.radiusResults);
-      this.props.parentCallback(this.state.radiusResults);
-    });
+    if(radius === -1) {
+      this.setState({ radiusResults: this.state.metaGrants}, () => {
+        this.props.parentCallback(this.state.radiusResults);
+      });
+    }
+    else {
+      var newRadRes = [];
+      this.state.metaGrants.forEach((meta) => {
+        console.log("meta.dist and radius ", meta.dist, radius);
+        if(meta.dist < radius) {
+          console.log("pushing in radCallback: ", meta);
+          newRadRes.push(meta);
+        }
+      }); 
+      this.setState({ radiusResults: newRadRes}, () => {
+        console.log("rad results: ", this.state.radiusResults);
+        this.props.parentCallback(this.state.radiusResults);
+      });
+    }
   }
 
   sortByCallback = (sortBy) => {

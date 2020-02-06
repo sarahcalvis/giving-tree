@@ -97,8 +97,8 @@ export default function LocationSearch(props) {
       filterOptions={x => x}
       options={options}
       autoComplete
-      includeInputInList
       freeSolo
+      includeInputInList
       disableOpenOnFocus
       onChange={handleChange}
       renderInput={params => (

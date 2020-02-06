@@ -67,7 +67,6 @@ export default function DDashboard() {
     console.log("childData in dashboard: ", childData);
     var newGrants = [];
     childData.forEach((meta) => {
-      console.log("dashboard card contents: ", meta.grant.id, meta.grant.title, meta.grant.cf_name, meta.grant.nonprofit_name, meta.grant.goal_amt, meta.grant.money_raised);
       newGrants.push(
         <SmallGrantCard
           id={meta.grant.id}
@@ -79,8 +78,8 @@ export default function DDashboard() {
           img={meta.grant.img} />
       );
     });
-    console.log("newGrants: ", newGrants);
     setGrants(newGrants);
+    console.log("newGrants: ", newGrants);
   }
 
   const classes = useStyles();
