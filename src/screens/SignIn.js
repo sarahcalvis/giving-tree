@@ -79,9 +79,10 @@ class SignInFormBase extends Component {
         if (emailError === '') {
             const {email, password} = this.state;
             
-            firebase.auth().createUserWithEmailAndPassword(email,password)
+            firebase.auth().signInWithEmailAndPassword(email,password)
             .then(() => {
                 //Do Misc Stuff for Sign In
+                // TODO: If user is CF, go to dashboard
                 
                 //Redirect User to Home
                 this.props.history.push('/');
