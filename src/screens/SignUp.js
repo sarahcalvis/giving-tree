@@ -201,7 +201,7 @@ const SignInForgotLink = ({ classes }) => (
             </Link>
         </Grid>
         <Grid item>
-            <Link to='/login' className={classes.links}>
+            <Link to='/signin' className={classes.links}>
                 <MUILink variant="body2" component={'span'}>
                     Already have an account? Sign In
                 </MUILink>

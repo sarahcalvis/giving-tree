@@ -51,7 +51,7 @@ function SignIn(props) {
                     <LockOutlinedIcon />
                 </Avatar>
                 <Typography component="h1" variant="h5" className={classes.header}>
-                    Sign Up
+                    Sign In
                     </Typography>
                 <SignInForm classes={classes} />
                 <SignUpForgotLink classes={classes} />
@@ -63,12 +63,7 @@ function SignIn(props) {
 const INITIAL_STATE = {
     email: '',
     password: '',
-    passwordTwo: '',
-    errors: {
-        email: '',
-        password: '',
-        passwordTwo: '',
-    },
+    emailError: '',
     submitError: ''
 };
 
@@ -178,7 +173,7 @@ const SignUpForgotLink = ({ classes }) => (
             </Link>
         </Grid>
         <Grid item>
-            <Link to='/login' className={classes.links}>
+            <Link to='/signup' className={classes.links}>
                 <MUILink variant="body2" component={'span'}>
                     Don't have an account? Sign Up
                 </MUILink>
