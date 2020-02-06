@@ -19,6 +19,9 @@ export default function Validation(props) {
       {props.type === 'address' &&
         <TextField fullWidth label={props.label} />
       }
+      {props.type === 'money' &&
+        <TextField fullWidth label={props.label} />
+      }
       {!props.type &&
         <TextField fullWidth label={props.label} />
       }
