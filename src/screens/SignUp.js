@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
+
+import * as helper from '../helpers/SignUpHelper.js';
+
 import { withStyles } from '@material-ui/styles';
 import Container from '@material-ui/core/Container';
 import Avatar from '@material-ui/core/Avatar';
@@ -64,8 +67,8 @@ const INITIAL_STATE = {
         email: '',
         passwordOne: '',
         passwordTwo: '',
-        submit: '',
-    }
+    },
+    submitError: ''
 };
 
 class SignUpForm extends Component {
@@ -75,8 +78,20 @@ class SignUpForm extends Component {
     }
 
     onSubmit = event => {
-        
-        console.log("hello!");
+        let errors = {
+            email: helper.validateEmail(this.state.email),
+            passwordOne: helper.validatePassword(this.state.passwordOne),
+            passwordTwo: helper.confirmMatching(this.state.passwordOne, this.state.passwordTwo),
+        }
+
+        this.setState({errors: errors});
+
+        if (errors.email === '' && errors.passwordOne === '' && errors.passwordTwo === ''){
+        }
+        else{
+        }
+
+        event.preventDefault();
     }
 
     onChange = event => {
@@ -89,6 +104,7 @@ class SignUpForm extends Component {
             passwordOne,
             passwordTwo,
             errors,
+            submitError,
         } = this.state;
 
         const { classes } = this.props;
@@ -96,7 +112,7 @@ class SignUpForm extends Component {
         return (
             <form className={classes.form} onSubmit={this.onSubmit}>
                 <Typography component="h6" className={classes.errorMsg} >
-                    {errors["submit"]}
+                    {submitError}
                 </Typography>
                 <TextField
                     variant="outlined"
