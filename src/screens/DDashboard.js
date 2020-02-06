@@ -64,21 +64,22 @@ export default function DDashboard() {
   }, [snapshot, error, loading]);
 
   function searchCallback(childData) {
+    console.log("childData in dashboard: ", childData);
     var newGrants = [];
-    childData.forEach((grant) => {
+    childData.forEach((meta) => {
       newGrants.push(
         <SmallGrantCard
-          id={grant.id}
-          title={grant.title}
-          cfName={grant.cf_name}
-          nonprofitName={grant.nonprofit_name}
-          goalAmt={grant.goal_amt}
-          moneyRaised={grant.money_raised}
-          img={grant.images[0] || 'GivingTree.png'} />
+          id={meta.grant.id}
+          title={meta.grant.title}
+          cfName={meta.grant.cfName}
+          nonprofitName={meta.grant.nonprofitName}
+          goalAmt={meta.grant.goalAmt}
+          moneyRaised={meta.grant.moneyRaised}
+          img={meta.grant.img} />
       );
     });
-    console.log("newGrants: ", newGrants);
     setGrants(newGrants);
+    console.log("newGrants: ", newGrants);
   }
 
   const classes = useStyles();

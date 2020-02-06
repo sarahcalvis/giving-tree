@@ -43,7 +43,7 @@ export default function SearchRadius(props) {
           onChange={handleChange}
           labelWidth={labelWidth}
         >
-          <MenuItem value="">
+          <MenuItem value={-1}>
             <em>None</em>
           </MenuItem>
           <MenuItem value={10}>10</MenuItem>
