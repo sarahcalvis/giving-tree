@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 
+import firebase from '../firebase.js';
 import * as helper from '../helpers/SignUpHelper.js';
 
 import { withStyles } from '@material-ui/styles';
@@ -71,7 +72,7 @@ const INITIAL_STATE = {
     submitError: ''
 };
 
-class SignUpForm extends Component {
+class SignUpFormBase extends Component {
     constructor(props) {
         super(props);
         this.state = { ...INITIAL_STATE };
@@ -84,11 +85,27 @@ class SignUpForm extends Component {
             passwordTwo: helper.confirmMatching(this.state.passwordOne, this.state.passwordTwo),
         }
 
-        this.setState({errors: errors});
+        if (errors.email === '' && errors.passwordOne === '' && errors.passwordTwo === '') {
+            const {email, passwordOne} = this.state;
+            
+            firebase.auth().createUserWithEmailAndPassword(email,passwordOne)
+            .then(() => {
+                //Do Misc Stuff for Donor Account
+                //Post to Server? Set firebase rules?
+                
+                //Redirect User to Home
+                this.props.history.push('/');
+            })
+            .catch((error) => {
+                //Failure
+                //TODO: Cleanup Firebase Error Messages
+                this.setState({submitError: error.message});
+            });
 
-        if (errors.email === '' && errors.passwordOne === '' && errors.passwordTwo === ''){
         }
-        else{
+        else {
+            //Display field validation errors
+            this.setState({ errors: errors });
         }
 
         event.preventDefault();
@@ -106,6 +123,13 @@ class SignUpForm extends Component {
             errors,
             submitError,
         } = this.state;
+
+        const isInvalid =
+            // passwordOne !== passwordTwo ||
+            passwordOne === '' ||
+            passwordTwo === '' ||
+            email === '' ||
+            submitError !== '';
 
         const { classes } = this.props;
 
@@ -158,6 +182,7 @@ class SignUpForm extends Component {
                     fullWidth
                     variant="contained"
                     color="primary"
+                    disabled={isInvalid}
                 >
                     Sign Up
                         </Button>
@@ -184,6 +209,8 @@ const SignInForgotLink = ({ classes }) => (
         </Grid>
     </Grid>
 );
+
+const SignUpForm = withRouter(SignUpFormBase);
 
 export default withStyles(styles)(SignUp);
 
