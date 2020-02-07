@@ -11,7 +11,7 @@ import "firebase/firestore";
 //Import everything, not recommended for production apps
 //import firebase from "firebase";
 
-const firebaseConfig = {
+const config = {
   apiKey: "AIzaSyAkeCK6w-qbvHzaOdEyg_PtpGQbElAv0_M",
   authDomain: "givingtree-cfs.firebaseapp.com",
   databaseURL: "https://givingtree-cfs.firebaseio.com",
@@ -23,6 +23,6 @@ const firebaseConfig = {
 };
 
 
-firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(config);
 
-export default !firebase.apps.length ? firebase.initializeApp(firebaseConfig) : firebase.app();
+export default !firebase.apps.length ? firebase.initializeApp(config) : firebase.app();
