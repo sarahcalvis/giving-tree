@@ -53,9 +53,46 @@ class Search extends Component {
     console.log("state tags: ", this.state.tags);
     console.log("doc tags: ", doc.grant.tags);
     if((this.state.tags).every(tag => (doc.grant.tags).includes(tag))) {
+      tempTemp.push({dist: doc.dist, grant: doc.grant});
+      console.log("pushing this grant: ", doc);
+      this.setState({tempMeta: tempTemp});
+    }
+  }
+
+
+  setByTags = () => { 
+    console.log("calling setByTags with these tags: ", this.state.tags);
+    var myMeta = this.state.metaGrants;
+    console.log("myMeta: ", myMeta);
+    this.setState({tempMeta: []}, () => {
+      (myMeta).forEach(this.addByTag);
+      console.log("tempMeta after setting: ", this.state.tempMeta);
+    });
+    this.props.parentCallback(this.state.tempMeta);
+    /*
+    this.setState({metaGrants: this.state.tempMeta}, () => {
+      this.props.parentCallback(this.state.tempMeta);
+    });
+    */
+    //console.log("metaGrants after callBack: ", this.state.metaGrants);
+  }
+    /*
+
+  addByTag = (doc) => {
+    var tempTemp = this.state.tempMeta;
+    if((this.state.tags).every(tag => (doc.grant.tags).includes(tag))) {
+      tempTemp.push({dist: doc.dist, grant: doc.grant});
+      this.setState({tempMeta: tempTemp});
+    }
+    var tempTemp = this.state.tempMeta;
+    console.log("state tags: ", this.state.tags);
+    console.log("doc tags: ", doc.grant.tags);
+    if((this.state.tags).every(tag => (doc.grant.tags).includes(tag))) {
       var textMatches = true;
       (this.state.freeText).forEach((text)=> {
+        console.log("checking this free text: ", text);
         if(!(doc.grant.desc).includes(text)) {
+          console.log("this text isn't found in description");
           textMatches = false;
         }
       })
@@ -73,10 +110,30 @@ class Search extends Component {
       (myMeta).forEach(this.addByTag);
     });
     this.setState({metaGrants: this.state.tempMeta}, () => {
+      this.props.parentCallback(this.state.tempMeta);      
+      //this.setByFreeText();
+    });
+  }
+
+  addByFreeText = (doc) => {
+    var tempTemp = this.state.tempMeta;
+    if((this.state.tags).every(tag => (doc.grant.tags).includes(tag))) {
+      tempTemp.push({dist: doc.dist, grant: doc.grant});
+      this.setState({tempMeta: tempTemp});
+    }
+  }
+
+  setByFreeText = () => { 
+    var myMeta = this.state.metaGrants;
+    this.setState({tempMeta: []}, () => {
+      (myMeta).forEach(this.addByTag);
+    });
+    this.setState({metaGrants: this.state.tempMeta}, () => {
       this.props.parentCallback(this.state.tempMeta);
     });
   }
 
+*/
 
   locationCallback = (location) => {   
     this.setState({centerLoc: { address: location, lat: this.state.centerLoc.lat, long: this.state.centerLoc.long }});
