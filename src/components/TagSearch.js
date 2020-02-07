@@ -20,11 +20,10 @@ class TagSearch extends React.Component {
       incomingTag: null
     };
     
-    //this.updateRequest = this.updateRequest.bind(this);
     this.setCached = this.setCached.bind(this);
     this.retrieveCached = this.retrieveCached.bind(this);
     this.updateSearch = this.updateSearch.bind(this);
-    this.updateRequest = this.updateRequest.bind(this);
+    this.updateParent = this.updateParent.bind(this);
     
   };
 
@@ -53,15 +52,14 @@ class TagSearch extends React.Component {
           return React.createElement('TextField');
           
         });
-        this.updateRequest();
+        this.updateParent();
       }
     }
 
   }
 
-  updateRequest() {
-    this.props.updateTags(this.state.activeTags);
-    this.props.updateFreeText(this.state.activeFreeText);
+  updateParent() {
+    this.props.parentCallback({ tags: this.state.activeTags, freeText: this.state.activeTextSearch})
   }
 
   handleAutoChange = (event, values) => {
@@ -81,7 +79,7 @@ class TagSearch extends React.Component {
     
     this.setState({ activeTags: tagArr }, () => { console.log(this.state.activeTags); });
     this.setState({ activeTextSearch: freeTextArr }, () => { console.log(this.state.activeTextSearch); });
-    this.updateRequest();
+    this.updateParent();
   }
 
   handleClick = (event) => {
