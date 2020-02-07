@@ -8,6 +8,8 @@ import Text from './Text.js';
 import Validation from './Validation.js';
 import { makeStyles } from '@material-ui/styles';
 import DateFnsUtils from '@date-io/date-fns'; // choose your lib
+import firebase from '../firebase.js';
+
 import {
   DatePicker,
   MuiPickersUtilsProvider,
@@ -28,20 +30,26 @@ const useStyles = makeStyles(theme => ({
 export default function EditGrant(props) {
   const [selectedDate, handleDateChange] = React.useState(null);
 
+  const fileInput = React.createRef();
+
   // here's how you get the date's timestamp in seconds, which is what we upload to Firebase
   useEffect(() => { if (selectedDate) { console.log(Math.round(selectedDate.getTime() / 1000)) } }, [selectedDate]);
 
   const classes = useStyles();
-  const [imgKey, setImgKey] = React.useState(0);
 
   // Set tab title
   useEffect(() => { document.title = 'Create Grant-Giving Tree'; }, []);
 
-  useEffect(() => {
-    //Force image carousel to rerender after 500ms
-    //TODO: Find better way to fix
-    setTimeout(function () { setImgKey(1); }, 500)
-  }, []);
+  // Initialize storage
+  const storage = firebase.storage();
+  const storageRef = storage.ref();
+
+  const uploadFileToFirebase = () => {
+    console.log(fileInput)
+    storageRef.put(new File(fileInput.current.value, 'fileName.png')).then(function (snapshot) {
+      console.log('Uploaded a blob or file!');
+    });
+  }
 
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -50,7 +58,8 @@ export default function EditGrant(props) {
           <CardContent className={classes.cardContent}>
             <Text type='card-heading' text='Public Grant Information' />
             <Text type='card-subheading' text='This information will be visible to the public.' />
-            <input type='file' accept='image/png, image/jpeg'/>
+            <input type='file' accept='image/png, image/jpeg' ref={fileInput} />
+            <button onClick={uploadFileToFirebase} >Submit</button>
             <TextField fullWidth label='Grant Title' />
             <TextField fullWidth label='Nonprofit Name' />
             <DatePicker fullWidth label='Deadine' variant="inline" value={selectedDate} onChange={handleDateChange} />
