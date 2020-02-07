@@ -48,11 +48,10 @@ class TagSearch extends React.Component {
         this.setState({activeTags: a}, () => { console.log(this.state.activeTags); });
         this.setState({incomingTag: a[0]}, () => { 
           console.log(this.state.incomingTag); 
-          
+          this.updateParent();
           return React.createElement('TextField');
           
         });
-        this.updateParent();
       }
     }
 
@@ -77,9 +76,11 @@ class TagSearch extends React.Component {
       }
     });
     
-    this.setState({ activeTags: tagArr }, () => { console.log(this.state.activeTags); });
-    this.setState({ activeTextSearch: freeTextArr }, () => { console.log(this.state.activeTextSearch); });
-    this.updateParent();
+    this.setState({ activeTags: tagArr, activeTextSearch: freeTextArr  }, () => { 
+      console.log(this.state.activeTags);
+      console.log(this.state.activeTextSearch);
+      this.updateParent();
+     });
   }
 
   handleClick = (event) => {

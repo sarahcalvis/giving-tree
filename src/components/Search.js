@@ -42,7 +42,10 @@ class Search extends Component {
   }
 
   tagFreeTextCallback = (tagsAndFreeText) => {
-    this.setState({tags: tagsAndFreeText.tags, freeText: tagsAndFreeText.freeText});
+    this.setState({tags: tagsAndFreeText.tags, freeText: tagsAndFreeText.freeText}, () => {
+      console.log("tags and free text: ", tagsAndFreeText);
+
+    });
   }
 
   locationCallback = (location) => {   
