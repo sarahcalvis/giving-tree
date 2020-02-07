@@ -103,7 +103,7 @@ class TagSearch extends React.Component {
       var data = JSON.parse(sessionStorage.getItem(key));
       var now = (new Date().getTime());
       var timeCached = data.time;
-      if((now - timeCached) < (ttl*10000)){ 
+      if((now - timeCached) < (ttl*1)){ 
         return data.value; 
       }
     }
