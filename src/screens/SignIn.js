@@ -163,7 +163,6 @@ class SignInFormBase extends Component {
         );
     }
 }
-
 const SignUpForgotLink = ({ classes }) => (
     <Grid container>
         <Grid item xs>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
+import { withAuthConsumer } from '../session';
 import firebase from '../firebase.js';
 import { AppBar, Tabs, Tab, Button, makeStyles } from '@material-ui/core';
 import AccountCircle from '@material-ui/icons/AccountCircle';
@@ -18,7 +19,6 @@ function Header(props) {
   const classes = useStyles();
   const [errorMsg, setErrorMsg] = React.useState('');
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const user = true;
 
   const handleClick = event => {
     setAnchorEl(event.currentTarget);
@@ -53,14 +53,14 @@ function Header(props) {
   return (
     <React.Fragment>
       <AppBar className={classes.appBar} title="Giving Tree">
-        {user ? <SignOutIcon /> : <SignInIcon />}
+        {props.authUser ? <SignOutIcon /> : <SignInIcon />}
       </AppBar>
       {errorMsg !== '' && <p>{errorMsg}</p>}
     </React.Fragment>
   );
 }
 
-export default withRouter(Header);
+export default withRouter(withAuthConsumer(Header));
 
 
     {/* <Tab className={this.props.classes.loginTab} aria-controls="simple-menu" aria-haspopup="true" onClick={this.handleClick} icon={<AccountCircle />} />
