@@ -7,6 +7,7 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import parse from "autosuggest-highlight/parse";
 import throttle from "lodash/throttle";
+import Geocode from "react-geocode";
 
 function loadScript(src, position, id) {
   if (!position) {
@@ -30,6 +31,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function LocationSearch(props) {
+  Geocode.setApiKey("AIzaSyDntA49IGS_w5ZRD3ijey8OVS8CNYpqXqA");
   const classes = useStyles();
   const [inputValue, setInputValue] = React.useState("");
   const [options, setOptions] = React.useState([]);
@@ -49,6 +51,25 @@ export default function LocationSearch(props) {
 
   const handleChange = (event, value) => {
     setInputValue(value);
+    Geocode.fromAddress(value.description).then(
+      response => {
+        console.log("supposed address: ", value.description);
+        const { lat, lng } = response.results[0].geometry.location;
+        console.log(lat, lng);
+        Geocode.fromLatLng(lat, lng).then(
+          response => {
+            const address = response.results[0].formatted_address;
+            console.log("regurged address: ", address);
+          },
+          error => {
+            console.error(error);
+          }
+        );
+      },
+      error => {
+        console.error(error);
+      }
+    );
     console.log(value);
     props.parentCallback(value);
   };
