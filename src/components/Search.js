@@ -53,25 +53,28 @@ class Search extends Component {
     console.log("state tags: ", this.state.tags);
     console.log("doc tags: ", doc.grant.tags);
     if((this.state.tags).every(tag => (doc.grant.tags).includes(tag))) {
-      tempTemp.push({dist: doc.dist, grant: doc.grant});
-      console.log("pushing this grant: ", doc);
-      this.setState({tempMeta: tempTemp});
+      var textMatches = true;
+      (this.state.freeText).forEach((text)=> {
+        if(!(doc.grant.desc).includes(text)) {
+          textMatches = false;
+        }
+      })
+      if(textMatches) {
+        tempTemp.push({dist: doc.dist, grant: doc.grant});
+        console.log("pushing this grant: ", doc);
+        this.setState({tempMeta: tempTemp});
+      }
     }
   }
 
   setByTags = () => { 
     var myMeta = this.state.metaGrants;
-    console.log("myMeta: ", myMeta);
     this.setState({tempMeta: []}, () => {
       (myMeta).forEach(this.addByTag);
-      console.log("tempMeta after setting: ", this.state.tempMeta);
     });
-
     this.setState({metaGrants: this.state.tempMeta}, () => {
       this.props.parentCallback(this.state.tempMeta);
     });
-    console.log("metaGrants after callBack: ", this.state.metaGrants);
-
   }
 
 
