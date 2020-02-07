@@ -50,11 +50,25 @@ function Header(props) {
     </Tabs>
   );
 
+  const customClaims = () => {
+    props.authUser.getIdTokenResult()
+    .then((idTokenResult) => {
+      console.log(idTokenResult.claims);
+      console.log(idTokenResult.claims.cf);
+    })
+    .catch((error) => {
+      console.log("ERROR: " + error.message);
+    });
+
+    return "hi";
+  }
+
   return (
     <React.Fragment>
       <AppBar className={classes.appBar} title="Giving Tree">
         {props.authUser ? <SignOutIcon /> : <SignInIcon />}
       </AppBar>
+      <Button onClick = {customClaims}>Test Custom Claims</Button>
       {errorMsg !== '' && <p>{errorMsg}</p>}
     </React.Fragment>
   );
@@ -63,7 +77,7 @@ function Header(props) {
 export default withRouter(withAuthConsumer(Header));
 
 
-    {/* <Tab className={this.props.classes.loginTab} aria-controls="simple-menu" aria-haspopup="true" onClick={this.handleClick} icon={<AccountCircle />} />
+{/* <Tab className={this.props.classes.loginTab} aria-controls="simple-menu" aria-haspopup="true" onClick={this.handleClick} icon={<AccountCircle />} />
     <Menu
       id="simple-menu"
       anchorEl={this.state.anchorEl}
