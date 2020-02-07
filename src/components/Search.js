@@ -3,6 +3,7 @@ import { withStyles } from '@material-ui/styles';
 import LocationSearch from "./LocationSearch";
 import SearchRadius from "./SearchRadius";
 import SortBy from "./SortBy";
+import TagSearch from "./TagSearch";
 
  const styles = theme => ({
   searchWrapper: {
@@ -24,6 +25,8 @@ class Search extends Component {
       tempMeta: [],
       radiusResults: [],
       metaGrants: [],
+      tags: [],
+      freeText: [],
     };
   }
 
@@ -38,9 +41,13 @@ class Search extends Component {
     this.setState({metaGrants: newMetaGrants});
   }
 
-  locationCallback = (childData) => {   
-    this.setState({centerLoc: { address: childData, lat: this.state.centerLoc.lat, long: this.state.centerLoc.long }});
-    console.log("In parent in callback. New Location: ", childData);
+  tagFreeTextCallback = (tagsAndFreeText) => {
+    this.setState({tags: tagsAndFreeText.tags, freeText: tagsAndFreeText.freeText});
+  }
+
+  locationCallback = (location) => {   
+    this.setState({centerLoc: { address: location, lat: this.state.centerLoc.lat, long: this.state.centerLoc.long }});
+    console.log("In parent in callback. New Location: ", location);
     this.setDists();
     // NEED TO RERENDER THE CARDS
     //this.props.parentCallback(this.state.metaGrants);
@@ -172,6 +179,7 @@ class Search extends Component {
   render() {
     return (
       <div className={styles.searchWrapper}>
+        <TagSearch parentCallback={this.tagFreeTextCallback}/>
         <LocationSearch parentCallback={this.locationCallback}/>
         <SearchRadius parentCallback={this.radiusCallback}/>
         <SortBy parentCallback={this.sortByCallback}/>
