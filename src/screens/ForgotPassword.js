@@ -3,6 +3,7 @@ import { Link, withRouter } from 'react-router-dom';
 
 import firebase from '../firebase.js';
 import * as helper from '../helpers/SignUpHelper.js';
+import Snack from '../components/Snack.js';
 
 import { withStyles } from '@material-ui/styles';
 import Container from '@material-ui/core/Container';
@@ -41,7 +42,7 @@ const styles = theme => ({
     }
 });
 
-function SignIn(props) {
+function ForgotPassword(props) {
     const { classes } = props;
 
     return (
@@ -51,10 +52,10 @@ function SignIn(props) {
                     <LockOutlinedIcon />
                 </Avatar>
                 <Typography component="h1" variant="h5" className={classes.header}>
-                    Sign In
+                    Reset Password
                     </Typography>
-                <SignInForm classes={classes} />
-                <SignUpForgotLink classes={classes} />
+                <ForgotPasswordForm classes={classes} />
+                <SignInSignUpLink classes={classes} />
             </div>
         </Container>
     );
@@ -62,12 +63,12 @@ function SignIn(props) {
 
 const INITIAL_STATE = {
     email: '',
-    password: '',
     emailError: '',
-    submitError: ''
+    submitError: '',
+    success: false,
 };
 
-class SignInFormBase extends Component {
+class ForgotPasswordFormBase extends Component {
     constructor(props) {
         super(props);
         this.state = { ...INITIAL_STATE };
@@ -77,26 +78,20 @@ class SignInFormBase extends Component {
         let emailError = helper.validateEmail(this.state.email);
 
         if (emailError === '') {
-            const {email, password} = this.state;
-            
-            firebase.auth().signInWithEmailAndPassword(email,password)
-            .then(() => {
-                //Do Misc Stuff for Sign In
-                // TODO: If user is CF, go to dashboard
-                
-                //Redirect User to Home
-                this.props.history.push('/');
-            })
-            .catch((error) => {
-                //Failure
-                //TODO: Cleanup Firebase Error Messages
-                this.setState({submitError: error.message});
-            });
+            const { email } = this.state;
 
+            firebase.auth().sendPasswordResetEmail(email)
+                .then(() => {
+                    // Email sent.
+                    this.setState({ ...INITIAL_STATE, success: true });
+                }).catch((error) => {
+                    // An error happened.
+                    this.setState({ submitError: error.message, success: false });
+                });
         }
         else {
             //Display field validation errors
-            this.setState({ emailError: emailError });
+            this.setState({ emailError: emailError, success: false });
         }
 
         event.preventDefault();
@@ -109,19 +104,21 @@ class SignInFormBase extends Component {
     render() {
         const {
             email,
-            password,
             emailError,
             submitError,
+            success,
         } = this.state;
 
-        const isInvalid =
-            password === '' ||
-            email === '' ;
+        const isInvalid = (email === '');
 
         const { classes } = this.props;
 
         return (
             <form className={classes.form} onSubmit={this.onSubmit}>
+
+                {success &&
+                    <Snack message='Success! A password reset email has been sent.' />
+                }
                 <Typography component="h6" className={classes.errorMsg} >
                     {submitError}
                 </Typography>
@@ -138,17 +135,6 @@ class SignInFormBase extends Component {
                     error={emailError !== ""}
                     helperText={emailError}
                 />
-                <TextField
-                    variant="outlined"
-                    margin="normal"
-                    required
-                    fullWidth
-                    name="password"
-                    value={password}
-                    onChange={this.onChange}
-                    type="password"
-                    label="Password"
-                />
                 <Button className={classes.submit}
                     type="submit"
                     fullWidth
@@ -156,33 +142,33 @@ class SignInFormBase extends Component {
                     color="primary"
                     disabled={isInvalid}
                 >
-                    Sign In
+                    Reset Password
                         </Button>
             </form>
         );
     }
 }
-const SignUpForgotLink = ({ classes }) => (
+const SignInSignUpLink = ({ classes }) => (
     <Grid container>
         <Grid item xs>
-            <Link to='/forgot' className={classes.links}>
+            <Link to='/signin' className={classes.links}>
                 <MUILink variant="body2" component={'span'}>
-                    Forgot password?
-                </MUILink>
+                    Back to Login
+            </MUILink>
             </Link>
         </Grid>
         <Grid item>
             <Link to='/signup' className={classes.links}>
                 <MUILink variant="body2" component={'span'}>
-                    Don't have an account? Sign Up
-                </MUILink>
+                    Sign Up
+            </MUILink>
             </Link>
         </Grid>
     </Grid>
 );
 
-const SignInForm = withRouter(SignInFormBase);
+const ForgotPasswordForm = withRouter(ForgotPasswordFormBase);
 
-export default withStyles(styles)(SignIn);
+export default withStyles(styles)(ForgotPassword);
 
-export { SignInForm, SignUpForgotLink };
+export { ForgotPasswordForm, SignInSignUpLink };

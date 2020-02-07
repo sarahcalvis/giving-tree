@@ -158,8 +158,7 @@ class SignUpFormBase extends Component {
             // passwordOne !== passwordTwo ||
             passwordOne === '' ||
             passwordTwo === '' ||
-            email === '' ||
-            submitError !== '';
+            email === '';
 
         const { classes } = this.props;
 
