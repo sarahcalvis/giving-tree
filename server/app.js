@@ -2,6 +2,13 @@
 
 const app = require('express')();
 const stripe = require('stripe')('sk_test_avCwuzIvg45JxkjItTyqRGH600JEoryzyP');
+const admin = require('firebase-admin');
+const serviceAccount = require("./secret/givingtree-cfs-firebase-adminsdk-grrpd-764871e22c.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://givingtree-cfs.firebaseio.com"
+});
 
 app.use(require('body-parser').text());
 
@@ -45,5 +52,65 @@ app.post('/create', async (req, res) => {
     res.status(500).end;
   }
 })
+
+
+//Get current user's ID token
+//If metaadmin, call "getUserByEmail" w/ the community foundation email, update status to accepted/rejected
+//If not metaadmin, get current user's ID token and set custom claim 'cf' to true
+app.post('/setCustomClaims', (req, res) => {
+
+  // Get the ID token passed.
+  const idToken = req.body.idToken;
+  const cfEmail = req.body.cfEmail;
+  const cfStatus = req.body.cfStatus;
+
+  // Verify the ID token and decode its payload.
+  admin.auth().verifyIdToken(idToken).then((claims) => {
+    //Check if metaadmin
+    if (typeof claims.admin !== 'undefined' && claims.admin) {
+      //Check that cfEmail and cfStatus were provided in request
+      if (typeof cfEmail !== 'undefined' && cfStatus !== 'undefined'
+        && cfEmail !== '' && cfStatus !== '') {
+          //Get the CF User and update their permissions
+          admin.auth().getUserByEmail(cfEmail).then((user) => {
+            if (cfStatus === 'accepted') {
+              admin.auth().setCustomUserClaims(user.uid, { accepted: true })
+                .then(function () {
+                  // Tell client to refresh token on user.
+                  res.end(JSON.stringify({ status: 'success' }));
+                })
+                .catch((error) => {
+                  res.end(JSON.stringify({ status: error }));
+                });
+            }
+            else if (cfStatus === 'rejected') {
+              admin.auth().setCustomUserClaims(user.uid, { rejected: true })
+                .then(function () {
+                  // Tell client to refresh token on user.
+                  res.end(JSON.stringify({ status: 'success' }));
+                })
+                .catch((error) => {
+                  res.end(JSON.stringify({ status: error }));
+                });
+            }
+          })
+            .catch((error) => {
+              res.end(JSON.stringify({ status: error }));
+            });
+      }
+    }
+    else {
+      // Not metaadmin, so we this post must be made from CF Account Request
+      admin.auth().setCustomUserClaims(claims.sub, { cf: true })
+        .then(function () {
+          // Tell client to refresh token on user.
+          res.end(JSON.stringify({ status: 'success' }));
+        })
+        .catch((error) => {
+          res.end(JSON.stringify({ status: error }));
+        });
+    }
+  });
+});
 
 app.listen(process.env.PORT);
