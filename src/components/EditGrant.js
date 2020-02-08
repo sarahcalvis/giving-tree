@@ -8,6 +8,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/styles';
 import {
   DatePicker,
@@ -15,8 +16,6 @@ import {
 } from '@material-ui/pickers';
 
 import DateFnsUtils from '@date-io/date-fns';
-
-
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -49,27 +48,19 @@ export default function EditGrant(props) {
 
   const uploadFileToFirebase = () => {
     let file = fileInput.current.files[0]
+    let name = file.name;
+    let type = file.type;
+
+    // Make firebase reference to file location
+    let ref = storageRef.child(name);
 
 
-    if (file) {
-      let name = file.name;
-      let type = file.type;
-
-      // Make firebase reference to file location
-      let ref = storageRef.child(name);
-
-      // create reader
-      var reader = new FileReader();
-      reader.readAsText(file);
-
-      reader.onload = function (e) {
-        // browser completed reading file - display it
-        ref.put(new File([e.target.result], name, { type: type, })).then(function (snapshot) {
-          console.log('Uploaded a blob or file!');
-        });
-      };
-    }
-  }
+    // browser completed reading file - display it
+    ref.put(new File([file], name, { type: type, }))
+      .then(function (snapshot) {
+        console.log(snapshot);
+      });
+  };
 
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -82,7 +73,7 @@ export default function EditGrant(props) {
             <Text type='card-heading' text='Public Grant Information' />
             <Text type='card-subheading' text='This information will be visible to the public.' />
             <input type='file' accept='image/png, image/jpeg' ref={fileInput} />
-            <button onClick={uploadFileToFirebase} >Submit</button>
+            <Button onClick={uploadFileToFirebase} >Submit</Button>
             <TextField fullWidth label='Grant Title' />
             <TextField fullWidth label='Nonprofit Name' />
             <DatePicker fullWidth label='Deadine' variant="inline" value={selectedDate} onChange={handleDateChange} />
