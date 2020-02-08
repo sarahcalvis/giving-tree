@@ -5,7 +5,6 @@ import Text from './Text.js';
 
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
 import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
@@ -30,8 +29,27 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export default function EditGrant(props) {
+  const [grantData, setGrantData] = React.useState(
+    {
+      cf_name: '',
+      cf_id: '',
+      title: '',
+      nonprofit_name: '',
+      nonprofit_id: '',
+      address: '',
+      lat: '',
+      long: '',
+      date_posted: '',
+      date_deadline: '',
+      money_raised: '',
+      goal_amt: '',
+      desc: '',
+      tags: [],
+      status: '',
+      images: [],
+    })
+
   const [selectedDate, handleDateChange] = React.useState(null);
-  const [img, setImg] = React.useState(null);
 
   const fileInput = React.createRef();
 
@@ -47,32 +65,32 @@ export default function EditGrant(props) {
   const storageRef = firebase.storage().ref();
 
   const uploadFileToFirebase = () => {
-    let file = fileInput.current.files[0]
-    let name = file.name;
-    let type = file.type;
+    for (let file of fileInput.current.files) {
+      let name = file.name;
+      let type = file.type;
 
-    // Make firebase reference to file location
-    let ref = storageRef.child(name);
+      // Make firebase reference to file location
+      let ref = storageRef.child(name);
 
 
-    // browser completed reading file - display it
-    ref.put(new File([file], name, { type: type, }))
-      .then(function (snapshot) {
-        console.log(snapshot);
-      });
+      // browser completed reading file - display it
+      ref.put(new File([file], name, { type: type, }))
+        .then(function (snapshot) {
+          let newData = grantData;
+          newData.images.push(name);
+          setGrantData(newData);
+        });
+    }
   };
 
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <Container className={classes.card}>
         <Card className={classes.topCard}>
-          {img &&
-            <CardMedia image={img} />
-          }
           <CardContent className={classes.cardContent}>
             <Text type='card-heading' text='Public Grant Information' />
             <Text type='card-subheading' text='This information will be visible to the public.' />
-            <input type='file' accept='image/png, image/jpeg' ref={fileInput} />
+            <input type='file' accept='image/png, image/jpeg' ref={fileInput} multiple />
             <Button onClick={uploadFileToFirebase} >Submit</Button>
             <TextField fullWidth label='Grant Title' />
             <TextField fullWidth label='Nonprofit Name' />
