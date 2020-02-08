@@ -99,6 +99,7 @@ export default function FEditGrant() {
         break;
     }
     setGrantData(newData);
+    console.log(grantData);
   }
 
   return (

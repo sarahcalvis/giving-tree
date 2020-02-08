@@ -53,7 +53,7 @@ export default function EditGrant(props) {
   const storageRef = firebase.storage().ref();
 
   // Upload images to Firebase storage
-  const uploadFileToFirebase = () => {
+  const uploadImages = () => {
     for (let file of fileInput.current.files) {
       let name = file.name;
       let type = file.type;
@@ -69,6 +69,11 @@ export default function EditGrant(props) {
     }
   };
 
+  // Handle general input to text fields
+  const handleInput = (e, data) => {
+    props.callback(e.target.value, e.target.id);
+  }
+
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <Container className={classes.card}>
@@ -77,11 +82,7 @@ export default function EditGrant(props) {
             <Text type='card-heading' text='Public Grant Information' />
             <Text type='card-subheading' text='This information will be visible to the public.' />
             <label for='file-upload'>
-              <Button
-                variant='contained'
-                color='primary'>
-                Upload images...
-              </Button>
+              Click to upload images...
             </label>
             <input
               className={classes.input}
@@ -89,14 +90,37 @@ export default function EditGrant(props) {
               type='file'
               accept='image/png, image/jpeg'
               ref={fileInput}
-              onChange={uploadFileToFirebase}
+              onChange={uploadImages}
               multiple />
-            <TextField fullWidth label='Grant Title' />
-            <TextField fullWidth label='Nonprofit Name' />
-            <DatePicker fullWidth label='Deadine' variant="inline" value={selectedDate} onChange={handleDateChange} />
-            <TextField fullWidth label='Goal amount' />
-            <TextField fullWidth label='Grant Description' />
-            <TextField fullWidth label='Tags' />
+            <TextField 
+              id='title'
+              fullWidth 
+              label='Grant Title'
+              onChange={handleInput} />
+            <TextField 
+              id='nonprofit_name'
+              fullWidth 
+              label='Nonprofit Name'
+              onChange={handleInput} />
+            <DatePicker 
+              fullWidth 
+              label='Deadine' 
+              variant="inline"
+              value={selectedDate}
+              onChange={handleDateChange} />
+            <TextField 
+              id='goal_amt'
+              fullWidth 
+              label='Goal amount'
+              onChange={handleInput} />
+            <TextField 
+              id='desc'
+              fullWidth 
+              label='Grant Description'
+              onChange={handleInput} />
+            <TextField 
+              fullWidth 
+              label='Tags' />
           </CardContent>
         </Card>
         <Card>
