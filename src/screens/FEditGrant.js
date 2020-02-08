@@ -16,6 +16,27 @@ const useStyles = makeStyles(theme => ({
 export default function FEditGrant() {
   const classes = useStyles();
 
+  // Grant data to upload to firebase
+  const [grantData, setGrantData] = React.useState(
+    {
+      cf_name: '',
+      cf_id: '',
+      title: '',
+      nonprofit_name: '',
+      nonprofit_id: '',
+      address: '',
+      lat: '',
+      long: '',
+      date_posted: '',
+      date_deadline: '',
+      money_raised: 0,
+      goal_amt: '',
+      desc: '',
+      tags: [],
+      status: '',
+      images: [],
+    })
+
   // Find out whether we are editing an existing grant or creating a new one
   const [grantStatus] = React.useState(window.location.pathname === '/foundation/create-grant' ? 'create' : 'edit');
 
@@ -27,16 +48,64 @@ export default function FEditGrant() {
     }
   }, [grantStatus]);
 
-  const grantCallback = (childData) => {   
-    
-    //props.parentCallback(grant);
+  const callback = (data, type) => {
+    let newData = grantData;
+
+    switch (type) {
+      case 'cf_name':
+        newData.cf_name = data;
+        break;
+      case 'cf_id':
+        newData.cf_name = data;
+        break;
+      case 'title':
+        newData.cf_name = data;
+        break;
+      case 'nonprofit_name':
+        newData.nonprofit_name = data;
+        break;
+      case 'nonprofit_id':
+        newData.nonprofit_id = data;
+        break;
+      case 'address':
+        newData.address = data;
+        break;
+      case 'lat':
+        newData.lat = data;
+        break;
+      case 'long':
+        newData.long = data;
+        break;
+      case 'date_deadline':
+        newData.date_deadline = data;
+        break;
+      case 'money_raised':
+        newData.money_raised = data;
+        break;
+      case 'goal_amt':
+        newData.goal_amt = data;
+        break;
+      case 'desc':
+        newData.desc = data;
+        break;
+      case 'tags':
+        newData.tags.push(data);
+        break;
+      case 'status':
+        newData.status = data;
+        break;
+      case 'images':
+        newData.images.push(data);
+        break;
+    }
+    setGrantData(newData);
   }
 
   return (
     <div className={classes.card}>
       <Grid container direction='row' justify='center' alignItems='flex-end'>
         <Grid item>
-          <EditGrant parentCallback={grantCallback} />
+          <EditGrant grantData={grantData} callback={callback} />
         </Grid>
         <Grid item>
           {grantStatus === 'edit' &&
@@ -66,7 +135,7 @@ export default function FEditGrant() {
               spacing={2}
               direction="column"
               justify="flex-end"
-              alignItems="flex-start">                
+              alignItems="flex-start">
               <Grid item>
                 <Button
                   color='primary'

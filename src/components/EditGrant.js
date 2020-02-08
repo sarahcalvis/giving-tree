@@ -35,34 +35,11 @@ export default function EditGrant(props) {
   // Set tab title
   useEffect(() => { document.title = 'Create Grant-Giving Tree'; }, []);
 
-  // Grant data to upload to firebase
-  const [grantData, setGrantData] = React.useState(
-    {
-      cf_name: '',
-      cf_id: '',
-      title: '',
-      nonprofit_name: '',
-      nonprofit_id: '',
-      address: '',
-      lat: '',
-      long: '',
-      date_posted: '',
-      date_deadline: '',
-      money_raised: 0,
-      goal_amt: '',
-      desc: '',
-      tags: [],
-      status: '',
-      images: [],
-    })
-
   // Handle the date picker
   const [selectedDate, handleDateChange] = React.useState(null);
   useEffect(() => {
     if (selectedDate) {
-      let newData = grantData;
-      newData.date_posted = Math.round(selectedDate.getTime() / 1000);
-      setGrantData(newData)
+      props.callback(Math.round(selectedDate.getTime() / 1000), 'date_deadline')
     }
   }, [selectedDate]);
 
@@ -81,12 +58,10 @@ export default function EditGrant(props) {
       // Make firebase reference to file location
       let ref = storageRef.child(name);
 
-      // Add file to storage and save its name in the grant object
+      // Add file to storage and pass the image name up to the parent
       ref.put(new File([file], name, { type: type, }))
         .then(function (snapshot) {
-          let newData = grantData;
-          newData.images.push(name);
-          setGrantData(newData);
+          props.callback(name, 'images');
         });
     }
   };
@@ -98,8 +73,7 @@ export default function EditGrant(props) {
           <CardContent className={classes.cardContent}>
             <Text type='card-heading' text='Public Grant Information' />
             <Text type='card-subheading' text='This information will be visible to the public.' />
-            <input type='file' accept='image/png, image/jpeg' ref={fileInput} multiple />
-            <Button onClick={uploadFileToFirebase} >Submit</Button>
+            <input type='file' accept='image/png, image/jpeg' ref={fileInput} onChange={uploadFileToFirebase} multiple />
             <TextField fullWidth label='Grant Title' />
             <TextField fullWidth label='Nonprofit Name' />
             <DatePicker fullWidth label='Deadine' variant="inline" value={selectedDate} onChange={handleDateChange} />
