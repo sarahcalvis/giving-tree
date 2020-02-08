@@ -37,7 +37,7 @@ class Tag extends React.Component {
           state: { incomingTag: this.props.tag }
         }}
       >
-        <Button variant="outlined" color="primary">
+        <Button color='primary' variant='contained'>
             {this.props.tag}
         </Button>
       </Link>

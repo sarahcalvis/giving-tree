@@ -243,7 +243,7 @@ function Grant(props) {
                           </Button>
                         </Grid>
                         <Grid item>
-                          <Link to={'/foundation/' + id + '/edit'}>
+                          <Link to={'/foundation/edit/' + id}>
                             <Button
                               color='primary'
                               variant='contained'>
@@ -276,7 +276,7 @@ function Grant(props) {
                           </Button>
                         </Grid>
                         <Grid item>
-                          <Link to={'/foundation/' + id + '/edit'}>
+                        <Link to={'/foundation/edit/' + id}>
                             <Button
                               color='primary'
                               variant='contained'>

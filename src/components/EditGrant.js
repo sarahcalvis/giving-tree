@@ -1,19 +1,20 @@
 import React, { useEffect } from 'react';
+
+import firebase from '../firebase.js';
+import Text from './Text.js';
+
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
-import { Link } from 'react-router-dom';
-import Text from './Text.js';
-import Validation from './Validation.js';
+import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/styles';
-import DateFnsUtils from '@date-io/date-fns'; // choose your lib
-import firebase from '../firebase.js';
-
 import {
   DatePicker,
   MuiPickersUtilsProvider,
 } from '@material-ui/pickers';
+
+import DateFnsUtils from '@date-io/date-fns';
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -28,28 +29,67 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export default function EditGrant(props) {
-  const [selectedDate, handleDateChange] = React.useState(null);
-
-  const fileInput = React.createRef();
-
-  // here's how you get the date's timestamp in seconds, which is what we upload to Firebase
-  useEffect(() => { if (selectedDate) { console.log(Math.round(selectedDate.getTime() / 1000)) } }, [selectedDate]);
-
+  // Styles
   const classes = useStyles();
 
   // Set tab title
   useEffect(() => { document.title = 'Create Grant-Giving Tree'; }, []);
 
-  // Initialize storage
-  const storage = firebase.storage();
-  const storageRef = storage.ref();
+  // Grant data to upload to firebase
+  const [grantData, setGrantData] = React.useState(
+    {
+      cf_name: '',
+      cf_id: '',
+      title: '',
+      nonprofit_name: '',
+      nonprofit_id: '',
+      address: '',
+      lat: '',
+      long: '',
+      date_posted: '',
+      date_deadline: '',
+      money_raised: 0,
+      goal_amt: '',
+      desc: '',
+      tags: [],
+      status: '',
+      images: [],
+    })
 
+  // Handle the date picker
+  const [selectedDate, handleDateChange] = React.useState(null);
+  useEffect(() => {
+    if (selectedDate) {
+      let newData = grantData;
+      newData.date_posted = Math.round(selectedDate.getTime() / 1000);
+      setGrantData(newData)
+    }
+  }, [selectedDate]);
+
+  // Moniter the image input
+  const fileInput = React.createRef();
+
+  // Initialize Firebase storage
+  const storageRef = firebase.storage().ref();
+
+  // Upload images to Firebase storage
   const uploadFileToFirebase = () => {
-    console.log(fileInput)
-    storageRef.put(new File(fileInput.current.value, 'fileName.png')).then(function (snapshot) {
-      console.log('Uploaded a blob or file!');
-    });
-  }
+    for (let file of fileInput.current.files) {
+      let name = file.name;
+      let type = file.type;
+
+      // Make firebase reference to file location
+      let ref = storageRef.child(name);
+
+      // Add file to storage and save its name in the grant object
+      ref.put(new File([file], name, { type: type, }))
+        .then(function (snapshot) {
+          let newData = grantData;
+          newData.images.push(name);
+          setGrantData(newData);
+        });
+    }
+  };
 
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -58,8 +98,8 @@ export default function EditGrant(props) {
           <CardContent className={classes.cardContent}>
             <Text type='card-heading' text='Public Grant Information' />
             <Text type='card-subheading' text='This information will be visible to the public.' />
-            <input type='file' accept='image/png, image/jpeg' ref={fileInput} />
-            <button onClick={uploadFileToFirebase} >Submit</button>
+            <input type='file' accept='image/png, image/jpeg' ref={fileInput} multiple />
+            <Button onClick={uploadFileToFirebase} >Submit</Button>
             <TextField fullWidth label='Grant Title' />
             <TextField fullWidth label='Nonprofit Name' />
             <DatePicker fullWidth label='Deadine' variant="inline" value={selectedDate} onChange={handleDateChange} />
@@ -72,7 +112,7 @@ export default function EditGrant(props) {
           <CardContent>
             <Text type='card-heading' text='Private Grant Information' />
             <Text type='card-subheading' text={'We will not directly share this address with the public. We will use it to calculate a donor\'s distance from a grant.'} />
-            <Validation fullWidth label='Address' type='address' />
+            <TextField fullWidth label='Address' />
           </CardContent>
         </Card>
       </Container>
