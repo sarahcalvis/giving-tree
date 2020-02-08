@@ -1,19 +1,22 @@
 import React, { useEffect } from 'react';
+
+import firebase from '../firebase.js';
+import Text from './Text.js';
+
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
 import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
-import { Link } from 'react-router-dom';
-import Text from './Text.js';
-import Validation from './Validation.js';
 import { makeStyles } from '@material-ui/styles';
-import DateFnsUtils from '@date-io/date-fns'; // choose your lib
-import firebase from '../firebase.js';
-
 import {
   DatePicker,
   MuiPickersUtilsProvider,
 } from '@material-ui/pickers';
+
+import DateFnsUtils from '@date-io/date-fns';
+
+
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -29,6 +32,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function EditGrant(props) {
   const [selectedDate, handleDateChange] = React.useState(null);
+  const [img, setImg] = React.useState(null);
 
   const fileInput = React.createRef();
 
@@ -41,20 +45,39 @@ export default function EditGrant(props) {
   useEffect(() => { document.title = 'Create Grant-Giving Tree'; }, []);
 
   // Initialize storage
-  const storage = firebase.storage();
-  const storageRef = storage.ref();
+  const storageRef = firebase.storage().ref();
 
   const uploadFileToFirebase = () => {
-    console.log(fileInput)
-    storageRef.put(new File(fileInput.current.value, 'fileName.png')).then(function (snapshot) {
-      console.log('Uploaded a blob or file!');
-    });
+    let file = fileInput.current.files[0]
+
+
+    if (file) {
+      let name = file.name;
+      let type = file.type;
+
+      // Make firebase reference to file location
+      let ref = storageRef.child(name);
+
+      // create reader
+      var reader = new FileReader();
+      reader.readAsText(file);
+
+      reader.onload = function (e) {
+        // browser completed reading file - display it
+        ref.put(new File([e.target.result], name, { type: type, })).then(function (snapshot) {
+          console.log('Uploaded a blob or file!');
+        });
+      };
+    }
   }
 
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <Container className={classes.card}>
         <Card className={classes.topCard}>
+          {img &&
+            <CardMedia image={img} />
+          }
           <CardContent className={classes.cardContent}>
             <Text type='card-heading' text='Public Grant Information' />
             <Text type='card-subheading' text='This information will be visible to the public.' />
@@ -72,7 +95,7 @@ export default function EditGrant(props) {
           <CardContent>
             <Text type='card-heading' text='Private Grant Information' />
             <Text type='card-subheading' text={'We will not directly share this address with the public. We will use it to calculate a donor\'s distance from a grant.'} />
-            <Validation fullWidth label='Address' type='address' />
+            <TextField fullWidth label='Address' />
           </CardContent>
         </Card>
       </Container>
