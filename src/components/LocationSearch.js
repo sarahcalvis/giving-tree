@@ -54,8 +54,11 @@ export default function LocationSearch(props) {
     Geocode.fromAddress(value.description).then(
       response => {
         console.log("supposed address: ", value.description);
+        console.log("the response for lat, long: ", response.results[0].geometry.location);
         const { lat, lng } = response.results[0].geometry.location;
         console.log(lat, lng);
+        console.log(value);
+        props.parentCallback({address: value, lat: lat, long: lng});
         Geocode.fromLatLng(lat, lng).then(
           response => {
             const address = response.results[0].formatted_address;
@@ -70,8 +73,7 @@ export default function LocationSearch(props) {
         console.error(error);
       }
     );
-    console.log(value);
-    props.parentCallback(value);
+    
   };
 
   const fetch = React.useMemo(
