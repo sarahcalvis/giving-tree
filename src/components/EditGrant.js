@@ -26,6 +26,9 @@ const useStyles = makeStyles(theme => ({
   cardContent: {
     flexGrow: 1,
   },
+  input: {
+    display: 'none',
+  }
 }))
 
 export default function EditGrant(props) {
@@ -73,7 +76,21 @@ export default function EditGrant(props) {
           <CardContent className={classes.cardContent}>
             <Text type='card-heading' text='Public Grant Information' />
             <Text type='card-subheading' text='This information will be visible to the public.' />
-            <input type='file' accept='image/png, image/jpeg' ref={fileInput} onChange={uploadFileToFirebase} multiple />
+            <label for='file-upload'>
+              <Button
+                variant='contained'
+                color='primary'>
+                Upload images...
+              </Button>
+            </label>
+            <input
+              className={classes.input}
+              id='file-upload'
+              type='file'
+              accept='image/png, image/jpeg'
+              ref={fileInput}
+              onChange={uploadFileToFirebase}
+              multiple />
             <TextField fullWidth label='Grant Title' />
             <TextField fullWidth label='Nonprofit Name' />
             <DatePicker fullWidth label='Deadine' variant="inline" value={selectedDate} onChange={handleDateChange} />
