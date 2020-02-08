@@ -29,6 +29,13 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export default function EditGrant(props) {
+  // Styles
+  const classes = useStyles();
+
+  // Set tab title
+  useEffect(() => { document.title = 'Create Grant-Giving Tree'; }, []);
+
+  // Grant data to upload to firebase
   const [grantData, setGrantData] = React.useState(
     {
       cf_name: '',
@@ -41,7 +48,7 @@ export default function EditGrant(props) {
       long: '',
       date_posted: '',
       date_deadline: '',
-      money_raised: '',
+      money_raised: 0,
       goal_amt: '',
       desc: '',
       tags: [],
@@ -49,21 +56,23 @@ export default function EditGrant(props) {
       images: [],
     })
 
+  // Handle the date picker
   const [selectedDate, handleDateChange] = React.useState(null);
+  useEffect(() => {
+    if (selectedDate) {
+      let newData = grantData;
+      newData.date_posted = Math.round(selectedDate.getTime() / 1000);
+      setGrantData(newData)
+    }
+  }, [selectedDate]);
 
+  // Moniter the image input
   const fileInput = React.createRef();
 
-  // here's how you get the date's timestamp in seconds, which is what we upload to Firebase
-  useEffect(() => { if (selectedDate) { console.log(Math.round(selectedDate.getTime() / 1000)) } }, [selectedDate]);
-
-  const classes = useStyles();
-
-  // Set tab title
-  useEffect(() => { document.title = 'Create Grant-Giving Tree'; }, []);
-
-  // Initialize storage
+  // Initialize Firebase storage
   const storageRef = firebase.storage().ref();
 
+  // Upload images to Firebase storage
   const uploadFileToFirebase = () => {
     for (let file of fileInput.current.files) {
       let name = file.name;
@@ -72,8 +81,7 @@ export default function EditGrant(props) {
       // Make firebase reference to file location
       let ref = storageRef.child(name);
 
-
-      // browser completed reading file - display it
+      // Add file to storage and save its name in the grant object
       ref.put(new File([file], name, { type: type, }))
         .then(function (snapshot) {
           let newData = grantData;

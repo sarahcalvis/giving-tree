@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react';
+
 import EditGrant from '../components/EditGrant.js';
+
 import { makeStyles } from '@material-ui/styles';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
@@ -25,11 +27,16 @@ export default function FEditGrant() {
     }
   }, [grantStatus]);
 
+  const grantCallback = (childData) => {   
+    
+    //props.parentCallback(grant);
+  }
+
   return (
     <div className={classes.card}>
       <Grid container direction='row' justify='center' alignItems='flex-end'>
         <Grid item>
-          <EditGrant />
+          <EditGrant parentCallback={grantCallback} />
         </Grid>
         <Grid item>
           {grantStatus === 'edit' &&
