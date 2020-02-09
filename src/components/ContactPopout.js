@@ -11,7 +11,7 @@ const useStyles = makeStyles(theme => ({
     cursor: 'pointer',
   },
   popover: {
-    width: '800px',
+    maxWidth: 500,
   },
   typographyTop: {
     padding: theme.spacing(2),
