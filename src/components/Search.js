@@ -145,24 +145,23 @@ class Search extends Component {
     let newDist = this.calcDistance(this.state.centerLoc.lat, this.state.centerLoc.long, doc.grant.lat, doc.grant.long);
     var tempTemp = this.state.tempMeta;
     tempTemp.push({dist: newDist, grant: doc.grant});
+    tempTemp.sort((a, b) => (a.dist > b.dist ? 1 : -1));
     this.setState({tempMeta: tempTemp});
-    console.log("temp meta in addDist: ", this.state.tempMeta);
+    console.log("temp temp in addDist: ", tempTemp);
   }
 
-  setDists = () => { 
-    console.log("metaGrants: ", this.state.metaGrants);
+  setDists = () => {
+    var localGrants = this.state.metaGrants; 
     this.setState({tempMeta: []}, () => {
-      console.log("got into the set state for the loop");
-      console.log("metaGrants before the loop: ", this.state.metaGrants);  
-      this.state.metaGrants.forEach(this.addDist); 
+      localGrants.forEach(this.addDist); 
     });
-    var sortedByDist = this.state.tempMeta;
-    sortedByDist.sort((a, b) => (a.dist > b.dist ? 1 : -1));
-    console.log("sorted array: ", sortedByDist);
-    this.setState({metaGrants: sortedByDist}, () => {
-      this.props.parentCallback(sortedByDist);
+    //var sortedByDist = this.state.tempMeta;
+    //sortedByDist.sort((a, b) => (a.dist > b.dist ? 1 : -1));
+    //console.log("sorted array: ", sortedByDist);
+    this.setState({metaGrants: this.state.tempMeta}, () => {
+      this.props.parentCallback(this.state.tempMeta);
     });
-    console.log("sorted array afterwards: ", sortedByDist);
+    console.log("sorted array afterwards: ", this.state.tempMeta);
   }
 
   sortByCallback = (sortBy) => {
