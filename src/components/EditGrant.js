@@ -26,6 +26,9 @@ const useStyles = makeStyles(theme => ({
   cardContent: {
     flexGrow: 1,
   },
+  input: {
+    display: 'none',
+  }
 }))
 
 export default function EditGrant(props) {
@@ -35,34 +38,11 @@ export default function EditGrant(props) {
   // Set tab title
   useEffect(() => { document.title = 'Create Grant-Giving Tree'; }, []);
 
-  // Grant data to upload to firebase
-  const [grantData, setGrantData] = React.useState(
-    {
-      cf_name: '',
-      cf_id: '',
-      title: '',
-      nonprofit_name: '',
-      nonprofit_id: '',
-      address: '',
-      lat: '',
-      long: '',
-      date_posted: '',
-      date_deadline: '',
-      money_raised: 0,
-      goal_amt: '',
-      desc: '',
-      tags: [],
-      status: '',
-      images: [],
-    })
-
   // Handle the date picker
   const [selectedDate, handleDateChange] = React.useState(null);
   useEffect(() => {
     if (selectedDate) {
-      let newData = grantData;
-      newData.date_posted = Math.round(selectedDate.getTime() / 1000);
-      setGrantData(newData)
+      props.callback(Math.round(selectedDate.getTime() / 1000), 'date_deadline')
     }
   }, [selectedDate]);
 
@@ -73,7 +53,7 @@ export default function EditGrant(props) {
   const storageRef = firebase.storage().ref();
 
   // Upload images to Firebase storage
-  const uploadFileToFirebase = () => {
+  const uploadImages = () => {
     for (let file of fileInput.current.files) {
       let name = file.name;
       let type = file.type;
@@ -81,15 +61,18 @@ export default function EditGrant(props) {
       // Make firebase reference to file location
       let ref = storageRef.child(name);
 
-      // Add file to storage and save its name in the grant object
+      // Add file to storage and pass the image name up to the parent
       ref.put(new File([file], name, { type: type, }))
         .then(function (snapshot) {
-          let newData = grantData;
-          newData.images.push(name);
-          setGrantData(newData);
+          props.callback(name, 'images');
         });
     }
   };
+
+  // Handle general input to text fields
+  const handleInput = (e, data) => {
+    props.callback(e.target.value, e.target.id);
+  }
 
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -98,14 +81,46 @@ export default function EditGrant(props) {
           <CardContent className={classes.cardContent}>
             <Text type='card-heading' text='Public Grant Information' />
             <Text type='card-subheading' text='This information will be visible to the public.' />
-            <input type='file' accept='image/png, image/jpeg' ref={fileInput} multiple />
-            <Button onClick={uploadFileToFirebase} >Submit</Button>
-            <TextField fullWidth label='Grant Title' />
-            <TextField fullWidth label='Nonprofit Name' />
-            <DatePicker fullWidth label='Deadine' variant="inline" value={selectedDate} onChange={handleDateChange} />
-            <TextField fullWidth label='Goal amount' />
-            <TextField fullWidth label='Grant Description' />
-            <TextField fullWidth label='Tags' />
+            <label for='file-upload'>
+              Click to upload images...
+            </label>
+            <input
+              className={classes.input}
+              id='file-upload'
+              type='file'
+              accept='image/png, image/jpeg'
+              ref={fileInput}
+              onChange={uploadImages}
+              multiple />
+            <TextField 
+              id='title'
+              fullWidth 
+              label='Grant Title'
+              onChange={handleInput} />
+            <TextField 
+              id='nonprofit_name'
+              fullWidth 
+              label='Nonprofit Name'
+              onChange={handleInput} />
+            <DatePicker 
+              fullWidth 
+              label='Deadine' 
+              variant="inline"
+              value={selectedDate}
+              onChange={handleDateChange} />
+            <TextField 
+              id='goal_amt'
+              fullWidth 
+              label='Goal amount'
+              onChange={handleInput} />
+            <TextField 
+              id='desc'
+              fullWidth 
+              label='Grant Description'
+              onChange={handleInput} />
+            <TextField 
+              fullWidth 
+              label='Tags' />
           </CardContent>
         </Card>
         <Card>
