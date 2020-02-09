@@ -44,7 +44,9 @@ class Search extends Component {
   tagFreeTextCallback = (tagsAndFreeText) => {
     this.setState({tags: tagsAndFreeText.tags, freeText: tagsAndFreeText.freeText}, () => {
       console.log("tags and free text: ", tagsAndFreeText);
-      this.setByTags();
+      if(!(this.state.tags === [] && this.state.freeText === [])) {
+        this.setByTags();
+      }
     });
   }
 
@@ -144,17 +146,23 @@ class Search extends Component {
     var tempTemp = this.state.tempMeta;
     tempTemp.push({dist: newDist, grant: doc.grant});
     this.setState({tempMeta: tempTemp});
+    console.log("temp meta in addDist: ", this.state.tempMeta);
   }
 
   setDists = () => { 
+    console.log("metaGrants: ", this.state.metaGrants);
     this.setState({tempMeta: []}, () => {
+      console.log("got into the set state for the loop");
+      console.log("metaGrants before the loop: ", this.state.metaGrants);  
       this.state.metaGrants.forEach(this.addDist); 
     });
     var sortedByDist = this.state.tempMeta;
     sortedByDist.sort((a, b) => (a.dist > b.dist ? 1 : -1));
+    console.log("sorted array: ", sortedByDist);
     this.setState({metaGrants: sortedByDist}, () => {
-      this.props.parentCallback(this.state.metaGrants);
+      this.props.parentCallback(sortedByDist);
     });
+    console.log("sorted array afterwards: ", sortedByDist);
   }
 
   sortByCallback = (sortBy) => {
