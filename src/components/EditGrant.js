@@ -77,7 +77,7 @@ export default function EditGrant(props) {
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <Container className={classes.card}>
-        <Card className={classes.topCard}>
+        <Card elevation={3} className={classes.topCard}>
           <CardContent className={classes.cardContent}>
             <Text type='card-heading' text='Public Grant Information' />
             <Text type='card-subheading' text='This information will be visible to the public.' />

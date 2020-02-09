@@ -42,7 +42,7 @@ export default function LargeGrantCard(props) {
   }, []);
 
   return (
-    <Container className={classes.card}>
+    <Container elevation={3} className={classes.card}>
       {props.user === 'foundation' &&
         <Card className={classes.topCard}>
           <CardContent>
@@ -51,24 +51,32 @@ export default function LargeGrantCard(props) {
           </CardContent>
         </Card>
       }
-      <Card>
+      <Card elevation={3}>
         <ImageCarousel key={imgKey} img={props.img} />
         <CardContent className={classes.cardContent}>
-          <Text type='card-aboveheading' text={props.nonprofitData.name} />
-          <Text type='card-heading' text={props.title} />
-          <Text type='card-subheading' text={props.cfData.name} />
-          <Grid container direction='row' justify='space-between' alignItems='flex-end' spacing={0}>
-            <Grid item>
-              <Text type='date' text={'Posted ' + props.datePosted} />
+          <div className={classes.topCard}>
+            <Text type='card-aboveheading' text={props.nonprofitData.name} />
+            <Text type='card-heading' text={props.title} />
+            <Text type='card-subheading' text={props.cfData.name} />
+          </div>
+          <div className={classes.topCard}>
+            <Grid container direction='row' justify='space-between' alignItems='flex-end' spacing={0}>
+              <Grid item>
+                <Text type='date' text={'Posted: ' + props.datePosted} />
+              </Grid>
+              <Grid item  >
+                <Text type='date' text={'Deadline: ' + props.dateDeadline} />
+              </Grid>
             </Grid>
-            <Grid item  >
-              <Text type='date' text={'Deadline ' + props.dateDeadline} />
-            </Grid>
-          </Grid>
-          <ProgressBar goal={props.goalAmt} raised={props.moneyRaised} />
-          <Text type='card-subheading' text={props.desc} />
-          <GrantTagBar tags={props.tags} />
-          {props.user == 'donor' &&
+            <ProgressBar goal={props.goalAmt} raised={props.moneyRaised} />
+          </div>
+          <div className={classes.topCard}>
+            <Text type='card-subheading' text={props.desc} />
+          </div>
+          <div className={classes.topCard}>
+            <GrantTagBar tags={props.tags} />
+          </div>
+          {props.user === 'donor' &&
             <Grid container direction='row' justify='space-between' alignItems='flex-end'>
               <Grid item>
                 <ContactPopout
@@ -77,7 +85,7 @@ export default function LargeGrantCard(props) {
               </Grid>
               <Grid item  >
                 <Link to={'/grants/' + props.id + '/give'}>
-                  <Button color='primary' variant='contained'>
+                  <Button variant='contained' color='primary'>
                     Donate
                   </Button>
                 </Link>

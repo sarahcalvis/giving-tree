@@ -36,7 +36,7 @@ export default function SmallGrantCard(props) {
 
   return (
     <Grid item xs={12} sm={6} md={4}>
-      <Card className={classes.card}>
+      <Card elevation={3} className={classes.card}>
         <CardActionArea
           component={Link}
           to={'/grants/' + props.id}>

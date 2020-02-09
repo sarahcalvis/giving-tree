@@ -7,7 +7,7 @@ import { makeStyles } from '@material-ui/styles';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    marginTop: theme.spacing(2),
+    marginTop: theme.spacing(0),
   }
 }))
 
@@ -56,6 +56,5 @@ export default function ProgressBar(props) {
         </Grid>
       </Grid>
     </div>
-
   );
 }
