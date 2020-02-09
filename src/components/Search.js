@@ -58,6 +58,7 @@ class Search extends Component {
       tempTemp.push({dist: doc.dist, grant: doc.grant});
       console.log("pushing this grant: ", doc);
       this.setState({tempMeta: tempTemp});
+      this.props.parentCallback(tempTemp);
     }
   }
 
@@ -69,9 +70,7 @@ class Search extends Component {
     this.setState({tempMeta: []}, () => {
       (myMeta).forEach(this.addByTag);
       console.log("tempMeta after setting: ", this.state.tempMeta);
-    });
-    this.props.parentCallback(this.state.tempMeta);
-    
+    });   
   }
 
 /*
@@ -147,7 +146,6 @@ class Search extends Component {
     tempTemp.push({dist: newDist, grant: doc.grant});
     tempTemp.sort((a, b) => (a.dist > b.dist ? 1 : -1));
     this.setState({tempMeta: tempTemp});
-    console.log("temp temp in addDist: ", tempTemp);
   }
 
   setDists = () => {
@@ -155,13 +153,9 @@ class Search extends Component {
     this.setState({tempMeta: []}, () => {
       localGrants.forEach(this.addDist); 
     });
-    //var sortedByDist = this.state.tempMeta;
-    //sortedByDist.sort((a, b) => (a.dist > b.dist ? 1 : -1));
-    //console.log("sorted array: ", sortedByDist);
     this.setState({metaGrants: this.state.tempMeta}, () => {
       this.props.parentCallback(this.state.tempMeta);
     });
-    console.log("sorted array afterwards: ", this.state.tempMeta);
   }
 
   sortByCallback = (sortBy) => {
