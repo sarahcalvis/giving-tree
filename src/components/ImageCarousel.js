@@ -11,6 +11,8 @@ const useStyles = makeStyles({
   root: {
     maxWidth: 500,
     flexGrow: 1,
+    height: 35,
+    // background: '#AAAAAA'
   },
   cardMedia: {
     height: 250,

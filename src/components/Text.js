@@ -1,9 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import { useEffect } from 'react';
+import { makeStyles } from '@material-ui/styles';
+
+const useStyles = makeStyles(theme => ({
+  noPad: {
+    marginBottom: '0em',
+  }
+}))
 
 export default function Text(props) {
+  const classes = useStyles();
+
   const [text, setText] = React.useState(props.text);
   const [type, setType] = React.useState(props.type);
 
@@ -44,6 +53,7 @@ export default function Text(props) {
       }
       {type === "date" &&
         <Typography
+          className={classes.noPad}
           variant="caption">
           {text}
         </Typography>
