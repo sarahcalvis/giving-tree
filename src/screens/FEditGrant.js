@@ -52,12 +52,6 @@ export default function FEditGrant() {
     let newData = grantData;
 
     switch (type) {
-      case 'cf_name':
-        newData.cf_name = data;
-        break;
-      case 'cf_id':
-        newData.cf_name = data;
-        break;
       case 'title':
         newData.cf_name = data;
         break;
@@ -79,9 +73,6 @@ export default function FEditGrant() {
       case 'date_deadline':
         newData.date_deadline = data;
         break;
-      case 'money_raised':
-        newData.money_raised = data;
-        break;
       case 'goal_amt':
         newData.goal_amt = data;
         break;
@@ -90,9 +81,6 @@ export default function FEditGrant() {
         break;
       case 'tags':
         newData.tags.push(data);
-        break;
-      case 'status':
-        newData.status = data;
         break;
       case 'images':
         newData.images.push(data);
