@@ -95,7 +95,8 @@ class Search extends Component {
   }
 */
 
-  radiusCallback = (radius) => {      
+  radiusCallback = (radius) => {  
+    console.log("central location: ", this.state.centerLoc);    
     if(radius === -1) {
       this.setState({ radiusResults: this.state.metaGrants}, () => {
         this.props.parentCallback(this.state.radiusResults);
@@ -104,10 +105,14 @@ class Search extends Component {
     else {
       var newRadRes = [];
       this.state.metaGrants.forEach((meta) => {
+        console.log("distance from center: ", meta.dist);
+        console.log("radius: ", radius);
+        console.log("meta.dist < radius", meta.dist < radius);
         if(meta.dist < radius) {
           newRadRes.push(meta);
-          this.props.parentCallback(newRadRes);
+          console.log("radius grant results: ", newRadRes);
         }
+        this.props.parentCallback(newRadRes);
       }); 
       this.setState({ radiusResults: newRadRes});
     }
@@ -133,8 +138,9 @@ class Search extends Component {
     var localGrants = this.state.metaGrants; 
     this.setState({tempMeta: []}, () => {
       localGrants.forEach(this.addDist); 
+      this.setState({metaGrants: this.state.tempMeta});
     });
-    this.setState({metaGrants: this.state.tempMeta});
+    //this.setState({metaGrants: this.state.tempMeta});
   }
 
   sortByCallback = (sortBy) => {
