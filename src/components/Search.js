@@ -106,11 +106,10 @@ class Search extends Component {
       this.state.metaGrants.forEach((meta) => {
         if(meta.dist < radius) {
           newRadRes.push(meta);
+          this.props.parentCallback(newRadRes);
         }
       }); 
-      this.setState({ radiusResults: newRadRes}, () => {
-        this.props.parentCallback(this.state.radiusResults);
-      });
+      this.setState({ radiusResults: newRadRes});
     }
   }
 
@@ -139,50 +138,19 @@ class Search extends Component {
   }
 
   sortByCallback = (sortBy) => {
-    if(sortBy === "deadline") {this.sortByDeadline();}
-    else if(sortBy === "posting") {this.sortByPosting();}
-    else if(sortBy === "goalD") {this.sortByGoalDecreasing();}
-    else if(sortBy === "goalI") {this.sortByGoalIncreasing();}
-    else if(sortBy === "size") {this.sortBySize();}
-    else {console.log("nothing selected?");}
-  }
-
-  sortByDeadline = () => {
-    var sortedByDeadline = this.state.metaGrants;
-    sortedByDeadline.sort((a, b) => (a.grant.dateDeadline > b.grant.dateDeadline ? 1 : -1));
-    this.setState({metaGrants: sortedByDeadline}, () => {
-      this.props.parentCallback(this.state.metaGrants);
-    });
-  }
-  
-  sortByPosting = () => {
-    var sortedByPosted = this.state.metaGrants;
-    sortedByPosted.sort((a, b) => (a.grant.datePosted > b.grant.datePosted ? 1 : -1));
-    this.setState({metaGrants: sortedByPosted}, () => {
-      this.props.parentCallback(this.state.metaGrants);
-    });
-  }
-  
-  sortByGoalDecreasing = () => {
-    var sortedByGDec = this.state.metaGrants;
-    sortedByGDec.sort((a, b) => ((a.grant.moneyRaised / a.grant.goalAmt) < (b.grant.moneyRaised / b.grant.goalAmt) ? 1 : -1));
-    this.setState({metaGrants: sortedByGDec}, () => {
-      this.props.parentCallback(this.state.metaGrants);
-    });
-  }
-  
-  sortByGoalIncreasing = () => {
-    var sortedByGDec = this.state.metaGrants;
-    sortedByGDec.sort((a, b) => ((a.grant.moneyRaised / a.grant.goalAmt) > (b.grant.moneyRaised / b.grant.goalAmt) ? 1 : -1));
-    this.setState({metaGrants: sortedByGDec}, () => {
-      this.props.parentCallback(this.state.metaGrants);
-    });
-  }
-
-  sortBySize = () => {
-    var sortedBySize = this.state.metaGrants;
-    sortedBySize.sort((a, b) => (a.grant.goalAmt > b.grant.goalAmt ? 1 : -1));
-    this.setState({metaGrants: sortedBySize}, () => {
+    var sortedBy = this.state.metaGrants;
+    if(sortBy === "deadline") { 
+      sortedBy.sort((a, b) => (a.grant.dateDeadline > b.grant.dateDeadline ? 1 : -1));
+    } else if(sortBy === "posting") {
+      sortedBy.sort((a, b) => (a.grant.datePosted > b.grant.datePosted ? 1 : -1));
+    } else if(sortBy === "goalD") {
+      sortedBy.sort((a, b) => ((a.grant.moneyRaised / a.grant.goalAmt) < (b.grant.moneyRaised / b.grant.goalAmt) ? 1 : -1));
+    } else if(sortBy === "goalI") {
+      sortedBy.sort((a, b) => ((a.grant.moneyRaised / a.grant.goalAmt) > (b.grant.moneyRaised / b.grant.goalAmt) ? 1 : -1));
+    } else if(sortBy === "size") {
+      sortedBy.sort((a, b) => (a.grant.goalAmt > b.grant.goalAmt ? 1 : -1));
+    } else {console.log("nothing selected?");}
+    this.setState({metaGrants: sortedBy}, () => {
       this.props.parentCallback(this.state.metaGrants);
     });
   }
