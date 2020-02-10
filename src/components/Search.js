@@ -1,5 +1,8 @@
 import React, {Component } from 'react';
 import { withStyles } from '@material-ui/styles';
+
+import * as helper from '../helpers/SearchHelper.js'; 
+
 import LocationSearch from "./LocationSearch";
 import SearchRadius from "./SearchRadius";
 import SortBy from "./SortBy";
@@ -34,7 +37,7 @@ class Search extends Component {
     var newMetaGrants = [];
     this.props.docs.forEach((doc) => {
       newMetaGrants.push({
-        dist: this.calcDistance(this.state.centerLoc.lat, this.state.centerLoc.long, doc.lat, doc.long),
+        dist: helper.calcDistance(this.state.centerLoc.lat, this.state.centerLoc.long, doc.lat, doc.long),
         grant: doc,
       });
     });
@@ -61,7 +64,6 @@ class Search extends Component {
       this.props.parentCallback(tempTemp);
     }
   }
-
 
   setByTags = () => { 
     console.log("calling setByTags with these tags: ", this.state.tags);
@@ -91,14 +93,7 @@ class Search extends Component {
       this.props.parentCallback(this.state.tempMeta);
     });
   }
-
 */
-
-  locationCallback = (location) => {   
-    this.setState({centerLoc: location}, () => {
-      this.setDists();
-    });
-  }
 
   radiusCallback = (radius) => {      
     if(radius === -1) {
@@ -119,33 +114,20 @@ class Search extends Component {
     }
   }
 
-  //from Geo Data Source
-  calcDistance = (lat1, lon1, lat2, lon2) => {
-    if ((lat1 === lat2) && (lon1 === lon2)) {
-      return 0;
-    }
-    else {
-      var radlat1 = Math.PI * lat1/180;
-      var radlat2 = Math.PI * lat2/180;
-      var theta = lon1-lon2;
-      var radtheta = Math.PI * theta/180;
-      var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
-      if (dist > 1) {
-        dist = 1;
-      }
-      dist = Math.acos(dist);
-      dist = dist * 180/Math.PI;
-      dist = dist * 60 * 1.1515;
-      return dist;
-    }
+  locationCallback = (location) => {   
+    this.setState({centerLoc: location}, () => {
+      this.setDists();
+    });
   }
 
   addDist = (doc) => {
-    let newDist = this.calcDistance(this.state.centerLoc.lat, this.state.centerLoc.long, doc.grant.lat, doc.grant.long);
+    let newDist = helper.calcDistance(this.state.centerLoc.lat, this.state.centerLoc.long, doc.grant.lat, doc.grant.long);
     var tempTemp = this.state.tempMeta;
     tempTemp.push({dist: newDist, grant: doc.grant});
     tempTemp.sort((a, b) => (a.dist > b.dist ? 1 : -1));
-    this.setState({tempMeta: tempTemp});
+    this.setState({tempMeta: tempTemp}, ()=> {
+      this.props.parentCallback(tempTemp);
+    });
   }
 
   setDists = () => {
@@ -153,9 +135,7 @@ class Search extends Component {
     this.setState({tempMeta: []}, () => {
       localGrants.forEach(this.addDist); 
     });
-    this.setState({metaGrants: this.state.tempMeta}, () => {
-      this.props.parentCallback(this.state.tempMeta);
-    });
+    this.setState({metaGrants: this.state.tempMeta});
   }
 
   sortByCallback = (sortBy) => {
