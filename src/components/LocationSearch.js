@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect }  from "react";
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
@@ -49,8 +49,13 @@ export default function LocationSearch(props) {
     loaded.current = true;
   }
 
-  const handleChange = (event, value) => {
+  const handleKeyPress = (event, value) => {
+    console.log("HANDLE KEY PRESS");
     setInputValue(value);
+  }
+
+
+  const handleChange = (event, value) => {
     if(!(value === null)) {
       Geocode.fromAddress(value.description).then(
         response => {
@@ -85,7 +90,8 @@ export default function LocationSearch(props) {
     []
   );
 
-  React.useEffect(() => {
+  useEffect(() => {
+    console.log("UseEffect INPUTVALUE CHANGED");
     let active = true;
 
     if (!autocompleteService.current && window.google) {
@@ -102,6 +108,7 @@ export default function LocationSearch(props) {
 
     fetch({ input: inputValue }, results => {
       if (active) {
+        console.log("BEFORE SET OPTIONS EYYYYYYY")
         setOptions(results || []);
       }
     });
@@ -131,6 +138,7 @@ export default function LocationSearch(props) {
           id="loc-textfield"
           {...params}
           label="Search from a location"
+          onChange={handleKeyPress}
           variant="outlined"
           fullWidth
         />

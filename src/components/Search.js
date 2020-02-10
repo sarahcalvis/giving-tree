@@ -1,4 +1,4 @@
-import React, {Component } from 'react';
+import React, {Component} from 'react';
 import { withStyles } from '@material-ui/styles';
 
 import * as helper from '../helpers/SearchHelper.js'; 
@@ -113,7 +113,11 @@ class Search extends Component {
     }
   }
 
-  locationCallback = (location) => {   
+  locationCallback = (location) => {
+    console.log("Hi");
+    console.log("Hiqweqwe");
+    console.log("Hqweqweqweqweqweqwei");
+
     this.setState({centerLoc: location}, () => {
       this.setDists();
     });
