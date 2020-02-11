@@ -8,6 +8,9 @@ const useStyles = makeStyles(theme => ({
     borderRadius: '25px',
     margin: '2px',
   },
+  link: {
+    textDecoration: 'none',
+  }
 }))
 
 class GrantTagBar extends React.Component {
@@ -46,6 +49,7 @@ function GrantTag(props) {
         pathname: "/",
         state: { incomingTag: props.tag }
       }}
+      className={classes.link}
     >
       <Button className={classes.button} size='small'  variant='outlined'>
         {props.tag}

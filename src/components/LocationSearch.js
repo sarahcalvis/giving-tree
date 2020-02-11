@@ -49,9 +49,8 @@ export default function LocationSearch(props) {
     loaded.current = true;
   }
 
-  const handleKeyPress = (event, value) => {
-    console.log("HANDLE KEY PRESS");
-    setInputValue(value);
+  const handleKeyPress = (event) => {
+    setInputValue(event.target.value);
   }
 
 
@@ -59,21 +58,21 @@ export default function LocationSearch(props) {
     if(!(value === null)) {
       Geocode.fromAddress(value.description).then(
         response => {
-          console.log("supposed address: ", value.description);
-          console.log("the response for lat, long: ", response.results[0].geometry.location);
+          // console.log("supposed address: ", value.description);
+          // console.log("the response for lat, long: ", response.results[0].geometry.location);
           const { lat, lng } = response.results[0].geometry.location;
-          console.log(lat, lng);
-          console.log(value);
+          // console.log(lat, lng);
+          // console.log(value);
           props.parentCallback({address: value, lat: lat, long: lng});
-          Geocode.fromLatLng(lat, lng).then(
-            response => {
-              const address = response.results[0].formatted_address;
-              console.log("regurged address: ", address);
-            },
-            error => {
-              console.error(error);
-            }
-          );
+          // Geocode.fromLatLng(lat, lng).then(
+          //   response => {
+          //     const address = response.results[0].formatted_address;
+          //     console.log("regurged address: ", address);
+          //   },
+          //   error => {
+          //     console.error(error);
+          //   }
+          // );
         },
         error => {
           console.error(error);
@@ -91,7 +90,6 @@ export default function LocationSearch(props) {
   );
 
   useEffect(() => {
-    console.log("UseEffect INPUTVALUE CHANGED");
     let active = true;
 
     if (!autocompleteService.current && window.google) {
@@ -108,7 +106,6 @@ export default function LocationSearch(props) {
 
     fetch({ input: inputValue }, results => {
       if (active) {
-        console.log("BEFORE SET OPTIONS EYYYYYYY")
         setOptions(results || []);
       }
     });
@@ -116,7 +113,9 @@ export default function LocationSearch(props) {
     return () => {
       active = false;
     };
-  }, [inputValue, fetch]);
+    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inputValue]);
 
   return (
     <Autocomplete
@@ -128,7 +127,6 @@ export default function LocationSearch(props) {
       filterOptions={x => x}
       options={options}
       autoComplete
-      freeSolo
       includeInputInList
       disableOpenOnFocus
       onChange={handleChange}
@@ -144,8 +142,7 @@ export default function LocationSearch(props) {
         />
       )}
       renderOption={option => {
-        const matches =
-          option.structured_formatting.main_text_matched_substrings;
+        const matches = option.structured_formatting.main_text_matched_substrings;
         const parts = parse(
           option.structured_formatting.main_text,
           matches.map(match => [match.offset, match.offset + match.length])

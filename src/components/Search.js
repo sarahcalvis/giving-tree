@@ -119,10 +119,6 @@ class Search extends Component {
   }
 
   locationCallback = (location) => {
-    console.log("Hi");
-    console.log("Hiqweqwe");
-    console.log("Hqweqweqweqweqweqwei");
-
     this.setState({centerLoc: location}, () => {
       this.setDists();
     });

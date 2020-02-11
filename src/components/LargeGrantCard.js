@@ -24,6 +24,9 @@ const useStyles = makeStyles(theme => ({
   cardContent: {
     flexGrow: 1,
   },
+  link: {
+    textDecoration: 'none',
+  }
 }))
 
 export default function LargeGrantCard(props) {
@@ -84,7 +87,7 @@ export default function LargeGrantCard(props) {
                   nonprofitData={props.nonprofitData} />
               </Grid>
               <Grid item  >
-                <Link to={'/grants/' + props.id + '/give'}>
+                <Link className={classes.link} to={'/grants/' + props.id + '/give'}>
                   <Button variant='contained' color='primary'>
                     Donate
                   </Button>

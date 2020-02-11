@@ -50,6 +50,9 @@ const useStyles = makeStyles(theme => ({
     borderRadius: '4px',
     background: 'white',
   },
+  padding: {
+    paddingBottom: theme.spacing(2),
+  }
 }))
 
 
@@ -183,8 +186,9 @@ function PaymentForm(props) {
     <Container className={classes.card}>
       <Card>
         <CardContent className={classes.cardContent}>
-
-          <Text type='card-heading' text={grant} />
+          <div className={classes.padding}>
+            <Text type='card-heading' text={grant} />
+          </div>
           <ProgressBar raised={raised} goal={goal} />
           {status === 'incomplete' &&
             <div>
