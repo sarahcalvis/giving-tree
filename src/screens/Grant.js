@@ -29,6 +29,9 @@ const styles = theme => ({
     justifyContent: "center",
     border: "none",
   },
+  link: {
+    textDecoration: 'none',
+  }
 });
 
 function Grant(props) {
@@ -243,7 +246,9 @@ function Grant(props) {
                           </Button>
                         </Grid>
                         <Grid item>
-                          <Link to={'/foundation/edit/' + id}>
+                          <Link 
+                            className={classes.link}
+                            to={'/foundation/edit/' + id}>
                             <Button
                               color='primary'
                               variant='contained'>
@@ -276,7 +281,9 @@ function Grant(props) {
                           </Button>
                         </Grid>
                         <Grid item>
-                        <Link to={'/foundation/edit/' + id}>
+                        <Link 
+                          className={classes.link}
+                          to={'/foundation/edit/' + id}>
                             <Button
                               color='primary'
                               variant='contained'>
