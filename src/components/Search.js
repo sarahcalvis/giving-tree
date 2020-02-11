@@ -41,7 +41,7 @@ class Search extends Component {
         grant: doc,
       });
     });
-    this.setState({metaGrants: newMetaGrants});
+    this.setState({metaGrants: newMetaGrants, radiusResults: newMetaGrants});
   }
 
   tagFreeTextCallback = (tagsAndFreeText) => {
@@ -144,11 +144,10 @@ class Search extends Component {
       localGrants.forEach(this.addDist); 
       this.setState({metaGrants: this.state.tempMeta});
     });
-    //this.setState({metaGrants: this.state.tempMeta});
   }
 
   sortByCallback = (sortBy) => {
-    var sortedBy = this.state.metaGrants;
+    var sortedBy = [this.radiusResults || this.state.metaGrants];
     if(sortBy === "deadline") { 
       sortedBy.sort((a, b) => (a.grant.dateDeadline > b.grant.dateDeadline ? 1 : -1));
     } else if(sortBy === "posting") {
