@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
-import { withAuthConsumer } from '../session';
+import { withAuthConsumer } from '../auth';
 import firebase from '../firebase.js';
 import { AppBar, Tabs, Tab, Button, makeStyles } from '@material-ui/core';
 import AccountCircle from '@material-ui/icons/AccountCircle';
@@ -50,25 +50,11 @@ function Header(props) {
     </Tabs>
   );
 
-  const customClaims = () => {
-    props.authUser.getIdTokenResult()
-    .then((idTokenResult) => {
-      console.log(idTokenResult.claims);
-      console.log(idTokenResult.claims.cf);
-    })
-    .catch((error) => {
-      console.log("ERROR: " + error.message);
-    });
-
-    return "hi";
-  }
-
   return (
     <React.Fragment>
       <AppBar className={classes.appBar} title="Giving Tree">
         {props.authUser ? <SignOutIcon /> : <SignInIcon />}
       </AppBar>
-      <Button onClick = {customClaims}>Test Custom Claims</Button>
       {errorMsg !== '' && <p>{errorMsg}</p>}
     </React.Fragment>
   );

@@ -16,9 +16,20 @@ const withAuthProvider = Component => {
     componentDidMount() {
       this.listener = firebase.auth().onAuthStateChanged(
         authUser => {
-          authUser
-            ? this.setState({ authUser })
-            : this.setState({ authUser: null });
+          if (authUser) {
+            authUser.getIdTokenResult()
+              .then((idTokenResult) => {
+                idTokenResult
+                  ? this.setState({ authUser: idTokenResult.claims })
+                  : this.setState({ authUser: null });
+              })
+              .catch((error) => {
+                console.log("ERROR: " + error.message);
+              });
+          }
+          else {
+            this.setState({ authUser: null });
+          }
         },
       );
     }
