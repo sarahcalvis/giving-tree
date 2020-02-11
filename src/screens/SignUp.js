@@ -125,7 +125,7 @@ class SignUpFormBase extends Component {
                     //-----------------------------------------
 
                     //Redirect User to Home
-                    // this.props.history.push('/');
+                    this.props.history.push('/');
                 })
                 .catch((error) => {
                     //Failure

@@ -1,7 +1,6 @@
 // Stripe Server
 
 const app = require('express')();
-const bodyParser = require('body-parser');
 const stripe = require('stripe')('sk_test_avCwuzIvg45JxkjItTyqRGH600JEoryzyP');
 const admin = require('firebase-admin');
 const serviceAccount = require("./secret/givingtree-cfs-firebase-adminsdk-grrpd-764871e22c.json");
@@ -11,8 +10,7 @@ admin.initializeApp({
   databaseURL: "https://givingtree-cfs.firebaseio.com"
 });
 
-app.use(bodyParser.text());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(require('body-parser').text());
 
 app.post('/charge', async (req, res) => {
   let source = req.body.split(' amount: ')[0];
@@ -54,7 +52,6 @@ app.post('/create', async (req, res) => {
     res.status(500).end;
   }
 })
-
 
 
 //Get current user's ID token
