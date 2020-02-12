@@ -63,55 +63,43 @@ class Search extends Component {
 
   addByTag = (doc) => {
     var tempTemp = this.state.tempMeta;
-    console.log("state tags: ", this.state.tags);
-    console.log("doc tags: ", doc.grant.tags);
     if((this.state.tags).every(tag => (doc.grant.tags).includes(tag))) {
       tempTemp.push({dist: doc.dist, grant: doc.grant});
-      console.log("pushing this grant: ", doc);
       this.setState({tempMeta: tempTemp, tftResults: tempTemp});
     }
   }
 
   setByTags = () => { 
-    console.log("calling setByTags with these tags: ", this.state.tags);
     var myMeta = this.state.metaGrants;
-    console.log("myMeta: ", myMeta);
     this.setState({tempMeta: [], tftResults: []}, () => {
       (myMeta).forEach(this.addByTag);
-      console.log("tempMeta after setting: ", this.state.tempMeta);
       this.locationCallback(this.state.radius);
     });   
   }
 
-/*
-  addByFreeText = (doc) => {
+  addByTag = (doc) => {
     var tempTemp = this.state.tempMeta;
     if((this.state.tags).every(tag => (doc.grant.tags).includes(tag))) {
       tempTemp.push({dist: doc.dist, grant: doc.grant});
-      this.setState({tempMeta: tempTemp});
+      this.setState({tempMeta: tempTemp, tftResults: tempTemp});
     }
   }
 
-  setByFreeText = () => { 
+  setByTags = () => { 
     var myMeta = this.state.metaGrants;
-    this.setState({tempMeta: []}, () => {
+    this.setState({tempMeta: [], tftResults: []}, () => {
       (myMeta).forEach(this.addByTag);
-    });
-    this.setState({metaGrants: this.state.tempMeta}, () => {
-      this.props.parentCallback(this.state.tempMeta);
-    });
+      this.locationCallback(this.state.radius);
+    });   
   }
-*/
 
   radiusCallback = (radius) => {  
     console.log("central location: ", this.state.centerLoc);  
     var newRadRes = [];  
     if(radius === -1) {
       newRadRes = this.state.tftResults;
-      //this.setState({ radiusResults: this.state.tftResults});
     }
     else {
-      //var newRadRes = [];
       this.state.tftResults.forEach((meta) => {
         console.log("distance from center: ", meta.dist);
         console.log("radius: ", radius);
@@ -121,7 +109,6 @@ class Search extends Component {
           console.log("radius grant results: ", newRadRes);
         }
       }); 
-      //this.setState({ radiusResults: newRadRes});
     }
     this.setState({radiusResults: newRadRes}, ()=>{
       this.sortByCallback(this.state.sortBy);
@@ -141,9 +128,6 @@ class Search extends Component {
     tempTemp.push({dist: newDist, grant: doc.grant});
     tempTemp.sort((a, b) => (a.dist > b.dist ? 1 : -1));
     this.setState({tempMeta: tempTemp}
-      /*, ()=> {
-      this.props.parentCallback(tempTemp);
-    }*/
     );
   }
 
