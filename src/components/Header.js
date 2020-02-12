@@ -19,6 +19,9 @@ const useStyles = makeStyles(theme => ({
   title: {
     flexGrow: 1,
   },
+  appBar: {
+    position: "sticky",
+  },
 }));
 
 function Header(props) {
@@ -105,11 +108,9 @@ function Header(props) {
             {props.authUser ? <SignedIn/> : <SignedOut/>}
             </Menu>
           </div>
-
         </Toolbar>
       </AppBar>
     </React.Fragment>
-
   );
 }
 
