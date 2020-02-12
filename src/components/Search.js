@@ -135,8 +135,9 @@ class Search extends Component {
     var localGrants = this.state.tftResults; 
     this.setState({tempMeta: []}, () => {
       localGrants.forEach(this.addDist); 
-      this.setState({tftResults: this.state.tempMeta});
-      this.radiusCallback(this.state.radius);
+      this.setState({tftResults: this.state.tempMeta}, ()=> {
+        this.radiusCallback(this.state.radius);
+      });
     });
   }
 
