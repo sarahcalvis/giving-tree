@@ -73,22 +73,22 @@ class Search extends Component {
     var myMeta = this.state.metaGrants;
     this.setState({tempMeta: [], tftResults: []}, () => {
       (myMeta).forEach(this.addByTag);
-      this.locationCallback(this.state.radius);
+      this.setByFreeText();
     });   
   }
 
-  addByTag = (doc) => {
+  addByFreeText = (doc) => {
     var tempTemp = this.state.tempMeta;
-    if((this.state.tags).every(tag => (doc.grant.tags).includes(tag))) {
+    if((this.state.freeText).every(freeText => (doc.grant.desc).includes(freeText))) {
       tempTemp.push({dist: doc.dist, grant: doc.grant});
       this.setState({tempMeta: tempTemp, tftResults: tempTemp});
     }
   }
 
-  setByTags = () => { 
-    var myMeta = this.state.metaGrants;
+  setByFreeText = () => { 
+    var myMeta = this.state.tempMeta;
     this.setState({tempMeta: [], tftResults: []}, () => {
-      (myMeta).forEach(this.addByTag);
+      (myMeta).forEach(this.addByFreeText);
       this.locationCallback(this.state.radius);
     });   
   }
