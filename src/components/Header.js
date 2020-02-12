@@ -1,26 +1,41 @@
 import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
-import { withAuthConsumer } from '../session';
-import firebase from '../firebase.js';
-import { AppBar, Tabs, Tab, Button, makeStyles } from '@material-ui/core';
-import AccountCircle from '@material-ui/icons/AccountCircle';
 
+import logo from '../iconSmall.png';
+import { withAuthConsumer } from '../auth';
+import firebase from '../firebase.js';
+
+import { makeStyles } from '@material-ui/core/styles';
+import { AppBar, Toolbar, IconButton, Typography, MenuItem, Menu } from '@material-ui/core';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 const useStyles = makeStyles(theme => ({
+  root: {
+    flexGrow: 1,
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+  },
+  title: {
+    flexGrow: 1,
+  },
   appBar: {
-    position: 'sticky',
-    flexWrap: 'wrap',
+    position: "sticky",
   },
 }));
 
-//TODO: CHANGE ICONS INTO MENUBUTTON BASED ON USER AUTH!!!
-//See ProfileTabMenu in WSAJ Project
 function Header(props) {
   const classes = useStyles();
+  const [auth, setAuth] = React.useState(true);
   const [errorMsg, setErrorMsg] = React.useState('');
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
 
-  const handleClick = event => {
+  const handleChange = event => {
+    setAuth(event.target.checked);
+  };
+
+  const handleMenu = event => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -30,60 +45,73 @@ function Header(props) {
 
   const logout = () => {
     firebase.auth().signOut().then(() => {
-      props.history.push('/');
+      props.history.push('/signin');
     }).catch((error) => {
       setErrorMsg(error.message);
     });
   }
 
-  const SignInIcon = () => (
-    <Tabs className={classes.tabs}>
-      <Tab className={classes.loginTab} icon={<AccountCircle />}
-        to='/signin' component={Link} />
-    </Tabs>
+  const SignedIn = () => (
+    <React.Fragment>
+      <MenuItem onClick={handleClose} to='/foundation/settings' component={Link}>Profile</MenuItem>
+      <MenuItem onClick={logout}>Logout</MenuItem>
+    </React.Fragment>
   );
 
-  const SignOutIcon = () => (
-    <Tabs className={classes.tabs}>
-      <Tab className={classes.loginTab} label='Logout' icon={<AccountCircle />}
-        onClick={logout} component={Button} />
-    </Tabs>
+  const SignedOut = () => (
+    <React.Fragment>
+      <MenuItem onClick={() => props.history.push('/signin')}>Login</MenuItem>
+    </React.Fragment>
   );
-
-  const customClaims = () => {
-    props.authUser.getIdTokenResult()
-    .then((idTokenResult) => {
-      console.log(idTokenResult.claims);
-      console.log(idTokenResult.claims.cf);
-    })
-    .catch((error) => {
-      console.log("ERROR: " + error.message);
-    });
-
-    return "hi";
-  }
 
   return (
     <React.Fragment>
-      <AppBar className={classes.appBar} title="Giving Tree">
-        {props.authUser ? <SignOutIcon /> : <SignInIcon />}
+      <AppBar className={classes.appBar}>
+        <Toolbar>
+          <IconButton
+            edge="start"
+            className={classes.menuButton}
+            color="inherit"
+            aria-label="menu"
+            to={props.authUser?.cf ? '/foundation' : '/'}
+            component={Link}>
+            <img src={logo} alt="Logo" height="48" width="48" />
+          </IconButton>
+          <Typography variant="h4" className={classes.title}>
+            Giving Tree
+          </Typography>
+          <div>
+            <IconButton
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleMenu}
+              color="inherit"
+            >
+              <AccountCircleIcon />
+            </IconButton>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              open={open}
+              onClose={handleClose}
+            >
+            {props.authUser ? <SignedIn/> : <SignedOut/>}
+            </Menu>
+          </div>
+        </Toolbar>
       </AppBar>
-      <Button onClick = {customClaims}>Test Custom Claims</Button>
-      {errorMsg !== '' && <p>{errorMsg}</p>}
     </React.Fragment>
   );
 }
 
 export default withRouter(withAuthConsumer(Header));
-
-
-{/* <Tab className={this.props.classes.loginTab} aria-controls="simple-menu" aria-haspopup="true" onClick={this.handleClick} icon={<AccountCircle />} />
-    <Menu
-      id="simple-menu"
-      anchorEl={this.state.anchorEl}
-      keepMounted
-      open={Boolean(this.state.anchorEl)}
-      onClose={this.handleClose}
-    >
-      <MenuItem onClick={this.logout}>Logout</MenuItem>
-    </Menu> */}
