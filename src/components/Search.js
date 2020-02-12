@@ -108,10 +108,10 @@ class Search extends Component {
     var newRadRes = [];  
     if(radius === -1) {
       newRadRes = this.state.tftResults;
-      this.setState({ radiusResults: this.state.tftResults});
+      //this.setState({ radiusResults: this.state.tftResults});
     }
     else {
-      var newRadRes = [];
+      //var newRadRes = [];
       this.state.tftResults.forEach((meta) => {
         console.log("distance from center: ", meta.dist);
         console.log("radius: ", radius);
@@ -121,10 +121,12 @@ class Search extends Component {
           console.log("radius grant results: ", newRadRes);
         }
       }); 
-      this.setState({ radiusResults: newRadRes});
+      //this.setState({ radiusResults: newRadRes});
     }
-    this.setState({radiusResults: newRadRes});
-    this.sortByCallback(this.state.sortBy);
+    this.setState({radiusResults: newRadRes}, ()=>{
+      this.sortByCallback(this.state.sortBy);
+    });
+    
   }
 
   locationCallback = (location) => {
@@ -167,7 +169,7 @@ class Search extends Component {
     } else if(sortBy === "size") {
       sortedBy.sort((a, b) => (a.grant.goalAmt > b.grant.goalAmt ? 1 : -1));
     } else {console.log("nothing selected?");}
-    this.setState({sortedResults: sortedBy}, () => {
+    this.setState({sortedResults: sortedBy, sortBy: sortBy}, () => {
       this.props.parentCallback(sortedBy);
     });
   }
