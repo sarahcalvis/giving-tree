@@ -25,8 +25,11 @@ class Search extends Component {
         lat : 40, 
         long : -80,
       },
+      sortBy: "",
       tempMeta: [],
       radiusResults: [],
+      tftResults: [],
+      sortedResults: [],
       metaGrants: [],
       tags: [],
       freeText: [],
@@ -41,7 +44,12 @@ class Search extends Component {
         grant: doc,
       });
     });
-    this.setState({metaGrants: newMetaGrants, radiusResults: newMetaGrants});
+    this.setState({
+      metaGrants: newMetaGrants, 
+      radiusResults: newMetaGrants, 
+      tftResults: newMetaGrants,
+      sortedResults: newMetaGrants
+    });
   }
 
   tagFreeTextCallback = (tagsAndFreeText) => {
@@ -60,8 +68,7 @@ class Search extends Component {
     if((this.state.tags).every(tag => (doc.grant.tags).includes(tag))) {
       tempTemp.push({dist: doc.dist, grant: doc.grant});
       console.log("pushing this grant: ", doc);
-      this.setState({tempMeta: tempTemp});
-      this.props.parentCallback(tempTemp);
+      this.setState({tempMeta: tempTemp, tftResults: tempTemp});
     }
   }
 
@@ -69,9 +76,10 @@ class Search extends Component {
     console.log("calling setByTags with these tags: ", this.state.tags);
     var myMeta = this.state.metaGrants;
     console.log("myMeta: ", myMeta);
-    this.setState({tempMeta: []}, () => {
+    this.setState({tempMeta: [], tftResults: []}, () => {
       (myMeta).forEach(this.addByTag);
       console.log("tempMeta after setting: ", this.state.tempMeta);
+      this.locationCallback(this.state.radius);
     });   
   }
 
@@ -96,15 +104,15 @@ class Search extends Component {
 */
 
   radiusCallback = (radius) => {  
-    console.log("central location: ", this.state.centerLoc);    
+    console.log("central location: ", this.state.centerLoc);  
+    var newRadRes = [];  
     if(radius === -1) {
-      this.setState({ radiusResults: this.state.metaGrants}, () => {
-        this.props.parentCallback(this.state.radiusResults);
-      });
+      newRadRes = this.state.tftResults;
+      this.setState({ radiusResults: this.state.tftResults});
     }
     else {
       var newRadRes = [];
-      this.state.metaGrants.forEach((meta) => {
+      this.state.tftResults.forEach((meta) => {
         console.log("distance from center: ", meta.dist);
         console.log("radius: ", radius);
         console.log("meta.dist < radius", meta.dist < radius);
@@ -112,10 +120,11 @@ class Search extends Component {
           newRadRes.push(meta);
           console.log("radius grant results: ", newRadRes);
         }
-        this.props.parentCallback(newRadRes);
       }); 
       this.setState({ radiusResults: newRadRes});
     }
+    this.setState({radiusResults: newRadRes});
+    this.sortByCallback(this.state.sortBy);
   }
 
   locationCallback = (location) => {
@@ -129,21 +138,24 @@ class Search extends Component {
     var tempTemp = this.state.tempMeta;
     tempTemp.push({dist: newDist, grant: doc.grant});
     tempTemp.sort((a, b) => (a.dist > b.dist ? 1 : -1));
-    this.setState({tempMeta: tempTemp}, ()=> {
+    this.setState({tempMeta: tempTemp}
+      /*, ()=> {
       this.props.parentCallback(tempTemp);
-    });
+    }*/
+    );
   }
 
   setDists = () => {
-    var localGrants = this.state.metaGrants; 
+    var localGrants = this.state.tftResults; 
     this.setState({tempMeta: []}, () => {
       localGrants.forEach(this.addDist); 
-      this.setState({metaGrants: this.state.tempMeta});
+      this.setState({tftResults: this.state.tempMeta});
+      this.radiusCallback(this.state.radius);
     });
   }
 
   sortByCallback = (sortBy) => {
-    var sortedBy = [this.radiusResults || this.state.metaGrants];
+    var sortedBy = this.state.radiusResults; //[this.state.radiusResults || this.state.metaGrants];
     if(sortBy === "deadline") { 
       sortedBy.sort((a, b) => (a.grant.dateDeadline > b.grant.dateDeadline ? 1 : -1));
     } else if(sortBy === "posting") {
@@ -155,8 +167,8 @@ class Search extends Component {
     } else if(sortBy === "size") {
       sortedBy.sort((a, b) => (a.grant.goalAmt > b.grant.goalAmt ? 1 : -1));
     } else {console.log("nothing selected?");}
-    this.setState({metaGrants: sortedBy}, () => {
-      this.props.parentCallback(this.state.metaGrants);
+    this.setState({sortedResults: sortedBy}, () => {
+      this.props.parentCallback(sortedBy);
     });
   }
 
