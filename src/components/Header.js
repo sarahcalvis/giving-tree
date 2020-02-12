@@ -8,6 +8,7 @@ import firebase from '../firebase.js';
 import { makeStyles } from '@material-ui/core/styles';
 import { AppBar, Toolbar, IconButton, Typography, MenuItem, Menu } from '@material-ui/core';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import { spacing } from '@material-ui/system';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -66,7 +67,7 @@ function Header(props) {
 
   return (
     <React.Fragment>
-      <AppBar className={classes.appBar}>
+      <AppBar style={{ 'margin-bottom': 15 }} className={classes.appBar} >
         <Toolbar>
           <IconButton
             edge="start"
@@ -75,9 +76,9 @@ function Header(props) {
             aria-label="menu"
             to={props.authUser?.cf ? '/foundation' : '/'}
             component={Link}>
-            <img src={logo} alt="Logo" height="48" width="48" />
+            <img src={logo} alt="Logo" height="40" width="40" />
           </IconButton>
-          <Typography variant="h4" className={classes.title}>
+          <Typography variant="h5" className={classes.title}>
             Giving Tree
           </Typography>
           <div>
