@@ -2,12 +2,12 @@ import React, { useEffect } from 'react';
 
 import firebase from '../firebase.js';
 import Text from './Text.js';
+import LocationSearch from './LocationSearch.js';
 
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/styles';
 import {
   DatePicker,
@@ -74,6 +74,13 @@ export default function EditGrant(props) {
     props.callback(e.target.value, e.target.id);
   }
 
+  // Get the location from LocationSearch
+  const locationCallback = (address) => {
+    props.callback(address.address.description, 'address');
+    props.callback(address.lat, 'lat');
+    props.callback(address.long, 'long');
+  }
+
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <Container className={classes.card}>
@@ -92,34 +99,34 @@ export default function EditGrant(props) {
               ref={fileInput}
               onChange={uploadImages}
               multiple />
-            <TextField 
+            <TextField
               id='title'
-              fullWidth 
+              fullWidth
               label='Grant Title'
               onChange={handleInput} />
-            <TextField 
+            <TextField
               id='nonprofit_name'
-              fullWidth 
+              fullWidth
               label='Nonprofit Name'
               onChange={handleInput} />
-            <DatePicker 
-              fullWidth 
-              label='Deadine' 
+            <DatePicker
+              fullWidth
+              label='Deadine'
               variant="inline"
               value={selectedDate}
               onChange={handleDateChange} />
-            <TextField 
+            <TextField
               id='goal_amt'
-              fullWidth 
+              fullWidth
               label='Goal amount'
               onChange={handleInput} />
-            <TextField 
+            <TextField
               id='desc'
-              fullWidth 
+              fullWidth
               label='Grant Description'
               onChange={handleInput} />
-            <TextField 
-              fullWidth 
+            <TextField
+              fullWidth
               label='Tags' />
           </CardContent>
         </Card>
@@ -127,7 +134,7 @@ export default function EditGrant(props) {
           <CardContent>
             <Text type='card-heading' text='Private Grant Information' />
             <Text type='card-subheading' text={'We will not directly share this address with the public. We will use it to calculate a donor\'s distance from a grant.'} />
-            <TextField fullWidth label='Address' />
+            <LocationSearch parentCallback={locationCallback} />
           </CardContent>
         </Card>
       </Container>
