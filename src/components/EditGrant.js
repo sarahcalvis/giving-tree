@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import firebase from '../firebase.js';
 import Text from './Text.js';
 import LocationSearch from './LocationSearch.js';
+import TagSearch from './TagSearch.js';
 
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -81,6 +82,12 @@ export default function EditGrant(props) {
     props.callback(address.long, 'long');
   }
 
+  // Get the tags from TagSearch
+  const tagsCallback = (tags) => { 
+    props.callback(tags.freeText, 'newTags');
+    props.callback(tags.tags.concat(tags.freeText), 'tags');
+  }
+
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <Container className={classes.card}>
@@ -125,9 +132,7 @@ export default function EditGrant(props) {
               fullWidth
               label='Grant Description'
               onChange={handleInput} />
-            <TextField
-              fullWidth
-              label='Tags' />
+            <TagSearch parentCallback={tagsCallback} />
           </CardContent>
         </Card>
         <Card>

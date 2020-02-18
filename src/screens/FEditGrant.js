@@ -38,7 +38,9 @@ export default function FEditGrant() {
       tags: [],
       status: '',
       images: [],
-    })
+    });
+
+  const [newTags, setNewTags] = React.useState([]);
 
   // Find out whether we are editing an existing grant or creating a new one
   const [grantStatus] = React.useState(window.location.pathname === '/foundation/create-grant' ? 'create' : 'edit');
@@ -55,6 +57,8 @@ export default function FEditGrant() {
     let newData = grantData;
 
     switch (type) {
+      case 'newTags':
+        setNewTags(newTags);
       case 'title':
         newData.title = data;
         break;
@@ -83,7 +87,7 @@ export default function FEditGrant() {
         newData.desc = data;
         break;
       case 'tags':
-        newData.tags.push(data);
+        newData.tags = data;
         break;
       case 'images':
         newData.images.push(data);
@@ -94,6 +98,7 @@ export default function FEditGrant() {
   }
 
   const saveToDrafts = () => {
+    // TODO: save the new tags
     let newGrantData = grantData;
     newGrantData.status = 'draft';
     // TODO: set CF name/id
@@ -108,6 +113,7 @@ export default function FEditGrant() {
   }
 
   const publish = () => {
+    // TODO: save the new tags
     let newGrantData = grantData;
     newGrantData.status = 'current';
     // TODO: set CF name/id
