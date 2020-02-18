@@ -30,7 +30,7 @@ export default function FEditGrant() {
       address: '',
       lat: '',
       long: '',
-      date_posted: '', // TODO
+      date_posted: '',
       date_deadline: '',
       money_raised: 0,
       goal_amt: '',
@@ -79,7 +79,7 @@ export default function FEditGrant() {
         newData.long = data;
         break;
       case 'date_deadline':
-        newData.date_deadline = data;
+        newData.date_deadline = {seconds: data, nanoseconds: 0};
         break;
       case 'goal_amt':
         newData.goal_amt = data;
@@ -146,7 +146,11 @@ export default function FEditGrant() {
 
     let newGrantData = grantData;
     newGrantData.status = 'current';
-    newGrantData.date_posted = (new Date().getTime()) / 1000;
+    newGrantData.cf_name = 'fake cf';
+    newGrantData.cf_id = '1fbyawFlFR0YdMYPZbtG';
+    newGrantData.nonprofit_id = 'Wafb5Zjt2z9k23FLVcOd';
+    let time = Math.round(new Date().getTime() / 1000);
+    newGrantData.date_posted = {seconds: time, nanoseconds: 0};
     // TODO: set CF name/id
     setGrantData(newGrantData);
     db.collection('grants').doc().set(grantData)
