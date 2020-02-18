@@ -4,6 +4,7 @@ import firebase from '../firebase.js';
 import Text from './Text.js';
 import LocationSearch from './LocationSearch.js';
 import TagSearch from './TagSearch.js';
+import ImageCarousel from './ImageCarousel.js';
 
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -50,6 +51,11 @@ export default function EditGrant(props) {
   // Moniter the image input
   const fileInput = React.createRef();
 
+  // Store the image names for the carousel
+  const [img, setImg] = React.useState([]);
+
+  // Store the image 
+
   // Initialize Firebase storage
   const storageRef = firebase.storage().ref();
 
@@ -65,10 +71,31 @@ export default function EditGrant(props) {
       // Add file to storage and pass the image name up to the parent
       ref.put(new File([file], name, { type: type, }))
         .then(function (snapshot) {
-          props.callback(name, 'images');
+          props.callback(name, 'images')
+          getUrls(name);
         });
     }
   };
+
+  // Get the array of images when another image is uploaded
+  const getUrls = (imgName) => {
+    let newImg = img;
+    storageRef.child(imgName).getDownloadURL().then(function (url) {
+      newImg.push(url);
+      setImg(newImg);
+      console.log(img);
+    }).catch(function (error) {
+      console.log('error getting image url: ', error)
+    })
+  }
+
+  const [imgKey, setImgKey] = React.useState(0);
+
+  useEffect(() => {
+    //Force image carousel to rerender after 500ms
+    //TODO: Find better way to fix
+    setTimeout(function () { setImgKey(1); }, 500)
+  }, []);
 
   // Handle general input to text fields
   const handleInput = (e, data) => {
@@ -83,7 +110,7 @@ export default function EditGrant(props) {
   }
 
   // Get the tags from TagSearch
-  const tagsCallback = (tags) => { 
+  const tagsCallback = (tags) => {
     props.callback(tags.freeText, 'newTags');
     props.callback(tags.tags.concat(tags.freeText), 'tags');
   }
@@ -95,6 +122,7 @@ export default function EditGrant(props) {
           <CardContent className={classes.cardContent}>
             <Text type='card-heading' text='Public Grant Information' />
             <Text type='card-subheading' text='This information will be visible to the public.' />
+            <ImageCarousel key={imgKey} img={img} />
             <label for='file-upload'>
               Click to upload images...
             </label>
