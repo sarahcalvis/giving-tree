@@ -59,6 +59,7 @@ export default function FEditGrant() {
     switch (type) {
       case 'newTags':
         setNewTags(data);
+        break;
       case 'title':
         newData.title = data;
         break;
@@ -97,16 +98,8 @@ export default function FEditGrant() {
     console.log(grantData);
   }
 
-  const saveToDrafts = () => {
-    // Save the new tags
-    // db.collection('tags').doc().set(newTags)
-    //   .then(function () {
-    //     console.log('New tags uploaded');
-    //   })
-    //   .catch(function (error) {
-    //     console.error('Error adding new tags: ', error);
-    //   })
-
+  // Save the new tags to database
+  const addNewTags = () => {
     db.runTransaction(function (transaction) {
       let docRef = db.collection('tags').doc('vXVDxq4ByQoKazDanGI1');
       return transaction.get(docRef).then(function (doc) {
@@ -127,6 +120,10 @@ export default function FEditGrant() {
     }).catch(function (err) {
       console.error(err);
     });
+  }
+
+  const saveToDrafts = () => {
+    addNewTags();
 
     // Update the grant status
     let newGrantData = grantData;
@@ -145,7 +142,8 @@ export default function FEditGrant() {
   }
 
   const publish = () => {
-    // TODO: save the new tags
+    addNewTags();
+
     let newGrantData = grantData;
     newGrantData.status = 'current';
     // TODO: set CF name/id
