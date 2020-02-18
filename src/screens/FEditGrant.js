@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 
 import EditGrant from '../components/EditGrant.js';
+import firebase from '../firebase'
 
 import { makeStyles } from '@material-ui/styles';
 import Grid from '@material-ui/core/Grid';
@@ -15,6 +16,8 @@ const useStyles = makeStyles(theme => ({
 
 export default function FEditGrant() {
   const classes = useStyles();
+
+  let db = firebase.firestore();
 
   // Grant data to upload to firebase
   const [grantData, setGrantData] = React.useState(
@@ -53,7 +56,7 @@ export default function FEditGrant() {
 
     switch (type) {
       case 'title':
-        newData.cf_name = data;
+        newData.title = data;
         break;
       case 'nonprofit_name':
         newData.nonprofit_name = data;
@@ -88,6 +91,34 @@ export default function FEditGrant() {
     }
     setGrantData(newData);
     console.log(grantData);
+  }
+
+  const saveToDrafts = () => {
+    let newGrantData = grantData;
+    newGrantData.status = 'draft';
+    // TODO: set CF name/id
+    setGrantData(newGrantData);
+    db.collection('grants').doc().set(grantData)
+      .then(function () {
+        console.log('Draft saved');
+      })
+      .catch(function (error) {
+        console.error('Error writing draft: ', error);
+      })
+  }
+
+  const publish = () => {
+    let newGrantData = grantData;
+    newGrantData.status = 'current';
+    // TODO: set CF name/id
+    setGrantData(newGrantData);
+    db.collection('grants').doc().set(grantData)
+      .then(function () {
+        console.log('Grant published');
+      })
+      .catch(function (error) {
+        console.error('Error writing draft: ', error);
+      })
   }
 
   return (
@@ -134,6 +165,7 @@ export default function FEditGrant() {
               </Grid>
               <Grid item>
                 <Button
+                  onClick={saveToDrafts}
                   color='primary'
                   variant='contained'>
                   Save to Drafts
@@ -142,7 +174,8 @@ export default function FEditGrant() {
               <Grid item>
                 <Button
                   color='primary'
-                  variant='contained'>
+                  variant='contained'
+                  onClick='publish'>
                   Publish
                 </Button>
               </Grid>
