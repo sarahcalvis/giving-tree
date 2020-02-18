@@ -22,15 +22,15 @@ export default function FEditGrant() {
   // Grant data to upload to firebase
   const [grantData, setGrantData] = React.useState(
     {
-      cf_name: '',
-      cf_id: '',
+      cf_name: '', // TODO
+      cf_id: '', // TODO
       title: '',
-      nonprofit_name: '',
-      nonprofit_id: '',
+      nonprofit_name: '', // TODO
+      nonprofit_id: '', // TODO
       address: '',
       lat: '',
       long: '',
-      date_posted: '',
+      date_posted: '', // TODO
       date_deadline: '',
       money_raised: 0,
       goal_amt: '',
@@ -146,6 +146,7 @@ export default function FEditGrant() {
 
     let newGrantData = grantData;
     newGrantData.status = 'current';
+    newGrantData.date_posted = (new Date().getTime()) / 1000;
     // TODO: set CF name/id
     setGrantData(newGrantData);
     db.collection('grants').doc().set(grantData)
@@ -211,7 +212,7 @@ export default function FEditGrant() {
                 <Button
                   color='primary'
                   variant='contained'
-                  onClick='publish'>
+                  onClick={publish}>
                   Publish
                 </Button>
               </Grid>
