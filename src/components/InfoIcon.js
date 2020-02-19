@@ -1,6 +1,8 @@
 //FYI: highly reccommend looking at contactpopout for help with this
 import React, { useEffect } from 'react';
 
+import { Info } from '@material-ui/icons';
+import IconButton from '@material-ui/core/IconButton';
 import Popover from '@material-ui/core/Popover';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -41,9 +43,9 @@ export default function ContactPopout(props) {
   return (
     <div>
       <a className={classes.a} aria-describedby={id} variant="contained" color="primary" onClick={handleClick}>
-        <Button variant='outlined' color='primary'>
-          ?
-        </Button>
+        <IconButton variant='outlined' color='secondary'>
+          <Info/>
+        </IconButton>
       </a>
       <Popover
         className={classes.popover}

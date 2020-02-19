@@ -106,18 +106,32 @@ export default function FEditGrant() {
               justify="flex-end"
               alignItems="flex-start">
               <Grid item>
-                <Button
-                  color='primary'
-                  variant='contained'>
-                  Cancel
-                </Button>
+                <Grid container  alignItems="center">
+                  <Grid item>
+                    <Button
+                      color='primary'
+                      variant='contained'>
+                      Cancel
+                    </Button>
+                  </Grid>
+                  <Grid item>
+                    <InfoIcon infoMessage="careful about canceling this, you'll lose your work!!"></InfoIcon>
+                  </Grid>
+                </Grid>
               </Grid>
               <Grid item>
-                <Button
-                  color='primary'
-                  variant='contained'>
-                  Save
-                </Button>
+              <Grid container  alignItems="center">
+                  <Grid item>
+                    <Button
+                      color='primary'
+                      variant='contained'>
+                      Save
+                    </Button>
+                  </Grid>
+                  <Grid item>
+                    <InfoIcon infoMessage="this will publish stuff for you!!"></InfoIcon>
+                  </Grid>
+                </Grid>
               </Grid>
             </Grid>
           }
@@ -128,29 +142,46 @@ export default function FEditGrant() {
               justify="flex-end"
               alignItems="flex-start">
               <Grid item>
-                <Button
-                  color='primary'
-                  variant='contained'>
-                  Discard
-                </Button>
-                <InfoIcon infoMessage="careful about discarding this!!"></InfoIcon>
+                <Grid container  alignItems="center">
+                  <Grid item>
+                    <Button
+                      color='primary'
+                      variant='contained'>
+                      Discard
+                    </Button>
+                  </Grid>
+                  <Grid item>
+                    <InfoIcon infoMessage="careful about discarding this!!"></InfoIcon>
+                  </Grid>
+                </Grid>
               </Grid>
               <Grid item>
-                <Button
-                  color='primary'
-                  variant='contained'>
-                  Save to Drafts
-                </Button>
-                <InfoIcon infoMessage="don't worry you can come back to it"></InfoIcon>
+               <Grid container  alignItems="center">
+                  <Grid item>
+                    <Button
+                      color='primary'
+                      variant='contained'>
+                      Save to Drafts
+                    </Button>
+                  </Grid>
+                  <Grid item>
+                    <InfoIcon infoMessage="don't worry you can come back to it"></InfoIcon>
+                  </Grid>
+                </Grid>
               </Grid>
               <Grid item>
-                <Button
-                  color='primary'
-                  variant='contained'>
-                  Publish
-                </Button>
-                <p>TRYING HARDER</p>
-                <InfoIcon infoMessage="then it will be visible to the public"></InfoIcon>
+              <Grid container  alignItems="center">
+                  <Grid item>
+                    <Button
+                      color='primary'
+                      variant='contained'>
+                      Publish
+                    </Button>
+                  </Grid>
+                  <Grid item>
+                    <InfoIcon infoMessage="then it will be visible to the public"></InfoIcon>
+                    </Grid>
+                </Grid>
               </Grid>
             </Grid>
           }
