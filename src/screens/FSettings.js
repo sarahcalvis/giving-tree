@@ -23,6 +23,7 @@ export default function FSettings() {
  
   // Set tab title
   useEffect(() => { document.title = 'Settings- Giving Tree'; }, []);
+  var db = firebase.firestore();
 
   const [isEdit, setEdit] = React.useState(false);
   const user = React.useContext(AuthUserContext);
@@ -47,8 +48,7 @@ export default function FSettings() {
 
   function functionLoadData(){
     // Foundation query
-    var db = firebase.firestore();
-    const cf = db.collection('communityFoundations').where('public_email','==','tanmr1@gcc.edu')
+    db.collection('communityFoundations').where('public_email','==','tanmr1@gcc.edu')
       .get()
       .then(function(querySnapshot) {
           querySnapshot.forEach(function(doc) {
@@ -89,7 +89,28 @@ export default function FSettings() {
   }
 
   function onSubmit(){
-    setEdit(false);
+    db.collection('communityFoundations').where('public_email','==','tanmr1@gcc.edu')
+    .get()
+    .then(function(querySnapshot) {
+      querySnapshot.forEach(function(doc) {
+        console.log(doc.id, " => ", doc.data());
+        // Build doc ref from doc.id
+        db.collection("communityFoundations").doc(doc.id).update({
+          name: nameForm,
+          public_email: emailForm,
+          public_phone: phoneForm,
+          first_contact: contactFirstNameForm,
+          last_contact: contactLastNameForm,
+          personal_email: contactEmailForm,
+          personal_phone: contactPhoneForm
+        });
+        console.log("Document successfully written!");
+        setEdit(false);
+      });
+    })
+    .catch(function(error) {
+      console.error("Error writing document: ", error);
+    });
   }
 
   function Data(){
@@ -109,6 +130,9 @@ export default function FSettings() {
     functionLoadData();
     return(
       <Container maxWidth="md">
+        <Typography variant="h5">
+          {name}
+        </Typography>
         <List >
           <ListItem>
             <ListItemAvatar>
@@ -176,6 +200,9 @@ export default function FSettings() {
   function EditableData(){
     return(
       <Container maxWidth="md">
+        <Typography variant="h5">
+          {name}
+        </Typography>
         <form autoComplete='off'>
           <List >
             <ListItem>
@@ -197,7 +224,7 @@ export default function FSettings() {
               </ListItemAvatar>
               <FormControl>
                 <InputLabel htmlFor="component-simple">Public Email</InputLabel>
-                <Input defaultValue={email} />
+                <Input defaultValue={emailForm} onChange={e => setEmailForm(e.target.value)} />
               </FormControl>
             </ListItem>
             <ListItem>
@@ -208,7 +235,7 @@ export default function FSettings() {
               </ListItemAvatar>
               <FormControl>
                 <InputLabel htmlFor="component-simple">Public Phone</InputLabel>
-                <Input defaultValue={phone} />
+                <Input defaultValue={phoneForm} onChange={e => setPhoneForm(e.target.value)} />
               </FormControl>
             </ListItem>
             <ListItem>
@@ -219,7 +246,7 @@ export default function FSettings() {
               </ListItemAvatar>
               <FormControl>
                 <InputLabel htmlFor="component-simple">Contact First Name</InputLabel>
-                <Input defaultValue={contactFirstName} />
+                <Input defaultValue={contactFirstNameForm} onChange={e => setContactFirstNameForm(e.target.value)} />
               </FormControl>
             </ListItem>
             <ListItem>
@@ -230,7 +257,7 @@ export default function FSettings() {
               </ListItemAvatar>
               <FormControl>
                 <InputLabel htmlFor="component-simple">Contact Last Name</InputLabel>
-                <Input defaultValue={contactLastName} />
+                <Input defaultValue={contactLastNameForm} onChange={e => setContactLastNameForm(e.target.value)} />
               </FormControl>
             </ListItem>
             <ListItem>
@@ -241,7 +268,7 @@ export default function FSettings() {
               </ListItemAvatar>
               <FormControl>
                 <InputLabel htmlFor="component-simple">Contact Email</InputLabel>
-                <Input defaultValue={contactEmail} />
+                <Input defaultValue={contactEmailForm} onChange={e => setContactEmailForm(e.target.value)} />
               </FormControl>
             </ListItem>
             <ListItem>
@@ -252,7 +279,7 @@ export default function FSettings() {
               </ListItemAvatar>
               <FormControl>
                 <InputLabel htmlFor="component-simple">Contact Phone</InputLabel>
-                <Input defaultValue={contactPhone} />
+                <Input defaultValue={contactPhoneForm} onChange={e => setContactPhoneForm(e.target.value)} />
               </FormControl>
             </ListItem>
           </List>
