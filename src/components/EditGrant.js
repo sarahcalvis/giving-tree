@@ -114,7 +114,7 @@ export default function EditGrant(props) {
           <CardContent className={classes.cardContent}>
             <Text type='card-heading' text='Public Grant Information' />
             <Text type='card-subheading' text='This information will be visible to the public.' />
-            <ImageCarousel key={imgKey} img={img} />
+            <ImageCarousel img={img} />
             <label for='file-upload'>
               Click to upload images...
             </label>
