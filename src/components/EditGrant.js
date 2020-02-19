@@ -5,6 +5,7 @@ import Text from './Text.js';
 import LocationSearch from './LocationSearch.js';
 import TagSearch from './TagSearch.js';
 import ImageCarousel from './ImageCarousel.js';
+import NonprofitAutocomplete from './NonprofitAutocomplete.js';
 
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -94,8 +95,8 @@ export default function EditGrant(props) {
   useEffect(() => {
     //Force image carousel to rerender after 500ms
     //TODO: Find better way to fix
-    setTimeout(function () { setImgKey(1); }, 500)
-  }, []);
+    setImgKey(1);
+  }, [img]);
 
   // Handle general input to text fields
   const handleInput = (e, data) => {
@@ -139,6 +140,7 @@ export default function EditGrant(props) {
               fullWidth
               label='Grant Title'
               onChange={handleInput} />
+            <NonprofitAutocomplete cfId={props.cfId} />
             <TextField
               id='nonprofit_name'
               fullWidth

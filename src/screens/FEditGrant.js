@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
 import EditGrant from '../components/EditGrant.js';
-import firebase from '../firebase'
+import firebase from '../firebase';
 
 import { makeStyles } from '@material-ui/styles';
 import Grid from '@material-ui/core/Grid';
@@ -166,7 +166,7 @@ export default function FEditGrant() {
     <div className={classes.card}>
       <Grid container direction='row' justify='center' alignItems='flex-end'>
         <Grid item>
-          <EditGrant grantData={grantData} callback={callback} />
+          <EditGrant grantData={grantData} cfId={'1fbyawFlFR0YdMYPZbtG'} callback={callback} />
         </Grid>
         <Grid item>
           {grantStatus === 'edit' &&
