@@ -80,7 +80,7 @@ export default function EditGrant(props) {
 
   // Get the array of images when another image is uploaded
   const getUrls = (imgName) => {
-    let newImg = img;
+    let newImg = img.slice(); // Need a new reference to trigger state reload
     storageRef.child(imgName).getDownloadURL().then(function (url) {
       newImg.push(url);
       setImg(newImg);
@@ -89,14 +89,6 @@ export default function EditGrant(props) {
       console.log('error getting image url: ', error)
     })
   }
-
-  const [imgKey, setImgKey] = React.useState(0);
-
-  useEffect(() => {
-    //Force image carousel to rerender after 500ms
-    //TODO: Find better way to fix
-    setImgKey(1);
-  }, [img]);
 
   // Handle general input to text fields
   const handleInput = (e, data) => {
@@ -123,7 +115,7 @@ export default function EditGrant(props) {
           <CardContent className={classes.cardContent}>
             <Text type='card-heading' text='Public Grant Information' />
             <Text type='card-subheading' text='This information will be visible to the public.' />
-            <ImageCarousel key={imgKey} img={img} />
+            <ImageCarousel img={img} />
             <label for='file-upload'>
               Click to upload images...
             </label>

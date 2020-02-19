@@ -60,39 +60,16 @@ export default function FEditGrant() {
       case 'newTags':
         setNewTags(data);
         break;
-      case 'title':
-        newData.title = data;
-        break;
-      case 'nonprofit_name':
-        newData.nonprofit_name = data;
-        break;
-      case 'nonprofit_id':
-        newData.nonprofit_id = data;
-        break;
-      case 'address':
-        newData.address = data;
-        break;
-      case 'lat':
-        newData.lat = data;
-        break;
-      case 'long':
-        newData.long = data;
-        break;
       case 'date_deadline':
         newData.date_deadline = {seconds: data, nanoseconds: 0};
-        break;
-      case 'goal_amt':
-        newData.goal_amt = data;
-        break;
-      case 'desc':
-        newData.desc = data;
-        break;
-      case 'tags':
-        newData.tags = data;
         break;
       case 'images':
         newData.images.push(data);
         break;
+      default:
+        if (newData.hasOwnProperty(type)){
+          newData[type] = data;
+        }
     }
     setGrantData(newData);
     console.log(grantData);
