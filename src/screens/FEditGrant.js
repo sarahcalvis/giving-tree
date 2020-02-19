@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react';
 
 import EditGrant from '../components/EditGrant.js';
+import InfoIcon from '../components/InfoIcon.js';
 
 import { makeStyles } from '@material-ui/styles';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
+import Typography from 'material-ui/styles/typography';
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -131,6 +133,7 @@ export default function FEditGrant() {
                   variant='contained'>
                   Discard
                 </Button>
+                <InfoIcon infoMessage="careful about discarding this!!"></InfoIcon>
               </Grid>
               <Grid item>
                 <Button
@@ -138,6 +141,7 @@ export default function FEditGrant() {
                   variant='contained'>
                   Save to Drafts
                 </Button>
+                <InfoIcon infoMessage="don't worry you can come back to it"></InfoIcon>
               </Grid>
               <Grid item>
                 <Button
@@ -145,6 +149,8 @@ export default function FEditGrant() {
                   variant='contained'>
                   Publish
                 </Button>
+                <p>TRYING HARDER</p>
+                <InfoIcon infoMessage="then it will be visible to the public"></InfoIcon>
               </Grid>
             </Grid>
           }
