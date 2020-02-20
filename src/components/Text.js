@@ -11,7 +11,6 @@ const useStyles = makeStyles(theme => ({
   sectionHeading: {
     fontWeight: '400',
     float: 'left',
-    fontStyle:'italic',
   },
 }))
 
