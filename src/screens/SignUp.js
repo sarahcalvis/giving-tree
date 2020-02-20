@@ -179,6 +179,7 @@ class SignUpFormBase extends Component {
                     label="Email Address"
                     error={errors["email"] !== ""}
                     helperText={errors["email"]}
+                    autoFocus
                 />
                 <TextField
                     variant="outlined"

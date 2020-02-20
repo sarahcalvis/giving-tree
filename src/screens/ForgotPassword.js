@@ -133,6 +133,7 @@ class ForgotPasswordFormBase extends Component {
                     label="Email Address"
                     error={emailError !== ""}
                     helperText={emailError}
+                    autoFocus
                 />
                 <Button className={classes.submit}
                     type="submit"
