@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
 import firebase from '../firebase.js';
 import * as helper from '../helpers/SignUpHelper.js';
@@ -11,7 +11,7 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Grid from "@material-ui/core/Grid";
-import MUILink from "@material-ui/core/Link";
+import Link from "@material-ui/core/Link";
 import Typography from "@material-ui/core/Typography";
 
 
@@ -165,17 +165,13 @@ class SignInFormBase extends Component {
 const SignUpForgotLink = ({ classes }) => (
     <Grid container>
         <Grid item xs>
-            <Link to='/forgot' className={classes.links}>
-                <MUILink variant="body2" component={'span'}>
+            <Link href='/forgot' variant="body2">
                     Forgot password?
-                </MUILink>
             </Link>
         </Grid>
         <Grid item>
-            <Link to='/signup' className={classes.links}>
-                <MUILink variant="body2" component={'span'}>
-                    Don't have an account? Sign Up
-                </MUILink>
+            <Link href='/signup' variant="body2">
+                Don't have an account? Sign Up
             </Link>
         </Grid>
     </Grid>
