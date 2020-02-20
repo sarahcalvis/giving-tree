@@ -163,7 +163,7 @@ class SignUpFormBase extends Component {
         const { classes } = this.props;
 
         return (
-            <form className={classes.form} onSubmit={this.onSubmit}>
+            <form className={classes.form} onSubmit={this.onSubmit} noValidate>
                 <Typography component="h6" className={classes.errorMsg} >
                     {submitError}
                 </Typography>

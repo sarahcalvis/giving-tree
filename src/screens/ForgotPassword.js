@@ -114,8 +114,7 @@ class ForgotPasswordFormBase extends Component {
         const { classes } = this.props;
 
         return (
-            <form className={classes.form} onSubmit={this.onSubmit}>
-
+            <form className={classes.form} onSubmit={this.onSubmit} noValidate>
                 {success &&
                     <Snack message='Success! A password reset email has been sent.' />
                 }

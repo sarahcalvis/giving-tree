@@ -41,8 +41,6 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-
-
 function FAccountRequest() {
   const classes = useStyles();
 
@@ -54,7 +52,7 @@ function FAccountRequest() {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign up
+          Foundation Account Request
         </Typography>
         <form className={classes.form} noValidate>
           <Grid container spacing={2}>
