@@ -1,7 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 
 import EditGrant from '../components/EditGrant.js';
 import firebase from '../firebase';
+
+import AuthUserContext from '../auth/context.js';
+import withAuthProtection from '../auth/withAuthProtection.js';
 
 import { makeStyles } from '@material-ui/styles';
 import Grid from '@material-ui/core/Grid';
@@ -14,10 +17,13 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function FEditGrant() {
+function FEditGrant() {
   const classes = useStyles();
 
   let db = firebase.firestore();
+
+  // Figure out what community foundation is logged in
+  const user = useContext(AuthUserContext);
 
   // Grant data to upload to firebase
   const [grantData, setGrantData] = React.useState(
@@ -204,3 +210,5 @@ export default function FEditGrant() {
     </div>
   );
 }
+
+export default withAuthProtection()(FEditGrant);
