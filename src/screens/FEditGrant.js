@@ -25,7 +25,7 @@ function FEditGrant() {
   // Figure out what community foundation is logged in
   const user = useContext(AuthUserContext);
 
-  const [cfData, setCfData] = React.useState({});
+  const [cfData, setCfData] = React.useState();
 
   // Load that community foundation's data
   useEffect(() => {
@@ -182,7 +182,7 @@ function FEditGrant() {
     <div className={classes.card}>
       <Grid container direction='row' justify='center' alignItems='flex-end'>
         <Grid item>
-          <EditGrant grantData={grantData} cfId={'1fbyawFlFR0YdMYPZbtG'} callback={callback} />
+          {cfData && <EditGrant grantData={grantData} cfId={cfData.id} callback={callback} />}
         </Grid>
         <Grid item>
           {grantStatus === 'edit' &&
