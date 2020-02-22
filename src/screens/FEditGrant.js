@@ -25,6 +25,23 @@ function FEditGrant() {
   // Figure out what community foundation is logged in
   const user = useContext(AuthUserContext);
 
+  const [cfData, setCfData] = React.useState({});
+
+  // Load that community foundation's data
+  useEffect(() => {
+    console.log(user.email);
+    db.collection('communityFoundations').where('public_email', '==', user.email)
+      .get()
+      .then(function (querySnapshot) {
+        querySnapshot.forEach(function (doc) {
+          setCfData({ id: doc.id, data: doc.data() });
+        });
+      })
+      .catch(function (error) {
+        console.log("Error getting documents: ", error);
+      });
+  }, [user]);
+
   // Grant data to upload to firebase
   const [grantData, setGrantData] = React.useState(
     {
@@ -67,13 +84,13 @@ function FEditGrant() {
         setNewTags(data);
         break;
       case 'date_deadline':
-        newData.date_deadline = {seconds: data, nanoseconds: 0};
+        newData.date_deadline = { seconds: data, nanoseconds: 0 };
         break;
       case 'images':
         newData.images.push(data);
         break;
       default:
-        if (newData.hasOwnProperty(type)){
+        if (newData.hasOwnProperty(type)) {
           newData[type] = data;
         }
     }
@@ -87,7 +104,7 @@ function FEditGrant() {
       let docRef = db.collection('tags').doc('vXVDxq4ByQoKazDanGI1');
       return transaction.get(docRef).then(function (doc) {
         if (!doc.exists) {
-          docRef.set({tags: newTags})
+          docRef.set({ tags: newTags })
             .then(function () {
               console.log('New tags uploaded');
             })
@@ -108,10 +125,17 @@ function FEditGrant() {
   const saveToDrafts = () => {
     addNewTags();
 
-    // Update the grant status
+    // Copy grant data
     let newGrantData = grantData;
+
+    // Update the grant status
     newGrantData.status = 'draft';
-    // TODO: set CF name/id
+
+    // Add CF details
+    newGrantData.cf_name = cfData.data.name;
+    newGrantData.cf_id = cfData.id;
+
+    // Update the grant data
     setGrantData(newGrantData);
 
     // Add the grant to the database
@@ -127,13 +151,22 @@ function FEditGrant() {
   const publish = () => {
     addNewTags();
 
+    // Copy grant data
     let newGrantData = grantData;
+
+    // Update the grant status
     newGrantData.status = 'current';
-    newGrantData.cf_name = 'fake cf';
-    newGrantData.cf_id = '1fbyawFlFR0YdMYPZbtG';
+
+    // Add CF details
+    newGrantData.cf_name = cfData.data.name;
+    newGrantData.cf_id = cfData.id;
+
+    // Update the grant data
+    setGrantData(newGrantData);
+
     newGrantData.nonprofit_id = 'Wafb5Zjt2z9k23FLVcOd';
     let time = Math.round(new Date().getTime() / 1000);
-    newGrantData.date_posted = {seconds: time, nanoseconds: 0};
+    newGrantData.date_posted = { seconds: time, nanoseconds: 0 };
     // TODO: set CF name/id
     setGrantData(newGrantData);
     db.collection('grants').doc().set(grantData)
