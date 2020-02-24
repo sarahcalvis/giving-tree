@@ -7,17 +7,20 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
 export default function NonprofitAutocomplete(props) {
-  console.log('props: ' + props.cfId)
   const [nonprofits, setNonprofits] = React.useState([]);
+  const [nonprofitData, setNonprofitData] = React.useState({ name: '', number: '', email: '', url: '', cf_id: props.cfId })
+
+  let db = firebase.firestore();
 
   // Keep track of whether the 'add nonprofit' panel is open
   const [adding, setAdding] = React.useState(false);
 
-  const addMode = () => {
-    setAdding(true);
-  }
+  const addMode = () => { setAdding(true); }
 
-  let db = firebase.firestore();
+  const cancelAddMode = () => { setAdding(false); }
+
+  const addNonprofit = () => {
+  }
 
   // Load the nonprofits
   useEffect(() => {
@@ -36,8 +39,11 @@ export default function NonprofitAutocomplete(props) {
       });
   }, [])
 
-  const handleInput = () => {
-
+  const handleInput = (e) => {
+    let newNonprofitData = nonprofitData;
+    newNonprofitData[e.target.id] = e.target.value;
+    setNonprofitData(newNonprofitData);
+    console.log(newNonprofitData);
   }
 
   return (
@@ -76,6 +82,12 @@ export default function NonprofitAutocomplete(props) {
             fullWidth
             label='Nonprofit Website'
             onChange={handleInput} />
+          <Button
+            onClick={addNonprofit}>Add Nonprofit
+          </Button>
+          <Button
+            onClick={cancelAddMode}>Cancel
+          </Button>
         </div>
       }
     </div>
