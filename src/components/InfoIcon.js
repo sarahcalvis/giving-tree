@@ -5,17 +5,14 @@ import { Info } from '@material-ui/icons';
 import IconButton from '@material-ui/core/IconButton';
 import Popover from '@material-ui/core/Popover';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/styles';
 
 const useStyles = makeStyles(theme => ({
-  a: {
+  button: {
     cursor: 'pointer',
   },
-  popover: {
-    maxWidth: 500,
-  },
-  typographyTop: {
+  typography: {
+    maxWidth: 300,
     padding: theme.spacing(2),
   },
 }));
@@ -33,34 +30,31 @@ export default function ContactPopout(props) {
   };
 
   const open = Boolean(anchorEl);
-  const id = open ? 'Info' : undefined;
+  const id = open ? 'info-popover' : undefined;
 
   return (
     <div>
-      <a className={classes.a} aria-describedby={id} variant="contained" color="primary" onClick={handleClick}>
-        <IconButton variant='outlined' color='secondary'>
-          <Info/>
-        </IconButton>
-      </a>
+      <IconButton className={classes.button} aria-describedby={id} variant="contained" color="primary" onClick={handleClick} variant='outlined' color='secondary'>
+        <Info />
+      </IconButton>
       <Popover
-        className={classes.popover}
         id={id}
         open={open}
         anchorEl={anchorEl}
         onClose={handleClose}
         anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
+          vertical: 'top',
+          horizontal: 'right',
         }}
         transformOrigin={{
           vertical: 'bottom',
-          horizontal: 'right',
+          horizontal: 'left',
         }}
       >
         <Typography
-          className={classes.typographyTop}
+          className={classes.typography}
           variant="body2">
-            {props.infoMessage}
+          {props.infoMessage}
         </Typography>
       </Popover>
     </div>
