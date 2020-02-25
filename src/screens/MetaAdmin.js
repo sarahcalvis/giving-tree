@@ -1,6 +1,13 @@
 import React from 'react';
+
+import Foundation from '../components/Foundation.js';
+
 export default function MetaAdmin() {
   return(
-    <p>Congrats you are the meta-admin</p>
+    <div>
+      <p>Congrats you are the meta-admin</p>
+      <Foundation></Foundation>
+    </div>
+    
   );
 }

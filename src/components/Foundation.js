@@ -36,6 +36,11 @@ const useStyles = makeStyles(theme => ({
   expandOpen: {
     transform: 'rotate(180deg)',
   },
+  bullet: {
+    display: 'inline-block',
+    margin: '0 2px',
+    transform: 'scale(0.8)',
+  },
   button: {
     paddingLeft: '4em',
     paddingRight: '4em',
@@ -74,6 +79,36 @@ const useStyles = makeStyles(theme => ({
 
 export default function Foundation(props) {
   const classes = useStyles();
+  const bull = <span className={classes.bullet}>•</span>;
+
+  return (
+    <div style = {{display: (props.status === "requested" ? "inline" : "none")}}>
+    <Card className={classes.card}>
+      <CardContent>
+        <Typography variant="h5" component="h2">
+          be{bull}nev{bull}o{bull}lent
+        </Typography>
+      </CardContent>  
+      <CardActions disableSpacing>
+        <Button variant="outlined" color="secondary" onClick={console.log("Approve")} className={classes.button}>
+          Approve
+        </Button>
+        <Button variant="outlined" color="primary" onClick={console.log("Deny")} className={classes.button}>
+          Deny
+        </Button>
+      </CardActions>
+      <CardContent className={classes.cardContent}>
+        <WarningModal
+            open={()=>{console.log("OPEN!")}}
+            handleClose={()=>{console.log("Close!!!")}}
+            handleYes={()=>{console.log("Yes!")}}
+        ></WarningModal>
+          
+      </CardContent>
+    </Card>
+    </div>
+  );
+  /*
   const [open, setOpen] = React.useState(false);
   const [expanded, setExpanded] = React.useState(false);
 
@@ -165,4 +200,5 @@ export default function Foundation(props) {
     </Card>
     </div>
   );
+  */
 }
