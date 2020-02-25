@@ -18,11 +18,6 @@ const useStyles = makeStyles(theme => ({
   typographyTop: {
     padding: theme.spacing(2),
   },
-  typographyBottom: {
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2),
-    paddingBottom: theme.spacing(2),
-  }
 }));
 
 export default function ContactPopout(props) {
@@ -54,12 +49,12 @@ export default function ContactPopout(props) {
         anchorEl={anchorEl}
         onClose={handleClose}
         anchorOrigin={{
-          vertical: 'top',
+          vertical: 'bottom',
           horizontal: 'left',
         }}
         transformOrigin={{
           vertical: 'bottom',
-          horizontal: 'left',
+          horizontal: 'right',
         }}
       >
         <Typography
