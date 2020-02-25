@@ -12,7 +12,6 @@ const useStyles = makeStyles({
     maxWidth: 500,
     flexGrow: 1,
     height: 35,
-    // background: '#AAAAAA'
   },
   narrow: {
     maxWidth: 500,
