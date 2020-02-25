@@ -132,9 +132,6 @@ export default function EditGrant(props) {
 
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
-
-      <Text type='heading' text='Create a Grant' />
-
       <div className={classes.padding}>
         <Text type='card-heading' text='Grant Title' />
         <Text type='card-subheading' text={'What is this grant for?'} />

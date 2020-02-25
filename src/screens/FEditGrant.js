@@ -2,6 +2,7 @@
 import React, { useEffect, useContext } from 'react';
 
 import EditGrant from '../components/EditGrant.js';
+import Text from '../components/Text.js';
 import firebase from '../firebase';
 
 import AuthUserContext from '../auth/context.js';
@@ -10,12 +11,21 @@ import withAuthProtection from '../auth/withAuthProtection.js';
 import { makeStyles } from '@material-ui/styles';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
+import Fab from '@material-ui/core/Fab';
 
 const useStyles = makeStyles(theme => ({
   card: {
     paddingTop: theme.spacing(2),
     paddingBottom: theme.spacing(2),
   },
+  fab: {
+    margin: 0,
+    top: 'auto',
+    right: 20,
+    bottom: 20,
+    left: 'auto',
+    position: 'fixed',
+  }
 }));
 
 function FEditGrant() {
@@ -184,66 +194,70 @@ function FEditGrant() {
   return (
     <div className={classes.card}>
       <Grid container
-        direction="row"
-        justify="space-around"
-        alignItems="flex-start">
+        direction='row'
+        justify='space-around'
+        alignItems='flex-start'>
         <Grid item>
+          {grantStatus === 'edit' && <Text type='heading' text='Edit Grant' />}
+          {grantStatus === 'create' && <Text type='heading' text='Create Grant' />}
           {cfData && <EditGrant grantData={grantData} cfId={cfData.id} callback={callback} />}
         </Grid>
         <Grid item>
-          {grantStatus === 'edit' &&
-            <Grid container
-              spacing={2}
-              direction="column"
-              justify="flex-end"
-              alignItems="flex-start">
-              <Grid item>
-                <Button
-                  color='primary'
-                  variant='contained'>
-                  Cancel
+          <div className={classes.fab}>
+            {grantStatus === 'edit' &&
+              <Grid container
+                spacing={2}
+                direction="column"
+                justify="flex-end"
+                alignItems="flex-start">
+                <Grid item>
+                  <Button
+                    color='primary'
+                    variant='contained'>
+                    Cancel
                 </Button>
-              </Grid>
-              <Grid item>
-                <Button
-                  color='primary'
-                  variant='contained'>
-                  Save
+                </Grid>
+                <Grid item>
+                  <Button
+                    color='primary'
+                    variant='contained'>
+                    Save
                 </Button>
+                </Grid>
               </Grid>
-            </Grid>
-          }
-          {grantStatus === 'create' &&
-            <Grid container
-              spacing={2}
-              direction="column"
-              justify="flex-end"
-              alignItems="flex-start">
-              <Grid item>
-                <Button
-                  color='primary'
-                  variant='contained'>
-                  Discard
+            }
+            {grantStatus === 'create' &&
+              <Grid container
+                spacing={2}
+                direction="column"
+                justify="flex-end"
+                alignItems="flex-start">
+                <Grid item>
+                  <Button
+                    color='primary'
+                    variant='contained'>
+                    Discard
                 </Button>
-              </Grid>
-              <Grid item>
-                <Button
-                  onClick={saveToDrafts}
-                  color='primary'
-                  variant='contained'>
-                  Save to Drafts
+                </Grid>
+                <Grid item>
+                  <Button
+                    onClick={saveToDrafts}
+                    color='primary'
+                    variant='contained'>
+                    Save to Drafts
                 </Button>
-              </Grid>
-              <Grid item>
-                <Button
-                  color='primary'
-                  variant='contained'
-                  onClick={publish}>
-                  Publish
+                </Grid>
+                <Grid item>
+                  <Button
+                    color='primary'
+                    variant='contained'
+                    onClick={publish}>
+                    Publish
                 </Button>
+                </Grid>
               </Grid>
-            </Grid>
-          }
+            }
+          </div>
         </Grid>
       </Grid>
     </div>
