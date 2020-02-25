@@ -64,29 +64,47 @@ export default function NonprofitAutocomplete(props) {
 
   return (
     <div>
-      {(nonprofits.length > 0) &&
-        <Autocomplete
-          options={transformedNonprofits}
-          getOptionLabel={nonprofits => nonprofits.name}
-          fullWidth
-          autoHighlight
-          onChange={props.callback}
-          renderInput={params => (
-            <TextField
-              {...params}
-              onChange={props.callback}
-              label='Select a nonprofit'
+      <Grid
+        container
+        direction='row'
+        justify='flex-start'
+        alignItems='flex-start'
+      >
+        <Grid item>
+          {(nonprofits.length > 0) &&
+            <Autocomplete
+              options={transformedNonprofits}
+              getOptionLabel={nonprofits => nonprofits.name}
+              autoHighlight
               fullWidth
+              onChange={props.callback}
+              renderInput={params => (
+                <TextField
+                  {...params}
+                  variant='outlined'
+                  fullWidth
+                  onChange={props.callback}
+                  label='Select a nonprofit'
+                  fullWidth
+                />
+              )}
             />
-          )}
-        />
-      }
-      <p>or</p>
-      <Button
-        color='primary'
-        variant='contained'
-        onClick={addMode}>Add a new nonprofit
-      </Button>
+          }
+        </Grid>
+        <Grid item>
+          <p>
+            or
+          </p>
+        </Grid>
+        <Grid item>
+          <Button
+            color='primary'
+            variant='contained'
+            onClick={addMode}>Add a new nonprofit
+        </Button>
+        </Grid>
+      </Grid>
+
       {
         adding &&
         <Container>

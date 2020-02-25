@@ -183,7 +183,10 @@ function FEditGrant() {
 
   return (
     <div className={classes.card}>
-      <Grid container direction='row' justify='center' alignItems='flex-end'>
+      <Grid container
+        direction="row"
+        justify="space-around"
+        alignItems="flex-start">
         <Grid item>
           {cfData && <EditGrant grantData={grantData} cfId={cfData.id} callback={callback} />}
         </Grid>

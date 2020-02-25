@@ -31,6 +31,10 @@ const useStyles = makeStyles(theme => ({
   },
   input: {
     display: 'none',
+  },
+  padding: {
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
   }
 }))
 
@@ -116,58 +120,87 @@ export default function EditGrant(props) {
 
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
-      <Container className={classes.card}>
-        <Card elevation={3} className={classes.topCard}>
-          <CardContent className={classes.cardContent}>
-            <Text type='card-heading' text='Public Grant Information' />
-            <Text type='card-subheading' text='This information will be visible to the public.' />
-            <ImageCarousel img={img} />
-            <label for='file-upload'>
-              Click to upload images...
-            </label>
-            <input
-              className={classes.input}
-              id='file-upload'
-              type='file'
-              accept='image/png, image/jpeg'
-              ref={fileInput}
-              onChange={uploadImages}
-              multiple />
-            <TextField
-              id='title'
-              fullWidth
-              label='Grant Title'
-              onChange={handleInput} />
-            <NonprofitAutocomplete 
-              callback={nonprofitCallback}
-              cfId={props.cfId} />
-            <DatePicker
-              fullWidth
-              label='Deadine'
-              variant="inline"
-              value={selectedDate}
-              onChange={handleDateChange} />
-            <TextField
-              id='goal_amt'
-              fullWidth
-              label='Goal amount'
-              onChange={handleInput} />
-            <TextField
-              id='desc'
-              fullWidth
-              label='Grant Description'
-              onChange={handleInput} />
-            <TagSearch parentCallback={tagsCallback} />
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent>
-            <Text type='card-heading' text='Private Grant Information' />
-            <Text type='card-subheading' text={'We will not directly share this address with the public. We will use it to calculate a donor\'s distance from a grant.'} />
-            <LocationSearch parentCallback={locationCallback} />
-          </CardContent>
-        </Card>
-      </Container>
+
+      <Text type='heading' text='Create a Grant' />
+
+      <div className={classes.padding}>
+        <Text type='card-heading' text='Grant Title' />
+        <Text type='card-subheading' text={'What is this grant for?'} />
+        <TextField
+          id='title'
+          variant='outlined'
+          label='Grant Title'
+          onChange={handleInput} />
+      </div>
+
+      <div className={classes.padding}>
+        <Text type='card-heading' text='Grant Images' />
+        <Text type='card-subheading' text={'Add some pictures related to the grant.'} />
+        {img.length > 0 && <ImageCarousel img={img} />}
+        <label for='file-upload'>
+          Click to upload images...
+        </label>
+        <input
+          className={classes.input}
+          id='file-upload'
+          type='file'
+          accept='image/png, image/jpeg'
+          ref={fileInput}
+          onChange={uploadImages}
+          multiple />
+      </div>
+
+      <div className={classes.padding}>
+        <Text type='card-heading' text='Grant Description' />
+        <Text type='card-subheading' text={'Add a some information to help donors understand why this grant is important.'} />
+        <TextField
+          id='desc'
+          multiline
+          variant='outlined'
+          label='Grant Description'
+          onChange={handleInput} />
+      </div>
+
+      <div className={classes.padding}>
+        <Text type='card-heading' text='Affiliated Nonprofit' />
+        <Text type='card-subheading' text={'The nonprofit that made this grant request.'} />
+        <NonprofitAutocomplete
+          callback={nonprofitCallback}
+          cfId={props.cfId} />
+      </div>
+
+      <div className={classes.padding}>
+        <Text type='card-heading' text='Deadline' />
+        <Text type='card-subheading' text={'The last day that donors can give to this grant.'} />
+        <DatePicker
+          label='Pick a date'
+          value={selectedDate}
+          onChange={handleDateChange} />
+      </div>
+
+      <div className={classes.padding}>
+        <Text type='card-heading' text='Goal Amount' />
+        <Text type='card-subheading' text={'The total amount you want to raise for this grant. If you receive donations from outside giving tree, you can always edit this amount.'} />
+        <TextField
+          id='goal_amt'
+          variant='outlined'
+          label='Goal amount'
+          onChange={handleInput} />
+      </div>
+
+
+      <div className={classes.padding}>
+        <Text type='card-heading' text='Tags' />
+        <Text type='card-subheading' text={'Search for a tag or acreate a new tag to help donors find the grants they are looking for.'} />
+        <TagSearch parentCallback={tagsCallback} />
+      </div>
+
+      <div className={classes.padding}>
+        <Text type='card-heading' text='Grant Location' />
+        <Text type='card-subheading' text={'We will not directly share this address with donors. We will use it to calculate a donor\'s distance from a grant.'} />
+        <LocationSearch parentCallback={locationCallback} />
+      </div>
+
     </MuiPickersUtilsProvider>
   );
 }
