@@ -7,15 +7,16 @@ import TagSearch from './TagSearch.js';
 import ImageCarousel from './ImageCarousel.js';
 import NonprofitAutocomplete from './NonprofitAutocomplete.js';
 
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import Container from '@material-ui/core/Container';
+import Divider from '@material-ui/core/Divider';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/styles';
 import {
   DatePicker,
   MuiPickersUtilsProvider,
 } from '@material-ui/pickers';
+
+import MaskedInput from 'react-text-mask'
+import createNumberMask from 'text-mask-addons/dist/createNumberMask'
 
 import DateFnsUtils from '@date-io/date-fns';
 
@@ -41,6 +42,13 @@ const useStyles = makeStyles(theme => ({
 export default function EditGrant(props) {
   // Styles
   const classes = useStyles();
+
+  // Money mask
+  const numberMask = createNumberMask({
+    allowDecimal: true,
+    prefix: '$ ',
+    suffix: '' // This will put the dollar sign at the end, with a space.
+  })
 
   // Set tab title
   useEffect(() => { document.title = 'Create Grant-Giving Tree'; }, []);
@@ -96,6 +104,7 @@ export default function EditGrant(props) {
 
   // Handle general input to text fields
   const handleInput = (e, data) => {
+    console.log(e.target.value.replace('$','').replace(' ', '').replace('.', '').replace(/,/g, ''))
     props.callback(e.target.value, e.target.id);
   }
 
@@ -133,6 +142,8 @@ export default function EditGrant(props) {
           onChange={handleInput} />
       </div>
 
+      <Divider variant="middle" />
+
       <div className={classes.padding}>
         <Text type='card-heading' text='Grant Images' />
         <Text type='card-subheading' text={'Add some pictures related to the grant.'} />
@@ -156,6 +167,8 @@ export default function EditGrant(props) {
         <TextField
           id='desc'
           multiline
+          fullWidth
+          rows='6'
           variant='outlined'
           label='Grant Description'
           onChange={handleInput} />
@@ -181,11 +194,19 @@ export default function EditGrant(props) {
       <div className={classes.padding}>
         <Text type='card-heading' text='Goal Amount' />
         <Text type='card-subheading' text={'The total amount you want to raise for this grant. If you receive donations from outside giving tree, you can always edit this amount.'} />
-        <TextField
+        {/* <TextField
           id='goal_amt'
           variant='outlined'
           label='Goal amount'
-          onChange={handleInput} />
+          onChange={handleInput} /> */}
+        <MaskedInput
+          mask={numberMask}
+          onChange={handleInput}
+          id='goal_amt'
+          className='form-control'
+          id='1'
+          type='text'
+        />
       </div>
 
 

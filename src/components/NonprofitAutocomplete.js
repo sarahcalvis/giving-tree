@@ -82,7 +82,6 @@ export default function NonprofitAutocomplete(props) {
                 <TextField
                   {...params}
                   variant='outlined'
-                  fullWidth
                   onChange={props.callback}
                   label='Select a nonprofit'
                   fullWidth
