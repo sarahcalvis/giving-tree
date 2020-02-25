@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import $ from 'jquery';
 
 import firebase from '../firebase.js';
 import * as helper from '../helpers/SignUpHelper.js';
@@ -92,38 +91,12 @@ class SignUpFormBase extends Component {
             firebase.auth().createUserWithEmailAndPassword(email, passwordOne)
                 .then((result) => {
                     //Do Misc Stuff for Donor Account
-                    //Post to Server? Set firebase rules?
+                    //Post to Server? Set firebase rules? Create empty donor document?
 
-                    //-----------------------------------------
-                    //--------MOVE INTO ACCOUNT REQUEST--------
-                    //-----------------------------------------
                     // User is signed in. Get the ID token.
                     return result.user.getIdToken();
                 })
                 .then((idToken) => {
-                    // Pass the ID token to the server.
-                    $.post(
-                        '/setCustomClaims',
-                        {
-                            idToken: idToken,
-                        },
-                        (data, status) => {
-                            // This is not required. You could just wait until the token is expired
-                            // and it proactively refreshes.
-                            if (status === 'success' && data) {
-                                const json = JSON.parse(data);
-                                if (json && json.status === 'success') {
-                                    // Force token refresh. The token claims will contain the additional claims.
-                                    firebase.auth().currentUser.getIdToken(true);
-                                }
-                            }
-                            else{
-                                console.log("ERROR: " + data);
-                            }
-                        });
-                    //-----------------------------------------
-                    //-----------------------------------------
-
                     //Redirect User to Home
                     this.props.history.push('/');
                 })
@@ -225,12 +198,12 @@ const SignInForgotLink = ({ classes }) => (
     <Grid container>
         <Grid item xs>
             <Link href='/forgot' variant="body2">
-                    Forgot password?
+                Forgot password?
             </Link>
         </Grid>
         <Grid item>
             <Link href='/signin' variant="body2">
-                    Already have an account? Sign In
+                Already have an account? Sign In
             </Link>
         </Grid>
     </Grid>
