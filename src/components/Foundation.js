@@ -97,6 +97,7 @@ export default function Foundation(props) {
             open={open}
             handleClose={handleClose}
             handleYes={handleYes}
+            cfName={props.cfName}
           ></WarningModal>
 
         </CardContent>
