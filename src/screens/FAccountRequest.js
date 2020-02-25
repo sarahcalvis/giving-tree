@@ -28,6 +28,9 @@ const useStyles = makeStyles(theme => ({
     width: '100%', // Fix IE 11 issue.
     marginTop: theme.spacing(3),
   },
+  marginBottom: {
+    marginBottom: theme.spacing(3),
+  },
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
@@ -45,7 +48,7 @@ function FAccountRequest() {
   const classes = useStyles();
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main" maxWidth="md" >
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
@@ -54,126 +57,150 @@ function FAccountRequest() {
         <Text type='card-heading' text={'Foundation Account Request'} />
         <form className={classes.form} noValidate>
           <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <Text type='card-sectionheading' text={'Foundation Info'} />
+
+          <Container maxWidth="xs" className={classes.marginBottom}>
+            <Grid container spacing={2}>
+              <Grid container item xs={12}>
+                <Text type='card-sectionheading' text={'Foundation Info'} />
+                <Text type='card-subheading' text={'This information will be displayed publicly on all published giving opportunities.'} />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  name="name"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="name"
+                  label="Foundation Name"
+                  autoFocus
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  name="foundation_url"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="foundation_url"
+                  label="Website URL"
+                  placeholder="www.communityfoundation.com"
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  name="public_email"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="public_email"
+                  label="Public Email"
+                  placeholder="contact@cf.com"
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  name="public_phone"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="public_phone"
+                  label="Public Phone"
+                />
+              </Grid>
             </Grid>
-            <Grid item xs={12}>
-              <TextField
-                name="name"
-                variant="outlined"
-                required
-                fullWidth
-                id="name"
-                label="Foundation Name"
-                autoFocus
-              />
+            </Container>
+
+            <Container maxWidth="xs">
+            <Grid container spacing={2}>
+              <Grid container item xs={12}>
+                <Text type='card-sectionheading' text={'Personal Contact Info'} />
+                <Text type='card-subheading' text={'This information will be used to sign into and manage your account.'} />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  name="fname_contact"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="fname_contact"
+                  label="First Name"
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="lname_contact"
+                  label="Last Name"
+                  name="lname_contact"
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="personal_email"
+                  label="Personal Email"
+                  name="personal_email"
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  name="personal_phone"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="personal_phone"
+                  label="Personal Phone"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  name="passwordOne"
+                  label="Password"
+                  type="password"
+                  id="passwordOne"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  name="passwordTwo"
+                  label="Confirm Password"
+                  type="password"
+                  id="passwordTwo"
+                />
+              </Grid>
             </Grid>
-            <Grid item xs={12}>
-              <TextField
-                name="foundation_url"
-                variant="outlined"
-                required
-                fullWidth
-                id="foundation_url"
-                label="Website URL"
-                placeholder="www.communityfoundation.com"
-                autoFocus
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                name="public_email"
-                variant="outlined"
-                required
-                fullWidth
-                id="public_email"
-                label="Public Email"
-                placeholder="contact@cf.com"
-                autoFocus
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                name="public_phone"
-                variant="outlined"
-                required
-                fullWidth
-                id="public_phone"
-                label="Public Phone"
-                autoFocus
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Text type='card-sectionheading' text={'Personal Contact Info'} />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                name="fname_contact"
-                variant="outlined"
-                required
-                fullWidth
-                id="fname_contact"
-                label="First Name"
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="lname_contact"
-                label="Last Name"
-                name="lname_contact"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="personal_email"
-                label="Personal Email Address"
-                name="personal_email"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="passwordOne"
-                label="Password"
-                type="password"
-                id="passwordOne"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="passwordTwo"
-                label="Confirm Password"
-                type="password"
-                id="passwordTwo"
-              />
-            </Grid>
-          </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Request Account
+            </Container>
+
+            
+            <Container maxWidth="xs">
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+            >
+              Request Account
           </Button>
-          <Grid container justify="flex-end">
-            <Grid item>
-              <Link href="/signin" variant="body2">
-                Already have an account? Sign in
+            <Grid container justify="flex-end">
+              <Grid item>
+                <Link href="/signin" variant="body2">
+                  Already have an account? Sign in
               </Link>
+              </Grid>
             </Grid>
+            </Container>
+
           </Grid>
         </form>
       </div>
