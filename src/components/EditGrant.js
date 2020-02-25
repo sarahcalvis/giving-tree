@@ -64,7 +64,7 @@ export default function EditGrant(props) {
   const fileInput = React.createRef();
 
   // Store the image names for the carousel
-  const [img, setImg] = React.useState([]);
+  const [img, setImg] = React.useState(props.grantData.images);
 
   // Store the image 
 
@@ -101,6 +101,19 @@ export default function EditGrant(props) {
     })
   }
 
+  // useEffect(() => {
+  //   let newImg = img.slice();
+  //   for (let i of img) {
+  //     storageRef.child(i).getDownloadURL().then(function (url) {
+  //       newImg.push(url);
+  //       setImg(newImg);
+  //       console.log(img);
+  //     }).catch(function (error) {
+  //       console.log('error getting image url: ', error)
+  //     })
+  //   }
+  // }, [img])
+
   // Handle general input to text fields
   const handleInput = (e) => {
     if (e.target.id === 'goal_amt') {
@@ -136,6 +149,7 @@ export default function EditGrant(props) {
         <Text type='card-subheading' text={'What is this grant for?'} />
         <TextField
           id='title'
+          value={props.grantData.title}
           variant='outlined'
           label='Grant Title'
           onChange={handleInput} />
@@ -144,9 +158,9 @@ export default function EditGrant(props) {
       <div className={classes.padding}>
         <Text type='card-heading' text='Grant Images' />
         <Text type='card-subheading' text={'Add some pictures related to the grant.'} />
-        {img.length > 0 && <ImageCarousel img={img} />}
+        {(img && img.length > 0) && <ImageCarousel img={img} />}
         <label for='file-upload'>
-          {img.length > 0 ? 'Upload another image' : 'Upload images' }
+          {(img && img.length > 0) ? 'Upload another image' : 'Upload images' }
         </label>
         <input
           className={classes.input}

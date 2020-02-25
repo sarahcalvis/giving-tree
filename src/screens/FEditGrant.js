@@ -55,11 +55,11 @@ function FEditGrant() {
   // Grant data to upload to firebase
   const [grantData, setGrantData] = React.useState(
     {
-      cf_name: '', // TODO
-      cf_id: '', // TODO
+      cf_name: '', 
+      cf_id: '', 
       title: '',
-      nonprofit_name: '', // TODO
-      nonprofit_id: '', // TODO
+      nonprofit_name: '', 
+      nonprofit_id: '', 
       address: '',
       lat: '',
       long: '',

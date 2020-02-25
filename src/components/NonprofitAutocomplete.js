@@ -26,10 +26,6 @@ export default function NonprofitAutocomplete(props) {
 
   const cancelAddMode = () => { setAdding(false); }
 
-  useEffect(() => {
-    console.log(nonprofits)
-  }, [nonprofits])
-
   const addNonprofit = () => {
     db.collection('nonprofits').doc().set(nonprofitData)
       .then(function () {
@@ -46,7 +42,6 @@ export default function NonprofitAutocomplete(props) {
       .get()
       .then(function (querySnapshot) {
         querySnapshot.forEach(function (doc) {
-          console.log(doc.id, " => ", doc.data());
           newNonprofits.push({ id: doc.id, name: doc.data().name })
         })
       }).then(() => setNonprofits(newNonprofits))
@@ -59,7 +54,6 @@ export default function NonprofitAutocomplete(props) {
     let newNonprofitData = nonprofitData;
     newNonprofitData[e.target.id] = e.target.value;
     setNonprofitData(newNonprofitData);
-    console.log(newNonprofitData);
   }
 
   return (

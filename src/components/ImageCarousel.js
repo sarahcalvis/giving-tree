@@ -14,6 +14,9 @@ const useStyles = makeStyles({
     height: 35,
     // background: '#AAAAAA'
   },
+  narrow: {
+    maxWidth: 500,
+  },
   cardMedia: {
     height: 250,
   },
@@ -32,13 +35,13 @@ export default function ImageCarousel(props) {
   };
 
   return (
-    <div>
+    <div className={classes.narrow}>
       <CardMedia
         className={classes.cardMedia}
         image={props.img[activeStep]}
         title="Grant Image"
       />
-      {props.img.length > 1 && 
+      {props.img.length > 1 &&
         <MobileStepper
           variant="dots"
           steps={props.img.length}
