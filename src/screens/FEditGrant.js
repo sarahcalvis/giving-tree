@@ -11,7 +11,6 @@ import withAuthProtection from '../auth/withAuthProtection.js';
 import { makeStyles } from '@material-ui/styles';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
-import Fab from '@material-ui/core/Fab';
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -86,6 +85,10 @@ function FEditGrant() {
       setId(window.location.pathname.split('/')[3]);
     }
   }, [grantStatus]);
+
+  useEffect(() => {
+
+  }, [id]);
 
   const callback = (data, type) => {
     let newData = grantData;

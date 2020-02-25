@@ -7,7 +7,6 @@ import TagSearch from './TagSearch.js';
 import ImageCarousel from './ImageCarousel.js';
 import NonprofitAutocomplete from './NonprofitAutocomplete.js';
 
-import Divider from '@material-ui/core/Divider';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/styles';
 import {
@@ -142,14 +141,12 @@ export default function EditGrant(props) {
           onChange={handleInput} />
       </div>
 
-      <Divider variant="middle" />
-
       <div className={classes.padding}>
         <Text type='card-heading' text='Grant Images' />
         <Text type='card-subheading' text={'Add some pictures related to the grant.'} />
         {img.length > 0 && <ImageCarousel img={img} />}
         <label for='file-upload'>
-          Click to upload images...
+          {img.length > 0 ? 'Upload another image' : 'Upload images' }
         </label>
         <input
           className={classes.input}
@@ -194,11 +191,6 @@ export default function EditGrant(props) {
       <div className={classes.padding}>
         <Text type='card-heading' text='Goal Amount' />
         <Text type='card-subheading' text={'The total amount you want to raise for this grant. If you receive donations from outside giving tree, you can always edit this amount.'} />
-        {/* <TextField
-          id='goal_amt'
-          variant='outlined'
-          label='Goal amount'
-          onChange={handleInput} /> */}
         <MaskedInput
           mask={numberMask}
           onChange={handleInput}
@@ -211,7 +203,7 @@ export default function EditGrant(props) {
 
       <div className={classes.padding}>
         <Text type='card-heading' text='Tags' />
-        <Text type='card-subheading' text={'Search for a tag or acreate a new tag to help donors find the grants they are looking for.'} />
+        <Text type='card-subheading' text={'Search for a tag or create a new tag to help donors find the grants they are looking for.'} />
         <TagSearch parentCallback={tagsCallback} />
       </div>
 
