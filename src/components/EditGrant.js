@@ -103,9 +103,12 @@ export default function EditGrant(props) {
   }
 
   // Handle general input to text fields
-  const handleInput = (e, data) => {
-    console.log(e.target.value.replace('$','').replace(' ', '').replace('.', '').replace(/,/g, ''))
-    props.callback(e.target.value, e.target.id);
+  const handleInput = (e) => {
+    if (e.target.id === 'goal_amt') {
+      props.callback(parseFloat(e.target.value.replace('$', '').replace(' ', '').replace(/,/g, '')), e.target.id)
+    } else {
+      props.callback(e.target.value, e.target.id);
+    }
   }
 
   // Get the location from LocationSearch
@@ -204,7 +207,6 @@ export default function EditGrant(props) {
           onChange={handleInput}
           id='goal_amt'
           className='form-control'
-          id='1'
           type='text'
         />
       </div>
