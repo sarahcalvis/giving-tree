@@ -1,3 +1,4 @@
+
 import React, { useEffect, useContext } from 'react';
 
 import EditGrant from '../components/EditGrant.js';
@@ -164,11 +165,13 @@ function FEditGrant() {
     // Update the grant data
     setGrantData(newGrantData);
 
-    newGrantData.nonprofit_id = 'Wafb5Zjt2z9k23FLVcOd';
+    // Set the date posted
     let time = Math.round(new Date().getTime() / 1000);
     newGrantData.date_posted = { seconds: time, nanoseconds: 0 };
-    // TODO: set CF name/id
+
+    // Save the changes
     setGrantData(newGrantData);
+
     db.collection('grants').doc().set(grantData)
       .then(function () {
         console.log('Grant published');

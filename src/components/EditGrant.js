@@ -109,9 +109,9 @@ export default function EditGrant(props) {
   }
 
   // Get the nonprofit from NonprofitAutocomplete
-  const nonprofitCallback = (event, nonprofit) => {
-    props.callback(nonprofit.id, 'nonprofit_id');
-    props.callback(nonprofit.name, 'nonprofit_name');
+  const nonprofitCallback = (event, value) => {
+    props.callback(value.id, 'nonprofit_id');
+    props.callback(value.name, 'nonprofit_name');
   }
 
   return (
