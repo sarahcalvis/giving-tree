@@ -87,7 +87,15 @@ function FEditGrant() {
   }, [grantStatus]);
 
   useEffect(() => {
-
+    if (id !== null) {
+      db.collection('grants').doc(id).get()
+        .then(function (doc) {
+          setGrantData(doc.data())
+        })
+        .catch(function (error) {
+          console.error('Error getting grant: ', error);
+        })
+    }
   }, [id]);
 
   const callback = (data, type) => {
