@@ -5,12 +5,19 @@ import firebase from '../firebase';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import Container from '@material-ui/core/Container';
+import Grid from '@material-ui/core/Grid';
 
 export default function NonprofitAutocomplete(props) {
   const [nonprofits, setNonprofits] = React.useState([]);
   const [nonprofitData, setNonprofitData] = React.useState({ name: '', number: '', email: '', url: '', cf_id: props.cfId })
 
   let db = firebase.firestore();
+
+  let transformedNonprofits = Object.values(nonprofits).map((item) => {
+    item.dataLabel = item.name;
+    return item;
+  })
 
   // Keep track of whether the 'add nonprofit' panel is open
   const [adding, setAdding] = React.useState(false);
@@ -19,7 +26,17 @@ export default function NonprofitAutocomplete(props) {
 
   const cancelAddMode = () => { setAdding(false); }
 
+  useEffect(() => {
+    console.log(nonprofits)
+  }, [nonprofits])
+
   const addNonprofit = () => {
+    db.collection('nonprofits').doc().set(nonprofitData)
+      .then(function () {
+        setAdding(false);
+      }).catch(function (error) {
+        console.error('Error writing draft: ', error);
+      })
   }
 
   // Load the nonprofits
@@ -29,15 +46,14 @@ export default function NonprofitAutocomplete(props) {
       .get()
       .then(function (querySnapshot) {
         querySnapshot.forEach(function (doc) {
-          // doc.data() is never undefined for query doc snapshots
           console.log(doc.id, " => ", doc.data());
           newNonprofits.push({ id: doc.id, name: doc.data().name })
-        }).then(() => setNonprofits(newNonprofits));
-      })
+        })
+      }).then(() => setNonprofits(newNonprofits))
       .catch(function (error) {
         console.log("Error getting documents: ", error);
       });
-  }, [])
+  }, [adding])
 
   const handleInput = (e) => {
     let newNonprofitData = nonprofitData;
@@ -48,20 +64,32 @@ export default function NonprofitAutocomplete(props) {
 
   return (
     <div>
-      <Autocomplete
-        options={nonprofits}
-        getOptionLabel={nonprofits => nonprofits.name}
-        fullWidth
-        renderInput={params => (
-          <TextField {...params} label='Nonprofit' fullWidth />
-        )}
-      />
+      {(nonprofits.length > 0) &&
+        <Autocomplete
+          options={transformedNonprofits}
+          getOptionLabel={nonprofits => nonprofits.name}
+          fullWidth
+          autoHighlight
+          onChange={props.callback}
+          renderInput={params => (
+            <TextField
+              {...params}
+              onChange={props.callback}
+              label='Select a nonprofit'
+              fullWidth
+            />
+          )}
+        />
+      }
+      <p>or</p>
       <Button
+        color='primary'
+        variant='contained'
         onClick={addMode}>Add a new nonprofit
       </Button>
       {
         adding &&
-        <div>
+        <Container>
           <TextField
             id='name'
             fullWidth
@@ -82,13 +110,25 @@ export default function NonprofitAutocomplete(props) {
             fullWidth
             label='Nonprofit Website'
             onChange={handleInput} />
-          <Button
-            onClick={addNonprofit}>Add Nonprofit
-          </Button>
-          <Button
-            onClick={cancelAddMode}>Cancel
-          </Button>
-        </div>
+          <Grid
+            container
+            direction="row"
+            justify="flex-end"
+            alignItems="center">
+            <Button
+              color='primary'
+              variant='outlined'
+              onClick={cancelAddMode}>
+              Cancel
+            </Button>
+            <Button
+              color='primary'
+              variant='contained'
+              onClick={addNonprofit}>
+              Add Nonprofit
+            </Button>
+          </Grid>
+        </Container>
       }
     </div>
   )

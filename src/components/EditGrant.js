@@ -108,6 +108,12 @@ export default function EditGrant(props) {
     props.callback(tags.tags.concat(tags.freeText), 'tags');
   }
 
+  // Get the nonprofit from NonprofitAutocomplete
+  const nonprofitCallback = (event, nonprofit) => {
+    props.callback(nonprofit.id, 'nonprofit_id');
+    props.callback(nonprofit.name, 'nonprofit_name');
+  }
+
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <Container className={classes.card}>
@@ -132,12 +138,9 @@ export default function EditGrant(props) {
               fullWidth
               label='Grant Title'
               onChange={handleInput} />
-            <NonprofitAutocomplete cfId={props.cfId} />
-            <TextField
-              id='nonprofit_name'
-              fullWidth
-              label='Nonprofit Name'
-              onChange={handleInput} />
+            <NonprofitAutocomplete 
+              callback={nonprofitCallback}
+              cfId={props.cfId} />
             <DatePicker
               fullWidth
               label='Deadine'
