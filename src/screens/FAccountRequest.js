@@ -58,6 +58,7 @@ const INITIAL_STATE = {
   passwordOne: '',
   passwordTwo: '',
   errors: {
+    name: '',
     public_email: '',
     public_phone: '',
     personal_email: '',
@@ -195,6 +196,8 @@ class FAccountRequest extends Component {
                       label="Foundation Name"
                       onChange={this.onChange}
                       value={name}
+                      error={errors.name !== ""}
+                      helperText={errors.name}
                     />
                   </Grid>
                   <Grid item xs={12}>

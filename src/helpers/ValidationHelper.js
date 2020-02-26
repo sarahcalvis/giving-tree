@@ -9,6 +9,7 @@ export const validateField = (name, value) => {
       return validatePhone(value);
     case 'foundation_url':
       return validateUrl(value);
+    case 'name':
     case 'fname_contact':
     case 'lname_contact':
       return validateName(value);
@@ -43,15 +44,47 @@ export const validateEmail = (email) => {
 }
 
 const validateName = (name) => {
-  return '';
+  let errorMsg = "";
+
+  if (name === "") {
+    errorMsg = "*Please enter a name.";
+  }
+
+  return errorMsg;
 }
 
 const validateUrl = (url) => {
-  return '';
+  let errorMsg = "";
+
+  if (url === "") {
+    errorMsg = "*Please enter the foundation website URL.";
+  }
+  else if (typeof url !== "undefined") {
+    //regular expression for email validation
+    var pattern = new RegExp("^(https?://)?(www\\.)?([-a-z0-9]{1,63}\\.)*?[a-z0-9][-a-z0-9]{0,61}[a-z0-9]\\.[a-z]{2,6}(/[-\\w@\\+\\.~#\\?&/=%]*)?$");
+    if (!pattern.test(url)) {
+      errorMsg = "*Please enter a valid URL.";
+    }
+  }
+
+  return errorMsg;
 }
 
 const validatePhone = (phone) => {
-  return '';
+  let errorMsg = "";
+
+  if (phone === "") {
+    errorMsg = "*Please enter your phone number.";
+  }
+  else if (typeof phone !== "undefined") {
+    //regular expression for email validation
+    var pattern = new RegExp(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im);
+    if (!pattern.test(phone)) {
+      errorMsg = "*Please enter a valid phone number.";
+    }
+  }
+
+  return errorMsg;
 }
 
 const validatePassword = (password) => {
