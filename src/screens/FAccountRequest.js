@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import $ from 'jquery';
 
 import firebase from '../firebase.js';
-import * as helper from '../helpers/SignUpHelper.js';
+import * as helper from '../helpers/ValidationHelper.js';
 import Text from '../components/Text.js';
 
 import Avatar from '@material-ui/core/Avatar';
@@ -67,8 +67,9 @@ const INITIAL_STATE = {
     lname_contact: '',
     passwordOne: '',
     passwordTwo: '',
-    submitError: '',
+    submit: '',
   },
+  isValid: false,
 };
 
 class FAccountRequest extends Component {
@@ -78,16 +79,9 @@ class FAccountRequest extends Component {
   }
 
   onSubmit = event => {
-    let errors = {
-      email: helper.validateEmail(this.state.email),
-      passwordOne: helper.validatePassword(this.state.passwordOne),
-      passwordTwo: helper.confirmMatching(this.state.passwordOne, this.state.passwordTwo),
-    }
+    if (this.state.isValid) {
+      const { email, passwordOne } = this.state;
 
-
-    const noErrors = Object.values(errors).filter((s) => { return s !== '' }).length === 0;
-
-    if (noErrors) {
       firebase.auth().createUserWithEmailAndPassword(email, passwordOne)
         .then((result) => {
           //Do Misc Stuff for Foundation Account
@@ -124,20 +118,35 @@ class FAccountRequest extends Component {
         .catch((error) => {
           //Failure
           //TODO: Cleanup Firebase Error Messages
-          this.setState({ submitError: error.message });
+          this.setState({ errors: { ...this.state.errors, submit: error.message } });
         });
-    }
-    else {
-      //Display field validation errors
-      this.setState({ errors: errors });
     }
 
     event.preventDefault();
   }
 
   onChange = event => {
-    this.setState({ [event.target.name]: event.target.value });
+    const { name, value } = event.target;
+    this.setState({ [name]: value });
+
+    if (name === 'passwordTwo') {
+      this.setState({ errors: { ...this.state.errors, [name]: helper.confirmMatching(this.state.passwordOne, value) } },
+        this.validateForm
+      );
+    }
+    else {
+      this.setState({ errors: { ...this.state.errors, [name]: helper.validateField(name, value) } },
+        this.validateForm
+      );
+    }
   };
+
+  validateForm = () => {
+    const noEmptyFields = Object.values(this.state).filter((s) => { return s === '' }).length === 0
+    const noErrors = Object.values(this.state.errors).filter((s) => { return s !== '' }).length === 0
+    this.setState({ isValid: noErrors && noEmptyFields });
+  }
+
 
   render() {
     const {
@@ -152,9 +161,8 @@ class FAccountRequest extends Component {
       passwordOne,
       passwordTwo,
       errors,
+      isValid,
     } = this.state;
-
-    const isValid = Object.values(this.state).filter((s) => { return s === '' }).length === 0;
 
     const { classes } = this.props;
 
@@ -187,8 +195,6 @@ class FAccountRequest extends Component {
                       label="Foundation Name"
                       onChange={this.onChange}
                       value={name}
-                      error={errors.name !== ""}
-                      helperText={errors.name}
                     />
                   </Grid>
                   <Grid item xs={12}>

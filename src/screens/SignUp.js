@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 
 import firebase from '../firebase.js';
-import * as helper from '../helpers/SignUpHelper.js';
+import * as helper from '../helpers/ValidationHelper.js';
 
 import { withStyles } from '@material-ui/styles';
 import Container from '@material-ui/core/Container';
@@ -68,8 +68,9 @@ const INITIAL_STATE = {
         email: '',
         passwordOne: '',
         passwordTwo: '',
+        submit: '',
     },
-    submitError: ''
+    isValid: false,
 };
 
 class SignUpFormBase extends Component {
@@ -79,13 +80,7 @@ class SignUpFormBase extends Component {
     }
 
     onSubmit = event => {
-        let errors = {
-            email: helper.validateEmail(this.state.email),
-            passwordOne: helper.validatePassword(this.state.passwordOne),
-            passwordTwo: helper.confirmMatching(this.state.passwordOne, this.state.passwordTwo),
-        }
-
-        if (errors.email === '' && errors.passwordOne === '' && errors.passwordTwo === '') {
+        if (this.state.isValid) {
             const { email, passwordOne } = this.state;
 
             firebase.auth().createUserWithEmailAndPassword(email, passwordOne)
@@ -93,30 +88,40 @@ class SignUpFormBase extends Component {
                     //Do Misc Stuff for Donor Account
                     //Post to Server? Set firebase rules? Create empty donor document?
 
-                    // User is signed in. Get the ID token.
-                    return result.user.getIdToken();
-                })
-                .then((idToken) => {
                     //Redirect User to Home
                     this.props.history.push('/');
                 })
                 .catch((error) => {
                     //Failure
                     //TODO: Cleanup Firebase Error Messages
-                    this.setState({ submitError: error.message });
+                    this.setState({ errors: { ...this.state.errors, submit: error.message } });
                 });
-        }
-        else {
-            //Display field validation errors
-            this.setState({ errors: errors });
         }
 
         event.preventDefault();
     }
 
     onChange = event => {
-        this.setState({ [event.target.name]: event.target.value });
+        const { name, value } = event.target;
+        this.setState({ [name]: value });
+
+        if (name === 'passwordTwo') {
+            this.setState({ errors: { ...this.state.errors, [name]: helper.confirmMatching(this.state.passwordOne, value) } },
+                this.validateForm
+            );
+        }
+        else {
+            this.setState({ errors: { ...this.state.errors, [name]: helper.validateField(name, value) } },
+                this.validateForm
+            );
+        }
     };
+
+    validateForm = () => {
+        const noEmptyFields = Object.values(this.state).filter((s) => { return s === '' }).length === 0
+        const noErrors = Object.values(this.state.errors).filter((s) => { return s !== '' }).length === 0
+        this.setState({ isValid: noErrors && noEmptyFields });
+    }
 
     render() {
         const {
@@ -124,21 +129,15 @@ class SignUpFormBase extends Component {
             passwordOne,
             passwordTwo,
             errors,
-            submitError,
+            isValid,
         } = this.state;
-
-        const isInvalid =
-            // passwordOne !== passwordTwo ||
-            passwordOne === '' ||
-            passwordTwo === '' ||
-            email === '';
 
         const { classes } = this.props;
 
         return (
             <form className={classes.form} onSubmit={this.onSubmit} noValidate>
                 <Typography component="h6" className={classes.errorMsg} >
-                    {submitError}
+                    {errors.submit}
                 </Typography>
                 <TextField
                     variant="outlined"
@@ -185,7 +184,7 @@ class SignUpFormBase extends Component {
                     fullWidth
                     variant="contained"
                     color="primary"
-                    disabled={isInvalid}
+                    disabled={!isValid}
                 >
                     Sign Up
                         </Button>
