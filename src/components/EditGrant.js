@@ -39,8 +39,14 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export default function EditGrant(props) {
+  // Set tab title
+  useEffect(() => { document.title = 'Create Grant-Giving Tree'; }, []);
+
   // Styles
   const classes = useStyles();
+
+  // Initialize Firebase storage
+  const storageRef = firebase.storage().ref();
 
   // Money mask
   const numberMask = createNumberMask({
@@ -49,27 +55,27 @@ export default function EditGrant(props) {
     suffix: '' // This will put the dollar sign at the end, with a space.
   })
 
-  // Set tab title
-  useEffect(() => { document.title = 'Create Grant-Giving Tree'; }, []);
-
-  // Handle the date picker
+  // Hold the date selected by the date picker
   const [selectedDate, handleDateChange] = React.useState(null);
+
+  // Handle change to the date picker
   useEffect(() => {
     if (selectedDate) {
       props.callback(Math.round(selectedDate.getTime() / 1000), 'date_deadline')
     }
   }, [selectedDate]);
 
+  ///////////
+  // IMAGE //
+  ///////////
   // Moniter the image input
   const fileInput = React.createRef();
 
-  // Store the image names for the carousel
+  // Store the image names
   const [img, setImg] = React.useState(props.grantData.images);
 
-  // Store the image 
-
-  // Initialize Firebase storage
-  const storageRef = firebase.storage().ref();
+  // Store the image urls
+  const [url, setUrl] = React.useState([]);
 
   // Upload images to Firebase storage
   const uploadImages = () => {
@@ -84,37 +90,36 @@ export default function EditGrant(props) {
       ref.put(new File([file], name, { type: type, }))
         .then(function (snapshot) {
           props.callback(name, 'images')
-          getUrls(name);
+
+          // add the image name to the image array
+          let newImg = img.slice();
+          newImg.push(name);
+          setImg(newImg);
         });
     }
   };
 
-  // Get the array of images when another image is uploaded
-  const getUrls = (imgName) => {
-    let newImg = img.slice(); // Need a new reference to trigger state reload
-    storageRef.child(imgName).getDownloadURL().then(function (url) {
-      newImg.push(url);
-      setImg(newImg);
-      console.log(img);
-    }).catch(function (error) {
-      console.log('error getting image url: ', error)
-    })
-  }
+  // Observe the image array. When an image name is added, reload the image urls
+  useEffect(() => {
+    if (img) {
+      let newUrl = [];
+      for (let i in img) {
+        storageRef.child(img[i]).getDownloadURL().then(function (url) {
+          newUrl.push(url);
+          if (i == img.length - 1) {
+            setUrl(newUrl.slice());
+          }
+        }).catch(function (error) {
+          console.log('error getting image url: ', error)
+        })
+      }
+    }
+  }, [img])
 
-  // useEffect(() => {
-  //   let newImg = img.slice();
-  //   for (let i of img) {
-  //     storageRef.child(i).getDownloadURL().then(function (url) {
-  //       newImg.push(url);
-  //       setImg(newImg);
-  //       console.log(img);
-  //     }).catch(function (error) {
-  //       console.log('error getting image url: ', error)
-  //     })
-  //   }
-  // }, [img])
-
-  // Handle general input to text fields
+  ///////////////
+  // CALLBACKS //
+  ///////////////
+  // Get input from text fields
   const handleInput = (e) => {
     if (e.target.id === 'goal_amt') {
       props.callback(parseFloat(e.target.value.replace('$', '').replace(' ', '').replace(/,/g, '')), e.target.id)
@@ -158,9 +163,9 @@ export default function EditGrant(props) {
       <div className={classes.padding}>
         <Text type='card-heading' text='Grant Images' />
         <Text type='card-subheading' text={'Add some pictures related to the grant.'} />
-        {(img && img.length > 0) && <ImageCarousel img={img} />}
+        {(url && url.length > 0) && <ImageCarousel img={url} />}
         <label for='file-upload'>
-          {(img && img.length > 0) ? 'Upload another image' : 'Upload images' }
+          {(url && url.length > 0) ? 'Upload another image' : 'Upload images'}
         </label>
         <input
           className={classes.input}
