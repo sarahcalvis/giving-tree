@@ -65,13 +65,8 @@ export default function EditGrant(props) {
 
   // Store the image names for the carousel
   const [img, setImg] = React.useState(props.grantData.images);
-  const [urls, setUrls] = React.useState();
 
-  // Update the image names when receiving them as props
-  useEffect(() => {
-    let newImg = props.grantData.images.slice(); // Need a new reference to trigger state reload
-    setImg(newImg)
-  }, [props.grantData.images])
+  // Store the image 
 
   // Initialize Firebase storage
   const storageRef = firebase.storage().ref();
@@ -89,26 +84,35 @@ export default function EditGrant(props) {
       ref.put(new File([file], name, { type: type, }))
         .then(function (snapshot) {
           props.callback(name, 'images')
-          let newImg = img.push(name);
-          setImg(newImg);
+          getUrls(name);
         });
     }
   };
 
   // Get the array of images when another image is uploaded
-  useEffect(() => {
-    let newUrls = [];
+  const getUrls = (imgName) => {
     let newImg = img.slice(); // Need a new reference to trigger state reload
-    for (let i of newImg) {
-      storageRef.child(i).getDownloadURL().then(function (url) {
-        newUrls.push(url);
-        setUrls(newUrls);
-        console.log(img);
-      }).catch(function (error) {
-        console.log('error getting image url: ', error)
-      })
-    }
-  }, [props.grantData.images, img]);
+    storageRef.child(imgName).getDownloadURL().then(function (url) {
+      newImg.push(url);
+      setImg(newImg);
+      console.log(img);
+    }).catch(function (error) {
+      console.log('error getting image url: ', error)
+    })
+  }
+
+  // useEffect(() => {
+  //   let newImg = img.slice();
+  //   for (let i of img) {
+  //     storageRef.child(i).getDownloadURL().then(function (url) {
+  //       newImg.push(url);
+  //       setImg(newImg);
+  //       console.log(img);
+  //     }).catch(function (error) {
+  //       console.log('error getting image url: ', error)
+  //     })
+  //   }
+  // }, [img])
 
   // Handle general input to text fields
   const handleInput = (e) => {
@@ -154,9 +158,9 @@ export default function EditGrant(props) {
       <div className={classes.padding}>
         <Text type='card-heading' text='Grant Images' />
         <Text type='card-subheading' text={'Add some pictures related to the grant.'} />
-        {(urls && urls.length > 0) && <ImageCarousel img={urls} />}
+        {(img && img.length > 0) && <ImageCarousel img={img} />}
         <label for='file-upload'>
-          {(img && img.length > 0) ? 'Upload another image' : 'Upload images'}
+          {(img && img.length > 0) ? 'Upload another image' : 'Upload images' }
         </label>
         <input
           className={classes.input}
