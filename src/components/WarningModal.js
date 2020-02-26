@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Fade from "@material-ui/core/Fade";
 import Modal from "@material-ui/core/Modal";
+import Dialog from "@material-ui/core/Dialog";
 import Backdrop from "@material-ui/core/Backdrop";
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
@@ -10,6 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Box from '@material-ui/core/Box';
+import { WarningRounded } from '@material-ui/icons';
 
 const useStyles = makeStyles(theme => ({
     buttonsWrapper: {
@@ -20,7 +22,16 @@ const useStyles = makeStyles(theme => ({
       paddingRight: '4em',
       marginRight: '1em',
     },
+    header: {
+      backgroundColor: theme.palette.warning,
+      justifyContent:'center',
+      display: 'block',
+    },
+    icon: {
+      verticalAlign: 'baseline',
+    },
     modal: {
+      maxWidth: 'xs',
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
@@ -47,7 +58,7 @@ export default function WarningModal(props) {
     }, [cfInput, props.cfName]);
 
     return(
-        <Modal
+        <Dialog
             aria-labelledby="simple-modal-title"
             aria-describedby="simple-modal-description"
             open={props.open}
@@ -60,16 +71,19 @@ export default function WarningModal(props) {
             >
             <Fade in={props.open}>
             <div className={classes.paper}>
-                <CardHeader 
-                  titleTypographyProps={{variant:'h2', fontWeight:'bold' }}
-                  title="WARNING" />
-                <CardContent>
+                
                   <div>
+                    <div className={classes.header}>
+                      <Typography variant="h6" gutterBottom>
+                        {<WarningRounded className={classes.icon}/>} Delete this Community Foundation? 
+                      </Typography>
+                      <Typography variant="body1" gutterBottom>
+                        Doing so will permanently delete its data, including all its giving opportunities. 
+                      </Typography>
+                    </div>
+                    
                     <Typography variant="body1" gutterBottom>
-                      Are you sure? This action can't be undone! 
-                    </Typography>
-                    <Typography variant="body1" gutterBottom>
-                      Type "{props.cfName}" to confirm. 
+                      Confirm you want to delete this community foundation by typing: {props.cfName} 
                     </Typography>
                     <TextField 
                       id='cf-name-field'
@@ -95,9 +109,9 @@ export default function WarningModal(props) {
                       </Button>
                     </div>             
                   </div>
-                </CardContent>
+                
             </div>
             </Fade>
-        </Modal>
+        </Dialog>
     );
 }
