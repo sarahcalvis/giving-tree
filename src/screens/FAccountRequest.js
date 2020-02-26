@@ -78,6 +78,13 @@ class FAccountRequest extends Component {
   }
 
   onSubmit = event => {
+    let errors = {
+      email: helper.validateEmail(this.state.email),
+      passwordOne: helper.validatePassword(this.state.passwordOne),
+      passwordTwo: helper.confirmMatching(this.state.passwordOne, this.state.passwordTwo),
+    }
+
+
     const noErrors = Object.values(errors).filter((s) => { return s !== '' }).length === 0;
 
     if (noErrors) {
@@ -134,7 +141,14 @@ class FAccountRequest extends Component {
 
   render() {
     const {
-      email,
+      name,
+      public_email,
+      public_phone,
+      personal_email,
+      personal_phone,
+      foundation_url,
+      fname_contact,
+      lname_contact,
       passwordOne,
       passwordTwo,
       errors,
@@ -172,6 +186,9 @@ class FAccountRequest extends Component {
                       id="name"
                       label="Foundation Name"
                       onChange={this.onChange}
+                      value={name}
+                      error={errors.name !== ""}
+                      helperText={errors.name}
                     />
                   </Grid>
                   <Grid item xs={12}>
@@ -184,6 +201,9 @@ class FAccountRequest extends Component {
                       label="Website URL"
                       placeholder="www.communityfoundation.com"
                       onChange={this.onChange}
+                      value={foundation_url}
+                      error={errors.foundation_url !== ""}
+                      helperText={errors.foundation_url}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
@@ -196,6 +216,9 @@ class FAccountRequest extends Component {
                       label="Public Email"
                       placeholder="contact@cf.com"
                       onChange={this.onChange}
+                      value={public_email}
+                      error={errors.public_email !== ""}
+                      helperText={errors.public_email}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
@@ -207,6 +230,9 @@ class FAccountRequest extends Component {
                       id="public_phone"
                       label="Public Phone"
                       onChange={this.onChange}
+                      value={public_phone}
+                      error={errors.public_phone !== ""}
+                      helperText={errors.public_phone}
                     />
                   </Grid>
                 </Grid>
@@ -227,6 +253,9 @@ class FAccountRequest extends Component {
                       id="fname_contact"
                       label="First Name"
                       onChange={this.onChange}
+                      value={fname_contact}
+                      error={errors.fname_contact !== ""}
+                      helperText={errors.fname_contact}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
@@ -238,6 +267,9 @@ class FAccountRequest extends Component {
                       label="Last Name"
                       name="lname_contact"
                       onChange={this.onChange}
+                      value={lname_contact}
+                      error={errors.lname_contact !== ""}
+                      helperText={errors.lname_contact}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
@@ -249,6 +281,9 @@ class FAccountRequest extends Component {
                       label="Personal Email"
                       name="personal_email"
                       onChange={this.onChange}
+                      value={personal_email}
+                      error={errors.personal_email !== ""}
+                      helperText={errors.personal_email}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
@@ -260,6 +295,9 @@ class FAccountRequest extends Component {
                       id="personal_phone"
                       label="Personal Phone"
                       onChange={this.onChange}
+                      value={personal_phone}
+                      error={errors.personal_phone !== ""}
+                      helperText={errors.personal_phone}
                     />
                   </Grid>
                   <Grid item xs={12}>
@@ -272,6 +310,9 @@ class FAccountRequest extends Component {
                       type="password"
                       id="passwordOne"
                       onChange={this.onChange}
+                      value={passwordOne}
+                      error={errors.passwordOne !== ""}
+                      helperText={errors.passwordOne}
                     />
                   </Grid>
                   <Grid item xs={12}>
@@ -284,6 +325,9 @@ class FAccountRequest extends Component {
                       type="password"
                       id="passwordTwo"
                       onChange={this.onChange}
+                      value={passwordTwo}
+                      error={errors.passwordTwo !== ""}
+                      helperText={errors.passwordTwo}
                     />
                   </Grid>
                 </Grid>
