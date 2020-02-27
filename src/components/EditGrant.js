@@ -56,14 +56,7 @@ export default function EditGrant(props) {
   })
 
   // Hold the date selected by the date picker
-  const [selectedDate, handleDateChange] = React.useState(null);
-
-  // Handle change to the date picker
-  useEffect(() => {
-    if (selectedDate) {
-      props.callback(Math.round(selectedDate.getTime() / 1000), 'date_deadline')
-    }
-  }, [selectedDate]);
+  const [selectedDate, handleDateChange] = React.useState(new Date(props.grantData.date_deadline.seconds * 1000));
 
   ///////////
   // IMAGE //
@@ -129,6 +122,13 @@ export default function EditGrant(props) {
       props.callback(e.target.value, e.target.id);
     }
   }
+
+  // Handle change to the date picker
+  useEffect(() => {
+    if (selectedDate) {
+      props.callback(Math.round(selectedDate.getTime() / 1000), 'date_deadline')
+    }
+  }, [selectedDate]);
 
   // Get the location from LocationSearch
   const locationCallback = (address) => {
