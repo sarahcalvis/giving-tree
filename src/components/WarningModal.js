@@ -81,7 +81,6 @@ export default function WarningModal(props) {
                     <Grid item className={classes.item}>
                         Delete this Community Foundation? 
                     </Grid>
-                    
                   </Grid>
                 </DialogTitle>   
               </Grid>
