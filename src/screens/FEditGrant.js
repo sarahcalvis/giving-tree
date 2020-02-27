@@ -32,12 +32,13 @@ function FEditGrant() {
 
   let db = firebase.firestore();
 
+  ///////////////////////////////
+  // COMMUNITY FOUNDATION DATA //
+  ///////////////////////////////
   // Figure out what community foundation is logged in
   const user = useContext(AuthUserContext);
 
-  // If editing grant, see if grant data is loaded
-  const [loaded, setLoaded] = React.useState(false);
-
+  // Data of the CF editing or creating the grant
   const [cfData, setCfData] = React.useState();
 
   // Load that community foundation's data
@@ -55,29 +56,10 @@ function FEditGrant() {
       });
   }, [user]);
 
-  // Grant data to upload to firebase
-  const [grantData, setGrantData] = React.useState(
-    {
-      cf_name: '',
-      cf_id: '',
-      title: '',
-      nonprofit_name: '',
-      nonprofit_id: '',
-      address: '',
-      lat: '',
-      long: '',
-      date_posted: '',
-      date_deadline: '',
-      money_raised: 0,
-      goal_amt: '',
-      desc: '',
-      tags: [],
-      status: '',
-      images: [],
-    });
 
-  const [newTags, setNewTags] = React.useState([]);
-
+  ////////////////////////////////////
+  // PROVISIONS FOR EDITING A GRANT //
+  ////////////////////////////////////
   // Find out whether we are editing an existing grant or creating a new one
   const [grantStatus] = React.useState(window.location.pathname === '/foundation/create-grant' ? 'create' : 'edit');
 
@@ -89,18 +71,55 @@ function FEditGrant() {
     }
   }, [grantStatus]);
 
+  // If editing grant, see if grant data is loaded
+  const [loaded, setLoaded] = React.useState(false);
+
+  // If editing grant, ensure CF owns it
+  const [validEditor, setValidEditor] = React.useState();
+
+  // If editing, load the grant data
   useEffect(() => {
     if (id !== null) {
       db.collection('grants').doc(id).get()
         .then(function (doc) {
-          setGrantData(doc.data())
-        }).then( function () { setLoaded(true) })
+          if (doc.data().cf_id === cfData.id) {
+            setGrantData(doc.data())
+            setValidEditor(true)
+          } else {
+            setValidEditor(false)
+          }
+        }).then(function () { setLoaded(true) })
         .catch(function (error) {
           console.error('Error getting grant: ', error);
         })
-    } 
-  }, [id]);
+    }
+  }, [cfData]);
 
+
+  ////////////////
+  // GRANT DATA //
+  ////////////////
+  // Grant data to upload to firebase
+  const [grantData, setGrantData] = React.useState({
+    cf_name: '',
+    cf_id: '',
+    title: '',
+    nonprofit_name: '',
+    nonprofit_id: '',
+    address: '',
+    lat: '',
+    long: '',
+    date_posted: '',
+    date_deadline: '',
+    money_raised: 0,
+    goal_amt: '',
+    desc: '',
+    tags: [],
+    status: '',
+    images: [],
+  });
+
+  // Receive changes to the grant data from EditGrant.js
   const callback = (data, type) => {
     let newData = grantData;
 
@@ -122,6 +141,12 @@ function FEditGrant() {
     setGrantData(newData);
     console.log(grantData);
   }
+
+  //////////////////
+  // TAG CREATION //
+  //////////////////
+  // Store the new tags we receive from the callback
+  const [newTags, setNewTags] = React.useState([]);
 
   // Save the new tags to database
   const addNewTags = () => {
@@ -147,6 +172,10 @@ function FEditGrant() {
     });
   }
 
+  ///////////////////////////////////
+  // UPDATE GRANTS IN THE DATABASE //
+  ///////////////////////////////////
+  // Save the grant to drafts
   const saveToDrafts = () => {
     addNewTags();
 
@@ -173,6 +202,7 @@ function FEditGrant() {
       })
   }
 
+  // Update an edited grant
   const update = () => {
     addNewTags();
 
@@ -186,6 +216,7 @@ function FEditGrant() {
       })
   }
 
+  // Publish a new grant
   const publish = () => {
     addNewTags();
 
@@ -229,9 +260,10 @@ function FEditGrant() {
           {grantStatus === 'create' && <Text type='heading' text='Create Grant' />}
           {
             cfData &&
-            ((grantStatus === 'edit' && loaded) || grantStatus == 'create') &&
+            ((grantStatus === 'edit' && loaded && validEditor) || grantStatus == 'create') &&
             < EditGrant grantData={grantData} cfId={cfData.id} callback={callback} />
           }
+          { !validEditor && loaded &&  <Text type='card-heading' text='You cannot edit this grant because it does not belong to your community foundation' />}
         </Grid>
         <Grid item>
           <div className={classes.fab}>
