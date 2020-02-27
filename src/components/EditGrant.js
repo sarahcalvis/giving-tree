@@ -215,7 +215,8 @@ export default function EditGrant(props) {
         <Text type='card-subheading' text={'The total amount you want to raise for this grant. If you receive donations from outside giving tree, you can always edit this amount.'} />
         <MaskedInput
           mask={numberMask}
-          onBlur={handleInput}
+          onChange={handleInput}
+          defaultValue={props.grantData.goal_amt}
           id='goal_amt'
           className='form-control'
           type='text'
