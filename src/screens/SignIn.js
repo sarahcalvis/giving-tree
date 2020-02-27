@@ -108,11 +108,11 @@ class SignInFormBase extends Component {
         this.setState({ [name]: value });
 
         if (name === 'email') {
-            this.setState({ errors: { ...this.state.errors, [name]: helper.validateField(name, value) } },
+            this.setState({ errors: { ...this.state.errors, submit: '', [name]: helper.validateField(name, value) } },
                 this.validateForm
             );
         }
-        else{
+        else {
             this.validateForm();
         }
     };

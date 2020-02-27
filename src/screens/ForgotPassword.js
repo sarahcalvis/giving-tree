@@ -98,17 +98,17 @@ class ForgotPasswordFormBase extends Component {
     onChange = event => {
         const { name, value } = event.target;
         this.setState({ [name]: value });
-    
-          this.setState({ errors: { ...this.state.errors, [name]: helper.validateField(name, value) } },
+
+        this.setState({ errors: { ...this.state.errors, submit: '', [name]: helper.validateField(name, value) } },
             this.validateForm
-          );
-      };
-    
-      validateForm = () => {
+        );
+    };
+
+    validateForm = () => {
         const noEmptyFields = Object.values(this.state).filter((s) => { return s === '' }).length === 0
         const noErrors = Object.values(this.state.errors).filter((s) => { return s !== '' }).length === 0
         this.setState({ isValid: noErrors && noEmptyFields });
-      }
+    }
 
     render() {
         const {
@@ -155,11 +155,11 @@ class ForgotPasswordFormBase extends Component {
         );
     }
 }
-const SignInSignUpLink = ({ classes }) => (    
+const SignInSignUpLink = ({ classes }) => (
     <Grid container>
         <Grid item xs>
             <Link href='/signin' variant="body2">
-                    Ready to sign in?
+                Ready to sign in?
             </Link>
         </Grid>
         <Grid item>

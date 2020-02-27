@@ -14,6 +14,7 @@ import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { withStyles } from '@material-ui/styles';
 import Container from '@material-ui/core/Container';
+import Typography from "@material-ui/core/Typography";
 
 const styles = theme => ({
   paper: {
@@ -79,51 +80,75 @@ class FAccountRequest extends Component {
     this.state = { ...INITIAL_STATE };
   }
 
+  addDocument = () => {
+    const cfDoc = {...this.state};
+    delete cfDoc.errors;
+    delete cfDoc.passwordOne;
+    delete cfDoc.passwordTwo;
+    delete cfDoc.isValid;
+    cfDoc.status = 'requested';
+
+    firebase.firestore().collection("communityFoundations").doc().set(cfDoc)
+      .then(() => {
+        //console.log("Document successfully written!");
+      })
+      .catch((error) => {
+        console.error("Error writing document: ", error);
+      });
+  }
+
   onSubmit = event => {
     if (this.state.isValid) {
-      const { email, passwordOne } = this.state;
+      const { personal_email, passwordOne } = this.state;
 
-      firebase.auth().createUserWithEmailAndPassword(email, passwordOne)
+      firebase.auth().createUserWithEmailAndPassword(personal_email, passwordOne)
         .then((result) => {
           //Do Misc Stuff for Foundation Account
           //Post to Server? Set firebase rules?
 
           // User is signed in. Get the ID token.
-          return result.user.getIdToken();
-        })
-        .then((idToken) => {
-          // Pass the ID token to the server.
-          $.post(
-            '/setCustomClaims',
-            {
-              idToken: idToken,
-            },
-            (data, status) => {
-              // This is not required. You could just wait until the token is expired
-              // and it proactively refreshes.
-              if (status === 'success' && data) {
-                const json = JSON.parse(data);
-                if (json && json.status === 'success') {
-                  // Force token refresh. The token claims will contain the additional claims.
-                  firebase.auth().currentUser.getIdToken(true);
+          result.user.getIdToken().then((idToken) => {
+            // Pass the ID token to the server.
+            $.post(
+              '/setCustomClaims',
+              {
+                idToken: idToken,
+              },
+              (data, status) => {
+                // This is not required. You could just wait until the token is expired
+                // and it proactively refreshes.
+                if (status === 'success' && data) {
+                  const json = JSON.parse(data);
+                  if (json && json.status === 'success') {
+                    // Force token refresh. The token claims will contain the additional claims.
+                    firebase.auth().currentUser.getIdToken(true);
+                  }
                 }
-              }
-              else {
-                console.log("ERROR: " + data);
-              }
+                else {
+                  console.log("ERROR: " + data);
+                }
+              });
+          })
+            .catch((error) => {
+              console.log("Error with getIdToken()");
+              //Failure
+              this.setState({ errors: { ...this.state.errors, submit: error.message } });
             });
 
-          //Refresh the page and display the waiting message 
-          this.props.history.push('/foundation');
         })
         .catch((error) => {
+          console.log("Error creating user.");
           //Failure
           //TODO: Cleanup Firebase Error Messages
           this.setState({ errors: { ...this.state.errors, submit: error.message } });
+        })
+        .then(this.addDocument)
+        .then(() => {
+          this.props.history.push('/request-sent');
         });
-    }
 
-    event.preventDefault();
+      event.preventDefault();
+    }
   }
 
   onChange = event => {
@@ -131,12 +156,12 @@ class FAccountRequest extends Component {
     this.setState({ [name]: value });
 
     if (name === 'passwordTwo') {
-      this.setState({ errors: { ...this.state.errors, [name]: helper.confirmMatching(this.state.passwordOne, value) } },
+      this.setState({ errors: { ...this.state.errors, submit: '', [name]: helper.confirmMatching(this.state.passwordOne, value) } },
         this.validateForm
       );
     }
     else {
-      this.setState({ errors: { ...this.state.errors, [name]: helper.validateField(name, value) } },
+      this.setState({ errors: { ...this.state.errors, submit: '', [name]: helper.validateField(name, value) } },
         this.validateForm
       );
     }
@@ -176,7 +201,7 @@ class FAccountRequest extends Component {
             <LockOutlinedIcon />
           </Avatar>
           <Text type='card-heading' text={'Foundation Account Request'} />
-          <form className={classes.form} noValidate>
+          <form className={classes.form} onSubmit={this.onSubmit} noValidate>
             <Grid container spacing={2}>
 
               <Container maxWidth="xs" className={classes.marginBottom}>
@@ -353,14 +378,17 @@ class FAccountRequest extends Component {
                   className={classes.submit}
                 >
                   Request Account
-          </Button>
+                </Button>
                 <Grid container justify="flex-end">
                   <Grid item>
                     <Link href="/signin" variant="body2">
                       Already have an account? Sign in
-              </Link>
+                    </Link>
                   </Grid>
                 </Grid>
+                <Typography component="h6" className={classes.errorMsg} >
+                  {errors.submit}
+                </Typography>
               </Container>
 
             </Grid>

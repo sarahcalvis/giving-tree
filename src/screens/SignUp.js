@@ -106,12 +106,12 @@ class SignUpFormBase extends Component {
         this.setState({ [name]: value });
 
         if (name === 'passwordTwo') {
-            this.setState({ errors: { ...this.state.errors, [name]: helper.confirmMatching(this.state.passwordOne, value) } },
+            this.setState({ errors: { ...this.state.errors, submit: '', [name]: helper.confirmMatching(this.state.passwordOne, value) } },
                 this.validateForm
             );
         }
         else {
-            this.setState({ errors: { ...this.state.errors, [name]: helper.validateField(name, value) } },
+            this.setState({ errors: { ...this.state.errors, submit: '', [name]: helper.validateField(name, value) } },
                 this.validateForm
             );
         }
