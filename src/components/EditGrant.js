@@ -122,6 +122,7 @@ export default function EditGrant(props) {
   ///////////////
   // Get input from text fields
   const handleInput = (e) => {
+    console.log(e.target);
     if (e.target.id === 'goal_amt') {
       props.callback(parseFloat(e.target.value.replace('$', '').replace(' ', '').replace(/,/g, '')), e.target.id)
     } else {
@@ -155,7 +156,7 @@ export default function EditGrant(props) {
         <Text type='card-subheading' text={'What is this grant for?'} />
         <TextField
           id='title'
-          value={props.grantData.title}
+          defaultValue={props.grantData.title}
           variant='outlined'
           label='Grant Title'
           onChange={handleInput} />
@@ -186,6 +187,7 @@ export default function EditGrant(props) {
           multiline
           fullWidth
           rows='6'
+          defaultValue={props.grantData.desc}
           variant='outlined'
           label='Grant Description'
           onChange={handleInput} />
@@ -213,7 +215,7 @@ export default function EditGrant(props) {
         <Text type='card-subheading' text={'The total amount you want to raise for this grant. If you receive donations from outside giving tree, you can always edit this amount.'} />
         <MaskedInput
           mask={numberMask}
-          onChange={handleInput}
+          onBlur={handleInput}
           id='goal_amt'
           className='form-control'
           type='text'
@@ -224,7 +226,7 @@ export default function EditGrant(props) {
       <div className={classes.padding}>
         <Text type='card-heading' text='Tags' />
         <Text type='card-subheading' text={'Search for a tag or create a new tag to help donors find the grants they are looking for.'} />
-        <TagSearch parentCallback={tagsCallback} />
+        <TagSearch parentCallback={tagsCallback} tags={props.grantData.tags} />
       </div>
 
       <div className={classes.padding}>

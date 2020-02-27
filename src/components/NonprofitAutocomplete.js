@@ -58,46 +58,32 @@ export default function NonprofitAutocomplete(props) {
 
   return (
     <div>
-      <Grid
-        container
-        direction='row'
-        justify='flex-start'
-        alignItems='flex-start'
-      >
-        <Grid item>
-          {(nonprofits.length > 0) &&
-            <Autocomplete
-              options={transformedNonprofits}
-              getOptionLabel={nonprofits => nonprofits.name}
-              autoHighlight
-              fullWidth
-              onChange={props.callback}
-              renderInput={params => (
-                <TextField
-                  {...params}
-                  variant='outlined'
-                  onChange={props.callback}
-                  label='Select a nonprofit'
-                  fullWidth
-                />
-              )}
-            />
-          }
-        </Grid>
-        <Grid item>
+      {(nonprofits.length > 0) &&
+        <div>
+          <Autocomplete
+            options={transformedNonprofits}
+            getOptionLabel={nonprofits => nonprofits.name}
+            autoHighlight
+            onChange={props.callback}
+            renderInput={params => (
+              <TextField
+                {...params}
+                variant='outlined'
+                onChange={props.callback}
+                label='Select a nonprofit'
+              />
+            )}
+          />
           <p>
             or
           </p>
-        </Grid>
-        <Grid item>
-          <Button
-            color='primary'
-            variant='contained'
-            onClick={addMode}>Add a new nonprofit
-        </Button>
-        </Grid>
-      </Grid>
-
+        </div>
+      }
+      <Button
+        color='primary'
+        variant='contained'
+        onClick={addMode}>Add a new nonprofit
+      </Button>
       {
         adding &&
         <Container>
@@ -141,6 +127,6 @@ export default function NonprofitAutocomplete(props) {
           </Grid>
         </Container>
       }
-    </div>
+    </div >
   )
 }

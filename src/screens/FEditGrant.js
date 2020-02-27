@@ -173,6 +173,19 @@ function FEditGrant() {
       })
   }
 
+  const update = () => {
+    addNewTags();
+
+    // Add the grant to the database
+    db.collection('grants').doc(id).set(grantData)
+      .then(function () {
+        console.log('Grant updated');
+      })
+      .catch(function (error) {
+        console.error('Error writing draft: ', error);
+      })
+  }
+
   const publish = () => {
     addNewTags();
 
@@ -225,9 +238,9 @@ function FEditGrant() {
             {grantStatus === 'edit' &&
               <Grid container
                 spacing={2}
-                direction="column"
-                justify="flex-end"
-                alignItems="flex-start">
+                direction='column'
+                justify='flex-end'
+                alignItems='flex-start'>
                 <Grid item>
                   <Button
                     color='primary'
@@ -238,7 +251,8 @@ function FEditGrant() {
                 <Grid item>
                   <Button
                     color='primary'
-                    variant='contained'>
+                    variant='contained'
+                    onClick={update}>
                     Save
                 </Button>
                 </Grid>
