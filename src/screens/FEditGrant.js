@@ -35,6 +35,9 @@ function FEditGrant() {
   // Figure out what community foundation is logged in
   const user = useContext(AuthUserContext);
 
+  // If editing grant, see if grant data is loaded
+  const [loaded, setLoaded] = React.useState(false);
+
   const [cfData, setCfData] = React.useState();
 
   // Load that community foundation's data
@@ -55,11 +58,11 @@ function FEditGrant() {
   // Grant data to upload to firebase
   const [grantData, setGrantData] = React.useState(
     {
-      cf_name: '', 
-      cf_id: '', 
+      cf_name: '',
+      cf_id: '',
       title: '',
-      nonprofit_name: '', 
-      nonprofit_id: '', 
+      nonprofit_name: '',
+      nonprofit_id: '',
       address: '',
       lat: '',
       long: '',
@@ -91,11 +94,11 @@ function FEditGrant() {
       db.collection('grants').doc(id).get()
         .then(function (doc) {
           setGrantData(doc.data())
-        })
+        }).then( function () { setLoaded(true) })
         .catch(function (error) {
           console.error('Error getting grant: ', error);
         })
-    }
+    } 
   }, [id]);
 
   const callback = (data, type) => {
@@ -211,7 +214,11 @@ function FEditGrant() {
         <Grid item>
           {grantStatus === 'edit' && <Text type='heading' text='Edit Grant' />}
           {grantStatus === 'create' && <Text type='heading' text='Create Grant' />}
-          {cfData && <EditGrant grantData={grantData} cfId={cfData.id} callback={callback} />}
+          {
+            cfData &&
+            ((grantStatus === 'edit' && loaded) || grantStatus == 'create') &&
+            < EditGrant grantData={grantData} cfId={cfData.id} callback={callback} />
+          }
         </Grid>
         <Grid item>
           <div className={classes.fab}>

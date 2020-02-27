@@ -101,6 +101,7 @@ export default function EditGrant(props) {
 
   // Observe the image array. When an image name is added, reload the image urls
   useEffect(() => {
+    console.log(props.grantData)
     if (img) {
       let newUrl = [];
       for (let i in img) {
