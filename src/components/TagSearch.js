@@ -149,6 +149,9 @@ class TagSearch extends React.Component {
   }
 
   setDefaultAuto(incoming) {
+    if(this.props.tags) {
+      return this.props.tags;
+    }
     if(incoming) {
       return [incoming];
     }else{
