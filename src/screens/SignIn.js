@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
 import firebase from '../firebase.js';
-import * as helper from '../helpers/SignUpHelper.js';
+import * as helper from '../helpers/ValidationHelper.js';
 
 import { withStyles } from '@material-ui/styles';
 import Container from '@material-ui/core/Container';
@@ -11,7 +11,7 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Grid from "@material-ui/core/Grid";
-import MUILink from "@material-ui/core/Link";
+import Link from "@material-ui/core/Link";
 import Typography from "@material-ui/core/Typography";
 
 
@@ -63,8 +63,11 @@ function SignIn(props) {
 const INITIAL_STATE = {
     email: '',
     password: '',
-    emailError: '',
-    submitError: ''
+    errors: {
+        email: '',
+        submit: '',
+    },
+    isValid: false,
 };
 
 class SignInFormBase extends Component {
@@ -74,56 +77,67 @@ class SignInFormBase extends Component {
     }
 
     onSubmit = event => {
-        let emailError = helper.validateEmail(this.state.email);
+        if (this.state.isValid) {
+            const { email, password } = this.state;
 
-        if (emailError === '') {
-            const {email, password} = this.state;
-            
-            firebase.auth().signInWithEmailAndPassword(email,password)
-            .then(() => {
-                //Do Misc Stuff for Sign In
-                // TODO: If user is CF, go to dashboard
-                
-                //Redirect User to Home
-                this.props.history.push('/');
-            })
-            .catch((error) => {
-                //Failure
-                //TODO: Cleanup Firebase Error Messages
-                this.setState({submitError: error.message});
-            });
+            firebase.auth().signInWithEmailAndPassword(email, password)
+                .then((result) => {
+                    // User is signed in. Get the ID token.
+                    return result.user.getIdToken();
+                })
+                .then((idToken) => {
 
-        }
-        else {
-            //Display field validation errors
-            this.setState({ emailError: emailError });
+                    // TODO: Redirect user based on role
+
+                    //Redirect User to Home
+                    this.props.history.push('/');
+                })
+                .catch((error) => {
+                    //Failure
+                    //TODO: Cleanup Firebase Error Messages
+                    this.setState({ errors: { ...this.state.errors, submit: error.message } });
+                });
+
         }
 
         event.preventDefault();
     }
 
     onChange = event => {
-        this.setState({ [event.target.name]: event.target.value });
+        const { name, value } = event.target;
+        this.setState({ [name]: value });
+
+        if (name === 'email') {
+            this.setState({ errors: { ...this.state.errors, submit: '', [name]: helper.validateField(name, value) } },
+                this.validateForm
+            );
+        }
+        else {
+            this.validateForm();
+        }
     };
+
+    validateForm = () => {
+        const noEmptyFields = Object.values(this.state).filter((s) => { return s === '' }).length === 0
+        const noErrors = Object.values(this.state.errors).filter((s) => { return s !== '' }).length === 0
+        this.setState({ isValid: noErrors && noEmptyFields });
+    }
+
 
     render() {
         const {
             email,
             password,
-            emailError,
-            submitError,
+            errors,
+            isValid,
         } = this.state;
-
-        const isInvalid =
-            password === '' ||
-            email === '' ;
 
         const { classes } = this.props;
 
         return (
-            <form className={classes.form} onSubmit={this.onSubmit}>
+            <form className={classes.form} onSubmit={this.onSubmit} noValidate>
                 <Typography component="h6" className={classes.errorMsg} >
-                    {submitError}
+                    {errors.submit}
                 </Typography>
                 <TextField
                     variant="outlined"
@@ -135,8 +149,9 @@ class SignInFormBase extends Component {
                     onChange={this.onChange}
                     type="text"
                     label="Email Address"
-                    error={emailError !== ""}
-                    helperText={emailError}
+                    error={errors.email !== ""}
+                    helperText={errors.email}
+                    autoFocus
                 />
                 <TextField
                     variant="outlined"
@@ -154,7 +169,7 @@ class SignInFormBase extends Component {
                     fullWidth
                     variant="contained"
                     color="primary"
-                    disabled={isInvalid}
+                    disabled={!isValid}
                 >
                     Sign In
                         </Button>
@@ -165,17 +180,13 @@ class SignInFormBase extends Component {
 const SignUpForgotLink = ({ classes }) => (
     <Grid container>
         <Grid item xs>
-            <Link to='/forgot' className={classes.links}>
-                <MUILink variant="body2" component={'span'}>
-                    Forgot password?
-                </MUILink>
+            <Link href='/forgot' variant="body2">
+                Forgot password?
             </Link>
         </Grid>
         <Grid item>
-            <Link to='/signup' className={classes.links}>
-                <MUILink variant="body2" component={'span'}>
-                    Don't have an account? Sign Up
-                </MUILink>
+            <Link href='/signup' variant="body2">
+                Don't have an account? Sign Up
             </Link>
         </Grid>
     </Grid>

@@ -27,7 +27,7 @@ export default function FGrants(props) {
 
   const classes = useStyles();
 
-  const [acctId, setAcctId] = React.useState('');
+  const [stripeId, setStripeId] = React.useState('');
 
   // Foundation ID
   const [id] = React.useState(props.id);
@@ -42,9 +42,9 @@ export default function FGrants(props) {
   const code = qs.parse(props.location.search).code;
   const error = qs.parse(props.location.search).error;
 
-  const updateAcctIDDB = (acctId) => {
-    console.log('updating account ID to ' + acctId);
-    docRef.update({ "acct_id": acctId });
+  const updateStripeIdDB = (stripeId) => {
+    console.log('updating account ID to ' + stripeId);
+    docRef.update({ "stripe_id": stripeId });
   }
 
   const submit = async () => {
@@ -58,8 +58,8 @@ export default function FGrants(props) {
 
       if (response.ok) {
         let resJSON = await response.json();
-        setAcctId(resJSON.acctID);
-        updateAcctIDDB(resJSON.acctID);
+        setStripeId(resJSON.stripeId);
+        updateStripeIdDB(resJSON.stripeId);
         //send the id to the database
       } else {
         console.log('did not do good');
@@ -78,10 +78,10 @@ export default function FGrants(props) {
     <div>
       <Container className={classes.pageLayout}>
         <React.Fragment>
-          {code && acctId !== '' &&
+          {code && stripeId !== '' &&
             <Snack message='Connected to Stripe' />
           }
-          {code && acctId === '' &&
+          {code && stripeId === '' &&
             <Snack message='Sorry- our server failed! Try again later' />
           }
           {error &&

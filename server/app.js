@@ -48,7 +48,7 @@ app.post('/create', async (req, res) => {
       // asynchronously called
       return response.stripe_user_id;
     });
-    return res.json({ 'acctID': connected_account_id });
+    return res.json({ 'stripeId': connected_account_id });
 
   } catch (err) {
     res.status(500).end;
