@@ -30,7 +30,7 @@ export default function FGrants(props) {
   const [acctId, setAcctId] = React.useState('');
 
   // Foundation ID
-  const [id] = React.useState('1fbyawFlFR0YdMYPZbtG'); //React.useState(props.id);
+  const [id] = React.useState(props.id);
 
   const docRef = firebase.firestore().doc('communityFoundations/' + id);
 
