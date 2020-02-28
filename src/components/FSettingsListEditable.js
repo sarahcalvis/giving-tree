@@ -9,6 +9,7 @@ import Avatar from '@material-ui/core/Avatar';
 import ImageIcon from '@material-ui/icons/Image';
 import TitleIcon from '@material-ui/icons/Title'
 import PhoneIcon from '@material-ui/icons/Phone';
+import HttpIcon from '@material-ui/icons/Http';
 import EmailIcon from '@material-ui/icons/Email';
 import ContactsIcon from '@material-ui/icons/Contacts';
 import ContactsOutlinedIcon from '@material-ui/icons/ContactsOutlined';
@@ -62,6 +63,18 @@ export default function EditableData(props){
 				<ListItem>
 					<ListItemAvatar>
 						<Avatar>
+							<HttpIcon />
+						</Avatar>
+					</ListItemAvatar>
+					<FormControl>
+						<InputLabel htmlFor="component-simple">Foundation URL</InputLabel>
+						<Input defaultValue={props.url} onChange={e => props.setUrl(e.target.value)} />
+					</FormControl>
+				</ListItem>
+
+				<ListItem>
+					<ListItemAvatar>
+						<Avatar>
 							<ContactsIcon />
 						</Avatar>
 					</ListItemAvatar>
@@ -90,8 +103,8 @@ export default function EditableData(props){
 						</Avatar>
 					</ListItemAvatar>
 					<FormControl>
-						<InputLabel htmlFor="component-simple">Contact Email</InputLabel>
-						<Input defaultValue={props.contactEmail} onChange={e => props.setContactEmail(e.target.value)} />
+						<InputLabel htmlFor="component-simple">Contact Email (Cannot be changed here!)</InputLabel>
+						<Input disabled={true} defaultValue={props.contactEmail} onChange={e => props.setContactEmail(e.target.value)} />
 					</FormControl>
 				</ListItem>
 

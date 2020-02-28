@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
-import $ from 'jquery';
+import { withRouter } from 'react-router-dom';
 
 import firebase from '../firebase.js';
-import * as helper from '../helpers/SignUpHelper.js';
+import * as helper from '../helpers/ValidationHelper.js';
 
 import { withStyles } from '@material-ui/styles';
 import Container from '@material-ui/core/Container';
@@ -12,7 +11,7 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Grid from "@material-ui/core/Grid";
-import MUILink from "@material-ui/core/Link";
+import Link from "@material-ui/core/Link";
 import Typography from "@material-ui/core/Typography";
 
 
@@ -69,8 +68,9 @@ const INITIAL_STATE = {
         email: '',
         passwordOne: '',
         passwordTwo: '',
+        submit: '',
     },
-    submitError: ''
+    isValid: false,
 };
 
 class SignUpFormBase extends Component {
@@ -80,49 +80,13 @@ class SignUpFormBase extends Component {
     }
 
     onSubmit = event => {
-        let errors = {
-            email: helper.validateEmail(this.state.email),
-            passwordOne: helper.validatePassword(this.state.passwordOne),
-            passwordTwo: helper.confirmMatching(this.state.passwordOne, this.state.passwordTwo),
-        }
-
-        if (errors.email === '' && errors.passwordOne === '' && errors.passwordTwo === '') {
+        if (this.state.isValid) {
             const { email, passwordOne } = this.state;
 
             firebase.auth().createUserWithEmailAndPassword(email, passwordOne)
                 .then((result) => {
                     //Do Misc Stuff for Donor Account
-                    //Post to Server? Set firebase rules?
-
-                    //-----------------------------------------
-                    //--------MOVE INTO ACCOUNT REQUEST--------
-                    //-----------------------------------------
-                    // User is signed in. Get the ID token.
-                    return result.user.getIdToken();
-                })
-                .then((idToken) => {
-                    // Pass the ID token to the server.
-                    $.post(
-                        '/setCustomClaims',
-                        {
-                            idToken: idToken,
-                        },
-                        (data, status) => {
-                            // This is not required. You could just wait until the token is expired
-                            // and it proactively refreshes.
-                            if (status === 'success' && data) {
-                                const json = JSON.parse(data);
-                                if (json && json.status === 'success') {
-                                    // Force token refresh. The token claims will contain the additional claims.
-                                    firebase.auth().currentUser.getIdToken(true);
-                                }
-                            }
-                            else{
-                                console.log("ERROR: " + data);
-                            }
-                        });
-                    //-----------------------------------------
-                    //-----------------------------------------
+                    //Post to Server? Set firebase rules? Create empty donor document?
 
                     //Redirect User to Home
                     this.props.history.push('/');
@@ -130,20 +94,34 @@ class SignUpFormBase extends Component {
                 .catch((error) => {
                     //Failure
                     //TODO: Cleanup Firebase Error Messages
-                    this.setState({ submitError: error.message });
+                    this.setState({ errors: { ...this.state.errors, submit: error.message } });
                 });
-        }
-        else {
-            //Display field validation errors
-            this.setState({ errors: errors });
         }
 
         event.preventDefault();
     }
 
     onChange = event => {
-        this.setState({ [event.target.name]: event.target.value });
+        const { name, value } = event.target;
+        this.setState({ [name]: value });
+
+        if (name === 'passwordTwo') {
+            this.setState({ errors: { ...this.state.errors, submit: '', [name]: helper.confirmMatching(this.state.passwordOne, value) } },
+                this.validateForm
+            );
+        }
+        else {
+            this.setState({ errors: { ...this.state.errors, submit: '', [name]: helper.validateField(name, value) } },
+                this.validateForm
+            );
+        }
     };
+
+    validateForm = () => {
+        const noEmptyFields = Object.values(this.state).filter((s) => { return s === '' }).length === 0
+        const noErrors = Object.values(this.state.errors).filter((s) => { return s !== '' }).length === 0
+        this.setState({ isValid: noErrors && noEmptyFields });
+    }
 
     render() {
         const {
@@ -151,21 +129,15 @@ class SignUpFormBase extends Component {
             passwordOne,
             passwordTwo,
             errors,
-            submitError,
+            isValid,
         } = this.state;
-
-        const isInvalid =
-            // passwordOne !== passwordTwo ||
-            passwordOne === '' ||
-            passwordTwo === '' ||
-            email === '';
 
         const { classes } = this.props;
 
         return (
-            <form className={classes.form} onSubmit={this.onSubmit}>
+            <form className={classes.form} onSubmit={this.onSubmit} noValidate>
                 <Typography component="h6" className={classes.errorMsg} >
-                    {submitError}
+                    {errors.submit}
                 </Typography>
                 <TextField
                     variant="outlined"
@@ -179,6 +151,7 @@ class SignUpFormBase extends Component {
                     label="Email Address"
                     error={errors["email"] !== ""}
                     helperText={errors["email"]}
+                    autoFocus
                 />
                 <TextField
                     variant="outlined"
@@ -211,7 +184,7 @@ class SignUpFormBase extends Component {
                     fullWidth
                     variant="contained"
                     color="primary"
-                    disabled={isInvalid}
+                    disabled={!isValid}
                 >
                     Sign Up
                         </Button>
@@ -223,17 +196,13 @@ class SignUpFormBase extends Component {
 const SignInForgotLink = ({ classes }) => (
     <Grid container>
         <Grid item xs>
-            <Link to='/forgot' className={classes.links}>
-                <MUILink variant="body2" component={'span'}>
-                    Forgot password?
-                </MUILink>
+            <Link href='/forgot' variant="body2">
+                Forgot password?
             </Link>
         </Grid>
         <Grid item>
-            <Link to='/signin' className={classes.links}>
-                <MUILink variant="body2" component={'span'}>
-                    Already have an account? Sign In
-                </MUILink>
+            <Link href='/signin' variant="body2">
+                Already have an account? Sign In
             </Link>
         </Grid>
     </Grid>

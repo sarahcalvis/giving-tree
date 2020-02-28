@@ -9,6 +9,7 @@ import Avatar from '@material-ui/core/Avatar';
 import ImageIcon from '@material-ui/icons/Image';
 import TitleIcon from '@material-ui/icons/Title'
 import PhoneIcon from '@material-ui/icons/Phone';
+import HttpIcon from '@material-ui/icons/Http';
 import EmailIcon from '@material-ui/icons/Email';
 import ContactsIcon from '@material-ui/icons/Contacts';
 import ContactsOutlinedIcon from '@material-ui/icons/ContactsOutlined';
@@ -47,6 +48,16 @@ export default function NonEditableData(props){
 					</ListItemAvatar>
 					<ListItemText primary="Public Phone" secondary={props.phone} />
 				</ListItem>
+				
+				<ListItem>
+					<ListItemAvatar>
+						<Avatar>
+							<HttpIcon />
+						</Avatar>
+					</ListItemAvatar>
+					<ListItemText primary="Foundation URL" secondary={props.url} />
+				</ListItem>
+				
 				<ListItem>
 					<ListItemAvatar>
 						<Avatar>
