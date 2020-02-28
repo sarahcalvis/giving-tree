@@ -198,7 +198,8 @@ export default function EditGrant(props) {
         <Text type='card-subheading' text={'The nonprofit that made this grant request.'} />
         <NonprofitAutocomplete
           callback={nonprofitCallback}
-          cfId={props.cfId} />
+          cfId={props.cfId}
+          nonprofit_id={props.grantData.nonprofit_id} />
       </div>
 
       <div className={classes.padding}>
@@ -227,13 +228,16 @@ export default function EditGrant(props) {
       <div className={classes.padding}>
         <Text type='card-heading' text='Tags' />
         <Text type='card-subheading' text={'Search for a tag or create a new tag to help donors find the grants they are looking for.'} />
-        <TagSearch parentCallback={tagsCallback} tags={props.grantData.tags} />
+        <TagSearch
+          parentCallback={tagsCallback}
+          tags={props.grantData.tags} />
       </div>
 
       <div className={classes.padding}>
         <Text type='card-heading' text='Grant Location' />
         <Text type='card-subheading' text={'We will not directly share this address with donors. We will use it to calculate a donor\'s distance from a grant.'} />
-        <LocationSearch parentCallback={locationCallback} />
+        <LocationSearch
+          parentCallback={locationCallback} />
       </div>
 
     </MuiPickersUtilsProvider>

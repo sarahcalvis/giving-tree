@@ -10,11 +10,22 @@ import Grid from '@material-ui/core/Grid';
 
 export default function NonprofitAutocomplete(props) {
   const [nonprofits, setNonprofits] = React.useState([]);
-  const [nonprofitData, setNonprofitData] = React.useState({ name: '', number: '', email: '', url: '', cf_id: props.cfId })
+  const [nonprofitData, setNonprofitData] = React.useState({ name: '', number: '', email: '', url: '', cf_id: props.cfId });
+  const [selected, setSelected] = React.useState(-1);
+  const [loaded, setLoaded] = React.useState(false);
 
   let db = firebase.firestore();
 
-  let transformedNonprofits = Object.values(nonprofits).map((item) => {
+  useEffect(() => {
+    for (let i in nonprofits) {
+      if (nonprofits[i].id === props.nonprofit_id) {
+        setSelected(i)
+      }
+    }
+    setLoaded(true);
+  }, [nonprofits])
+
+  let transformedNonprofits = Object.values(nonprofits).map((item, index) => {
     item.dataLabel = item.name;
     return item;
   })
@@ -58,74 +69,80 @@ export default function NonprofitAutocomplete(props) {
 
   return (
     <div>
-      {(nonprofits.length > 0) &&
+      {loaded &&
         <div>
-          <Autocomplete
-            options={transformedNonprofits}
-            getOptionLabel={nonprofits => nonprofits.name}
-            autoHighlight
-            onChange={props.callback}
-            renderInput={params => (
-              <TextField
-                {...params}
-                variant='outlined'
+          {nonprofits.length > 0 &&
+            <div>
+              <Autocomplete
+                options={transformedNonprofits}
+                getOptionLabel={nonprofits => nonprofits.name}
+                autoHighlight
+                defaultValue={transformedNonprofits[selected]}
                 onChange={props.callback}
-                label='Select a nonprofit'
+                renderInput={params => (
+                  <TextField
+                    {...params}
+                    variant='outlined'
+                    fullWidth
+                    onChange={props.callback}
+                    label='Select a nonprofit'
+                  />
+                )}
               />
-            )}
-          />
-          <p>
-            or
+              <p>
+                or
           </p>
-        </div>
-      }
-      <Button
-        color='primary'
-        variant='contained'
-        onClick={addMode}>Add a new nonprofit
+            </div>
+          }
+          <Button
+            color='primary'
+            variant='contained'
+            onClick={addMode}>Add a new nonprofit
       </Button>
-      {
-        adding &&
-        <Container>
-          <TextField
-            id='name'
-            fullWidth
-            label='Nonprofit Name'
-            onChange={handleInput} />
-          <TextField
-            id='number'
-            fullWidth
-            label='Nonprofit Email'
-            onChange={handleInput} />
-          <TextField
-            id='email'
-            fullWidth
-            label='Nonprofit Phone Number'
-            onChange={handleInput} />
-          <TextField
-            id='url'
-            fullWidth
-            label='Nonprofit Website'
-            onChange={handleInput} />
-          <Grid
-            container
-            direction="row"
-            justify="flex-end"
-            alignItems="center">
-            <Button
-              color='primary'
-              variant='outlined'
-              onClick={cancelAddMode}>
-              Cancel
+          {
+            adding &&
+            <Container>
+              <TextField
+                id='name'
+                fullWidth
+                label='Nonprofit Name'
+                onChange={handleInput} />
+              <TextField
+                id='number'
+                fullWidth
+                label='Nonprofit Email'
+                onChange={handleInput} />
+              <TextField
+                id='email'
+                fullWidth
+                label='Nonprofit Phone Number'
+                onChange={handleInput} />
+              <TextField
+                id='url'
+                fullWidth
+                label='Nonprofit Website'
+                onChange={handleInput} />
+              <Grid
+                container
+                direction="row"
+                justify="flex-end"
+                alignItems="center">
+                <Button
+                  color='primary'
+                  variant='outlined'
+                  onClick={cancelAddMode}>
+                  Cancel
             </Button>
-            <Button
-              color='primary'
-              variant='contained'
-              onClick={addNonprofit}>
-              Add Nonprofit
+                <Button
+                  color='primary'
+                  variant='contained'
+                  onClick={addNonprofit}>
+                  Add Nonprofit
             </Button>
-          </Grid>
-        </Container>
+              </Grid>
+            </Container>
+          }
+        </div>
       }
     </div >
   )
