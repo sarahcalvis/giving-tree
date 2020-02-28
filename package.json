@@ -29,7 +29,7 @@
     "react-geocode": "^0.2.1",
     "react-load-script": "0.0.6",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "3.3.0",
+    "react-scripts": "3.4.0",
     "react-stripe-elements": "^6.0.1",
     "stripe": "^8.4.1",
     "typeface-roboto": "0.0.75"
@@ -57,9 +57,7 @@
   },
   "description": "Giving Tree is a website that provides public access to grant giving opportunites.",
   "main": "index.js",
-  "devDependencies": {
-    "jest": "^25.1.0"
-  },
+  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sarahcalvis/giving-tree.git"
