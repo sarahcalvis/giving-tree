@@ -149,6 +149,13 @@ export default function EditGrant(props) {
     props.callback(value.name, 'nonprofit_name');
   }
 
+  // Get the image to delete from ImageCarousel
+  const removeImageCallback = (index) => {
+    // let newImg = img.splice(index, 1);
+    // setImg(newImg);
+    props.callback(img[index], 'remove')
+  }
+
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <div className={classes.padding}>
@@ -165,7 +172,12 @@ export default function EditGrant(props) {
       <div className={classes.padding}>
         <Text type='card-heading' text='Grant Images' />
         <Text type='card-subheading' text={'Add some pictures related to the grant.'} />
-        {(url && url.length > 0) && <ImageCarousel img={url} deletable={true} />}
+        {url && url.length > 0 &&
+          <ImageCarousel
+            img={url}
+            deletable={true}
+            callback={removeImageCallback} />
+        }
         <label for='file-upload'>
           {(url && url.length > 0) ? 'Upload another image' : 'Upload images'}
         </label>

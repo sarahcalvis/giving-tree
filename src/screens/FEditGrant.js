@@ -133,6 +133,11 @@ function FEditGrant() {
       case 'images':
         newData.images.push(data);
         break;
+      case 'remove':
+        let i = newData.images.indexOf(data);
+        let newImg = newData.images.splice(i, 1);
+        newData.images = newImg;
+        break;
       default:
         if (newData.hasOwnProperty(type)) {
           newData[type] = data;
@@ -263,7 +268,7 @@ function FEditGrant() {
             ((grantStatus === 'edit' && loaded && validEditor) || grantStatus == 'create') &&
             < EditGrant grantData={grantData} cfId={cfData.id} callback={callback} />
           }
-          { !validEditor && loaded &&  <Text type='card-heading' text='You cannot edit this grant because it does not belong to your community foundation' />}
+          {!validEditor && loaded && <Text type='card-heading' text='You cannot edit this grant because it does not belong to your community foundation' />}
         </Grid>
         <Grid item>
           <div className={classes.fab}>
