@@ -63,7 +63,7 @@ function Grant(props) {
           if (!doc.exists) {
             console.log('No such document for grant ' + id);
           } else {
-            console.log('Got the grant; here is the data: ' + doc.data());
+            console.log(doc.data());
             setGrantData(doc.data());
           }
         })

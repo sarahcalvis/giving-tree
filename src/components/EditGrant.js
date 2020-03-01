@@ -165,7 +165,7 @@ export default function EditGrant(props) {
       <div className={classes.padding}>
         <Text type='card-heading' text='Grant Images' />
         <Text type='card-subheading' text={'Add some pictures related to the grant.'} />
-        {(url && url.length > 0) && <ImageCarousel img={url} />}
+        {(url && url.length > 0) && <ImageCarousel img={url} deletable={true} />}
         <label for='file-upload'>
           {(url && url.length > 0) ? 'Upload another image' : 'Upload images'}
         </label>
