@@ -113,6 +113,7 @@ export default function EditGrant(props) {
 
   // Observe the image array. When an image name is added, reload the image urls
   useEffect(() => {
+    if (img.length == 0) setUrl([]);
     let newUrl = [];
 
     var fillNewUrl = new Promise((resolve, reject) => {
@@ -129,12 +130,10 @@ export default function EditGrant(props) {
       })
     })
 
-    if (img) {
-      fillNewUrl.then(() => {
-        console.log('Setting url to ', newUrl);
-        setUrl(newUrl);
-      });
-    }
+    fillNewUrl.then(() => {
+      console.log('Setting url to ', newUrl);
+      setUrl(newUrl);
+    });
   }, [img])
 
   ///////////////
@@ -226,7 +225,7 @@ export default function EditGrant(props) {
               </label>
             </div>
           </GridListTile>
-          {url && url.length > 0 && url.map(u => (
+          {url.length > 0 && url.map(u => (
             <GridListTile className={classes.img} key={u.name} cols={1} rows={1}>
               <img src={u.url} />
               <GridListTileBar
