@@ -4,10 +4,14 @@ import firebase from '../firebase.js';
 import Text from './Text.js';
 import LocationSearch from './LocationSearch.js';
 import TagSearch from './TagSearch.js';
-import ImageCarousel from './ImageCarousel.js';
 import NonprofitAutocomplete from './NonprofitAutocomplete.js';
 
+import GridList from '@material-ui/core/GridList';
+import GridListTile from '@material-ui/core/GridListTile';
+import GridListTileBar from '@material-ui/core/GridListTileBar';
 import TextField from '@material-ui/core/TextField';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
 import { makeStyles } from '@material-ui/styles';
 import {
   DatePicker,
@@ -35,7 +39,26 @@ const useStyles = makeStyles(theme => ({
   padding: {
     paddingTop: theme.spacing(2),
     paddingBottom: theme.spacing(2),
-  }
+  },
+  root: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+    // overflow: 'hidden',
+    backgroundColor: theme.palette.background.paper,
+  },
+  gridList: {
+    flexWrap: 'nowrap',
+    // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
+    transform: 'translateZ(0)',
+  },
+  title: {
+    color: theme.palette.primary.light,
+  },
+  titleBar: {
+    background:
+      'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
+  },
 }))
 
 export default function EditGrant(props) {
@@ -99,7 +122,7 @@ export default function EditGrant(props) {
       let newUrl = [];
       for (let i in img) {
         storageRef.child(img[i]).getDownloadURL().then(function (url) {
-          newUrl.push(url);
+          newUrl.push({name: img[i], url: url});
           if (i == img.length - 1) {
             setUrl(newUrl.slice());
           }
@@ -151,8 +174,6 @@ export default function EditGrant(props) {
 
   // Get the image to delete from ImageCarousel
   const removeImageCallback = (index) => {
-    // let newImg = img.splice(index, 1);
-    // setImg(newImg);
     props.callback(img[index], 'remove')
   }
 
@@ -173,10 +194,25 @@ export default function EditGrant(props) {
         <Text type='card-heading' text='Grant Images' />
         <Text type='card-subheading' text={'Add some pictures related to the grant.'} />
         {url && url.length > 0 &&
-          <ImageCarousel
-            img={url}
-            deletable={true}
-            callback={removeImageCallback} />
+          <GridList className={classes.gridList} cols={3}>
+            {url.map(u => (
+              <GridListTile key={u.name}>
+                <img src={u.url} />
+                <GridListTileBar
+                  title={u.name}
+                  classes={{
+                    root: classes.titleBar,
+                    title: classes.title,
+                  }}
+                  actionIcon={
+                    <IconButton aria-label={`delete image`}>
+                      <DeleteIcon className={classes.title} />
+                    </IconButton>
+                  }
+                />
+              </GridListTile>
+            ))}
+          </GridList>
         }
         <label for='file-upload'>
           {(url && url.length > 0) ? 'Upload another image' : 'Upload images'}
