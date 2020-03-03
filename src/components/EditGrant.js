@@ -190,20 +190,6 @@ export default function EditGrant(props) {
         <Text type='card-heading' text='Grant Images' />
         <Text type='card-subheading' text={'Add some pictures related to the grant.'} />
         <GridList cellHeight={200} spacing={1} className={classes.gridList} >
-          {url && url.length > 0 && url.map(u => (
-            <GridListTile className={classes.img} key={u.name} cols={1} rows={1}>
-              <img src={u.url} />
-              <GridListTileBar
-                title={u.name}
-                className={classes.titleBar}
-                actionIcon={
-                  <IconButton style={{ color: 'white' }} aria-label={`delete image`}>
-                    <DeleteIcon />
-                  </IconButton>
-                }
-              />
-            </GridListTile>
-          ))}
           <GridListTile
             className={classes.img}
             key={'Upload another'}
@@ -218,7 +204,22 @@ export default function EditGrant(props) {
               </label>
             </div>
           </GridListTile>
+          {url && url.length > 0 && url.map(u => (
+            <GridListTile className={classes.img} key={u.name} cols={1} rows={1}>
+              <img src={u.url} />
+              <GridListTileBar
+                title={u.name}
+                className={classes.titleBar}
+                actionIcon={
+                  <IconButton style={{ color: 'white' }} aria-label={`delete image`}>
+                    <DeleteIcon />
+                  </IconButton>
+                }
+              />
+            </GridListTile>
+          ))}
         </GridList>
+
 
         <input
           className={classes.input}

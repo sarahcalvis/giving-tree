@@ -85,7 +85,7 @@ export default function NonprofitAutocomplete(props) {
                     variant='outlined'
                     fullWidth
                     onChange={props.callback}
-                    label='Select a nonprofit'
+                    label='Select affiliated nonprofit'
                   />
                 )}
               />
