@@ -29,11 +29,30 @@ export default function EditableData(props){
     lname_contact: '',
     personal_email: '',
     personal_phone: ''
-  });
+	});
+	
+	const [changedText, setChangedText] = React.useState({});
 
 	const onChange = (event, field) => {
 		const value = event.target.value;
-		setHelperText({ [field]: [helper.validateField(field, value)] });
+		setHelperText({ ...helperText, [field]: helper.validateField(field, value) },
+			setChangedText({ ...changedText, [field]: value })
+		);
+	}
+
+	const submitForm = () => {
+		var canSubmit = true;
+		for(const key in helperText){
+			if(helperText[key] !== ''){
+				canSubmit = false;
+			}
+		}
+		if(canSubmit){
+			props.onSubmit(changedText)
+		}else{
+			console.log("Dang it we can't, here's why: ");
+			console.log(helperText)
+		}
 	}
 
 	return (
@@ -72,8 +91,7 @@ export default function EditableData(props){
 						</Avatar>
 					</ListItemAvatar>
 					<FormControl>
-						<InputLabel htmlFor="component-simple">Public Phone</InputLabel>
-						<Input defaultValue={props.cfInfo.public_phone} onChange={(e, f) => onChange(e, 'public_phone')} />
+						<TextField label='Public Phone' defaultValue={props.cfInfo.public_phone} onChange={(e, f) => onChange(e, 'public_phone')} helperText={helperText.public_phone}/>
 					</FormControl>
 				</ListItem>
 
@@ -84,8 +102,7 @@ export default function EditableData(props){
 						</Avatar>
 					</ListItemAvatar>
 					<FormControl>
-						<InputLabel htmlFor="component-simple">Foundation URL</InputLabel>
-						<Input defaultValue={props.cfInfo.foundation_url} onChange={(e, f) => onChange(e, 'foundation_url')} />
+						<TextField label='Foundation URL' defaultValue={props.cfInfo.foundation_url} onChange={(e, f) => onChange(e, 'foundation_url')} helperText={helperText.foundation_url}/>
 					</FormControl>
 				</ListItem>
 
@@ -96,8 +113,7 @@ export default function EditableData(props){
 						</Avatar>
 					</ListItemAvatar>
 					<FormControl>
-						<InputLabel htmlFor="component-simple">Contact First Name</InputLabel>
-						<Input defaultValue={props.cfInfo.fname_contact} onChange={(e, f) => onChange(e, 'fname_contact')} />
+						<TextField label='Contact First Name' defaultValue={props.cfInfo.fname_contact} onChange={(e, f) => onChange(e, 'fname_contact')} helperText={helperText.fname_contact}/>
 					</FormControl>
 				</ListItem>
 
@@ -108,8 +124,7 @@ export default function EditableData(props){
 						</Avatar>
 					</ListItemAvatar>
 					<FormControl>
-						<InputLabel htmlFor="component-simple">Contact Last Name</InputLabel>
-						<Input defaultValue={props.cfInfo.lname_contact} onChange={(e, f) => onChange(e, 'lname_contact')} />
+						<TextField label='Contact Last Name' defaultValue={props.cfInfo.lname_contact} onChange={(e, f) => onChange(e, 'lname_contact')} helperText={helperText.lname_contact}/>
 					</FormControl>
 				</ListItem>
 
@@ -120,8 +135,7 @@ export default function EditableData(props){
 						</Avatar>
 					</ListItemAvatar>
 					<FormControl>
-						<InputLabel htmlFor="component-simple">Contact Email</InputLabel>
-						<Input disabled={true} defaultValue={props.cfInfo.personal_email} />
+						<TextField label='Contact Email' disabled={true} defaultValue={props.cfInfo.personal_email} />
 					</FormControl>
 				</ListItem>
 
@@ -132,14 +146,13 @@ export default function EditableData(props){
 						</Avatar>
 					</ListItemAvatar>
 					<FormControl>
-						<InputLabel htmlFor="component-simple">Contact Phone</InputLabel>
-						<Input defaultValue={props.cfInfo.personal_phone} onChange={(e, f) => onChange(e, 'personal_phone')} />
+						<TextField label='Contact Phone' defaultValue={props.cfInfo.personal_phone} onChange={(e, f) => onChange(e, 'personal_phone')} helperText={helperText.personal_phone}/>
 					</FormControl>
 				</ListItem>
 			</List>
 
 			<Button onClick={props.toggleEdit}>Discard</Button>
-			<Button onClick={props.onSubmit}>Save</Button>
+			<Button onClick={submitForm}>Save</Button>
 		</Container>
 	);
 }

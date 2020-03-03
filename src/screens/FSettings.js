@@ -16,7 +16,6 @@ export default function FSettings() {
 
   const [isEdit, setEdit] = React.useState(false);
   const user = React.useContext(AuthUserContext);
-  console.log(user);
 
   // Foundation info
   const [cfInfo, setCfInfo] = React.useState({
@@ -33,19 +32,6 @@ export default function FSettings() {
   const [getData, setGetData] = React.useState(true);
 
   const functionLoadData = () =>{
-    
-    console.log("I've been called!!");
-    /*setCfInfo({ 
-      name: '',
-      public_email: '',
-      public_phone: '',
-      foundation_url: '',
-      fname_contact: '',
-      lname_contact: '',
-      personal_email: '',
-      personal_phone: ''
-    })*/
-    
     // Foundation query
     db.collection('communityFoundations').where('personal_email','==', user.email)
       .get()
@@ -72,7 +58,11 @@ export default function FSettings() {
       });
   }
 
-  function onSubmit(){
+  function onSubmit(changedText){
+    var temp = {...cfInfo};
+    for(const key in changedText){
+      temp = { ...temp, [key]: changedText[key] };
+    }
     db.collection('communityFoundations').where('personal_email','==',user.email)
     .get()
     .then(function(querySnapshot) {
@@ -80,14 +70,14 @@ export default function FSettings() {
         console.log(doc.id, " => ", doc.data());
         // Build doc ref from doc.id
         db.collection("communityFoundations").doc(doc.id).update({
-          name: cfInfo.name,
-          public_email: cfInfo.public_email,
-          public_phone: cfInfo.public_phone,
-          foundation_url: cfInfo.foundation_url,
-          fname_contact: cfInfo.fname_contact,
-          lname_contact: cfInfo.lname_contact,
-          personal_email: cfInfo.personal_email,
-          personal_phone: cfInfo.personal_phone
+          name: temp.name,
+          public_email: temp.public_email,
+          public_phone: temp.public_phone,
+          foundation_url: temp.foundation_url,
+          fname_contact: temp.fname_contact,
+          lname_contact: temp.lname_contact,
+          personal_email: temp.personal_email,
+          personal_phone: temp.personal_phone
         });
         console.log("Document successfully written!");
         setGetData(true);
@@ -111,16 +101,14 @@ export default function FSettings() {
   React.useEffect(() => {
     if(getData){
       functionLoadData();
-    }else{
-      console.log("no need...")
     }
-    
   }, [getData]);
 
   return (
     <Data 
       isEdit={isEdit}
       cfInfo={cfInfo}
+      setCfInfo={setCfInfo}
       toggleEdit={toggleEdit}
       onSubmit={onSubmit}
       functionLoadData={functionLoadData}
