@@ -24,15 +24,6 @@ import createNumberMask from 'text-mask-addons/dist/createNumberMask'
 import DateFnsUtils from '@date-io/date-fns';
 
 const useStyles = makeStyles(theme => ({
-  card: {
-    maxWidth: 500,
-  },
-  topCard: {
-    marginBottom: theme.spacing(2),
-  },
-  cardContent: {
-    flexGrow: 1,
-  },
   input: {
     display: 'none',
   },
@@ -40,20 +31,10 @@ const useStyles = makeStyles(theme => ({
     paddingTop: theme.spacing(2),
     paddingBottom: theme.spacing(2),
   },
-  root: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around',
-    // overflow: 'hidden',
-    backgroundColor: theme.palette.background.paper,
-  },
   gridList: {
-    flexWrap: 'nowrap',
+    width: 700,
     // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
     transform: 'translateZ(0)',
-  },
-  title: {
-    color: theme.palette.primary.light,
   },
   titleBar: {
     background:
@@ -122,7 +103,7 @@ export default function EditGrant(props) {
       let newUrl = [];
       for (let i in img) {
         storageRef.child(img[i]).getDownloadURL().then(function (url) {
-          newUrl.push({name: img[i], url: url});
+          newUrl.push({ name: img[i], url: url });
           if (i == img.length - 1) {
             setUrl(newUrl.slice());
           }
@@ -194,19 +175,18 @@ export default function EditGrant(props) {
         <Text type='card-heading' text='Grant Images' />
         <Text type='card-subheading' text={'Add some pictures related to the grant.'} />
         {url && url.length > 0 &&
-          <GridList className={classes.gridList} cols={3}>
+          <GridList cellHeight={200} spacing={1} className={classes.gridList} >
             {url.map(u => (
-              <GridListTile key={u.name}>
+              <GridListTile key={u.name} cols={1} rows={1}>
                 <img src={u.url} />
                 <GridListTileBar
                   title={u.name}
                   classes={{
                     root: classes.titleBar,
-                    title: classes.title,
                   }}
                   actionIcon={
                     <IconButton aria-label={`delete image`}>
-                      <DeleteIcon className={classes.title} />
+                      <DeleteIcon />
                     </IconButton>
                   }
                 />
