@@ -113,19 +113,27 @@ export default function EditGrant(props) {
 
   // Observe the image array. When an image name is added, reload the image urls
   useEffect(() => {
-    console.log(props.grantData)
-    if (img) {
-      let newUrl = [];
-      for (let i in img) {
-        storageRef.child(img[i]).getDownloadURL().then(function (url) {
-          newUrl.push({ name: img[i], url: url });
-          if (i == img.length - 1) {
-            setUrl(newUrl.slice());
-          }
+    let newUrl = [];
+
+    var fillNewUrl = new Promise((resolve, reject) => {
+      img.forEach((i, index, img) => {
+        storageRef.child(i).getDownloadURL().then(function (url) {
+          newUrl.push({ name: i, url: url });
         }).catch(function (error) {
           console.log('error getting image url: ', error)
+        }).then(() => {
+          if (index === img.length - 1) {
+            resolve();
+          }
         })
-      }
+      })
+    })
+
+    if (img) {
+      fillNewUrl.then(() => {
+        console.log('Setting url to ', newUrl);
+        setUrl(newUrl);
+      });
     }
   }, [img])
 
@@ -176,14 +184,13 @@ export default function EditGrant(props) {
 
     var fillNewImg = new Promise((resolve, reject) => {
       img.forEach((i, index, img) => {
-        console.log(i, index, img)
         if (i !== event.target.parentNode.id) newImg.push(i);
         if (index === img.length - 1) resolve();
       });
     });
 
     fillNewImg.then(() => {
-      console.log(newImg)
+      console.log('updating img to ' + newImg)
       setImg(newImg);
     });
   }
