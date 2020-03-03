@@ -91,6 +91,7 @@ export default function EditGrant(props) {
 
   // Upload images to Firebase storage
   const uploadImages = () => {
+    let newImg = img.slice();
     for (let file of fileInput.current.files) {
       let name = file.name;
       let type = file.type;
@@ -104,8 +105,8 @@ export default function EditGrant(props) {
           props.callback(name, 'images')
 
           // add the image name to the image array
-          let newImg = img.slice();
           newImg.push(name);
+        }).then(function() {
           setImg(newImg);
         });
     }
