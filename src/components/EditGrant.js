@@ -203,12 +203,11 @@ export default function EditGrant(props) {
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <div className={classes.padding}>
         <Text type='card-heading' text='Grant Title' />
-        <Text type='card-subheading' text={'What is this grant for?'} />
         <TextField
           id='title'
           defaultValue={props.grantData.title}
           variant='outlined'
-          label='Grant Title'
+          label='What is this grant for?'
           onChange={handleInput} />
       </div>
 
@@ -249,8 +248,6 @@ export default function EditGrant(props) {
             </GridListTile>
           ))}
         </GridList>
-
-
         <input
           className={classes.input}
           id='file-upload'
@@ -263,7 +260,6 @@ export default function EditGrant(props) {
 
       <div className={classes.padding}>
         <Text type='card-heading' text='Grant Description' />
-        <Text type='card-subheading' text={'Add a some information to help donors understand why this grant is important.'} />
         <TextField
           id='desc'
           multiline
@@ -271,13 +267,12 @@ export default function EditGrant(props) {
           rows='6'
           defaultValue={props.grantData.desc}
           variant='outlined'
-          label='Grant Description'
+          label='Add a some information to help donors understand why this grant is important.'
           onChange={handleInput} />
       </div>
 
       <div className={classes.padding}>
         <Text type='card-heading' text='Affiliated Nonprofit' />
-        <Text type='card-subheading' text={'The nonprofit that made this grant request.'} />
         <NonprofitAutocomplete
           callback={nonprofitCallback}
           cfId={props.cfId}
@@ -285,8 +280,7 @@ export default function EditGrant(props) {
       </div>
 
       <div className={classes.padding}>
-        <Text type='card-heading' text='Deadline' />
-        <Text type='card-subheading' text={'The last day that donors can give to this grant.'} />
+        <Text type='card-heading' text='Grant Deadline' />
         <DatePicker
           label='Pick a date'
           value={selectedDate}
@@ -295,7 +289,6 @@ export default function EditGrant(props) {
 
       <div className={classes.padding}>
         <Text type='card-heading' text='Goal Amount' />
-        <Text type='card-subheading' text={'The total amount you want to raise for this grant. If you receive donations from outside giving tree, you can always edit this amount.'} />
         <MaskedInput
           mask={numberMask}
           onChange={handleInput}
