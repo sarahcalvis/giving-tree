@@ -40,6 +40,10 @@ const useStyles = makeStyles(theme => ({
     background:
       'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
   },
+  img: {
+    maxWidth: 200,
+    maxHeight: 200,
+  },
 }))
 
 export default function EditGrant(props) {
@@ -174,29 +178,28 @@ export default function EditGrant(props) {
       <div className={classes.padding}>
         <Text type='card-heading' text='Grant Images' />
         <Text type='card-subheading' text={'Add some pictures related to the grant.'} />
-        {url && url.length > 0 &&
-          <GridList cellHeight={200} spacing={1} className={classes.gridList} >
-            {url.map(u => (
-              <GridListTile key={u.name} cols={1} rows={1}>
-                <img src={u.url} />
-                <GridListTileBar
-                  title={u.name}
-                  classes={{
-                    root: classes.titleBar,
-                  }}
-                  actionIcon={
-                    <IconButton aria-label={`delete image`}>
-                      <DeleteIcon />
-                    </IconButton>
-                  }
-                />
-              </GridListTile>
-            ))}
-          </GridList>
-        }
-        <label for='file-upload'>
-          {(url && url.length > 0) ? 'Upload another image' : 'Upload images'}
-        </label>
+        <GridList cellHeight={200} spacing={1} className={classes.gridList} >
+          {url && url.length > 0 && url.map(u => (
+            <GridListTile className={classes.img} key={u.name} cols={1} rows={1}>
+              <img src={u.url} />
+              <GridListTileBar
+                title={u.name}
+                className={classes.titleBar}
+                actionIcon={
+                  <IconButton aria-label={`delete image`}>
+                    <DeleteIcon />
+                  </IconButton>
+                }
+              />
+            </GridListTile>
+          ))}
+          <GridListTile className={classes.img} key={'Upload another'} cols={1} rows={1}>
+            <label for='file-upload'>
+              {(url && url.length > 0) ? 'Upload another image' : 'Upload images'}
+            </label>
+          </GridListTile>
+        </GridList>
+
         <input
           className={classes.input}
           id='file-upload'
