@@ -138,7 +138,7 @@ export default function EditGrant(props) {
 
   
   // Delete an image
-  const removeImageCallback = async (event) => {
+  const removeImage = async (event) => {
     console.log('name of the image to be deleted: ', event.target.parentNode.id)
 
     let newImg = [];
@@ -196,6 +196,7 @@ export default function EditGrant(props) {
     props.callback(value.name, 'nonprofit_name');
   }
 
+  // Update the images array
   useEffect(() => { props.callback(img, 'images') }, [img]);
 
   return (
@@ -238,7 +239,7 @@ export default function EditGrant(props) {
                 actionIcon={
                   <IconButton
                     id={u.name}
-                    onClick={removeImageCallback}
+                    onClick={removeImage}
                     style={{ color: 'white' }}
                     aria-label={`delete image`}>
                     <DeleteIcon id={u.name} />
