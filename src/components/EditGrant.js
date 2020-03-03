@@ -186,7 +186,7 @@ export default function EditGrant(props) {
                 title={u.name}
                 className={classes.titleBar}
                 actionIcon={
-                  <IconButton aria-label={`delete image`}>
+                  <IconButton style={{ color: 'white' }} aria-label={`delete image`}>
                     <DeleteIcon />
                   </IconButton>
                 }
