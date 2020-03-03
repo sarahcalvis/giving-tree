@@ -19,25 +19,33 @@ export default function FSettings() {
   console.log(user);
 
   // Foundation info
-  const [name, setName] = React.useState('');
-  const [email, setEmail] = React.useState('');
-  const [phone, setPhone] = React.useState('');
-  const [url, setUrl] = React.useState('');
-  const [contactFirstName, setContactFirstName] = React.useState('');
-  const [contactLastName, setContactLastName] = React.useState('');
-  const [contactEmail, setContactEmail] = React.useState('');
-  const [contactPhone, setContactPhone] = React.useState('');
+  const [cfInfo, setCfInfo] = React.useState({
+    name: '',
+    public_email: '',
+    public_phone: '',
+    foundation_url: '',
+    fname_contact: '',
+    lname_contact: '',
+    personal_email: '',
+    personal_phone: ''
+  });
 
-  // Foundation info
-  const [nameHelp, setNameHelp] = React.useState('');
-  const [emailHelp, setEmailHelp] = React.useState('');
-  const [phoneHelp, setPhoneHelp] = React.useState('');
-  const [urlHelp, setUrlHelp] = React.useState('');
-  const [contactFirstNameHelp, setContactFirstNameHelp] = React.useState('');
-  const [contactLastNameHelp, setContactLastNameHelp] = React.useState('');
-  const [contactPhoneHelp, setContactPhoneHelp] = React.useState('');
+  const [getData, setGetData] = React.useState(true);
 
-  function functionLoadData(){
+  const functionLoadData = () =>{
+    
+    console.log("I've been called!!");
+    /*setCfInfo({ 
+      name: '',
+      public_email: '',
+      public_phone: '',
+      foundation_url: '',
+      fname_contact: '',
+      lname_contact: '',
+      personal_email: '',
+      personal_phone: ''
+    })*/
+    
     // Foundation query
     db.collection('communityFoundations').where('personal_email','==', user.email)
       .get()
@@ -45,14 +53,18 @@ export default function FSettings() {
         querySnapshot.forEach(function(doc) {
           // doc.data() is never undefined for query doc snapshots
           console.log(doc.id, " => ", doc.data());
-          setName(doc.data().name);
-          setEmail(doc.data().public_email);
-          setPhone(doc.data().public_phone);
-          setUrl(doc.data().foundation_url);
-          setContactFirstName(doc.data().fname_contact);
-          setContactLastName(doc.data().lname_contact);
-          setContactEmail(doc.data().personal_email);
-          setContactPhone(doc.data().personal_phone);
+          
+          setCfInfo({ 
+            name: doc.data().name,
+            public_email: doc.data().public_email,
+            public_phone: doc.data().public_phone,
+            foundation_url: doc.data().foundation_url,
+            fname_contact: doc.data().fname_contact,
+            lname_contact: doc.data().lname_contact,
+            personal_email: doc.data().personal_email,
+            personal_phone: doc.data().personal_phone
+          })
+          setGetData(false);
         });
       })
       .catch(function(error) {
@@ -61,48 +73,30 @@ export default function FSettings() {
   }
 
   function onSubmit(){
-    /*setNameHelp(helper.validateField('name', name));
-    setEmailHelp(helper.validateField('email', email));
-    setPhoneHelp(helper.validateField('public_phone', phone));
-    setUrlHelp(helper.validateField('foundation_url', url));
-    setContactFirstNameHelp(helper.validateField('fname_contact', contactFirstName));
-    setContactFirstNameHelp(helper.validateField('lname_contact', contactLastName));
-    setContactPhoneHelp(helper.validateField('private_phone', contactPhone));
-    
-    console.log("Name Help: "+nameHelp);
-    console.log("Email Help: "+emailHelp);
-    console.log("Phone Help: "+phoneHelp);
-    console.log("URL Help: "+urlHelp);
-    console.log("First Help: "+contactFirstNameHelp);
-    console.log("Last Help: "+contactLastNameHelp);
-    console.log("Contact Phone Help: "+contactPhoneHelp);
-
-    if((nameHelp === '') && (emailHelp === '') && (phoneHelp === '') && (urlHelp === '') && (contactFirstNameHelp === '') && (contactLastNameHelp === '') && (contactPhoneHelp === ''))
-    {*/
-      db.collection('communityFoundations').where('personal_email','==',user.email)
-      .get()
-      .then(function(querySnapshot) {
-        querySnapshot.forEach(function(doc) {
-          console.log(doc.id, " => ", doc.data());
-          // Build doc ref from doc.id
-          db.collection("communityFoundations").doc(doc.id).update({
-            name: name,
-            public_email: email,
-            public_phone: phone,
-            foundation_url: url,
-            fname_contact: contactFirstName,
-            lname_contact: contactLastName,
-            personal_email: contactEmail,
-            personal_phone: contactPhone
-          });
-          console.log("Document successfully written!");
-          setEdit(false);
+    db.collection('communityFoundations').where('personal_email','==',user.email)
+    .get()
+    .then(function(querySnapshot) {
+      querySnapshot.forEach(function(doc) {
+        console.log(doc.id, " => ", doc.data());
+        // Build doc ref from doc.id
+        db.collection("communityFoundations").doc(doc.id).update({
+          name: cfInfo.name,
+          public_email: cfInfo.public_email,
+          public_phone: cfInfo.public_phone,
+          foundation_url: cfInfo.foundation_url,
+          fname_contact: cfInfo.fname_contact,
+          lname_contact: cfInfo.lname_contact,
+          personal_email: cfInfo.personal_email,
+          personal_phone: cfInfo.personal_phone
         });
-      })
-      .catch(function(error) {
-        console.error("Error writing document: ", error);
+        console.log("Document successfully written!");
+        setGetData(true);
+        setEdit(false);
       });
-    //}
+    })
+    .catch(function(error) {
+      console.error("Error writing document: ", error);
+    });
   }
 
   function toggleEdit()
@@ -114,38 +108,22 @@ export default function FSettings() {
     }
   }
 
+  React.useEffect(() => {
+    if(getData){
+      functionLoadData();
+    }else{
+      console.log("no need...")
+    }
+    
+  }, [getData]);
+
   return (
     <Data 
       isEdit={isEdit}
-      
-      name={name}
-      setName={setName}
-      email={email}
-      setEmail={setEmail}
-      phone={phone}
-      setPhone={setPhone}
-      url={url}
-      setUrl={setUrl}
-      contactFirstName={contactFirstName}
-      setContactFirstName={setContactFirstName}
-      contactLastName={contactLastName}
-      setContactLastName={setContactLastName}
-      contactEmail={contactEmail}
-      setContactEmail={setContactEmail}
-      contactPhone={contactPhone}
-      setContactPhone={setContactPhone}
-      
+      cfInfo={cfInfo}
       toggleEdit={toggleEdit}
       onSubmit={onSubmit}
       functionLoadData={functionLoadData}
-      
-      nameHelp={nameHelp}
-      emailHelp={emailHelp}
-      phoneHelp={phoneHelp}
-      urlHelp={urlHelp}
-      contactFirstNameHelp={contactFirstNameHelp}
-      contactLastNameHelp={contactLastNameHelp}
-      contactPhoneHelp={contactPhoneHelp}
     />
   );
 } 
@@ -161,18 +139,10 @@ const Data = (props) => {
   }else{
     return(
       <NonEditableData
-        functionLoadData={props.functionLoadData}
-        name={props.name}
-        email={props.email}
-        phone={props.phone}
-        url={props.url}
-        contactFirstName={props.contactFirstName}
-        contactLastName={props.contactLastName}
-        contactEmail={props.contactEmail}
-        contactPhone={props.contactPhone}
-        onSubmit={props.onSubmit}
+        cfInfo={props.cfInfo}
         toggleEdit={props.toggleEdit}
-        />
+        onSubmit={props.onSubmit}
+      />
     );
   }
 }
