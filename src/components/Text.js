@@ -23,7 +23,11 @@ export default function Text(props) {
     <div>
       {type === 'heading' &&
         <Typography
+          component='h1'
           variant='h2'
+          align='center'
+          color='textPrimary'
+          gutterBottom
         >
           {text}
         </Typography>
