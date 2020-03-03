@@ -61,7 +61,7 @@ export default function FSettings() {
   }
 
   function onSubmit(){
-    setNameHelp(helper.validateField('name', name));
+    /*setNameHelp(helper.validateField('name', name));
     setEmailHelp(helper.validateField('email', email));
     setPhoneHelp(helper.validateField('public_phone', phone));
     setUrlHelp(helper.validateField('foundation_url', url));
@@ -69,9 +69,17 @@ export default function FSettings() {
     setContactFirstNameHelp(helper.validateField('lname_contact', contactLastName));
     setContactPhoneHelp(helper.validateField('private_phone', contactPhone));
     
+    console.log("Name Help: "+nameHelp);
+    console.log("Email Help: "+emailHelp);
+    console.log("Phone Help: "+phoneHelp);
+    console.log("URL Help: "+urlHelp);
+    console.log("First Help: "+contactFirstNameHelp);
+    console.log("Last Help: "+contactLastNameHelp);
+    console.log("Contact Phone Help: "+contactPhoneHelp);
+
     if((nameHelp === '') && (emailHelp === '') && (phoneHelp === '') && (urlHelp === '') && (contactFirstNameHelp === '') && (contactLastNameHelp === '') && (contactPhoneHelp === ''))
-    {
-      db.collection('communityFoundations').where('public_email','==',user.email)
+    {*/
+      db.collection('communityFoundations').where('personal_email','==',user.email)
       .get()
       .then(function(querySnapshot) {
         querySnapshot.forEach(function(doc) {
@@ -94,7 +102,7 @@ export default function FSettings() {
       .catch(function(error) {
         console.error("Error writing document: ", error);
       });
-    }
+    //}
   }
 
   function toggleEdit()
