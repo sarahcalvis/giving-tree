@@ -11,11 +11,15 @@ import withAuthProtection from '../auth/withAuthProtection.js';
 import { makeStyles } from '@material-ui/styles';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
+import Paper from '@material-ui/core/Paper';
+import Container from '@material-ui/core/Container';
 
 const useStyles = makeStyles(theme => ({
   card: {
-    paddingTop: theme.spacing(2),
-    paddingBottom: theme.spacing(2),
+    padding: theme.spacing(2),
+  },
+  paper: {
+    padding: theme.spacing(6),
   },
   fab: {
     margin: 0,
@@ -251,13 +255,10 @@ function FEditGrant() {
 
   return (
     <div className={classes.card}>
-      <Grid container
-        direction='row'
-        justify='space-around'
-        alignItems='flex-start'>
-        <Grid item>
-          {grantStatus === 'edit' && <Text type='heading' text='Edit Grant' />}
-          {grantStatus === 'create' && <Text type='heading' text='Create Grant' />}
+      <Container maxWidth='md'>
+        {grantStatus === 'edit' && <Text type='heading' text='Edit Grant' />}
+        {grantStatus === 'create' && <Text type='heading' text='Create Grant' />}
+        <Paper className={classes.paper}>
           {
             cfData &&
             ((grantStatus === 'edit' && loaded && validEditor) || grantStatus == 'create') &&
@@ -268,13 +269,15 @@ function FEditGrant() {
               type='card-heading'
               text='You cannot edit this grant because it does not belong to your community foundation' />
           }
-        </Grid>
-        <Grid item>
-          <div className={classes.fab}>
+          <Grid container
+            direction='row'
+            justify='space-around'
+            alignItems='flex-start'>
+            {/* <div className={classes.fab}> */}
             {grantStatus === 'edit' &&
               <Grid container
                 spacing={2}
-                direction='column'
+                direction='row'
                 justify='flex-end'
                 alignItems='flex-start'>
                 <Grid item>
@@ -297,15 +300,15 @@ function FEditGrant() {
             {grantStatus === 'create' &&
               <Grid container
                 spacing={2}
-                direction="column"
-                justify="flex-end"
-                alignItems="flex-start">
+                direction='row'
+                justify='flex-end'
+                alignItems='flex-start'>
                 <Grid item>
                   <Button
                     color='primary'
                     variant='contained'>
                     Discard
-                </Button>
+                  </Button>
                 </Grid>
                 <Grid item>
                   <Button
@@ -325,10 +328,12 @@ function FEditGrant() {
                 </Grid>
               </Grid>
             }
-          </div>
-        </Grid>
-      </Grid>
-    </div>
+            {/* </div> */}
+            {/* </Grid> */}
+          </Grid>
+        </Paper>
+      </Container>
+    </div >
   );
 }
 

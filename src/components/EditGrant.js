@@ -206,8 +206,20 @@ export default function EditGrant(props) {
         <TextField
           id='title'
           defaultValue={props.grantData.title}
-          variant='outlined'
+          fullWidth
           label='What is this grant for?'
+          onChange={handleInput} />
+      </div>
+
+      <div className={classes.padding}>
+        <Text type='card-heading' text='Grant Description' />
+        <TextField
+          id='desc'
+          multiline
+          fullWidth
+          rows='6'
+          defaultValue={props.grantData.desc}
+          label='Add a some information to help donors understand why this grant is important.'
           onChange={handleInput} />
       </div>
 
@@ -258,18 +270,7 @@ export default function EditGrant(props) {
           multiple />
       </div>
 
-      <div className={classes.padding}>
-        <Text type='card-heading' text='Grant Description' />
-        <TextField
-          id='desc'
-          multiline
-          fullWidth
-          rows='6'
-          defaultValue={props.grantData.desc}
-          variant='outlined'
-          label='Add a some information to help donors understand why this grant is important.'
-          onChange={handleInput} />
-      </div>
+
 
       <div className={classes.padding}>
         <Text type='card-heading' text='Affiliated Nonprofit' />
