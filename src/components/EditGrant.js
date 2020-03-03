@@ -12,7 +12,7 @@ import GridListTileBar from '@material-ui/core/GridListTileBar';
 import TextField from '@material-ui/core/TextField';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
-import AddIcon from '@material-ui/icons/Add';
+import AddPhotoAlternateIcon from '@material-ui/icons/AddPhotoAlternate';
 import { makeStyles } from '@material-ui/styles';
 import {
   DatePicker,
@@ -102,12 +102,11 @@ export default function EditGrant(props) {
       // Add file to storage and pass the image name up to the parent
       ref.put(new File([file], name, { type: type, }))
         .then(function (snapshot) {
-          props.callback(name, 'images')
-
           // add the image name to the image array
           newImg.push(name);
-        }).then(function() {
+        }).then(function () {
           setImg(newImg);
+
         });
     }
   };
@@ -136,6 +135,27 @@ export default function EditGrant(props) {
       setUrl(newUrl);
     });
   }, [img])
+
+  
+  // Delete an image
+  const removeImageCallback = async (event) => {
+    console.log('name of the image to be deleted: ', event.target.parentNode.id)
+
+    let newImg = [];
+
+    var fillNewImg = new Promise((resolve, reject) => {
+      img.forEach((i, index, img) => {
+        if (i !== event.target.parentNode.id) newImg.push(i);
+        if (index === img.length - 1) resolve();
+      });
+    });
+
+    fillNewImg.then(() => {
+      console.log('updating img to ' + newImg)
+      setImg(newImg);
+    });
+  }
+
 
   ///////////////
   // CALLBACKS //
@@ -176,24 +196,7 @@ export default function EditGrant(props) {
     props.callback(value.name, 'nonprofit_name');
   }
 
-  // Get the image to delete from ImageCarousel
-  const removeImageCallback = async (event) => {
-    console.log('name of the image to be deleted: ', event.target.parentNode.id)
-
-    let newImg = [];
-
-    var fillNewImg = new Promise((resolve, reject) => {
-      img.forEach((i, index, img) => {
-        if (i !== event.target.parentNode.id) newImg.push(i);
-        if (index === img.length - 1) resolve();
-      });
-    });
-
-    fillNewImg.then(() => {
-      console.log('updating img to ' + newImg)
-      setImg(newImg);
-    });
-  }
+  useEffect(() => { props.callback(img, 'images') }, [img]);
 
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -210,7 +213,6 @@ export default function EditGrant(props) {
 
       <div className={classes.padding}>
         <Text type='card-heading' text='Grant Images' />
-        <Text type='card-subheading' text={'Add some pictures related to the grant.'} />
         <GridList cellHeight={200} spacing={1} className={classes.gridList} >
           <GridListTile
             className={classes.img}
@@ -221,7 +223,7 @@ export default function EditGrant(props) {
               <label htmlFor='file-upload'>
                 <IconButton
                   component='span'>
-                  <AddIcon className={classes.largeIcon} />
+                  <AddPhotoAlternateIcon className={classes.largeIcon} />
                 </IconButton>
               </label>
             </div>

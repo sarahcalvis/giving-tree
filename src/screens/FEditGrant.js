@@ -131,14 +131,7 @@ function FEditGrant() {
         newData.date_deadline = { seconds: data, nanoseconds: 0 };
         break;
       case 'images':
-        newData.images.push(data);
-        break;
-      case 'remove':
-        for (let img of newData.images) {
-          if (img === data) {
-            newData.images = newData.images.splice(0, newData.images.indexOf(img))
-          }
-        }
+        newData.images = data;
         break;
       default:
         if (newData.hasOwnProperty(type)) {
