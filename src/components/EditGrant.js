@@ -169,8 +169,23 @@ export default function EditGrant(props) {
   }
 
   // Get the image to delete from ImageCarousel
-  const removeImageCallback = (index) => {
-    props.callback(img[index], 'remove')
+  const removeImageCallback = async (event) => {
+    console.log('name of the image to be deleted: ', event.target.parentNode.id)
+
+    let newImg = [];
+
+    var fillNewImg = new Promise((resolve, reject) => {
+      img.forEach((i, index, img) => {
+        console.log(i, index, img)
+        if (i !== event.target.parentNode.id) newImg.push(i);
+        if (index === img.length - 1) resolve();
+      });
+    });
+
+    fillNewImg.then(() => {
+      console.log(newImg)
+      setImg(newImg);
+    });
   }
 
   return (
@@ -209,10 +224,15 @@ export default function EditGrant(props) {
               <img src={u.url} />
               <GridListTileBar
                 title={u.name}
+                id={u.name}
                 className={classes.titleBar}
                 actionIcon={
-                  <IconButton style={{ color: 'white' }} aria-label={`delete image`}>
-                    <DeleteIcon />
+                  <IconButton
+                    id={u.name}
+                    onClick={removeImageCallback}
+                    style={{ color: 'white' }}
+                    aria-label={`delete image`}>
+                    <DeleteIcon id={u.name} />
                   </IconButton>
                 }
               />

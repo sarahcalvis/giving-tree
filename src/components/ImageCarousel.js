@@ -5,7 +5,6 @@ import MobileStepper from '@material-ui/core/MobileStepper';
 import Button from '@material-ui/core/Button';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
-import DeleteIcon from '@material-ui/icons/Delete';
 import CardMedia from '@material-ui/core/CardMedia';
 import Grid from '@material-ui/core/Grid';
 
@@ -34,11 +33,6 @@ export default function ImageCarousel(props) {
   const handleBack = () => {
     setActiveStep(prevActiveStep => prevActiveStep - 1);
   };
-
-  const handleDelete = () => {
-    props.callback(activeStep);
-    setActiveStep(0);
-  }
 
   return (
     <div className={classes.narrow}>
@@ -74,13 +68,6 @@ export default function ImageCarousel(props) {
               </Button>
               }
             />
-          }
-          {props.deletable &&
-            <Button
-              size='small'
-              onClick={handleDelete}>
-              <DeleteIcon />
-            </Button>
           }
         </Grid>
       </div>
