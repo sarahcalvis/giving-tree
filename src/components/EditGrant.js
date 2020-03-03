@@ -12,6 +12,7 @@ import GridListTileBar from '@material-ui/core/GridListTileBar';
 import TextField from '@material-ui/core/TextField';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
+import AddIcon from '@material-ui/icons/Add';
 import { makeStyles } from '@material-ui/styles';
 import {
   DatePicker,
@@ -43,6 +44,16 @@ const useStyles = makeStyles(theme => ({
   img: {
     maxWidth: 200,
     maxHeight: 200,
+  },
+  centeredIcon: {
+    height: 200,
+    display: 'flex',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    textAlign: 'center',
+  },
+  largeIcon: {
+    fontSize: '5em',
   },
 }))
 
@@ -193,10 +204,19 @@ export default function EditGrant(props) {
               />
             </GridListTile>
           ))}
-          <GridListTile className={classes.img} key={'Upload another'} cols={1} rows={1}>
-            <label for='file-upload'>
-              {(url && url.length > 0) ? 'Upload another image' : 'Upload images'}
-            </label>
+          <GridListTile
+            className={classes.img}
+            key={'Upload another'}
+            cols={1}
+            rows={1}>
+            <div className={classes.centeredIcon}>
+              <label htmlFor='file-upload'>
+                <IconButton
+                  component='span'>
+                  <AddIcon className={classes.largeIcon} />
+                </IconButton>
+              </label>
+            </div>
           </GridListTile>
         </GridList>
 
