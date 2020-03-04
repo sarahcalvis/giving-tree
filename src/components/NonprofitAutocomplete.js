@@ -80,6 +80,7 @@ export default function NonprofitAutocomplete(props) {
                 options={transformedNonprofits}
                 getOptionLabel={nonprofits => nonprofits.name}
                 autoHighlight
+                disableClearable
                 defaultValue={transformedNonprofits[selected]}
                 onChange={props.callback}
                 renderInput={params => (
