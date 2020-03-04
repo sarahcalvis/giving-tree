@@ -1,6 +1,6 @@
 import React, { useEffect, Component } from 'react';
 
-import { Button, Typography, Container, FormControl, InputLabel, Input, } from '@material-ui/core';
+import { Button, Typography, Container, FormControl, InputLabel, Input, Grid, Paper, } from '@material-ui/core';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -18,84 +18,87 @@ import AlternateEmailIcon from '@material-ui/icons/AlternateEmail';
 
 export default function NonEditableData(props){
 	return (
-		<Container maxWidth="md">
-			<Typography variant="h5">
-				{props.name}
+		<Container maxWidth="lg">
+			<Typography variant="h4">
+				{props.cfInfo.name}
 			</Typography>
-			<List >
-				<ListItem>
-					<ListItemAvatar>
-						<Avatar>
-							<TitleIcon />
-						</Avatar>
-					</ListItemAvatar>
-					<ListItemText primary="Foundation Name" secondary={props.cfInfo.name} />
-				</ListItem>
+			<Grid container direction={'row'}>
+				<Grid item xs="6">
+					<Typography variant="h5">
+						Public Information
+					</Typography>
+					<Grid container direction={'column'} spacing={2}>
+						<StaticItem 
+							icon={<TitleIcon />}
+							label={"Foundation Name"}
+							value={props.cfInfo.name}
+						/>
+						<StaticItem 
+							icon={<EmailIcon />}
+							label={"Public Email"}
+							value={props.cfInfo.public_email}
+						/>
+						<StaticItem 
+							icon={<PhoneIcon />}
+							label={"Public Phone"}
+							value={props.cfInfo.public_phone}
+						/>
+						<StaticItem 
+							icon={<HttpIcon />}
+							label={"Foundation URL"}
+							value={props.cfInfo.foundation_url}
+						/>
+					</Grid>
+				</Grid>
 				
-				<ListItem>
-					<ListItemAvatar>
-						<Avatar>
-							<EmailIcon />
-						</Avatar>
-					</ListItemAvatar>
-					<ListItemText primary="Public Email" secondary={props.cfInfo.public_email} />
-				</ListItem>
-				
-				<ListItem>
-					<ListItemAvatar>
-						<Avatar>
-							<PhoneIcon />
-						</Avatar>
-					</ListItemAvatar>
-					<ListItemText primary="Public Phone" secondary={props.cfInfo.public_phone} />
-				</ListItem>
-				
-				<ListItem>
-					<ListItemAvatar>
-						<Avatar>
-							<HttpIcon />
-						</Avatar>
-					</ListItemAvatar>
-					<ListItemText primary="Foundation URL" secondary={props.cfInfo.foundation_url} />
-				</ListItem>
-				
-				<ListItem>
-					<ListItemAvatar>
-						<Avatar>
-							<ContactsIcon />
-						</Avatar>
-					</ListItemAvatar>
-					<ListItemText primary="Contact First Name" secondary={props.cfInfo.fname_contact} />
-				</ListItem>
-				
-				<ListItem>
-					<ListItemAvatar>
-						<Avatar>
-							<ContactsOutlinedIcon />
-						</Avatar>
-					</ListItemAvatar>
-					<ListItemText primary="Contact Last Name" secondary={props.cfInfo.lname_contact} />
-				</ListItem>
-				
-				<ListItem>
-					<ListItemAvatar>
-						<Avatar>
-							<AlternateEmailIcon />
-						</Avatar>
-					</ListItemAvatar>
-					<ListItemText primary="Contact Email" secondary={props.cfInfo.personal_email} />
-				</ListItem>
-				
-				<ListItem>
-					<ListItemAvatar>
-						<Avatar>
-							<PhoneIphoneIcon />
-						</Avatar>
-					</ListItemAvatar>
-					<ListItemText primary="Contact Phone" secondary={props.cfInfo.personal_phone} />
-				</ListItem>
-			</List>
+				<Grid item maxWidth="6">
+					<Typography variant="h5">
+						Giving Tree Contact Information
+					</Typography>
+					<Grid container direction={'column'} spacing={2}>
+						<StaticItem 
+							icon={<ContactsIcon />}
+							label={"Contact First Name"}
+							value={props.cfInfo.fname_contact}
+						/>
+						<StaticItem 
+							icon={<ContactsOutlinedIcon />}
+							label={"Contact Last Name"}
+							value={props.cfInfo.lname_contact}
+						/>
+						<StaticItem 
+							icon={<AlternateEmailIcon />}
+							label={"Contact Email"}
+							value={props.cfInfo.personal_email}
+						/>
+						<StaticItem 
+							icon={<PhoneIphoneIcon />}
+							label={"Contact Phone"}
+							value={props.cfInfo.personal_phone}
+						/>
+					</Grid>
+				</Grid>
+			</Grid>
 			<Button onClick={props.toggleEdit}>Edit</Button>
 		</Container>
+		
+	);
+}
+
+function StaticItem(props) {
+	return(
+		<Grid container item spacing={2}>
+			<Grid item>
+				<Avatar>
+					{React.cloneElement(props.icon)}
+				</Avatar>
+			</Grid>
+			<Grid item sm container>
+				<ListItemText 
+					primary={props.label}
+					secondary={props.value} 
+				/>
+			</Grid>
+		</Grid>
 	);
 }

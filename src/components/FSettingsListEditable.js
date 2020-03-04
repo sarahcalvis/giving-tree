@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { Button, Typography, Container, FormControl, InputLabel, Input, TextField, } from '@material-ui/core';
+import { Button, Typography, Container, FormControl, InputLabel, Input, TextField, Grid, } from '@material-ui/core';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -56,103 +56,107 @@ export default function EditableData(props){
 	}
 
 	return (
-		<Container maxWidth="md">
-			<Typography variant="h5">
-				{props.name}
+		<Container maxWidth="lg">
+			<Typography variant="h4">
+				{props.cfInfo.name}
 			</Typography>
 
-			<List>
-				<ListItem>
-					<ListItemAvatar>
-						<Avatar>
-							<TitleIcon />
-						</Avatar>
-					</ListItemAvatar>
-					<FormControl>
-						<TextField label={'Foundation Name'} defaultValue={props.cfInfo.name} onChange={(e, f) => onChange(e, 'name')} helperText={helperText.name} />
-					</FormControl>
-				</ListItem>
+			<Grid container direction={'row'}>
+				<Grid item xs="6">
+					<Typography variant="h5">
+						Public Information
+					</Typography>
+					<Grid container direction={'column'} spacing={3}>
+						<EditItem 
+							icon={<TitleIcon />}
+							label={'Foundation Name'}
+							default={props.cfInfo.name}
+							change={(e, f) => onChange(e, 'name')}
+							helper={helperText.name}
+						/>
+						<EditItem 
+							icon={<EmailIcon />}
+							label={'Public Email'}
+							default={props.cfInfo.public_email}
+							change={(e, f) => onChange(e, 'public_email')}
+							helper={helperText.public_email}
+						/>
+						<EditItem 
+							icon={<PhoneIcon />}
+							label={'Public Phone'}
+							default={props.cfInfo.public_phone}
+							change={(e, f) => onChange(e, 'public_phone')}
+							helper={helperText.public_phone}
+						/>
+						<EditItem 
+							icon={<HttpIcon />}
+							label={'Foundation URL'}
+							default={props.cfInfo.foundation_url}
+							change={(e, f) => onChange(e, 'foundation_url')}
+							helper={helperText.foundation_url}
+						/>
+					</Grid>
+				</Grid>
 
-				<ListItem>
-					<ListItemAvatar>
-						<Avatar>
-							<EmailIcon />
-						</Avatar>
-					</ListItemAvatar>
-					<FormControl>
-						<TextField label='Public Email' defaultValue={props.cfInfo.public_email} onChange={(e, f) => onChange(e, 'public_email')} helperText={helperText.public_email}/>
-					</FormControl>
-				</ListItem>
-
-				<ListItem>
-					<ListItemAvatar>
-						<Avatar>
-							<PhoneIcon />
-						</Avatar>
-					</ListItemAvatar>
-					<FormControl>
-						<TextField label='Public Phone' defaultValue={props.cfInfo.public_phone} onChange={(e, f) => onChange(e, 'public_phone')} helperText={helperText.public_phone}/>
-					</FormControl>
-				</ListItem>
-
-				<ListItem>
-					<ListItemAvatar>
-						<Avatar>
-							<HttpIcon />
-						</Avatar>
-					</ListItemAvatar>
-					<FormControl>
-						<TextField label='Foundation URL' defaultValue={props.cfInfo.foundation_url} onChange={(e, f) => onChange(e, 'foundation_url')} helperText={helperText.foundation_url}/>
-					</FormControl>
-				</ListItem>
-
-				<ListItem>
-					<ListItemAvatar>
-						<Avatar>
-							<ContactsIcon />
-						</Avatar>
-					</ListItemAvatar>
-					<FormControl>
-						<TextField label='Contact First Name' defaultValue={props.cfInfo.fname_contact} onChange={(e, f) => onChange(e, 'fname_contact')} helperText={helperText.fname_contact}/>
-					</FormControl>
-				</ListItem>
-
-				<ListItem>
-					<ListItemAvatar>
-						<Avatar>
-							<ContactsOutlinedIcon />
-						</Avatar>
-					</ListItemAvatar>
-					<FormControl>
-						<TextField label='Contact Last Name' defaultValue={props.cfInfo.lname_contact} onChange={(e, f) => onChange(e, 'lname_contact')} helperText={helperText.lname_contact}/>
-					</FormControl>
-				</ListItem>
-
-				<ListItem>
-					<ListItemAvatar>
-						<Avatar>
-							<AlternateEmailIcon />
-						</Avatar>
-					</ListItemAvatar>
-					<FormControl>
-						<TextField label='Contact Email' disabled={true} defaultValue={props.cfInfo.personal_email} />
-					</FormControl>
-				</ListItem>
-
-				<ListItem>
-					<ListItemAvatar>
-						<Avatar>
-							<PhoneIphoneIcon />
-						</Avatar>
-					</ListItemAvatar>
-					<FormControl>
-						<TextField label='Contact Phone' defaultValue={props.cfInfo.personal_phone} onChange={(e, f) => onChange(e, 'personal_phone')} helperText={helperText.personal_phone}/>
-					</FormControl>
-				</ListItem>
-			</List>
+				<Grid item xs="6">
+					<Typography variant="h5">
+						Giving Tree Contact Information
+					</Typography>
+					<Grid container direction={'column'} spacing={3}>
+						<EditItem 
+							icon={<ContactsIcon />}
+							label={'Contact First Name'}
+							default={props.cfInfo.fname_contact}
+							change={(e, f) => onChange(e, 'fname_contact')}
+							helper={helperText.fname_contact}
+						/>
+						<EditItem 
+							icon={<ContactsOutlinedIcon />}
+							label={'Contact Last Name'}
+							default={props.cfInfo.lname_contact}
+							change={(e, f) => onChange(e, 'lname_contact')}
+							helper={helperText.lname_contact}
+						/>
+						<EditItem 
+							icon={<AlternateEmailIcon />}
+							label={'Contact Email'}
+							default={props.cfInfo.personal_email}
+							disabled={true}
+						/>
+						<EditItem 
+							icon={<PhoneIphoneIcon />}
+							label={'Contact Phone'}
+							default={props.cfInfo.personal_phone}
+							change={(e, f) => onChange(e, 'personal_phone')}
+							helper={helperText.personal_phone}
+						/>
+					</Grid>
+				</Grid>
+			</Grid>
 
 			<Button onClick={props.toggleEdit}>Discard</Button>
 			<Button onClick={submitForm}>Save</Button>
 		</Container>
+	);
+}
+
+function EditItem(props, disabled=false) {
+	return(
+		<Grid container item spacing={2}>
+			<Grid item>
+				<Avatar>
+					{React.cloneElement(props.icon)}
+				</Avatar>
+			</Grid>
+			<Grid item xs={8} sm container>
+				<TextField 
+					label={props.label} 
+					defaultValue={props.default} 
+					onChange={props.change} 
+					helperText={props.helper} 
+					disabled={props.disabled}
+				/>
+			</Grid>
+		</Grid>
 	);
 }
