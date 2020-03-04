@@ -1,10 +1,8 @@
 import React, { useEffect, Component } from 'react';
+import { Link } from 'react-router-dom';
 
-import { Button, Typography, Container, FormControl, InputLabel, Input, Grid, Paper, } from '@material-ui/core';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
+import { Button, Typography, Container, Grid} from '@material-ui/core';
 import ListItemText from '@material-ui/core/ListItemText';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import ImageIcon from '@material-ui/icons/Image';
 import TitleIcon from '@material-ui/icons/Title'
@@ -19,14 +17,34 @@ import AlternateEmailIcon from '@material-ui/icons/AlternateEmail';
 export default function NonEditableData(props){
 	return (
 		<Container maxWidth="lg">
-			<Typography variant="h4">
-				{props.cfInfo.name}
-			</Typography>
+			<Grid container direction={'column'} style={{ 'margin-bottom': 15 }}>
+				<Typography variant="h4">
+					{props.cfInfo.name}
+				</Typography>
+				<Grid container direction='row'>
+					<Button 
+						color='primary'
+						onClick={props.toggleEdit} 
+						variant='outlined'
+						style={{ 'margin': 2 }}
+					>
+						Edit
+					</Button>
+					<Link to={{ pathname: "/forgot" }}>
+						<Button 
+							variant='outlined'
+							style={{ 'margin': 2}}
+						>
+							Change Password
+						</Button>
+					</Link>
+				</Grid>
+			</Grid>
+			
 			<Grid container direction={'row'}>
 				<Grid item xs="6">
-					<Typography variant="h5">
-						Public Information
-					</Typography>
+					<Typography variant="h5">Public Information</Typography>
+					<Typography variant="p" paragraph={true}>This information will be displayed on all published giving opportunities.</Typography>
 					<Grid container direction={'column'} spacing={2}>
 						<StaticItem 
 							icon={<TitleIcon />}
@@ -52,9 +70,8 @@ export default function NonEditableData(props){
 				</Grid>
 				
 				<Grid item maxWidth="6">
-					<Typography variant="h5">
-						Giving Tree Contact Information
-					</Typography>
+					<Typography variant="h5">Personal Contact Information</Typography>
+					<Typography variant="p" paragraph={true}>This information will be used to sign into and manage your account.</Typography>
 					<Grid container direction={'column'} spacing={2}>
 						<StaticItem 
 							icon={<ContactsIcon />}
@@ -79,7 +96,6 @@ export default function NonEditableData(props){
 					</Grid>
 				</Grid>
 			</Grid>
-			<Button onClick={props.toggleEdit}>Edit</Button>
 		</Container>
 		
 	);
