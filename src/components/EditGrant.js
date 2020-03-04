@@ -320,7 +320,8 @@ export default function EditGrant(props) {
         <Text type='card-heading' text='Grant Location' />
         <Text type='card-subheading' text={'We will not directly share this address with donors. We will use it to calculate a donor\'s distance from a grant.'} />
         <LocationSearch
-          parentCallback={locationCallback} />
+          parentCallback={locationCallback}
+          address={props.grantData.address} />
       </div>
 
     </MuiPickersUtilsProvider>

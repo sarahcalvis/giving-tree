@@ -1,4 +1,4 @@
-import React, { useEffect }  from "react";
+import React, { useEffect } from "react";
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
@@ -55,7 +55,7 @@ export default function LocationSearch(props) {
 
 
   const handleChange = (event, value) => {
-    if(!(value === null)) {
+    if (!(value === null)) {
       Geocode.fromAddress(value.description).then(
         response => {
           // console.log("supposed address: ", value.description);
@@ -63,7 +63,7 @@ export default function LocationSearch(props) {
           const { lat, lng } = response.results[0].geometry.location;
           // console.log(lat, lng);
           // console.log(value);
-          props.parentCallback({address: value, lat: lat, long: lng});
+          props.parentCallback({ address: value, lat: lat, long: lng });
           // Geocode.fromLatLng(lat, lng).then(
           //   response => {
           //     const address = response.results[0].formatted_address;
@@ -113,7 +113,7 @@ export default function LocationSearch(props) {
     return () => {
       active = false;
     };
-    
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputValue]);
 
@@ -130,6 +130,7 @@ export default function LocationSearch(props) {
       includeInputInList
       disableOpenOnFocus
       fullWidth
+      defaultValue={props.address}
       onChange={handleChange}
       renderInput={params => (
         <TextField
