@@ -121,6 +121,7 @@ export default function EditableData(props){
 							icon={<AlternateEmailIcon />}
 							label={'Contact Email'}
 							default={props.cfInfo.personal_email}
+							helper={""}
 							disabled={true}
 						/>
 						<EditItem 
@@ -155,6 +156,7 @@ function EditItem(props, disabled=false) {
 					onChange={props.change} 
 					helperText={props.helper} 
 					disabled={props.disabled}
+					error={props.helper !== ""}
 				/>
 			</Grid>
 		</Grid>
