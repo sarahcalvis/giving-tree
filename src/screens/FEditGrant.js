@@ -123,6 +123,27 @@ function FEditGrant() {
     images: [],
   });
 
+  /////////////////////////
+  // VALIDATE GRANT DATA //
+  /////////////////////////
+  const [valid, setValid] = React.useState(false);
+  console.log(grantData.date_deadline.seconds, new Date().getTime() / 1000)
+  useEffect(() => {
+    setValid(
+      grantData.title != '' &&
+      grantData.nonprofit_name != '' &&
+      grantData.nonprofit_id != '' &&
+      grantData.address != '' &&
+      grantData.lat != '' &&
+      grantData.long != '' &&
+      grantData.date_deadline.seconds > new Date().getTime() / 1000 &&
+      typeof(grantData.money_raised) === 'number' &&
+      typeof(grantData.goal_amt) === 'number' &&
+      parseFloat(grantData.goal_amt) > 0 &&
+      grantData.desc != ''
+    )
+  }, [grantData])
+
   // Receive changes to the grant data from EditGrant.js
   const callback = (data, type) => {
     let newData = grantData;
@@ -291,6 +312,7 @@ function FEditGrant() {
                   <Button
                     color='primary'
                     variant='contained'
+                    disabled={!valid}
                     onClick={update}>
                     Save
                 </Button>
@@ -322,14 +344,13 @@ function FEditGrant() {
                   <Button
                     color='primary'
                     variant='contained'
+                    disabled={!valid}
                     onClick={publish}>
                     Publish
                 </Button>
                 </Grid>
               </Grid>
             }
-            {/* </div> */}
-            {/* </Grid> */}
           </Grid>
         </Paper>
       </Container>

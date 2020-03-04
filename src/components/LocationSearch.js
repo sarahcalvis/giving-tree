@@ -120,7 +120,6 @@ export default function LocationSearch(props) {
   return (
     <Autocomplete
       id="loc-bar"
-      style={{ width: 300 }}
       getOptionLabel={option =>
         typeof option === "string" ? option : option.description
       }

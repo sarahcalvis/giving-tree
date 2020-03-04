@@ -180,6 +180,7 @@ class TagSearch extends React.Component {
           <TextField {...params}
             label="Select Tags"
             fullWidth
+            multiline
             InputProps={{
               ...params.InputProps,
               endAdornment: (

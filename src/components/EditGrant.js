@@ -19,8 +19,8 @@ import {
   MuiPickersUtilsProvider,
 } from '@material-ui/pickers';
 
-import MaskedInput from 'react-text-mask'
-import createNumberMask from 'text-mask-addons/dist/createNumberMask'
+// import MaskedInput from 'react-text-mask'
+// import createNumberMask from 'text-mask-addons/dist/createNumberMask'
 
 import DateFnsUtils from '@date-io/date-fns';
 
@@ -68,11 +68,11 @@ export default function EditGrant(props) {
   const storageRef = firebase.storage().ref();
 
   // Money mask
-  const numberMask = createNumberMask({
-    allowDecimal: true,
-    prefix: '$ ',
-    suffix: '' // This will put the dollar sign at the end, with a space.
-  })
+  // const numberMask = createNumberMask({
+  //   allowDecimal: true,
+  //   prefix: '$ ',
+  //   suffix: '' // This will put the dollar sign at the end, with a space.
+  // })
 
   // Hold the date selected by the date picker
   const [selectedDate, handleDateChange] = React.useState(new Date(props.grantData.date_deadline.seconds * 1000));
@@ -285,26 +285,27 @@ export default function EditGrant(props) {
         <DatePicker
           label='Pick a date'
           value={selectedDate}
+          fullWidth
           onChange={handleDateChange} />
       </div>
 
       <div className={classes.padding}>
         <Text type='card-heading' text='Goal Amount' />
         <TextField
-          mask={numberMask}
           onChange={handleInput}
           defaultValue={props.grantData.goal_amt}
           id='goal_amt'
           className='form-control'
-          type='text' />
-        <MaskedInput
+          type='text'
+          fullWidth />
+        {/* <MaskedInput
           mask={numberMask}
           onChange={handleInput}
           defaultValue={props.grantData.goal_amt}
           id='goal_amt'
           className='form-control'
           type='text'
-        />
+        /> */}
       </div>
 
 
