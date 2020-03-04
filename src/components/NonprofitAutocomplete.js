@@ -76,44 +76,49 @@ export default function NonprofitAutocomplete(props) {
   return (
     <div>
       {loaded && !adding && nonprofits.length > 0 &&
-        <div>
-          <Autocomplete
-            options={transformedNonprofits}
-            getOptionLabel={nonprofits => nonprofits.name}
-            autoHighlight
-            disableClearable
-            defaultValue={transformedNonprofits[selected]}
-            onChange={props.callback}
-            renderInput={params => (
-              <TextField
-                {...params}
-                variant='outlined'
-                fullWidth
-                onChange={props.callback}
-                label='Select affiliated nonprofit'
-              />
-            )}
-          />
-          <p>
-            or
-          </p>
-          <Button color='primary' variant='contained' onClick={addMode}>Add a new nonprofit</Button>
-        </div>
-      }
-      {
-        adding &&
-        <Container>
-          <TextField id='name' fullWidth label='Nonprofit Name' onChange={handleInput} />
-          <TextField id='number' fullWidth label='Nonprofit Email' onChange={handleInput} />
-          <TextField id='email' fullWidth label='Nonprofit Phone Number' onChange={handleInput} />
-          <TextField id='url'
-            fullWidth label='Nonprofit Website' onChange={handleInput} />
-          <Grid container direction="row" justify="flex-end" alignItems="center">
-            <Button color='primary' variant='outlined' onClick={cancelAddMode}>Cancel</Button>
-            <Button color='primary' variant='contained' onClick={addNonprofit}>Add Nonprofit</Button>
+        <Grid container
+          direction='row'
+          justify='space-between'
+          alignItems='center'>
+          <Grid item xs='8'>
+            <Autocomplete
+              options={transformedNonprofits}
+              getOptionLabel={nonprofits => nonprofits.name}
+              autoHighlight
+              disableClearable
+              defaultValue={transformedNonprofits[selected]}
+              onChange={props.callback}
+              renderInput={params => (
+                <TextField
+                  {...params}
+                  fullWidth
+                  onChange={props.callback}
+                  label='Select affiliated nonprofit'
+                />
+              )}
+            />
           </Grid>
-        </Container>
+          <Grid item>
+            <Button color='primary' variant='contained' onClick={addMode}>Add a new nonprofit</Button>
+          </Grid>
+        </Grid>
       }
+      <Grid item>
+        {
+          adding &&
+          <Container>
+            <TextField id='name' fullWidth label='Nonprofit Name' onChange={handleInput} />
+            <TextField id='number' fullWidth label='Nonprofit Email' onChange={handleInput} />
+            <TextField id='email' fullWidth label='Nonprofit Phone Number' onChange={handleInput} />
+            <TextField id='url'
+              fullWidth label='Nonprofit Website' onChange={handleInput} />
+            <Grid container direction="row" justify="flex-end" alignItems="center">
+              <Button color='primary' variant='outlined' onClick={cancelAddMode}>Cancel</Button>
+              <Button color='primary' variant='contained' onClick={addNonprofit}>Add Nonprofit</Button>
+            </Grid>
+          </Container>
+        }
+      </Grid>
     </div >
   )
 }

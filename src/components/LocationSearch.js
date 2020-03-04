@@ -129,6 +129,7 @@ export default function LocationSearch(props) {
       autoComplete
       includeInputInList
       disableOpenOnFocus
+      fullWidth
       onChange={handleChange}
       renderInput={params => (
         <TextField
@@ -137,7 +138,6 @@ export default function LocationSearch(props) {
           {...params}
           label="Search from a location"
           onChange={handleKeyPress}
-          variant="outlined"
           fullWidth
         />
       )}
@@ -162,7 +162,6 @@ export default function LocationSearch(props) {
                   {part.text}
                 </span>
               ))}
-
               <Typography variant="body2" color="textSecondary">
                 {option.structured_formatting.secondary_text}
               </Typography>

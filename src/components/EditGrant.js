@@ -33,7 +33,7 @@ const useStyles = makeStyles(theme => ({
     paddingBottom: theme.spacing(2),
   },
   gridList: {
-    width: 700,
+    width: 800,
     // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
     transform: 'translateZ(0)',
   },

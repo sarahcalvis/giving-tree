@@ -179,7 +179,6 @@ class TagSearch extends React.Component {
              
           <TextField {...params}
             label="Select Tags"
-            variant="outlined"
             fullWidth
             InputProps={{
               ...params.InputProps,
