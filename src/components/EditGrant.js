@@ -136,7 +136,7 @@ export default function EditGrant(props) {
     });
   }, [img])
 
-  
+
   // Delete an image
   const removeImage = async (event) => {
     console.log('name of the image to be deleted: ', event.target.parentNode.id)
@@ -277,7 +277,7 @@ export default function EditGrant(props) {
         <NonprofitAutocomplete
           callback={nonprofitCallback}
           cfId={props.cfId}
-          nonprofit_id={props.grantData.nonprofit_id} />
+          initialNonprofit={props.grantData.nonprofit_id} />
       </div>
 
       <div className={classes.padding}>
@@ -290,6 +290,13 @@ export default function EditGrant(props) {
 
       <div className={classes.padding}>
         <Text type='card-heading' text='Goal Amount' />
+        <TextField
+          mask={numberMask}
+          onChange={handleInput}
+          defaultValue={props.grantData.goal_amt}
+          id='goal_amt'
+          className='form-control'
+          type='text' />
         <MaskedInput
           mask={numberMask}
           onChange={handleInput}

@@ -18,11 +18,14 @@ export default function NonprofitAutocomplete(props) {
 
   useEffect(() => {
     for (let i in nonprofits) {
-      if (nonprofits[i].id === props.nonprofit_id) {
-        setSelected(i)
+      console.log(nonprofits[i].id, props.initialNonprofit)
+      if (nonprofits[i].id === props.initialNonprofit) {
+        setSelected(i);
+        setLoaded(true);
+      } else if (i === nonprofits.length - 1) {
+        setLoaded(true);
       }
     }
-    setLoaded(true);
   }, [nonprofits])
 
   let transformedNonprofits = Object.values(nonprofits).map((item, index) => {
