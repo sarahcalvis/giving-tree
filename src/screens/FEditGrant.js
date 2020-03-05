@@ -133,43 +133,21 @@ function FEditGrant() {
     images: [],
   });
 
-  const [errors, setErrors] = React.useState({
-    title: false,
-    nonprofit: false,
-    address: false,
-    date_deadline: false,
-    goal_amt: false,
-    desc: false,
-  })
+
 
   /////////////////////////
   // VALIDATE GRANT DATA //
   /////////////////////////
   const [valid, setValid] = React.useState(false);
-  const refreshValidity = () => {
-    setErrors({
-      title: grantData.title === '',
-      nonprofit: grantData.nonprofit_name === '' || grantData.nonprofit_id === '',
-      address: grantData.address === '' || grantData.lat === '' || grantData.long === '',
-      date_deadline: grantData.date_deadline.seconds <= new Date().getTime() / 1000,
-      goal_amt: typeof (grantData.goal_amt) !== 'number' || parseFloat(grantData.goal_amt) < 0,
-      desc: grantData.desc === ''
-    })
-  }
-  const refreshErrors = () => {
-    setValid(
-      grantData.title !== '' &&
-      grantData.nonprofit_name !== '' &&
-      grantData.nonprofit_id !== '' &&
-      grantData.address !== '' &&
-      grantData.lat !== '' &&
-      grantData.long !== '' &&
-      grantData.date_deadline.seconds > new Date().getTime() / 1000 &&
-      typeof (grantData.goal_amt) === 'number' &&
-      parseFloat(grantData.goal_amt) > 0 &&
-      grantData.desc !== '');
-  }
-  useEffect(() => { refreshValidity() }, [grantData]);
+  const [errors, setErrors] = React.useState({
+    title: '',
+    desc: '',
+    nonprofit: '',
+    address: '',
+    date: '',
+    goal_amt: '',
+    location: '',
+  })
 
   // Receive changes to the grant data from EditGrant.js
   const callback = (data, type) => {
@@ -191,8 +169,6 @@ function FEditGrant() {
         }
     }
     setGrantData(newData);
-    refreshValidity();
-    // refreshErrors();
     console.log(grantData);
   }
 
@@ -312,10 +288,7 @@ function FEditGrant() {
           cfData &&
           ((grantStatus === 'edit' && loaded && validEditor && validGrant) || grantStatus == 'create') &&
           <Paper className={classes.paper}>
-
-            < EditGrant grantData={grantData} cfId={cfData.id} callback={callback} error={errors} />
-
-
+            <EditGrant grantData={grantData} cfId={cfData.id} callback={callback} errors={errors} />
             <Grid container
               direction='row'
               justify='space-around'

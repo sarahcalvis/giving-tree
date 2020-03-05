@@ -77,7 +77,7 @@ export default function EditGrant(props) {
 
   // Hold the date selected by the date picker
   const [selectedDate, handleDateChange] = React.useState(
-    (props.grantData.date_deadline !== '')? new Date(props.grantData.date_deadline.seconds * 1000) : null
+    (props.grantData.date_deadline !== '') ? new Date(props.grantData.date_deadline.seconds * 1000) : null
   );
 
   ///////////
@@ -210,7 +210,8 @@ export default function EditGrant(props) {
           id='title'
           defaultValue={props.grantData.title}
           fullWidth
-          //error={props.error.title}
+          error={props.errors.title !== ""}
+          helperText={props.errors.title}
           label='Grant Title'
           onChange={handleInput} />
       </div>
@@ -221,6 +222,8 @@ export default function EditGrant(props) {
           id='desc'
           multiline
           fullWidth
+          error={props.errors.desc !== ""}
+          helperText={props.errors.desc}
           defaultValue={props.grantData.desc}
           label='Add a description to help donors understand why this grant is important.'
           onChange={handleInput} />
@@ -234,6 +237,8 @@ export default function EditGrant(props) {
         <NonprofitAutocomplete
           callback={nonprofitCallback}
           cfId={props.cfId}
+          error={props.errors.nonprofit !== ""}
+          helperText={props.errors.nonprofit}
           initialNonprofit={props.grantData.nonprofit_id} />
       </div>
 
@@ -249,6 +254,8 @@ export default function EditGrant(props) {
               label='Pick a date'
               value={selectedDate}
               fullWidth
+              error={props.errors.date !== ""}
+              helperText={props.errors.date}
               onChange={handleDateChange} />
           </div>
         </Grid>
@@ -263,7 +270,8 @@ export default function EditGrant(props) {
               label='Goal amount'
               className='form-control'
               type='text'
-              //error={props.error.goal_amt}
+              error={props.errors.goal_amt !== ""}
+              helperText={props.errors.goal_amt}
               fullWidth />
             {/* <MaskedInput
           mask={numberMask}
@@ -299,7 +307,9 @@ export default function EditGrant(props) {
             <Text type='card-subheading' text={'We will not directly share this address with donors. We will use it to calculate a donor\'s distance from a grant.'} />
             <LocationSearch
               parentCallback={locationCallback}
-              address={props.grantData.address} />
+              address={props.grantData.address}
+              error={props.errors.location !== ""}
+              helperText={props.errors.location} />
           </div>
         </Grid>
       </Grid>
