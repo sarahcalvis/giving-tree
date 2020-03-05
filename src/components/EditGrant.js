@@ -207,6 +207,7 @@ export default function EditGrant(props) {
           id='title'
           defaultValue={props.grantData.title}
           fullWidth
+          error={props.error.title}
           label='What is this grant for?'
           onChange={handleInput} />
       </div>
@@ -297,6 +298,7 @@ export default function EditGrant(props) {
           id='goal_amt'
           className='form-control'
           type='text'
+          error={props.error.goal_amt}
           fullWidth />
         {/* <MaskedInput
           mask={numberMask}
