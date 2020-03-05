@@ -70,6 +70,13 @@ function FEditGrant() {
   // Find out whether we are editing an existing grant or creating a new one
   const [grantStatus] = React.useState(window.location.pathname === '/foundation/create-grant' ? 'create' : 'edit');
 
+  // Set tab title
+  useEffect(() => {
+    grantStatus === 'create' ?
+      document.title = 'Create Grant-Giving Tree' :
+      document.title = 'Edit Grant-Giving Tree';
+  }, [grantStatus]);
+
   // If we are editing the grant rather than creating one, get its ID from URL params
   const [id, setId] = React.useState(null);
   useEffect(() => {

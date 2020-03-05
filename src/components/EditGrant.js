@@ -59,9 +59,6 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export default function EditGrant(props) {
-  // Set tab title
-  useEffect(() => { document.title = 'Create Grant-Giving Tree'; }, []);
-
   // Styles
   const classes = useStyles();
 
