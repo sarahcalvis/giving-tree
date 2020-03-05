@@ -29,8 +29,8 @@ const useStyles = makeStyles(theme => ({
     display: 'none',
   },
   padding: {
-    paddingTop: theme.spacing(2),
-    paddingBottom: theme.spacing(2),
+    paddingTop: theme.spacing(1),
+    paddingBottom: theme.spacing(1),
   },
   gridList: {
     width: 800,
