@@ -1,12 +1,13 @@
 // TODO: will receive props describing grant
 // TODO: split up elements to make it look nicer
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/styles';
 import Text from '../components/Text.js';
 import firebase from '../firebase.js';
 import ProgressBar from '../components/ProgressBar.js';
+import AuthUserContext from '../auth/context.js';
 import LinearProgress from '@material-ui/core/LinearProgress';
 // FYI: removing this unused import does make the whole project crash, do not know why
 import * as naughtyFirebase from 'firebase';
@@ -58,7 +59,8 @@ const useStyles = makeStyles(theme => ({
 
 function PaymentForm(props) {
   const classes = useStyles();
-
+  const user = useContext(AuthUserContext);
+  console.log("the user is this: ", user);
   // Grant details received as props
   const [grantId] = React.useState(props.grantId);
 
