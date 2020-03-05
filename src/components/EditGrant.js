@@ -5,6 +5,7 @@ import Text from './Text.js';
 import LocationSearch from './LocationSearch.js';
 import TagSearch from './TagSearch.js';
 import NonprofitAutocomplete from './NonprofitAutocomplete.js';
+import * as helper from '../helpers/ValidationHelper.js';
 
 import Grid from '@material-ui/core/Grid';
 import GridList from '@material-ui/core/GridList';
@@ -162,7 +163,6 @@ export default function EditGrant(props) {
   ///////////////
   // Get input from text fields
   const handleInput = (e) => {
-    console.log(e.target);
     if (e.target.id === 'goal_amt') {
       props.callback(parseFloat(e.target.value.replace('$', '').replace(' ', '').replace(/,/g, '')), e.target.id)
     } else {
@@ -176,6 +176,20 @@ export default function EditGrant(props) {
       props.callback(Math.round(selectedDate.getTime() / 1000), 'date_deadline')
     }
   }, [selectedDate]);
+
+  // TODO: this bad jawn
+  const handleDate = () => {
+    if (selectedDate) {
+      props.callback(Math.round(selectedDate.getTime() / 1000), 'date_deadline')
+    } else {
+      props.callback('', 'date_deadline')
+    }
+  }
+
+  // TODO
+  const validateNonprofit = () => {
+    
+  }
 
   // Get the location from LocationSearch
   const locationCallback = (address) => {
@@ -210,9 +224,9 @@ export default function EditGrant(props) {
           error={props.errors.title !== ''}
           helperText={props.errors.title}
           label='Grant Title'
+          onBlur={handleInput}
           onChange={handleInput} />
       </div>
-
       <div className={classes.padding}>
         <Text type='card-heading' text='Grant Description' />
         <TextField
@@ -223,12 +237,9 @@ export default function EditGrant(props) {
           helperText={props.errors.desc}
           defaultValue={props.grantData.desc}
           label='Add a description to help donors understand why this grant is important.'
+          onBlur={handleInput}
           onChange={handleInput} />
       </div>
-
-
-
-
       <div className={classes.padding}>
         <Text type='card-heading' text='Affiliated Nonprofit' />
         <NonprofitAutocomplete
@@ -238,7 +249,6 @@ export default function EditGrant(props) {
           helperText={props.errors.nonprofit_name}
           initialNonprofit={props.grantData.nonprofit_id} />
       </div>
-
       <Grid
         container
         direction='row'
@@ -253,15 +263,16 @@ export default function EditGrant(props) {
               fullWidth
               error={props.errors.date_deadline !== ''}
               helperText={props.errors.date_deadline}
-              onChange={handleDateChange} />
+              //onBlur={handleDateChange}
+            />
           </div>
         </Grid>
-
         <Grid item xs={12} sm={6}>
           <div className={classes.padding}>
             <Text type='card-heading' text='Goal Amount' />
             <TextField
               onChange={handleInput}
+              onBlur={handleInput}
               defaultValue={props.grantData.goal_amt}
               id='goal_amt'
               label='Goal amount'
@@ -281,8 +292,6 @@ export default function EditGrant(props) {
           </div>
         </Grid>
       </Grid>
-
-
       <Grid
         container
         direction='row'
@@ -297,7 +306,6 @@ export default function EditGrant(props) {
               tags={props.grantData.tags} />
           </div>
         </Grid>
-
         <Grid item xs={12} sm={6}>
           <div className={classes.padding}>
             <Text type='card-heading' text='Grant Location' />
@@ -306,11 +314,11 @@ export default function EditGrant(props) {
               parentCallback={locationCallback}
               address={props.grantData.address}
               error={props.errors.address !== ''}
-              helperText={props.errors.address} />
+              helperText={props.errors.address}
+              onBlur={locationCallback} />
           </div>
         </Grid>
       </Grid>
-
       <div className={classes.padding}>
         <Text type='card-heading' text='Grant Images' />
         <GridList cellHeight={200} spacing={1} className={classes.gridList} >
@@ -357,8 +365,6 @@ export default function EditGrant(props) {
           onChange={uploadImages}
           multiple />
       </div>
-
-
     </MuiPickersUtilsProvider>
   );
 }

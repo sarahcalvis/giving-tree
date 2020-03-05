@@ -92,7 +92,6 @@ export default function NonprofitAutocomplete(props) {
                 <TextField
                   {...params}
                   fullWidth
-                  onChange={props.callback}
                   label='Select affiliated nonprofit'
                 />
               )}
