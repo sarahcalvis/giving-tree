@@ -6,6 +6,7 @@ import * as helper from '../helpers/ValidationHelper.js';
 
 import EditableData from '../components/FSettingsListEditable.js'
 import NonEditableData from '../components/FSettingList.js'
+import { Typography } from '@material-ui/core';
 
 
 export default function FSettings() {
@@ -30,6 +31,7 @@ export default function FSettings() {
   });
 
   const [getData, setGetData] = React.useState(true);
+  const [hasUser, setHasUser] = React.useState(true);
 
   const functionLoadData = () =>{
     // Foundation query
@@ -63,30 +65,37 @@ export default function FSettings() {
     for(const key in changedText){
       temp = { ...temp, [key]: changedText[key] };
     }
-    db.collection('communityFoundations').where('personal_email','==',user.email)
-    .get()
-    .then(function(querySnapshot) {
-      querySnapshot.forEach(function(doc) {
-        console.log(doc.id, " => ", doc.data());
-        // Build doc ref from doc.id
-        db.collection("communityFoundations").doc(doc.id).update({
-          name: temp.name,
-          public_email: temp.public_email,
-          public_phone: temp.public_phone,
-          foundation_url: temp.foundation_url,
-          fname_contact: temp.fname_contact,
-          lname_contact: temp.lname_contact,
-          personal_email: temp.personal_email,
-          personal_phone: temp.personal_phone
+
+    if(hasUser){
+      db.collection('communityFoundations').where('personal_email','==',user.email)
+      .get()
+      .then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+          console.log(doc.id, " => ", doc.data());
+          // Build doc ref from doc.id
+          db.collection("communityFoundations").doc(doc.id).update({
+            name: temp.name,
+            public_email: temp.public_email,
+            public_phone: temp.public_phone,
+            foundation_url: temp.foundation_url,
+            fname_contact: temp.fname_contact,
+            lname_contact: temp.lname_contact,
+            personal_email: temp.personal_email,
+            personal_phone: temp.personal_phone
+          });
+          console.log("Document successfully written!");
+          setGetData(true);
+          setEdit(false);
         });
-        console.log("Document successfully written!");
-        setGetData(true);
-        setEdit(false);
+      })
+      .catch(function(error) {
+        console.error("Error writing document: ", error);
       });
-    })
-    .catch(function(error) {
-      console.error("Error writing document: ", error);
-    });
+    }else { 
+      setGetData(true);
+      setEdit(false); 
+    }
+    
   }
 
   function toggleEdit()
@@ -100,7 +109,11 @@ export default function FSettings() {
 
   React.useEffect(() => {
     if(getData){
-      functionLoadData();
+      if((user !== null)){
+        functionLoadData();
+      }else{
+        setHasUser(false);
+      } 
     }
   }, [getData]);
 
