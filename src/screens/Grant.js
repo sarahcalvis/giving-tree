@@ -182,22 +182,32 @@ function Grant(props) {
   }
 
   // Load image URLs from image names
-  const getUrls = (imgNames) => {
+  const getUrls = async (imgNames) => {
     let newImg = [];
-    for (let imgName of imgNames) {
-      storageRef.child(imgName).getDownloadURL().then(function (url) {
-        newImg.push(url);
-      }).catch(function (error) {
-        console.log('error getting image url: ', error)
-      })
+
+    for (const imgName of imgNames) {
+      const url = await getUrl(imgName);
+      newImg.push(url);
     }
+
     return newImg;
+  }
+
+  // Load image URL from image names
+  const getUrl = async (imgName) => {
+    return new Promise((res, rej) => {
+      storageRef.child(imgName).getDownloadURL().then((url) => {
+        res(url)
+      }).catch((err) => {
+        rej(err)
+      });
+    })
   }
 
   //////////////////////
   // The Visible Part //
   //////////////////////
-  
+
   // Styles variable
   const { classes } = props;
 
@@ -246,7 +256,7 @@ function Grant(props) {
                           </Button>
                         </Grid>
                         <Grid item>
-                          <Link 
+                          <Link
                             className={classes.link}
                             to={'/foundation/edit/' + id}>
                             <Button
@@ -281,9 +291,9 @@ function Grant(props) {
                           </Button>
                         </Grid>
                         <Grid item>
-                        <Link 
-                          className={classes.link}
-                          to={'/foundation/edit/' + id}>
+                          <Link
+                            className={classes.link}
+                            to={'/foundation/edit/' + id}>
                             <Button
                               color='primary'
                               variant='contained'>
