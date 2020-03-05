@@ -127,22 +127,22 @@ function FEditGrant() {
   // VALIDATE GRANT DATA //
   /////////////////////////
   const [valid, setValid] = React.useState(false);
-  console.log(grantData.date_deadline.seconds, new Date().getTime() / 1000)
-  useEffect(() => {
+  const refreshValidity = () => {
+    console.log(grantData.date_deadline.seconds, new Date().getTime() / 1000)
     setValid(
-      grantData.title != '' &&
-      grantData.nonprofit_name != '' &&
-      grantData.nonprofit_id != '' &&
-      grantData.address != '' &&
-      grantData.lat != '' &&
-      grantData.long != '' &&
+      grantData.title !== '' &&
+      grantData.nonprofit_name !== '' &&
+      grantData.nonprofit_id !== '' &&
+      grantData.address !== '' &&
+      grantData.lat !== '' &&
+      grantData.long !== '' &&
       grantData.date_deadline.seconds > new Date().getTime() / 1000 &&
-      typeof(grantData.money_raised) === 'number' &&
-      typeof(grantData.goal_amt) === 'number' &&
+      typeof (grantData.money_raised) === 'number' &&
+      typeof (grantData.goal_amt) === 'number' &&
       parseFloat(grantData.goal_amt) > 0 &&
-      grantData.desc != ''
+      grantData.desc !== ''
     )
-  }, [grantData])
+  }
 
   // Receive changes to the grant data from EditGrant.js
   const callback = (data, type) => {
@@ -164,6 +164,7 @@ function FEditGrant() {
         }
     }
     setGrantData(newData);
+    refreshValidity();
     console.log(grantData);
   }
 
