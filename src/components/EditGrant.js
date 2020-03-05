@@ -177,20 +177,6 @@ export default function EditGrant(props) {
     }
   }, [selectedDate]);
 
-  // TODO: this bad jawn
-  const handleDate = () => {
-    if (selectedDate) {
-      props.callback(Math.round(selectedDate.getTime() / 1000), 'date_deadline')
-    } else {
-      props.callback('', 'date_deadline')
-    }
-  }
-
-  // TODO
-  const validateNonprofit = () => {
-    
-  }
-
   // Get the location from LocationSearch
   const locationCallback = (address) => {
     props.callback(address.address.description, 'address');
@@ -263,7 +249,6 @@ export default function EditGrant(props) {
               fullWidth
               error={props.errors.date_deadline !== ''}
               helperText={props.errors.date_deadline}
-              //onBlur={handleDateChange}
             />
           </div>
         </Grid>

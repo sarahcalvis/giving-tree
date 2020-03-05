@@ -191,6 +191,31 @@ function FEditGrant() {
     console.log(newErrors);
   }
 
+  const validateAll = () => {
+    let newErrors = {
+      title: '',
+      desc: '',
+      nonprofit_name: '',
+      date_deadline: '',
+      goal_amt: '',
+      address: '',
+    };
+    for (let property in errors) newErrors[property] = helper.validateField(property, grantData[property]);
+    setErrors(newErrors);
+    console.log(newErrors);
+  }
+
+  useEffect(() => {
+    setValid(
+      helper.validateField('title', grantData.title) === '' &&
+      helper.validateField('desc', grantData.desc) === '' &&
+      helper.validateField('nonprofit_name', grantData.nonprofit_name) === '' &&
+      helper.validateField('date_deadline', grantData.date_deadline) === '' &&
+      helper.validateField('goal_amt', grantData.goal_amt) === '' &&
+      helper.validateField('address', grantData.address) === ''
+    )
+  }, [grantData])
+
   //////////////////
   // TAG CREATION //
   //////////////////
