@@ -84,6 +84,9 @@ function FEditGrant() {
   // If editing grant, ensure CF owns it
   const [validEditor, setValidEditor] = React.useState();
 
+  // If editing a grant, ensure it exists
+  const [validGrant, setValidGrant] = React.useState();
+
   // If editing, load the grant data
   useEffect(() => {
     if (id !== null) {
@@ -95,9 +98,13 @@ function FEditGrant() {
           } else {
             setValidEditor(false)
           }
-        }).then(function () { setLoaded(true) })
+        }).then(function () {
+          setLoaded(true);
+          setValidGrant(true);
+        })
         .catch(function (error) {
           console.error('Error getting grant: ', error);
+          setValidGrant(false);
         })
     }
   }, [cfData]);
@@ -301,80 +308,88 @@ function FEditGrant() {
       <Container maxWidth='md'>
         {grantStatus === 'edit' && <Text type='heading' text='Edit Grant' />}
         {grantStatus === 'create' && <Text type='heading' text='Create Grant' />}
-        <Paper className={classes.paper}>
-          {
-            cfData &&
-            ((grantStatus === 'edit' && loaded && validEditor) || grantStatus == 'create') &&
+        {
+          cfData &&
+          ((grantStatus === 'edit' && loaded && validEditor && validGrant) || grantStatus == 'create') &&
+          <Paper className={classes.paper}>
+
             < EditGrant grantData={grantData} cfId={cfData.id} callback={callback} error={errors} />
-          }
-          {!validEditor && loaded &&
-            <Text
-              type='card-heading'
-              text='You cannot edit this grant because it does not belong to your community foundation' />
-          }
-          <Grid container
-            direction='row'
-            justify='space-around'
-            alignItems='flex-start'>
-            {/* <div className={classes.fab}> */}
-            {grantStatus === 'edit' &&
-              <Grid container
-                spacing={2}
-                direction='row'
-                justify='flex-end'
-                alignItems='flex-start'>
-                <Grid item>
-                  <Button
-                    color='primary'
-                    variant='contained'>
-                    Cancel
+
+
+            <Grid container
+              direction='row'
+              justify='space-around'
+              alignItems='flex-start'>
+              {/* <div className={classes.fab}> */}
+              {grantStatus === 'edit' && validEditor && validGrant &&
+                <Grid container
+                  spacing={2}
+                  direction='row'
+                  justify='flex-end'
+                  alignItems='flex-start'>
+                  <Grid item>
+                    <Button
+                      color='primary'
+                      variant='contained'>
+                      Cancel
                 </Button>
-                </Grid>
-                <Grid item>
-                  <Button
-                    color='primary'
-                    variant='contained'
-                    disabled={!valid}
-                    onClick={update}>
-                    Save
+                  </Grid>
+                  <Grid item>
+                    <Button
+                      color='primary'
+                      variant='contained'
+                      disabled={!valid}
+                      onClick={update}>
+                      Save
                 </Button>
+                  </Grid>
                 </Grid>
-              </Grid>
-            }
-            {grantStatus === 'create' &&
-              <Grid container
-                spacing={2}
-                direction='row'
-                justify='flex-end'
-                alignItems='flex-start'>
-                <Grid item>
-                  <Button
-                    color='primary'
-                    variant='contained'>
-                    Discard
+              }
+              {grantStatus === 'create' &&
+                <Grid container
+                  spacing={2}
+                  direction='row'
+                  justify='flex-end'
+                  alignItems='flex-start'>
+                  <Grid item>
+                    <Button
+                      color='primary'
+                      variant='contained'>
+                      Discard
                   </Button>
-                </Grid>
-                <Grid item>
-                  <Button
-                    onClick={saveToDrafts}
-                    color='primary'
-                    variant='contained'>
-                    Save to Drafts
+                  </Grid>
+                  <Grid item>
+                    <Button
+                      onClick={saveToDrafts}
+                      color='primary'
+                      variant='contained'>
+                      Save to Drafts
                 </Button>
-                </Grid>
-                <Grid item>
-                  <Button
-                    color='primary'
-                    variant='contained'
-                    disabled={!valid}
-                    onClick={publish}>
-                    Publish
+                  </Grid>
+                  <Grid item>
+                    <Button
+                      color='primary'
+                      variant='contained'
+                      disabled={!valid}
+                      onClick={publish}>
+                      Publish
                 </Button>
+                  </Grid>
                 </Grid>
-              </Grid>
-            }
-          </Grid>
-        </Paper>
+              }
+            </Grid>
+          </Paper>
+        }
+        {!validEditor && loaded &&
+          <Text
+            type='card-heading'
+            text='Yowza! You cannot edit this grant because it does not belong to your community foundation' />
+        }
+        {!validGrant &&
+          <Text
+            type='card-heading'
+            text='Yowza! That grant does not exist' />
+        }
       </Container>
     </div >
   );
