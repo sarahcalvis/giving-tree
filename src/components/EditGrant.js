@@ -199,6 +199,7 @@ export default function EditGrant(props) {
   // Update the images array
   useEffect(() => { props.callback(img, 'images') }, [img]);
 
+  useEffect(() => {console.log('hiyz' , props.errors.title)}, [props.errors.title])
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <div className={classes.padding}>
@@ -306,7 +307,7 @@ export default function EditGrant(props) {
               parentCallback={locationCallback}
               address={props.grantData.address}
               error={props.errors.address !== ''}
-              helperText={props.errors.adddress} />
+              helperText={props.errors.address} />
           </div>
         </Grid>
       </Grid>

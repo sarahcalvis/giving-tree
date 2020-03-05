@@ -151,7 +151,6 @@ function FEditGrant() {
     title: '',
     desc: '',
     nonprofit_name: '',
-    address: '',
     date_deadline: '',
     goal_amt: '',
     address: '',
@@ -178,8 +177,16 @@ function FEditGrant() {
     setGrantData(newData);
     console.log(grantData);
 
-    let newErrors = errors;
-    if (newErrors.hasOwnProperty(type)) newErrors[type] = helper.validateField(data);
+    let newErrors = {
+      title: '',
+      desc: '',
+      nonprofit_name: '',
+      date_deadline: '',
+      goal_amt: '',
+      address: '',
+    };
+    for (let property in errors) newErrors[property] = errors[property];
+    if (newErrors.hasOwnProperty(type)) newErrors[type] = helper.validateField(type, data);
     setErrors(newErrors);
     console.log(newErrors);
   }

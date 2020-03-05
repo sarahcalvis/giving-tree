@@ -1,5 +1,17 @@
 export const validateField = (name, value) => {
   switch (name) {
+    case 'title':
+      return validateTitle(value);
+    // case 'desc':
+    //   return validateDesc(value);
+    // case 'nonprofit_name':
+    //   return validateNonprofit(value);
+    // case 'address':
+    //   return validateAddress(value);
+    // case 'date_deadline':
+    //   return validateDeadine(value);
+    // case 'goal_amt':
+    //   return validateGoal(value);
     case 'email':
     case 'public_email':
     case 'personal_email':
@@ -39,6 +51,16 @@ export const validateEmail = (email) => {
       errorMsg = "*Please enter a valid email.";
     }
   }
+
+  return errorMsg;
+}
+
+const validateTitle = (title) => {
+  let errorMsg = '';
+  
+  if (title === '') errorMsg = '*Please enter a grant title.';
+
+  if (title.length > 60) errorMsg = '*Grant title must be less than 60 characters.'
 
   return errorMsg;
 }
