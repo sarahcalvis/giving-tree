@@ -85,7 +85,7 @@ function FEditGrant() {
   const [validEditor, setValidEditor] = React.useState();
 
   // If editing a grant, ensure it exists
-  const [validGrant, setValidGrant] = React.useState();
+  const [validGrant, setValidGrant] = React.useState(true);
 
   // If editing, load the grant data
   useEffect(() => {
