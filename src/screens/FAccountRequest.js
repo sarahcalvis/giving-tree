@@ -48,16 +48,16 @@ const styles = theme => ({
 });
 
 const INITIAL_STATE = {
-  name: '',
-  public_email: '',
-  public_phone: '',
-  personal_email: '',
-  personal_phone: '',
-  foundation_url: '',
-  fname_contact: '',
-  lname_contact: '',
-  passwordOne: '',
-  passwordTwo: '',
+  name: 'a',
+  public_email: 'q@q.coo',
+  public_phone: '11111111111',
+  personal_email: 'q@q.coo',
+  personal_phone: '1111111111',
+  foundation_url: 'sfdafsdf.com',
+  fname_contact: 'dsa',
+  lname_contact: 'dadsa',
+  passwordOne: '!Q1qqqqq',
+  passwordTwo: '!Q1qqqqq',
   errors: {
     name: '',
     public_email: '',
@@ -141,6 +141,7 @@ class FAccountRequest extends Component {
           //Failure
           //TODO: Cleanup Firebase Error Messages
           this.setState({ errors: { ...this.state.errors, submit: error.message } });
+          return Promise.reject(error.message);
         })
         .then(this.addDocument)
         .then(() => {
