@@ -142,7 +142,7 @@ function FEditGrant() {
       nonprofit: grantData.nonprofit_name === '' || grantData.nonprofit_id === '',
       address: grantData.address === '' || grantData.lat === '' || grantData.long === '',
       date_deadline: grantData.date_deadline.seconds <= new Date().getTime() / 1000,
-      goal_amt: typeof (grantData.goal_amt) === 'number' || parseFloat(grantData.goal_amt) < 0,
+      goal_amt: typeof (grantData.goal_amt) !== 'number' || parseFloat(grantData.goal_amt) < 0,
       desc: grantData.desc === ''
     })
     setValid(
