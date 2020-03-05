@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, withContext } from 'react';
 import SmallGrantCard from '../components/SmallGrantCard.js';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
@@ -6,6 +6,7 @@ import { useCollection } from 'react-firebase-hooks/firestore';
 import firebase from '../firebase.js';
 import Search from '../components/Search';
 import { makeStyles } from '@material-ui/core/styles';
+import UserAuthContext from '../auth/context.js';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -13,10 +14,12 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function DDashboard() {
+export default function FDashboard(props) {
   // List of small grant cards
   const [grants, setGrants] = React.useState([]);
-
+  // Foundation ID
+  const [id] = React.useState(props.id);
+  //const user = withContext(UserAuthContext);
   // Initialize database and specific grant in database
   const db = firebase.firestore();
   const [docs, setDocs] = React.useState();
@@ -25,38 +28,43 @@ export default function DDashboard() {
   useEffect(() => {
     var newGrants = [];
     var newDocs = [];
+
     if (!loading && !error) {
       snapshot.forEach(function (doc) {
-        console.log("a date: ", doc.data().date_deadline);
-        newDocs.push({
-          dist: -1,
-          id: doc.id,
-          title: doc.data().title,
-          cfName: doc.data().cf_name,
-          nonprofitName: doc.data().nonprofit_name,
-          goalAmt: doc.data().goal_amt,
-          moneyRaised: doc.data().money_raised,
-          img: doc.data().images[0] || 'GivingTree.png',
-          nonprofitId: doc.data().nonprofit_id,
-          address: doc.data().address,
-          lat: doc.data().lat,
-          long: doc.data().long,
-          datePosted: doc.data().date_posted,
-          dateDeadline: doc.data().date_deadline,
-          desc: doc.data().desc,
-          tags: doc.data().tags
-        });
-        if(doc.data().status === 'current') {
-          newGrants.push(
-            <SmallGrantCard
-              id={doc.id}
-              title={doc.data().title}
-              cfName={doc.data().cf_name}
-              nonprofitName={doc.data().nonprofit_name}
-              goalAmt={doc.data().goal_amt}
-              moneyRaised={doc.data().money_raised}
-              img={doc.data().images[0] || 'GivingTree.png'} />
-          );
+        //console.log("cf_id, id: ", doc.data().cf_id, user.id);
+        /////////////////////////////////////////////////////
+        // JUST A TEST //////////////////////////////////////
+        // NEED TO EVENTUALLY CHANGE THE COMPARISON!!!!!/////
+        /////////////////////////////////////////////////////
+        if(doc.data().cf_id === 'p80ZpdUu9hx6nVoYO6Do') {
+            newDocs.push({
+            dist: -1,
+            id: doc.id,
+            title: doc.data().title,
+            cfName: doc.data().cf_name,
+            nonprofitName: doc.data().nonprofit_name,
+            goalAmt: doc.data().goal_amt,
+            moneyRaised: doc.data().money_raised,
+            img: doc.data().images[0] || 'GivingTree.png',
+            nonprofitId: doc.data().nonprofit_id,
+            address: doc.data().address,
+            lat: doc.data().lat,
+            long: doc.data().long,
+            datePosted: doc.data().date_posted,
+            dateDeadline: doc.data().date_deadline,
+            desc: doc.data().desc,
+            tags: doc.data().tags,
+            status: doc.data().status,
+            });
+            let grant = <SmallGrantCard
+                        id={doc.id}
+                        title={doc.data().title}
+                        cfName={doc.data().cf_name}
+                        nonprofitName={doc.data().nonprofit_name}
+                        goalAmt={doc.data().goal_amt}
+                        moneyRaised={doc.data().money_raised}
+                        img={doc.data().images[0] || 'GivingTree.png'} />;
+            newGrants.push(grant);
         }
       });
       setGrants(newGrants);
