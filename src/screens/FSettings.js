@@ -115,7 +115,7 @@ export default function FSettings() {
         setHasUser(false);
       } 
     }
-  }, [getData]);
+  }, [getData, user, functionLoadData]);
 
   return (
     <Data 
