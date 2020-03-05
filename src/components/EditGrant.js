@@ -199,7 +199,6 @@ export default function EditGrant(props) {
   // Update the images array
   useEffect(() => { props.callback(img, 'images') }, [img]);
 
-  useEffect(() => {console.log('hiyz' , props.errors.title)}, [props.errors.title])
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <div className={classes.padding}>
