@@ -96,46 +96,33 @@ export default function FDashboard(props) {
                         goalAmt={doc.data().goal_amt}
                         moneyRaised={doc.data().money_raised}
                         img={doc.data().images[0] || 'GivingTree.png'} />;
-            if(doc.data().status === 'current') {
-                curGrants.push(grant);
-            } else if (doc.data().status === 'drafted') {
-                drGrants.push(grant);
-            } else if (doc.data().status === 'expired') {
-                exGrants.push(grant);
-            }
             newGrants.push(grant);
         }
       });
       setGrants(newGrants);
-      setCurrentGrants(curGrants);
-      setDraftedGrants(drGrants);
-      setExpiredGrants(exGrants);
-      setShownGrants(curGrants);
       console.log("newDocs: ", newDocs);
       setDocs(newDocs);
     }
   }, [snapshot, error, loading]);
 
   useEffect(() => {
-    var newGrants = [];
     var curGrants = [];
     var exGrants = [];
     var drGrants = [];
-
     docs.forEach((doc)=> {
         let grant = <SmallGrantCard
-            id={doc.id}
-            title={doc.data().title}
-            cfName={doc.data().cf_name}
-            nonprofitName={doc.data().nonprofit_name}
-            goalAmt={doc.data().goal_amt}
-            moneyRaised={doc.data().money_raised}
-            img={doc.data().images[0] || 'GivingTree.png'} />;
-        if(doc.data().status === 'current') {
+                        id={doc.id}
+                        title={doc.title}
+                        cfName={doc.cf_name}
+                        nonprofitName={doc.nonprofit_name}
+                        goalAmt={doc.goal_amt}
+                        moneyRaised={doc.money_raised}
+                        img={doc.img}/>;
+        if(doc.status === 'current') {
             curGrants.push(grant);
-        } else if (doc.data().status === 'drafted') {
+        } else if (doc.status === 'draft') {
             drGrants.push(grant);
-        } else if (doc.data().status === 'expired') {
+        } else if (doc.status === 'expired') {
             exGrants.push(grant);
         }
     });
