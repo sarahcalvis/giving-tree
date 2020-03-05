@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
 import firebase from '../firebase.js';
-import * as helper from '../helpers/SignUpHelper.js';
+import * as helper from '../helpers/ValidationHelper.js';
 import Snack from '../components/Snack.js';
 
 import { withStyles } from '@material-ui/styles';
@@ -12,7 +12,7 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Grid from "@material-ui/core/Grid";
-import MUILink from "@material-ui/core/Link";
+import Link from "@material-ui/core/Link";
 import Typography from "@material-ui/core/Typography";
 
 
@@ -63,8 +63,11 @@ function ForgotPassword(props) {
 
 const INITIAL_STATE = {
     email: '',
-    emailError: '',
-    submitError: '',
+    errors: {
+        email: '',
+        submit: '',
+    },
+    isValid: false,
     success: false,
 };
 
@@ -75,9 +78,7 @@ class ForgotPasswordFormBase extends Component {
     }
 
     onSubmit = event => {
-        let emailError = helper.validateEmail(this.state.email);
-
-        if (emailError === '') {
+        if (this.state.isValid) {
             const { email } = this.state;
 
             firebase.auth().sendPasswordResetEmail(email)
@@ -86,41 +87,46 @@ class ForgotPasswordFormBase extends Component {
                     this.setState({ ...INITIAL_STATE, success: true });
                 }).catch((error) => {
                     // An error happened.
-                    this.setState({ submitError: error.message, success: false });
+                    this.setState({ errors: { ...this.state.errors, submit: error.message } });
                 });
-        }
-        else {
-            //Display field validation errors
-            this.setState({ emailError: emailError, success: false });
         }
 
         event.preventDefault();
     }
 
+    //Written generically to match SignUp/AccountRequest/SignIn, even though there's only one field 
     onChange = event => {
-        this.setState({ [event.target.name]: event.target.value });
+        const { name, value } = event.target;
+        this.setState({ [name]: value });
+
+        this.setState({ errors: { ...this.state.errors, submit: '', [name]: helper.validateField(name, value) } },
+            this.validateForm
+        );
     };
+
+    validateForm = () => {
+        const noEmptyFields = Object.values(this.state).filter((s) => { return s === '' }).length === 0
+        const noErrors = Object.values(this.state.errors).filter((s) => { return s !== '' }).length === 0
+        this.setState({ isValid: noErrors && noEmptyFields });
+    }
 
     render() {
         const {
             email,
-            emailError,
-            submitError,
+            errors,
+            isValid,
             success,
         } = this.state;
-
-        const isInvalid = (email === '');
 
         const { classes } = this.props;
 
         return (
-            <form className={classes.form} onSubmit={this.onSubmit}>
-
+            <form className={classes.form} onSubmit={this.onSubmit} noValidate>
                 {success &&
                     <Snack message='Success! A password reset email has been sent.' />
                 }
                 <Typography component="h6" className={classes.errorMsg} >
-                    {submitError}
+                    {errors.submit}
                 </Typography>
                 <TextField
                     variant="outlined"
@@ -132,15 +138,16 @@ class ForgotPasswordFormBase extends Component {
                     onChange={this.onChange}
                     type="text"
                     label="Email Address"
-                    error={emailError !== ""}
-                    helperText={emailError}
+                    error={errors.email !== ""}
+                    helperText={errors.email}
+                    autoFocus
                 />
                 <Button className={classes.submit}
                     type="submit"
                     fullWidth
                     variant="contained"
                     color="primary"
-                    disabled={isInvalid}
+                    disabled={!isValid}
                 >
                     Reset Password
                         </Button>
@@ -151,17 +158,13 @@ class ForgotPasswordFormBase extends Component {
 const SignInSignUpLink = ({ classes }) => (
     <Grid container>
         <Grid item xs>
-            <Link to='/signin' className={classes.links}>
-                <MUILink variant="body2" component={'span'}>
-                    Back to Login
-            </MUILink>
+            <Link href='/signin' variant="body2">
+                Ready to sign in?
             </Link>
         </Grid>
         <Grid item>
-            <Link to='/signup' className={classes.links}>
-                <MUILink variant="body2" component={'span'}>
-                    Sign Up
-            </MUILink>
+            <Link href='/signup' variant="body2">
+                Don't have an account? Sign Up
             </Link>
         </Grid>
     </Grid>

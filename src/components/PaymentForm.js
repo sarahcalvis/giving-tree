@@ -74,7 +74,7 @@ function PaymentForm(props) {
 
   // Payment details we will get from the database
   const [cfId, setCfId] = React.useState('');
-  const [acctId, setAcctId] = React.useState('');
+  const [stripeId, setStripeId] = React.useState('');
 
   // Initialize database and specific grant in database
   const db = firebase.firestore();
@@ -100,7 +100,7 @@ function PaymentForm(props) {
             console.log('No such document for CF ' + cfId);
             setStatus('error')
           } else {
-            setAcctId(doc.data().acct_id)
+            setStripeId(doc.data().stripe_id)
           }
         })
         .catch(err => {
@@ -118,7 +118,7 @@ function PaymentForm(props) {
     setClicked(true);
 
     // Confirm payment amount is in bounds
-    if (amountIsGood() && acctId !== '') {
+    if (amountIsGood() && stripeId !== '') {
 
       // Make the token
       let { token } = await props.stripe.createToken({ name: 'Giving Tree Donor' });
@@ -130,7 +130,7 @@ function PaymentForm(props) {
       let response = await fetch('/charge', {
         method: 'POST',
         headers: { 'Content-Type': 'text/plain' },
-        body: token.id + ' amount: ' + (amount * 100) + ' description: ' + grant + ' account: ' + acctId,
+        body: token.id + ' amount: ' + (amount * 100) + ' description: ' + grant + ' account: ' + stripeId,
       });
 
       console.log(response);
