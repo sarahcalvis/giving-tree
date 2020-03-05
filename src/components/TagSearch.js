@@ -120,12 +120,12 @@ class TagSearch extends React.Component {
     var cacheResult = this.retrieveCached(query, 600);
     var tags = [];
     if(cacheResult){
-      console.log("Getting from cache :)");
+      //console.log("Getting from cache :)");
       tags = cacheResult;
       this.setState({ tags: tags })
       displayResults(cacheResult);
     }else{
-      console.log("Have to start over :(");
+      //console.log("Have to start over :(");
       var db = firebase.firestore();
       var dbRef = db.collection("tags");
 

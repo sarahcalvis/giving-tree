@@ -60,7 +60,8 @@ const useStyles = makeStyles(theme => ({
 function PaymentForm(props) {
   const classes = useStyles();
   const user = useContext(AuthUserContext);
-  console.log("the user is this: ", user);
+  // ^^ use user.user_id
+
   // Grant details received as props
   const [grantId] = React.useState(props.grantId);
 
@@ -167,6 +168,22 @@ function PaymentForm(props) {
           });
 
         });
+
+        let userRef = db.collection('users').doc(user.user_id);
+        // Update the donation collection for the user in firebase
+        userRef.collection('donations').add({
+          amount: Number.parseInt(amount),
+          grant: grantId,
+          timestamp: naughtyFirebase.firestore.Timestamp.fromDate(new Date()),
+        }).then(ref => {
+          console.log('Added donation of ' + amount + ' with ID ' + ref.id + ' to the donations collection');
+          }).then(result => {
+            console.log('User donations updated!');
+            // Record transaction complete
+            setStatus('complete');
+          }).catch(err => {
+            console.log('User donations update error:', err);
+          });
       } else {
         setStatus('error');
       }

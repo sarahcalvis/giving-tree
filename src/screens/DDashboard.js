@@ -27,7 +27,7 @@ export default function DDashboard() {
     var newDocs = [];
     if (!loading && !error) {
       snapshot.forEach(function (doc) {
-        console.log("a date: ", doc.data().date_deadline);
+        //console.log("a date: ", doc.data().date_deadline);
         newDocs.push({
           dist: -1,
           id: doc.id,
@@ -58,7 +58,7 @@ export default function DDashboard() {
         );
       });
       setGrants(newGrants);
-      console.log("newDocs: ", newDocs);
+      //console.log("newDocs: ", newDocs);
       setDocs(newDocs);
     }
   }, [snapshot, error, loading]);
