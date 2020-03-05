@@ -37,7 +37,7 @@ export default function LocationSearch(props) {
   const [options, setOptions] = React.useState([]);
   const loaded = React.useRef(false);
   if (typeof window !== "undefined" && !loaded.current) {
-    console.log(document.querySelector("#google-maps"));
+    //console.log(document.querySelector("#google-maps"));
     if (!document.querySelector("#google-maps")) {
       loadScript(
         "https://maps.googleapis.com/maps/api/js?key=AIzaSyDntA49IGS_w5ZRD3ijey8OVS8CNYpqXqA&libraries=places",
