@@ -19,7 +19,10 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(1),
   },
   paper: {
-    padding: theme.spacing(6),
+    paddingRight: theme.spacing(6),
+    paddingLeft: theme.spacing(6),
+    paddingTop: theme.spacing(4),
+    paddingBottom: theme.spacing(4),
   },
   fab: {
     margin: 0,

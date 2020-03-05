@@ -38,7 +38,7 @@ export default function Text(props) {
       }
       {type === 'card-heading' &&
         <Typography
-          variant='h5'
+          variant='h6'
         >
           {text}
         </Typography>

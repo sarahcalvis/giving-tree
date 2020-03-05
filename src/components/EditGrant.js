@@ -6,6 +6,7 @@ import LocationSearch from './LocationSearch.js';
 import TagSearch from './TagSearch.js';
 import NonprofitAutocomplete from './NonprofitAutocomplete.js';
 
+import Grid from '@material-ui/core/Grid';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
@@ -29,8 +30,8 @@ const useStyles = makeStyles(theme => ({
     display: 'none',
   },
   padding: {
-    paddingTop: theme.spacing(1),
-    paddingBottom: theme.spacing(1),
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
   },
   gridList: {
     width: 800,
@@ -75,7 +76,9 @@ export default function EditGrant(props) {
   // })
 
   // Hold the date selected by the date picker
-  const [selectedDate, handleDateChange] = React.useState(new Date(props.grantData.date_deadline.seconds * 1000));
+  const [selectedDate, handleDateChange] = React.useState(
+    (props.grantData.date_deadline !== '')? new Date(props.grantData.date_deadline.seconds * 1000) : null
+  );
 
   ///////////
   // IMAGE //
@@ -207,8 +210,8 @@ export default function EditGrant(props) {
           id='title'
           defaultValue={props.grantData.title}
           fullWidth
-          error={props.error.title}
-          label='What is this grant for?'
+          //error={props.error.title}
+          label='Grant Title'
           onChange={handleInput} />
       </div>
 
@@ -218,11 +221,88 @@ export default function EditGrant(props) {
           id='desc'
           multiline
           fullWidth
-          rows='6'
           defaultValue={props.grantData.desc}
-          label='Add a some information to help donors understand why this grant is important.'
+          label='Add a description to help donors understand why this grant is important.'
           onChange={handleInput} />
       </div>
+
+
+
+
+      <div className={classes.padding}>
+        <Text type='card-heading' text='Affiliated Nonprofit' />
+        <NonprofitAutocomplete
+          callback={nonprofitCallback}
+          cfId={props.cfId}
+          initialNonprofit={props.grantData.nonprofit_id} />
+      </div>
+
+      <Grid
+        container
+        direction='row'
+        alignItems='flex-start'
+        spacing={3}>
+        <Grid item xs={12} sm={6}>
+          <div className={classes.padding}>
+            <Text type='card-heading' text='Grant Deadline' />
+            <DatePicker
+              label='Pick a date'
+              value={selectedDate}
+              fullWidth
+              onChange={handleDateChange} />
+          </div>
+        </Grid>
+
+        <Grid item xs={12} sm={6}>
+          <div className={classes.padding}>
+            <Text type='card-heading' text='Goal Amount' />
+            <TextField
+              onChange={handleInput}
+              defaultValue={props.grantData.goal_amt}
+              id='goal_amt'
+              label='Goal amount'
+              className='form-control'
+              type='text'
+              //error={props.error.goal_amt}
+              fullWidth />
+            {/* <MaskedInput
+          mask={numberMask}
+          onChange={handleInput}
+          defaultValue={props.grantData.goal_amt}
+          id='goal_amt'
+          className='form-control'
+          type='text'
+        /> */}
+          </div>
+        </Grid>
+      </Grid>
+
+
+      <Grid
+        container
+        direction='row'
+        alignItems='flex-start'
+        spacing={3}>
+        <Grid item xs={12} sm={6}>
+          <div className={classes.padding}>
+            <Text type='card-heading' text='Tags' />
+            <Text type='card-subheading' text={'Search for a tag or create a new tag to help donors find the grants they are looking for.'} />
+            <TagSearch
+              parentCallback={tagsCallback}
+              tags={props.grantData.tags} />
+          </div>
+        </Grid>
+
+        <Grid item xs={12} sm={6}>
+          <div className={classes.padding}>
+            <Text type='card-heading' text='Grant Location' />
+            <Text type='card-subheading' text={'We will not directly share this address with donors. We will use it to calculate a donor\'s distance from a grant.'} />
+            <LocationSearch
+              parentCallback={locationCallback}
+              address={props.grantData.address} />
+          </div>
+        </Grid>
+      </Grid>
 
       <div className={classes.padding}>
         <Text type='card-heading' text='Grant Images' />
@@ -271,61 +351,6 @@ export default function EditGrant(props) {
           multiple />
       </div>
 
-
-
-      <div className={classes.padding}>
-        <Text type='card-heading' text='Affiliated Nonprofit' />
-        <NonprofitAutocomplete
-          callback={nonprofitCallback}
-          cfId={props.cfId}
-          initialNonprofit={props.grantData.nonprofit_id} />
-      </div>
-
-      <div className={classes.padding}>
-        <Text type='card-heading' text='Grant Deadline' />
-        <DatePicker
-          label='Pick a date'
-          value={selectedDate}
-          fullWidth
-          onChange={handleDateChange} />
-      </div>
-
-      <div className={classes.padding}>
-        <Text type='card-heading' text='Goal Amount' />
-        <TextField
-          onChange={handleInput}
-          defaultValue={props.grantData.goal_amt}
-          id='goal_amt'
-          className='form-control'
-          type='text'
-          error={props.error.goal_amt}
-          fullWidth />
-        {/* <MaskedInput
-          mask={numberMask}
-          onChange={handleInput}
-          defaultValue={props.grantData.goal_amt}
-          id='goal_amt'
-          className='form-control'
-          type='text'
-        /> */}
-      </div>
-
-
-      <div className={classes.padding}>
-        <Text type='card-heading' text='Tags' />
-        <Text type='card-subheading' text={'Search for a tag or create a new tag to help donors find the grants they are looking for.'} />
-        <TagSearch
-          parentCallback={tagsCallback}
-          tags={props.grantData.tags} />
-      </div>
-
-      <div className={classes.padding}>
-        <Text type='card-heading' text='Grant Location' />
-        <Text type='card-subheading' text={'We will not directly share this address with donors. We will use it to calculate a donor\'s distance from a grant.'} />
-        <LocationSearch
-          parentCallback={locationCallback}
-          address={props.grantData.address} />
-      </div>
 
     </MuiPickersUtilsProvider>
   );
