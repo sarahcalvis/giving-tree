@@ -207,7 +207,7 @@ export default function EditGrant(props) {
           id='title'
           defaultValue={props.grantData.title}
           fullWidth
-          error={props.errors.title !== ""}
+          error={props.errors.title !== ''}
           helperText={props.errors.title}
           label='Grant Title'
           onChange={handleInput} />
@@ -219,7 +219,7 @@ export default function EditGrant(props) {
           id='desc'
           multiline
           fullWidth
-          error={props.errors.desc !== ""}
+          error={props.errors.desc !== ''}
           helperText={props.errors.desc}
           defaultValue={props.grantData.desc}
           label='Add a description to help donors understand why this grant is important.'
@@ -234,8 +234,8 @@ export default function EditGrant(props) {
         <NonprofitAutocomplete
           callback={nonprofitCallback}
           cfId={props.cfId}
-          error={props.errors.nonprofit !== ""}
-          helperText={props.errors.nonprofit}
+          error={props.errors.nonprofit_name !== ''}
+          helperText={props.errors.nonprofit_name}
           initialNonprofit={props.grantData.nonprofit_id} />
       </div>
 
@@ -251,8 +251,8 @@ export default function EditGrant(props) {
               label='Pick a date'
               value={selectedDate}
               fullWidth
-              error={props.errors.date !== ""}
-              helperText={props.errors.date}
+              error={props.errors.date_deadline !== ''}
+              helperText={props.errors.date_deadline}
               onChange={handleDateChange} />
           </div>
         </Grid>
@@ -267,7 +267,7 @@ export default function EditGrant(props) {
               label='Goal amount'
               className='form-control'
               type='text'
-              error={props.errors.goal_amt !== ""}
+              error={props.errors.goal_amt !== ''}
               helperText={props.errors.goal_amt}
               fullWidth />
             {/* <MaskedInput
@@ -305,8 +305,8 @@ export default function EditGrant(props) {
             <LocationSearch
               parentCallback={locationCallback}
               address={props.grantData.address}
-              error={props.errors.location !== ""}
-              helperText={props.errors.location} />
+              error={props.errors.address !== ''}
+              helperText={props.errors.adddress} />
           </div>
         </Grid>
       </Grid>

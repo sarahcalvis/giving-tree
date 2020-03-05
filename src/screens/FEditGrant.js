@@ -4,6 +4,7 @@ import React, { useEffect, useContext } from 'react';
 import EditGrant from '../components/EditGrant.js';
 import Text from '../components/Text.js';
 import firebase from '../firebase';
+import * as helper from '../helpers/ValidationHelper.js';
 
 import AuthUserContext from '../auth/context.js';
 import withAuthProtection from '../auth/withAuthProtection.js';
@@ -149,17 +150,16 @@ function FEditGrant() {
   const [errors, setErrors] = React.useState({
     title: '',
     desc: '',
-    nonprofit: '',
+    nonprofit_name: '',
     address: '',
-    date: '',
+    date_deadline: '',
     goal_amt: '',
-    location: '',
+    address: '',
   })
 
   // Receive changes to the grant data from EditGrant.js
   const callback = (data, type) => {
     let newData = grantData;
-
     switch (type) {
       case 'newTags':
         setNewTags(data);
@@ -177,6 +177,11 @@ function FEditGrant() {
     }
     setGrantData(newData);
     console.log(grantData);
+
+    let newErrors = errors;
+    if (newErrors.hasOwnProperty(type)) newErrors[type] = helper.validateField(data);
+    setErrors(newErrors);
+    console.log(newErrors);
   }
 
   //////////////////
