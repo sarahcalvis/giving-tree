@@ -145,6 +145,8 @@ function FEditGrant() {
       goal_amt: typeof (grantData.goal_amt) !== 'number' || parseFloat(grantData.goal_amt) < 0,
       desc: grantData.desc === ''
     })
+  }
+  const refreshErrors = () => {
     setValid(
       grantData.title !== '' &&
       grantData.nonprofit_name !== '' &&
@@ -180,6 +182,7 @@ function FEditGrant() {
     }
     setGrantData(newData);
     refreshValidity();
+    // refreshErrors();
     console.log(grantData);
   }
 
