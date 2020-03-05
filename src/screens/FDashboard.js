@@ -52,7 +52,7 @@ export default function FDashboard(props) {
   //const user = withContext(UserAuthContext);
   // Initialize database and specific grant in database
   const db = firebase.firestore();
-  const [docs, setDocs] = React.useState();
+  const [docs, setDocs] = React.useState([]);
   const [snapshot, loading, error] = useCollection(db.collection('grants'));
 
   useEffect(() => {
