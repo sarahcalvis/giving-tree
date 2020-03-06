@@ -22,7 +22,7 @@ export default function FDashboard(props) {
   const [expiredGrants, setExpiredGrants] = React.useState([]);
   const [currentGrants, setCurrentGrants] = React.useState([]);
   const [draftedGrants, setDraftedGrants] = React.useState([]);
-  const [shownGrants, setShownGrants] = React.useState([]);
+  const [shownGrants, setShownGrants] = React.useState(currentGrants);
   const [status, setStatus] = React.useState('current');
 
   const handleChange = (event, newStatus) => {
