@@ -113,10 +113,10 @@ export default function FDashboard(props) {
         let grant = <SmallGrantCard
                         id={doc.id}
                         title={doc.title}
-                        cfName={doc.cf_name}
-                        nonprofitName={doc.nonprofit_name}
-                        goalAmt={doc.goal_amt}
-                        moneyRaised={doc.money_raised}
+                        cfName={doc.cfName}
+                        nonprofitName={doc.nonprofitName}
+                        goalAmt={doc.goalAmt}
+                        moneyRaised={doc.moneyRaised}
                         img={doc.img}/>;
         if(doc.status === 'current') {
             curGrants.push(grant);
