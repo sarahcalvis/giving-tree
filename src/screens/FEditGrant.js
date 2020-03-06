@@ -14,6 +14,7 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Container from '@material-ui/core/Container';
+import { Link, withRouter } from 'react-router-dom'
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -284,7 +285,7 @@ function FEditGrant(props) {
     db.collection('grants').doc().set(grantData)
       .then(function () {
         console.log('Draft saved');
-        props.history.push('\\foundation');
+        props.history.push('/foundation');
       })
       .catch(function (error) {
         console.error('Error writing draft: ', error);
@@ -298,7 +299,7 @@ function FEditGrant(props) {
     // Add the grant to the database
     db.collection('grants').doc(id).set(grantData)
       .then(function () {
-        props.history.push('\\foundation');
+        props.history.push('/foundation');
         console.log('Grant updated');
       })
       .catch(function (error) {
@@ -333,7 +334,7 @@ function FEditGrant(props) {
     db.collection('grants').doc().set(grantData)
       .then(function () {
         console.log('Grant published');
-        props.history.push('\\foundation');
+        props.history.push('/foundation');
       })
       .catch(function (error) {
         console.error('Error writing draft: ', error);
@@ -342,7 +343,7 @@ function FEditGrant(props) {
 
   // Cancel changes
   const cancel = () => {
-    props.history.push('\\foundation');
+    props.history.push('/foundation');
   }
 
   return (
@@ -436,4 +437,4 @@ function FEditGrant(props) {
   );
 }
 
-export default withAuthProtection()(FEditGrant);
+export default withAuthProtection()(withRouter(FEditGrant));
