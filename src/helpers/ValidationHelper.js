@@ -102,9 +102,11 @@ const validateDeadline = (deadline) => {
 const validateGoal = (goal) => {
   let errorMsg = '';
   
+  let pattern = new RegExp(/^\d+(?:\.\d{2})?$/);
+  
   if (goal === '') errorMsg = '*Please enter a goal amount.';
   
-  if (Number.isNaN(parseFloat(goal))) errorMsg = '*Please enter a number.';
+  if (!pattern.test(goal)) errorMsg = '*Please enter a valid money amount.';
 
   if (parseFloat(goal) <= 0) errorMsg = '*Goal must be positive.';
 

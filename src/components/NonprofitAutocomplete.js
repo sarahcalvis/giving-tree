@@ -111,7 +111,7 @@ export default function NonprofitAutocomplete(props) {
             <TextField id='email' fullWidth label='Nonprofit Phone Number' onChange={handleInput} />
             <TextField id='url'
               fullWidth label='Nonprofit Website' onChange={handleInput} />
-            <Grid container direction="row" justify="flex-end" alignItems="center">
+            <Grid container direction="row" justify="flex-end" alignItems="center" spacing={1}>
               <Button color='primary' variant='outlined' onClick={cancelAddMode}>Cancel</Button>
               <Button color='primary' variant='contained' onClick={addNonprofit}>Add Nonprofit</Button>
             </Grid>

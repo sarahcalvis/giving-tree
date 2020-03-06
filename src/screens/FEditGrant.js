@@ -51,7 +51,6 @@ function FEditGrant() {
 
   // Load that community foundation's data
   useEffect(() => {
-    console.log(user.email);
     db.collection('communityFoundations').where('public_email', '==', user.email)
       .get()
       .then(function (querySnapshot) {
@@ -158,7 +157,26 @@ function FEditGrant() {
 
   // Receive changes to the grant data from EditGrant.js
   const callback = (data, type) => {
-    let newData = grantData;
+    console.log(data, type)
+    let newData = {
+      cf_name: '',
+      cf_id: '',
+      title: '',
+      nonprofit_name: '',
+      nonprofit_id: '',
+      address: '',
+      lat: '',
+      long: '',
+      date_posted: '',
+      date_deadline: '',
+      money_raised: 0,
+      goal_amt: '',
+      desc: '',
+      tags: [],
+      status: '',
+      images: [],
+    }
+    for (let property in grantData) newData[property] = grantData[property];
     switch (type) {
       case 'newTags':
         setNewTags(data);
@@ -169,13 +187,16 @@ function FEditGrant() {
       case 'images':
         newData.images = data;
         break;
+      case 'address':
+        newData.address = data.address.description;
+        newData.lat = data.lat;
+        newData.long = data.long;
       default:
         if (newData.hasOwnProperty(type)) {
           newData[type] = data;
         }
     }
     setGrantData(newData);
-    console.log(grantData);
 
     let newErrors = {
       title: '',
@@ -188,7 +209,6 @@ function FEditGrant() {
     for (let property in errors) newErrors[property] = errors[property];
     if (newErrors.hasOwnProperty(type)) newErrors[type] = helper.validateField(type, data);
     setErrors(newErrors);
-    console.log(newErrors);
   }
 
   const validateAll = () => {
@@ -202,10 +222,10 @@ function FEditGrant() {
     };
     for (let property in errors) newErrors[property] = helper.validateField(property, grantData[property]);
     setErrors(newErrors);
-    console.log(newErrors);
   }
 
   useEffect(() => {
+    console.log(grantData);
     setValid(
       helper.validateField('title', grantData.title) === '' &&
       helper.validateField('desc', grantData.desc) === '' &&
@@ -214,6 +234,13 @@ function FEditGrant() {
       helper.validateField('goal_amt', grantData.goal_amt) === '' &&
       helper.validateField('address', grantData.address) === ''
     )
+    console.log('valid', valid,
+      'title', helper.validateField('title', grantData.title) === '',
+      'desc', helper.validateField('desc', grantData.desc) === '',
+      'nonprofit_name', helper.validateField('nonprofit_name', grantData.nonprofit_name) === '',
+      'date_deadline', helper.validateField('date_deadline', grantData.date_deadline) === '',
+      'goal_amt', helper.validateField('goal_amt', grantData.goal_amt) === '',
+      'address', helper.validateField('address', grantData.address) === '')
   }, [grantData])
 
   //////////////////

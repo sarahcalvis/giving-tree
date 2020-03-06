@@ -178,9 +178,7 @@ export default function EditGrant(props) {
 
   // Get the location from LocationSearch
   const locationCallback = (address) => {
-    props.callback(address.address.description, 'address');
-    props.callback(address.lat, 'lat');
-    props.callback(address.long, 'long');
+    props.callback(address, 'address')
   }
 
   // Get the tags from TagSearch
