@@ -26,7 +26,6 @@ const autocompleteService = { current: null };
 const useStyles = makeStyles(theme => ({
   icon: {
     color: theme.palette.text.secondary,
-    marginRight: theme.spacing(2)
   }
 }));
 
@@ -53,26 +52,12 @@ export default function LocationSearch(props) {
     setInputValue(event.target.value);
   }
 
-
   const handleChange = (event, value) => {
     if(!(value === null)) {
       Geocode.fromAddress(value.description).then(
         response => {
-          // console.log("supposed address: ", value.description);
-          // console.log("the response for lat, long: ", response.results[0].geometry.location);
           const { lat, lng } = response.results[0].geometry.location;
-          // console.log(lat, lng);
-          // console.log(value);
           props.parentCallback({address: value, lat: lat, long: lng});
-          // Geocode.fromLatLng(lat, lng).then(
-          //   response => {
-          //     const address = response.results[0].formatted_address;
-          //     console.log("regurged address: ", address);
-          //   },
-          //   error => {
-          //     console.error(error);
-          //   }
-          // );
         },
         error => {
           console.error(error);
@@ -113,8 +98,6 @@ export default function LocationSearch(props) {
     return () => {
       active = false;
     };
-    
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputValue]);
 
   return (
@@ -151,10 +134,7 @@ export default function LocationSearch(props) {
 
         return (
           <Grid container alignItems="center">
-            <Grid item>
-              <LocationOnIcon className={classes.icon} />
-            </Grid>
-            <Grid item xs>
+            <Grid item xs={12}>
               {parts.map((part, index) => (
                 <span
                   key={index}
@@ -163,7 +143,6 @@ export default function LocationSearch(props) {
                   {part.text}
                 </span>
               ))}
-
               <Typography variant="body2" color="textSecondary">
                 {option.structured_formatting.secondary_text}
               </Typography>
