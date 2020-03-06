@@ -14,6 +14,12 @@ import ContactsOutlinedIcon from '@material-ui/icons/ContactsOutlined';
 import PhoneIphoneIcon from '@material-ui/icons/PhoneIphone';
 import AlternateEmailIcon from '@material-ui/icons/AlternateEmail';
 
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+
 export default function NonEditableData(props){
 	return (
 		<Container maxWidth="lg">
@@ -38,6 +44,10 @@ export default function NonEditableData(props){
 							Change Password
 						</Button>
 					</Link>
+					<ToggleActive 
+						active={props.cfInfo.status}
+						toggleAccountActive={props.toggleAccountActive}
+					/>
 				</Grid>
 			</Grid>
 			
@@ -101,6 +111,7 @@ export default function NonEditableData(props){
 	);
 }
 
+
 function StaticItem(props) {
 	return(
 		<Grid container item spacing={2}>
@@ -117,4 +128,91 @@ function StaticItem(props) {
 			</Grid>
 		</Grid>
 	);
+}
+
+
+function ToggleActive(props) {
+	console.log(props.active);
+	const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleYesClose = () => {
+		props.toggleAccountActive();
+		setOpen(false);
+	};
+	const handleNoClose = () => {
+    setOpen(false);
+	};
+	
+	if(props.active === 'current'){
+		return(
+			<div>
+				<Button 
+					color='secondary'
+					onClick={handleClickOpen} 
+					variant='contained'
+					style={{ 'margin': 2 }}
+				>Deactivate Account</Button>
+				<Dialog
+					open={open}
+					onClose={handleNoClose}
+					aria-labelledby="alert-dialog-title"
+					aria-describedby="alert-dialog-description"
+				>
+					<DialogTitle id="alert-dialog-title">{"Use Google's location service?"}</DialogTitle>
+					<DialogContent>
+						<DialogContentText id="alert-dialog-description">
+							Are you sure you would like to deactivate your account?
+						</DialogContentText>
+					</DialogContent>
+					<DialogActions>
+						<Button onClick={handleNoClose} color="primary">
+							No
+						</Button>
+						<Button onClick={handleYesClose} color="secondary" variant='contained' autoFocus>
+							Yes
+						</Button>
+					</DialogActions>
+				</Dialog>
+			</div>
+		);
+	}else if(props.active === 'deactivated'){
+		return(
+			<div>
+				<Button 
+					color='primary'
+					onClick={handleClickOpen} 
+					variant='contained'
+					style={{ 'margin': 2 }}
+				>Activate Account</Button>
+				<Dialog
+					open={open}
+					onClose={handleNoClose}
+					aria-labelledby="alert-dialog-title"
+					aria-describedby="alert-dialog-description"
+				>
+					<DialogTitle id="alert-dialog-title">{"Use Google's location service?"}</DialogTitle>
+					<DialogContent>
+						<DialogContentText id="alert-dialog-description">
+							Are you sure you would like to activate your account?
+						</DialogContentText>
+					</DialogContent>
+					<DialogActions>
+						<Button onClick={handleNoClose} color="secondary">
+							No
+						</Button>
+						<Button onClick={handleYesClose} color="primary" variant='contained' autoFocus>
+							Yes
+						</Button>
+					</DialogActions>
+				</Dialog>
+			</div>
+		);
+	}
+	else{
+		return(null);
+	}
 }

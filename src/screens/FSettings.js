@@ -27,7 +27,8 @@ export default function FSettings() {
     fname_contact: '',
     lname_contact: '',
     personal_email: '',
-    personal_phone: ''
+    personal_phone: '',
+    status: ''
   });
 
   const [getData, setGetData] = React.useState(true);
@@ -50,7 +51,8 @@ export default function FSettings() {
             fname_contact: doc.data().fname_contact,
             lname_contact: doc.data().lname_contact,
             personal_email: doc.data().personal_email,
-            personal_phone: doc.data().personal_phone
+            personal_phone: doc.data().personal_phone,
+            status: doc.data().status
           })
           setGetData(false);
         });
@@ -58,6 +60,31 @@ export default function FSettings() {
       .catch(function(error) {
         console.log("Error getting documents: ", error);
       });
+  }
+
+  function toggleAccountActive(){
+    db.collection('communityFoundations').where('personal_email','==',user.email)
+    .get()
+    .then(function(querySnapshot) {
+      querySnapshot.forEach(function(doc) {
+        console.log(doc.id, " => ", doc.data());
+        // Build doc ref from doc.id
+        if(cfInfo.status === 'current'){
+          db.collection("communityFoundations").doc(doc.id).update({
+            status: 'deactivated',
+          });
+        }else if(cfInfo.status === 'deactivated'){
+          db.collection("communityFoundations").doc(doc.id).update({
+            status: 'current',
+          });
+        }
+        console.log("Document successfully written!");
+        setGetData(true);
+      });
+    })
+    .catch(function(error) {
+      console.error("Error writing document: ", error);
+    });
   }
 
   function onSubmit(changedText){
@@ -115,7 +142,7 @@ export default function FSettings() {
         setHasUser(false);
       } 
     }
-  }, [getData, user, functionLoadData]);
+  }, [getData, user]);
 
   return (
     <Data 
@@ -125,6 +152,7 @@ export default function FSettings() {
       toggleEdit={toggleEdit}
       onSubmit={onSubmit}
       functionLoadData={functionLoadData}
+      toggleAccountActive={toggleAccountActive}
     />
   );
 } 
@@ -143,6 +171,7 @@ const Data = (props) => {
         cfInfo={props.cfInfo}
         toggleEdit={props.toggleEdit}
         onSubmit={props.onSubmit}
+        toggleAccountActive={props.toggleAccountActive}
       />
     );
   }
