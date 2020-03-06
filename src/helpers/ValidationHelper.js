@@ -18,8 +18,10 @@ export const validateField = (name, value) => {
       return validateEmail(value);
     case 'public_phone':
     case 'personal_phone':
+    case 'number':
       return validatePhone(value);
     case 'foundation_url':
+    case 'url':
       return validateUrl(value);
     case 'name':
     case 'fname_contact':

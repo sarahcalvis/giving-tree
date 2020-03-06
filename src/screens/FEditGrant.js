@@ -35,7 +35,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function FEditGrant() {
+function FEditGrant(props) {
   const classes = useStyles();
 
   let db = firebase.firestore();
@@ -211,19 +211,6 @@ function FEditGrant() {
     setErrors(newErrors);
   }
 
-  const validateAll = () => {
-    let newErrors = {
-      title: '',
-      desc: '',
-      nonprofit_name: '',
-      date_deadline: '',
-      goal_amt: '',
-      address: '',
-    };
-    for (let property in errors) newErrors[property] = helper.validateField(property, grantData[property]);
-    setErrors(newErrors);
-  }
-
   useEffect(() => {
     console.log(grantData);
     setValid(
@@ -297,6 +284,7 @@ function FEditGrant() {
     db.collection('grants').doc().set(grantData)
       .then(function () {
         console.log('Draft saved');
+        props.history.push('\\foundation');
       })
       .catch(function (error) {
         console.error('Error writing draft: ', error);
@@ -310,6 +298,7 @@ function FEditGrant() {
     // Add the grant to the database
     db.collection('grants').doc(id).set(grantData)
       .then(function () {
+        props.history.push('\\foundation');
         console.log('Grant updated');
       })
       .catch(function (error) {
@@ -344,10 +333,16 @@ function FEditGrant() {
     db.collection('grants').doc().set(grantData)
       .then(function () {
         console.log('Grant published');
+        props.history.push('\\foundation');
       })
       .catch(function (error) {
         console.error('Error writing draft: ', error);
       })
+  }
+
+  // Cancel changes
+  const cancel = () => {
+    props.history.push('\\foundation');
   }
 
   return (
@@ -374,7 +369,8 @@ function FEditGrant() {
                   <Grid item>
                     <Button
                       color='primary'
-                      variant='contained'>
+                      variant='contained'
+                      onClick={cancel}>
                       Cancel
                 </Button>
                   </Grid>
@@ -385,7 +381,7 @@ function FEditGrant() {
                       disabled={!valid}
                       onClick={update}>
                       Save
-                </Button>
+                    </Button>
                   </Grid>
                 </Grid>
               }
@@ -398,7 +394,8 @@ function FEditGrant() {
                   <Grid item>
                     <Button
                       color='primary'
-                      variant='contained'>
+                      variant='contained'
+                      onClick={cancel}>
                       Discard
                   </Button>
                   </Grid>
@@ -417,7 +414,7 @@ function FEditGrant() {
                       disabled={!valid}
                       onClick={publish}>
                       Publish
-                </Button>
+                    </Button>
                   </Grid>
                 </Grid>
               }
