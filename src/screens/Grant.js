@@ -110,9 +110,7 @@ function Grant(props) {
   // Query image urls
   useEffect(() => {
     if (grantData) {
-      let imag = getUrls(grantData.images);
-      console.log(imag);
-      setImg(imag);
+      getUrls(grantData.images);
     }
   }, [grantData]);
 
@@ -183,20 +181,7 @@ function Grant(props) {
 
   // Load image URLs from image names
   const getUrls = async (imgNames) => {
-    // let urls = await Promise.all(imgNames.map(imgName => 
-    //   new Promise((resolve, reject) => {
-    //     storageRef.child(imgName).getDownloadURL().then((url) => {
-    //       resolve(url);
-    //     }).catch(() => {
-    //       reject(null);
-    //     })
-    //   }).then((url) => {
-    //     return url;
-    //   })
-    // ));
-    // console.log(urls);
-    // return urls;
-    let urls = imgNames.map(imgName =>
+    await Promise.all(imgNames.map(imgName =>
       new Promise((resolve, reject) => {
         storageRef.child(imgName).getDownloadURL().then((url) => {
           resolve(url);
@@ -204,11 +189,11 @@ function Grant(props) {
           reject(null);
         })
       }).then((url) => {
-        urls.push(url)
+        return url;
       })
-    )
-    console.log(urls);
-    return urls.splice(imgNames.length - 1, 2* imgNames.length);
+    )).then((arr) => {
+      setImg(arr);
+    });
   }
 
   //////////////////////
