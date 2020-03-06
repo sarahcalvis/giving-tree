@@ -1,8 +1,11 @@
 import React, { useEffect } from 'react';
 import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
 import Link from '@material-ui/core/Link';
+import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/styles';
+import { Dialog, DialogContent, DialogActions, DialogTitle, DialogContentText, Slide } from '@material-ui/core';
 
 
 const useStyles = makeStyles(theme => ({
@@ -25,6 +28,15 @@ export default function FStripeSetup() {
 
   // Set tab title
   useEffect(() => { document.title = 'Connect to Stripe' }, []);
+  
+  const [open, setOpen] = React.useState(false);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   return (
     <div>
@@ -41,8 +53,48 @@ export default function FStripeSetup() {
               Connect to Stripe
             </Button>
           </Link>
+
+          <IconButton aria-label="Stripe Information" size="medium" onClick={handleClickOpen}>
+            <HelpOutlineIcon />
+          </IconButton>
+          <Dialog
+            open={open}
+            TransitionComponent={Transition}
+            keepMounted
+            onClose={handleClose}
+            aria-labelledby="alert-dialog-slide-title"
+            aria-describedby="alert-dialog-slide-description"
+          >
+            <DialogTitle id="alert-dialog-slide-title">{"About Stripe"}</DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-slide-description">
+                <p>Stripe is a third party payment platform that handles customer payment information and allows donors to contribute to your 
+                  foundation's giving opportunities. </p>
+                <p>After clicking on the link above, you will be taken to a signup page, where you will be prompted to provide your 
+                  foundation's basic information.</p>
+                <p>Additionally, you will be given the opportunity to supply the information that will show up on the donors' banking and 
+                  credit card statements.</p>
+                <p>Finally, you will be asked for your bank account number and routing number.</p>
+                <p>Once all the pertinent information has been provided, you can strengthen your account's security with a second step of
+                  authentication.</p>
+                <p>If you still have questions about Stripe, please click "Learn More" below!</p>
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleClose} color="primary">
+                Learn More
+              </Button>
+              <Button onClick={handleClose} color="primary">
+                Got it!
+              </Button>
+            </DialogActions>
+          </Dialog>
         </React.Fragment>
       </Container>
     </div >
   );
 }
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
