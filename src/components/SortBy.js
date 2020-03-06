@@ -7,7 +7,6 @@ import Select from "@material-ui/core/Select";
 
 const useStyles = makeStyles(theme => ({
   formControl: {
-    margin: theme.spacing(1),
     minWidth: 120
   },
   selectEmpty: {
@@ -32,7 +31,7 @@ export default function SortBy(props) {
 
   return (
     <div>
-      <FormControl variant="outlined" className={classes.formControl}>
+      <FormControl fullWidth variant="outlined" className={classes.formControl}>
         <InputLabel ref={inputLabel} id="select-radius-ref">
           Sort By
         </InputLabel>

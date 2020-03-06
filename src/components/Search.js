@@ -164,13 +164,17 @@ class Search extends Component {
   render() {
     return (
       <div className={styles.searchWrapper}>
-        <Grid container spacing={2} >
-          <Grid item>
+        <Grid container spacing={1} >
+          <Grid item xs={12}>
             <TagSearch parentCallback={this.tagFreeTextCallback}/>
           </Grid>
-          <Grid item>
+          <Grid item xs={12}>
             <LocationSearch parentCallback={this.locationCallback}/>
+          </Grid>
+          <Grid item xs={6}>
             <SearchRadius parentCallback={this.radiusCallback}/>
+          </Grid>
+          <Grid item xs={6}>
             <SortBy parentCallback={this.sortByCallback}/>
           </Grid>
         </Grid>

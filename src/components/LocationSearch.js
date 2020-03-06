@@ -127,6 +127,7 @@ export default function LocationSearch(props) {
       filterOptions={x => x}
       options={options}
       autoComplete
+      fullWidth
       includeInputInList
       disableOpenOnFocus
       onChange={handleChange}
