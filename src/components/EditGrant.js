@@ -111,29 +111,28 @@ export default function EditGrant(props) {
     }
   };
 
+  // Load image urls from their names
+  const getUrls = async (imgNames) => {
+    await Promise.all(imgNames.map(imgName =>
+      new Promise((resolve, reject) => {
+        storageRef.child(imgName).getDownloadURL().then((url) => {
+          resolve(url);
+        }).catch(() => {
+          reject(null);
+        })
+      }).then((url) => {
+        return {url: url, name: imgName};
+      })
+    )).then((urls) => {
+      setUrl(urls);
+    });
+  }
+
+  useEffect(() => {console.log(url)}, [url])
+
   // Observe the image array. When an image name is added, reload the image urls
   useEffect(() => {
-    if (img.length == 0) setUrl([]);
-    let newUrl = [];
-
-    var fillNewUrl = new Promise((resolve, reject) => {
-      img.forEach((i, index, img) => {
-        storageRef.child(i).getDownloadURL().then(function (url) {
-          newUrl.push({ name: i, url: url });
-        }).catch(function (error) {
-          console.log('error getting image url: ', error)
-        }).then(() => {
-          if (index === img.length - 1) {
-            resolve();
-          }
-        })
-      })
-    })
-
-    fillNewUrl.then(() => {
-      console.log('Setting url to ', newUrl);
-      setUrl(newUrl);
-    });
+    getUrls(img);
   }, [img])
 
 
