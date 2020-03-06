@@ -14,7 +14,7 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Container from '@material-ui/core/Container';
-import { Link, withRouter } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -52,7 +52,7 @@ function FEditGrant(props) {
 
   // Load that community foundation's data
   useEffect(() => {
-    db.collection('communityFoundations').where('public_email', '==', user.email)
+    db.collection('communityFoundations').where('personal_email', '==', user.email)
       .get()
       .then(function (querySnapshot) {
         querySnapshot.forEach(function (doc) {
@@ -142,7 +142,6 @@ function FEditGrant(props) {
   });
 
 
-
   /////////////////////////
   // VALIDATE GRANT DATA //
   /////////////////////////
@@ -159,57 +158,38 @@ function FEditGrant(props) {
   // Receive changes to the grant data from EditGrant.js
   const callback = (data, type) => {
     console.log(data, type)
-    let newData = {
-      cf_name: '',
-      cf_id: '',
-      title: '',
-      nonprofit_name: '',
-      nonprofit_id: '',
-      address: '',
-      lat: '',
-      long: '',
-      date_posted: '',
-      date_deadline: '',
-      money_raised: 0,
-      goal_amt: '',
-      desc: '',
-      tags: [],
-      status: '',
-      images: [],
-    }
-    for (let property in grantData) newData[property] = grantData[property];
-    switch (type) {
-      case 'newTags':
-        setNewTags(data);
-        break;
-      case 'date_deadline':
-        newData.date_deadline = { seconds: data, nanoseconds: 0 };
-        break;
-      case 'images':
-        newData.images = data;
-        break;
-      case 'address':
-        newData.address = data.address.description;
-        newData.lat = data.lat;
-        newData.long = data.long;
-      default:
-        if (newData.hasOwnProperty(type)) {
-          newData[type] = data;
-        }
-    }
-    setGrantData(newData);
+    let newData = { ...grantData };
+    let newErrors = {...errors};
 
-    let newErrors = {
-      title: '',
-      desc: '',
-      nonprofit_name: '',
-      date_deadline: '',
-      goal_amt: '',
-      address: '',
-    };
-    for (let property in errors) newErrors[property] = errors[property];
-    if (newErrors.hasOwnProperty(type)) newErrors[type] = helper.validateField(type, data);
+    if (newErrors.hasOwnProperty(type)) {
+      newErrors[type] = helper.validateField(type, data);
+    }
     setErrors(newErrors);
+
+    if (newErrors[type] === ''){
+      switch (type) {
+        case 'newTags':
+          setNewTags(data);
+          break;
+        case 'date_deadline':
+          newData.date_deadline = { seconds: data, nanoseconds: 0 };
+          break;
+        case 'images':
+          newData.images = data;
+          break;
+        case 'address':
+          newData.address = data.address.description;
+          newData.lat = data.lat;
+          newData.long = data.long;
+          break;
+        default:
+          if (newData.hasOwnProperty(type)) {
+            newData[type] = data;
+          }
+      }
+    }
+
+    setGrantData(newData);
   }
 
   useEffect(() => {
