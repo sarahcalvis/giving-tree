@@ -103,7 +103,6 @@ export default function LocationSearch(props) {
   return (
     <Autocomplete
       id="loc-bar"
-      style={{ width: 300 }}
       getOptionLabel={option =>
         typeof option === "string" ? option : option.description
       }
@@ -143,7 +142,9 @@ export default function LocationSearch(props) {
                   {part.text}
                 </span>
               ))}
-              
+              <Typography variant="body2" color="textSecondary">
+                {option.structured_formatting.secondary_text}
+              </Typography>
             </Grid>
           </Grid>
         );
