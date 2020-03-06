@@ -5,7 +5,7 @@ import Link from '@material-ui/core/Link';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/styles';
-import { Dialog, DialogContent, DialogActions, DialogTitle, DialogContentText, Slide } from '@material-ui/core';
+import { Dialog, DialogContent, DialogActions, DialogTitle, DialogContentText, Slide, Grid } from '@material-ui/core';
 
 
 const useStyles = makeStyles(theme => ({
@@ -40,20 +40,22 @@ export default function FStripeSetup() {
 
   return (
     <div>
-      <Container className={classes.pageLayout}>
-        <React.Fragment>
+      <Grid container className={classes.pageLayout} justify='center' spacing={2}>
+        <Grid item xs="10">
           <Link
             textDecoration='none'
             color='inherit'
             href='https://connect.stripe.com/oauth/authorize?response_type=code&client_id=ca_GdKhmkaiFmOndJQ4UU6LTUm6pyfJcpQj&scope=read_write'>
             <Button
               fullWidth
+              size="large"
               color='primary'
               variant='contained'>
               Connect to Stripe
             </Button>
           </Link>
-
+        </Grid>
+        <Grid item>
           <IconButton aria-label="Stripe Information" size="medium" onClick={handleClickOpen}>
             <HelpOutlineIcon />
           </IconButton>
@@ -81,16 +83,22 @@ export default function FStripeSetup() {
               </DialogContentText>
             </DialogContent>
             <DialogActions>
-              <Button onClick={handleClose} color="primary">
-                Learn More
-              </Button>
+              <Link
+              textDecoration='none'
+              color='inherit'
+              href='https://stripe.com/about'
+              >
+                <Button onClick={handleClose} color="primary">
+                  Learn More
+                </Button>
+              </Link>
               <Button onClick={handleClose} color="primary">
                 Got it!
               </Button>
             </DialogActions>
           </Dialog>
-        </React.Fragment>
-      </Container>
+        </Grid>
+      </Grid>
     </div >
   );
 }
