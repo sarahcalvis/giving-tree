@@ -183,32 +183,16 @@ function Grant(props) {
 
   // Load image URLs from image names
   const getUrls = async (imgNames) => {
-    console.log(imgNames)
-    const newImg = await imgNames.map((imgName) => {
-      storageRef.child(imgName).getDownloadURL().then((url) => {
-        return url;
+    const urls = await Promise.all(imgNames.map(imgName => {
+      new Promise((resolve, reject) => {
+        storageRef.child(imgName).getDownloadURL().then((url) => {
+          resolve(url);
+        }).catch(() => {
+          reject(null);
+        })
       })
-    })
-    console.log(newImg)
-
-    // for (const imgName of imgNames) {
-    //   const url = await getUrl(imgName);
-    //   newImg.push(url);
-    // }
-
-    return newImg;
-  }
-
-  // Load image URL from image names
-  const getUrl = async (imgName) => {
-    // return new Promise((res, rej) => {
-    storageRef.child(imgName).getDownloadURL().then((url) => {
-      // res(url)
-      return url;
-    }).catch((err) => {
-      // rej(err)
-    });
-    // })
+    }));
+    return urls;
   }
 
   //////////////////////
