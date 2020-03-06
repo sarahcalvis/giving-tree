@@ -14,6 +14,9 @@ const useStyles = makeStyles(theme => ({
   container: {
     paddingBottom: theme.spacing(2),
   },
+  toggleBar: {
+    marginBottom: 4,
+  }
 }));
 
 export default function FDashboard(props) {
@@ -48,8 +51,8 @@ export default function FDashboard(props) {
     </ToggleButton>
   ];
   // Foundation ID
-  const [id] = React.useState(props.id);
-  //const user = withContext(UserAuthContext);
+  const cfId = 'p80ZpdUu9hx6nVoYO6Do'; //withContext(UserAuthContext)//.cfId;
+
   // Initialize database and specific grant in database
   const db = firebase.firestore();
   const [docs, setDocs] = React.useState([]);
@@ -58,17 +61,9 @@ export default function FDashboard(props) {
   useEffect(() => {
     var newGrants = [];
     var newDocs = [];
-    var curGrants = [];
-    var exGrants = [];
-    var drGrants = [];
     if (!loading && !error) {
       snapshot.forEach(function (doc) {
-        //console.log("cf_id, id: ", doc.data().cf_id, user.id);
-        /////////////////////////////////////////////////////
-        // JUST A TEST //////////////////////////////////////
-        // NEED TO EVENTUALLY CHANGE THE COMPARISON!!!!!/////
-        /////////////////////////////////////////////////////
-        if(doc.data().cf_id === 'p80ZpdUu9hx6nVoYO6Do') {
+        if(doc.data().cf_id === cfId) {
             newDocs.push({
             dist: -1,
             id: doc.id,
@@ -129,7 +124,7 @@ export default function FDashboard(props) {
       setCurrentGrants(curGrants);
       setDraftedGrants(drGrants);
       setExpiredGrants(exGrants);
-  }, [docs, grants]);
+  }, [grants]);
 
   function searchCallback(childData) {
     console.log("childData in dashboard: ", childData);
@@ -157,7 +152,7 @@ export default function FDashboard(props) {
       {docs &&
         <div>
           <Grid container spacing={2} direction="column" alignItems="center">
-            <Grid item>
+            <Grid item className={classes.toggleBar}>
                 <ToggleButtonGroup size="small" value={status} exclusive onChange={handleChange}>
                 {children}
                 </ToggleButtonGroup>
