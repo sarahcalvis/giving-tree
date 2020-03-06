@@ -26,7 +26,7 @@ export default function FDashboard(props) {
   const [currentGrants, setCurrentGrants] = React.useState([]);
   const [draftedGrants, setDraftedGrants] = React.useState([]);
   const [shownGrants, setShownGrants] = React.useState(currentGrants);
-  const [status, setStatus] = React.useState('current');
+  const [status, setStatus] = React.useState();
 
   const handleChange = (event, newStatus) => {
     setStatus(newStatus);
@@ -94,7 +94,9 @@ export default function FDashboard(props) {
             newGrants.push(grant);
         }
       });
-      setGrants(newGrants);
+      setGrants(newGrants, ()=> {
+        setStatus('current');
+      });
       console.log("newDocs: ", newDocs);
       setDocs(newDocs);
     }
@@ -124,7 +126,7 @@ export default function FDashboard(props) {
       setCurrentGrants(curGrants);
       setDraftedGrants(drGrants);
       setExpiredGrants(exGrants);
-  }, [grants]);
+  }, [grants, docs]);
 
   function searchCallback(childData) {
     console.log("childData in dashboard: ", childData);
