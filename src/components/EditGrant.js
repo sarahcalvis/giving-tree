@@ -5,7 +5,6 @@ import Text from './Text.js';
 import LocationSearch from './LocationSearch.js';
 import TagSearch from './TagSearch.js';
 import NonprofitAutocomplete from './NonprofitAutocomplete.js';
-import * as helper from '../helpers/ValidationHelper.js';
 
 import Grid from '@material-ui/core/Grid';
 import GridList from '@material-ui/core/GridList';
@@ -249,6 +248,7 @@ export default function EditGrant(props) {
               fullWidth
               error={props.errors.date_deadline !== ''}
               helperText={props.errors.date_deadline}
+              onChange={handleDateChange}
             />
           </div>
         </Grid>

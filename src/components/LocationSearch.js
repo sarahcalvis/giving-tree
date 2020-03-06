@@ -135,6 +135,7 @@ export default function LocationSearch(props) {
         <TextField
           name="loc-textfield"
           id="loc-textfield"
+          error={props.error}
           {...params}
           label="Search from a location"
           onChange={handleKeyPress}
