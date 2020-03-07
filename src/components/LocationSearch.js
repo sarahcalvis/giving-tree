@@ -1,4 +1,4 @@
-import React, { useEffect }  from "react";
+import React, { useEffect } from "react";
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
@@ -53,7 +53,7 @@ export default function LocationSearch(props) {
   }
 
   const handleChange = (event, value) => {
-    if(!(value === null)) {
+    if (!(value === null)) {
       Geocode.fromAddress(value.description).then(
         response => {
           const { lat, lng } = response.results[0].geometry.location;
@@ -98,6 +98,8 @@ export default function LocationSearch(props) {
     return () => {
       active = false;
     };
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputValue]);
 
   return (
@@ -112,15 +114,17 @@ export default function LocationSearch(props) {
       fullWidth
       includeInputInList
       disableOpenOnFocus
+      fullWidth
+      defaultValue={props.address}
       onChange={handleChange}
       renderInput={params => (
         <TextField
           name="loc-textfield"
           id="loc-textfield"
+          error={props.error}
           {...params}
           label="Search from a location"
           onChange={handleKeyPress}
-          variant="outlined"
           fullWidth
         />
       )}
