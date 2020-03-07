@@ -1,6 +1,13 @@
 import React from 'react';
+
+import Foundation from '../components/Foundation.js';
+
 export default function MetaAdmin() {
+  const cfName = "Test CF";
   return(
-    <p>Congrats you are the meta-admin</p>
+    <div>
+      <Foundation cfName={cfName}></Foundation>
+    </div>
+    
   );
 }
