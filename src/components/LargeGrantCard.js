@@ -33,16 +33,9 @@ export default function LargeGrantCard(props) {
   console.log(props.img);
 
   const classes = useStyles();
-  const [imgKey, setImgKey] = React.useState(0);
 
   // Set tab title
   useEffect(() => { document.title = props.title + '-Giving Tree'; }, [props.title]);
-
-  useEffect(() => {
-    //Force image carousel to rerender after 500ms
-    //TODO: Find better way to fix
-    setTimeout(function () { setImgKey(1); }, 500)
-  }, []);
 
   return (
     <Container elevation={3} className={classes.card}>
@@ -55,7 +48,7 @@ export default function LargeGrantCard(props) {
         </Card>
       }
       <Card elevation={3}>
-        <ImageCarousel key={imgKey} img={props.img} />
+        <ImageCarousel img={props.img} />
         <CardContent className={classes.cardContent}>
           <div className={classes.topCard}>
             <Text type='card-aboveheading' text={props.nonprofitData.name} />
