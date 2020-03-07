@@ -87,6 +87,7 @@ export default function FStripeSetup() {
               textDecoration='none'
               color='inherit'
               href='https://stripe.com/about'
+              target='_blank'
               >
                 <Button onClick={handleClose} color="primary">
                   Learn More
