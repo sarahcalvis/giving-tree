@@ -121,14 +121,14 @@ export default function EditGrant(props) {
           reject(null);
         })
       }).then((url) => {
-        return {url: url, name: imgName};
+        return { url: url, name: imgName };
       })
     )).then((urls) => {
       setUrl(urls);
     });
   }
 
-  useEffect(() => {console.log(url)}, [url])
+  useEffect(() => { console.log(url) }, [url])
 
   // Observe the image array. When an image name is added, reload the image urls
   useEffect(() => {
@@ -139,20 +139,27 @@ export default function EditGrant(props) {
   // Delete an image
   const removeImage = async (event) => {
     console.log('name of the image to be deleted: ', event.target.parentNode.id)
-
+    const deleteMe = event.target.parentNode.id;
     let newImg = [];
 
-    var fillNewImg = new Promise((resolve, reject) => {
-      img.forEach((i, index, img) => {
-        if (i !== event.target.parentNode.id) newImg.push(i);
-        if (index === img.length - 1) resolve();
-      });
+    img.forEach((i, index, img) => {
+      if (i !== event.target.parentNode.id) newImg.push(i);
+      if (newImg.length === img.length - 1) setImg(newImg);
     });
 
-    fillNewImg.then(() => {
-      console.log('updating img to ' + newImg)
-      setImg(newImg);
-    });
+  
+
+    // await Promise.all(img.map(imgName =>
+    //   new Promise((resolve, reject) => {
+    //     resolve(imgName);
+    //   }).then((imgName) => {
+    //     if (imgName !== deleteMe) return imgName;
+    //     else return null;
+    //   })
+    // )).then((imgNames) => {
+    //   console.log(imgNames);
+    //   setImg(imgNames);
+    // });
   }
 
 
