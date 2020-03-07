@@ -72,12 +72,22 @@ app.post('/setCustomClaims', (req, res) => {
     //Check if metaadmin
     if (typeof claims.admin !== 'undefined' && claims.admin) {
       //Check that cfEmail and cfStatus were provided in request
-      if (typeof cfEmail !== 'undefined' && cfStatus !== 'undefined'
-        && cfEmail !== '' && cfStatus !== '') {
-          //Get the CF User and update their permissions
-          admin.auth().getUserByEmail(cfEmail).then((user) => {
-            if (cfStatus === 'accepted') {
-              admin.auth().setCustomUserClaims(user.uid, { accepted: true })
+      if (typeof cfEmail !== 'undefined' && typeof cfStatus !== 'undefined'
+        && cfEmail !== '' && cfStatus !== '' && typeof claims.cfId !== 'undefined' ) {
+        //Get the CF User and update their permissions
+        admin.auth().getUserByEmail(cfEmail).then((user) => {
+          if (cfStatus === 'current') {
+            admin.auth().setCustomUserClaims(user.uid, { cfId: claims.cfId, status: 'current' })
+              .then(function () {
+                // Tell client to refresh token on user.
+                res.end(JSON.stringify({ status: 'success' }));
+              })
+              .catch((error) => {
+                res.end(JSON.stringify({ status: error }));
+              });
+          }
+          else if (cfStatus === 'denied') {
+              admin.auth().setCustomUserClaims(user.uid, { cfId: claims.cfId, status: 'denied' })
                 .then(function () {
                   // Tell client to refresh token on user.
                   res.end(JSON.stringify({ status: 'success' }));
@@ -85,35 +95,44 @@ app.post('/setCustomClaims', (req, res) => {
                 .catch((error) => {
                   res.end(JSON.stringify({ status: error }));
                 });
-            }
-            else if (cfStatus === 'rejected') {
-              admin.auth().setCustomUserClaims(user.uid, { rejected: true })
-                .then(function () {
-                  // Tell client to refresh token on user.
-                  res.end(JSON.stringify({ status: 'success' }));
-                })
-                .catch((error) => {
-                  res.end(JSON.stringify({ status: error }));
-                });
-            }
-          })
-            .catch((error) => {
-              res.end(JSON.stringify({ status: error }));
-            });
+          }
+        })
+          .catch((error) => {
+            res.end(JSON.stringify({ status: error }));
+          });
       }
     }
     else {
-      // Not metaadmin, so we this post must be made from CF Account Request
-      admin.auth().setCustomUserClaims(claims.sub, { cf: true })
-        .then(function () {
-          // Tell client to refresh token on user.
-          res.end(JSON.stringify({ status: 'success' }));
+      //Not metaadmin, so we this post must be made from CF Account Request
+      //Get and store the cf document record id in the claims object
+      admin.auth().getUser(claims.sub)
+        .then((claims, user) => {
+          admin.firestore().collection('communityFoundations').where('personal_email', '==', user.email)
+            .get()
+            .then(function (querySnapshot) {
+              querySnapshot.forEach(function (doc) {
+                admin.auth().setCustomUserClaims(claims.sub, { cfId: doc.id, status: 'requested' })
+                  .then(() => {
+                    // Tell client to refresh token on user.
+                    res.end(JSON.stringify({ status: 'success' }));
+                  })
+                  .catch((error) => {
+                    res.end(JSON.stringify({ status: error }));
+                  });
+
+              });
+            })
+            .catch((error) => {
+              res.end(JSON.stringify({ status: error }));
+            });
         })
         .catch((error) => {
           res.end(JSON.stringify({ status: error }));
         });
     }
   });
+
+  res.end(JSON.stringify({ status: "ERROR: End of method; endpoint executed without resolving." }));
 });
 
 app.listen(process.env.PORT);

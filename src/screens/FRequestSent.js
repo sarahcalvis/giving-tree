@@ -39,6 +39,6 @@ function FRequestSent() {
 }
 
 
-const condition = (authUser) => authUser && authUser.cf;
+const condition = (authUser) => authUser &&  !!authUser.status;
 
 export default withAuthProtection(condition)(withRouter(FRequestSent));
