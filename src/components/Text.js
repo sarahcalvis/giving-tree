@@ -7,7 +7,11 @@ import { makeStyles } from '@material-ui/styles';
 const useStyles = makeStyles(theme => ({
   noPad: {
     marginBottom: '0em',
-  }
+  },
+  sectionHeading: {
+    fontWeight: '400',
+    float: 'left',
+  },
 }))
 
 export default function Text(props) {
@@ -21,9 +25,28 @@ export default function Text(props) {
 
   return (
     <div>
-      {type === "card-heading" &&
+      {type === 'heading' &&
         <Typography
-          variant="h5"
+          component='h1'
+          variant='h2'
+          align='center'
+          color='textPrimary'
+          gutterBottom
+        >
+          {text}
+        </Typography>
+      }
+      {type === 'card-heading' &&
+        <Typography
+          variant='h6'
+        >
+          {text}
+        </Typography>
+      }
+      {type === "card-sectionheading" &&
+        <Typography
+          variant="h6"
+          className={classes.sectionHeading}
         >
           {text}
         </Typography>
@@ -31,7 +54,7 @@ export default function Text(props) {
       {type === "card-aboveheading" &&
         <Typography
           variant="button"
-          color="primary" 
+          color="primary"
           component="p">
           {text}
         </Typography>
@@ -39,7 +62,7 @@ export default function Text(props) {
       {type === "card-subheading" &&
         <Typography
           variant="body2"
-          color="textSecondary" 
+          color="textSecondary"
           component="p"
           gutterBottom>
           {text}
