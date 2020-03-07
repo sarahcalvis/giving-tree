@@ -102,7 +102,7 @@ export default function NonprofitAutocomplete(props) {
 
   return (
     <div>
-      {!adding &&
+      {!adding && nonprofits.length > 0 &&
         <Grid container
           direction='row'
           justify='space-between'
