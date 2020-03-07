@@ -159,47 +159,46 @@ function FEditGrant(props) {
   const callback = (data, type) => {
     let newData = { ...grantData };
     let newErrors = { ...errors };
+    let error = '';
 
     if (newErrors.hasOwnProperty(type)) {
       if (type === 'nonprofit_name') {
-        newErrors[type] = helper.validateField(type, data.name);
+        error = helper.validateField(type, data.name);
       } else {
-        newErrors[type] = helper.validateField(type, data);
+        error = helper.validateField(type, data);
       }
+      newErrors[type] = error;
     }
     setErrors(newErrors);
 
-    // if (newErrors[type] === '') {
-    console.log('hi')
-    switch (type) {
-      case 'newTags':
-        setNewTags(data);
-        break;
-      case 'date_deadline':
-        newData.date_deadline = { seconds: data, nanoseconds: 0 };
-        break;
-      case 'images':
-        newData.images = data;
-        break;
-      case 'address':
-        newData.address = data.address.description;
-        newData.lat = data.lat;
-        newData.long = data.long;
-        break;
-      case 'nonprofit_name':
-        console.log(data)
-        newData.nonprofit_name = data.name;
-        newData.nonprofit_id = data.id;
-        break;
-      default:
-        if (newData.hasOwnProperty(type)) {
-          newData[type] = data;
-        }
-      // }
+    if (error === '') {
+      switch (type) {
+        case 'newTags':
+          setNewTags(data);
+          break;
+        case 'date_deadline':
+          newData.date_deadline = { seconds: data, nanoseconds: 0 };
+          break;
+        case 'images':
+          newData.images = data;
+          break;
+        case 'address':
+          newData.address = data.address.description;
+          newData.lat = data.lat;
+          newData.long = data.long;
+          break;
+        case 'nonprofit_name':
+          newData.nonprofit_name = data.name;
+          newData.nonprofit_id = data.id;
+          break;
+        default:
+          if (newData.hasOwnProperty(type)) {
+            newData[type] = data;
+          }
+      }
     }
 
     setGrantData(newData);
-    console.log(grantData);
   }
 
   useEffect(() => {

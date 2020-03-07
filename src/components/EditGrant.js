@@ -176,7 +176,6 @@ export default function EditGrant(props) {
 
   // Get the nonprofit from NonprofitAutocomplete
   const nonprofitCallback = (event, value) => {
-    console.log('hi', value)
     props.callback(value, 'nonprofit_name');
   }
 
