@@ -158,14 +158,19 @@ function FEditGrant(props) {
   // Receive changes to the grant data from EditGrant.js
   const callback = (data, type) => {
     let newData = { ...grantData };
-    let newErrors = {...errors};
+    let newErrors = { ...errors };
 
     if (newErrors.hasOwnProperty(type)) {
-      newErrors[type] = helper.validateField(type, data);
+      if (type === 'nonprofit_name') {
+        newErrors[type] = helper.validateField(type, data.name);
+      } else {
+        newErrors[type] = helper.validateField(type, data);
+      }
     }
     setErrors(newErrors);
 
-    if (newErrors[type] === ''){
+    if (newErrors[type] === '') {
+      console.log('hi')
       switch (type) {
         case 'newTags':
           setNewTags(data);
@@ -181,9 +186,11 @@ function FEditGrant(props) {
           newData.lat = data.lat;
           newData.long = data.long;
           break;
-        case 'nonprofit': 
+        case 'nonprofit_name':
+          console.log(data)
           newData.nonprofit_name = data.name;
           newData.nonprofit_id = data.id;
+          break;
         default:
           if (newData.hasOwnProperty(type)) {
             newData[type] = data;
@@ -192,6 +199,7 @@ function FEditGrant(props) {
     }
 
     setGrantData(newData);
+    console.log(grantData);
   }
 
   useEffect(() => {

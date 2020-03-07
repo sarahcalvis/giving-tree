@@ -176,7 +176,8 @@ export default function EditGrant(props) {
 
   // Get the nonprofit from NonprofitAutocomplete
   const nonprofitCallback = (event, value) => {
-    props.callback(value, 'nonprofit');
+    console.log('hi', value)
+    props.callback(value, 'nonprofit_name');
   }
 
   // Update the images array
