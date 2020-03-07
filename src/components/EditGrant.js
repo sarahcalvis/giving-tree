@@ -211,6 +211,7 @@ export default function EditGrant(props) {
       </div>
       <div className={classes.padding}>
         <Text type='card-heading' text='Affiliated Nonprofit' />
+        <Text type='card-subheading' text={'This information will be publicly visible to donors.'} />
         <NonprofitAutocomplete
           callback={nonprofitCallback}
           cfId={props.cfId}
