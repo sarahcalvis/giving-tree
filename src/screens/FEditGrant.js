@@ -169,33 +169,33 @@ function FEditGrant(props) {
     }
     setErrors(newErrors);
 
-    if (newErrors[type] === '') {
-      console.log('hi')
-      switch (type) {
-        case 'newTags':
-          setNewTags(data);
-          break;
-        case 'date_deadline':
-          newData.date_deadline = { seconds: data, nanoseconds: 0 };
-          break;
-        case 'images':
-          newData.images = data;
-          break;
-        case 'address':
-          newData.address = data.address.description;
-          newData.lat = data.lat;
-          newData.long = data.long;
-          break;
-        case 'nonprofit_name':
-          console.log(data)
-          newData.nonprofit_name = data.name;
-          newData.nonprofit_id = data.id;
-          break;
-        default:
-          if (newData.hasOwnProperty(type)) {
-            newData[type] = data;
-          }
-      }
+    // if (newErrors[type] === '') {
+    console.log('hi')
+    switch (type) {
+      case 'newTags':
+        setNewTags(data);
+        break;
+      case 'date_deadline':
+        newData.date_deadline = { seconds: data, nanoseconds: 0 };
+        break;
+      case 'images':
+        newData.images = data;
+        break;
+      case 'address':
+        newData.address = data.address.description;
+        newData.lat = data.lat;
+        newData.long = data.long;
+        break;
+      case 'nonprofit_name':
+        console.log(data)
+        newData.nonprofit_name = data.name;
+        newData.nonprofit_id = data.id;
+        break;
+      default:
+        if (newData.hasOwnProperty(type)) {
+          newData[type] = data;
+        }
+      // }
     }
 
     setGrantData(newData);
