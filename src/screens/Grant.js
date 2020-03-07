@@ -110,9 +110,7 @@ function Grant(props) {
   // Query image urls
   useEffect(() => {
     if (grantData) {
-      let imag = getUrls(grantData.images);
-      console.log(imag);
-      setImg(imag);
+      getUrls(grantData.images);
     }
   }, [grantData]);
 
@@ -182,22 +180,26 @@ function Grant(props) {
   }
 
   // Load image URLs from image names
-  const getUrls = (imgNames) => {
-    let newImg = [];
-    for (let imgName of imgNames) {
-      storageRef.child(imgName).getDownloadURL().then(function (url) {
-        newImg.push(url);
-      }).catch(function (error) {
-        console.log('error getting image url: ', error)
+  const getUrls = async (imgNames) => {
+    await Promise.all(imgNames.map(imgName =>
+      new Promise((resolve, reject) => {
+        storageRef.child(imgName).getDownloadURL().then((url) => {
+          resolve(url);
+        }).catch(() => {
+          reject(null);
+        })
+      }).then((url) => {
+        return url;
       })
-    }
-    return newImg;
+    )).then((arr) => {
+      setImg(arr);
+    });
   }
 
   //////////////////////
   // The Visible Part //
   //////////////////////
-  
+
   // Styles variable
   const { classes } = props;
 
@@ -246,7 +248,7 @@ function Grant(props) {
                           </Button>
                         </Grid>
                         <Grid item>
-                          <Link 
+                          <Link
                             className={classes.link}
                             to={'/foundation/edit/' + id}>
                             <Button
@@ -281,9 +283,9 @@ function Grant(props) {
                           </Button>
                         </Grid>
                         <Grid item>
-                        <Link 
-                          className={classes.link}
-                          to={'/foundation/edit/' + id}>
+                          <Link
+                            className={classes.link}
+                            to={'/foundation/edit/' + id}>
                             <Button
                               color='primary'
                               variant='contained'>
