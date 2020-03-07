@@ -149,6 +149,9 @@ class TagSearch extends React.Component {
   }
 
   setDefaultAuto(incoming) {
+    if(this.props.tags) {
+      return this.props.tags;
+    }
     if(incoming) {
       return [incoming];
     }else{
@@ -176,8 +179,8 @@ class TagSearch extends React.Component {
              
           <TextField {...params}
             label="Select Tags"
-            variant="outlined"
             fullWidth
+            multiline
             InputProps={{
               ...params.InputProps,
               endAdornment: (
