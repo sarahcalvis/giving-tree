@@ -30,7 +30,9 @@ export default function NonprofitAutocomplete(props) {
   // Select correct nonprofit
   useEffect(() => {
     for (let i in nonprofits) {
-      if (nonprofits[i].id === props.initialNonprofit) {
+      if (props.initialNonprofit === '') {
+        setSelected(0)
+      } else if (nonprofits[i].id === props.initialNonprofit) {
         setSelected(i);
       } else if (i === nonprofits.length - 1) {
       }
@@ -102,87 +104,93 @@ export default function NonprofitAutocomplete(props) {
 
   return (
     <div>
-      {!adding && nonprofits.length > 0 &&
-        <Grid container
-          direction='row'
-          justify='space-between'
-          alignItems='center'>
-          <Grid item xs='8'>
-            <Autocomplete
-              options={transformedNonprofits}
-              getOptionLabel={nonprofits => nonprofits.name}
-              autoHighlight
-              disableClearable
-              defaultValue={transformedNonprofits[selected]}
-              onChange={props.callback}
-              renderInput={params => (
-                <TextField
-                  {...params}
-                  fullWidth
-                  label='Select affiliated nonprofit'
+      {selected > -1 &&
+        <div>
+          {!adding && nonprofits.length > 0 &&
+            <Grid container
+              direction='row'
+              justify='space-between'
+              alignItems='center'>
+              <Grid item xs='8'>
+                <Autocomplete
+                  options={transformedNonprofits}
+                  getOptionLabel={nonprofits => nonprofits.name}
+                  autoHighlight
+                  disableClearable
+                  defaultValue={transformedNonprofits[selected]}
+                  onChange={props.callback}
+                  renderInput={params => (
+                    <TextField
+                      {...params}
+                      fullWidth
+                      onChange={props.callback}
+                      defaultValue={transformedNonprofits[selected]}
+                      label='Select affiliated nonprofit'
+                    />
+                  )}
                 />
-              )}
-            />
-          </Grid>
-          <Grid item>
-            <Button color='primary' variant='contained' onClick={addMode}>Add a new nonprofit</Button>
-          </Grid>
-        </Grid>
-      }
-      <Grid item>
-        {
-          (adding || nonprofits.length == 0) &&
-          <Container>
-            <TextField
-              id='name'
-              fullWidth
-              label='Nonprofit Name'
-              onChange={handleInput}
-              error={errors.name !== ''}
-              helperText={errors.name} />
-            <TextField
-              id='number'
-              fullWidth
-              label='Nonprofit Phone Number'
-              onChange={handleInput}
-              error={errors.number !== ''}
-              helperText={errors.number} />
-            <TextField
-              id='email'
-              fullWidth
-              label='Nonprofit Email'
-              onChange={handleInput}
-              error={errors.email !== ''}
-              helperText={errors.email} />
-            <TextField
-              id='url'
-              fullWidth
-              label='Nonprofit Website'
-              onChange={handleInput}
-              error={errors.url !== ''}
-              helperText={errors.url} />
-            <Grid container direction="row" justify="flex-end" alignItems="center">
-              <Grid item style={{padding: 2}}>
-                <Button
-                  color='primary'
-                  variant='outlined'
-                  onClick={cancelAddMode}>
-                  Cancel
-                </Button>
               </Grid>
-              <Grid item style={{padding: 2}}>
-                <Button
-                  color='primary'
-                  variant='contained'
-                  onClick={addNonprofit}
-                  disabled={!valid}>
-                  Add Nonprofit
-                </Button>
+              <Grid item>
+                <Button color='primary' variant='contained' onClick={addMode}>Add a new nonprofit</Button>
               </Grid>
             </Grid>
-          </Container>
-        }
-      </Grid>
+          }
+          <Grid item>
+            {
+              (adding || nonprofits.length == 0) &&
+              <Container>
+                <TextField
+                  id='name'
+                  fullWidth
+                  label='Nonprofit Name'
+                  onChange={handleInput}
+                  error={errors.name !== ''}
+                  helperText={errors.name} />
+                <TextField
+                  id='number'
+                  fullWidth
+                  label='Nonprofit Phone Number'
+                  onChange={handleInput}
+                  error={errors.number !== ''}
+                  helperText={errors.number} />
+                <TextField
+                  id='email'
+                  fullWidth
+                  label='Nonprofit Email'
+                  onChange={handleInput}
+                  error={errors.email !== ''}
+                  helperText={errors.email} />
+                <TextField
+                  id='url'
+                  fullWidth
+                  label='Nonprofit Website'
+                  onChange={handleInput}
+                  error={errors.url !== ''}
+                  helperText={errors.url} />
+                <Grid container direction="row" justify="flex-end" alignItems="center">
+                  <Grid item style={{ padding: 2 }}>
+                    <Button
+                      color='primary'
+                      variant='outlined'
+                      onClick={cancelAddMode}>
+                      Cancel
+                </Button>
+                  </Grid>
+                  <Grid item style={{ padding: 2 }}>
+                    <Button
+                      color='primary'
+                      variant='contained'
+                      onClick={addNonprofit}
+                      disabled={!valid}>
+                      Add Nonprofit
+                </Button>
+                  </Grid>
+                </Grid>
+              </Container>
+            }
+          </Grid>
+        </div>
+      }
     </div >
   )
 }
