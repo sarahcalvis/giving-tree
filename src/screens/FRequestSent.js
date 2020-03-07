@@ -21,7 +21,7 @@ function FRequestSent() {
   const authUser = useContext(AuthUserContext);
 
   useEffect(() => {
-    if(authUser.status === 'current'){
+    if(authUser?.status === 'current'){
       this.props.history.push('/foundation');
     }
   }, [authUser]);

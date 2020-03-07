@@ -82,6 +82,9 @@ class FAccountRequest extends Component {
 
   onSubmit = event => {
     if (this.state.isValid) {
+      //Prevent user from clicking button multiple times while firebase executes
+      this.setState({ isValid: false });
+      
       const { personal_email, passwordOne } = this.state;
 
       firebase.auth().createUserWithEmailAndPassword(personal_email, passwordOne)

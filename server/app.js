@@ -146,5 +146,5 @@ app.post('/setCustomClaims', (req, res) => {
   });
 });
 
-// app.listen(process.env.PORT);
-app.listen(9000, () => console.log('Listening on port 9000')); 	
+app.listen(process.env.PORT);
+// app.listen(9000, () => console.log('Listening on port 9000')); 	
