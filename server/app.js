@@ -69,6 +69,8 @@ app.post('/setCustomClaims', (req, res) => {
 
   // Verify the ID token and decode its payload.
   admin.auth().verifyIdToken(idToken).then((claims) => {
+    console.log('verified token\n');
+
     //Check if metaadmin
     if (typeof claims.admin !== 'undefined' && claims.admin) {
       //Check that cfEmail and cfStatus were provided in request
@@ -103,23 +105,29 @@ app.post('/setCustomClaims', (req, res) => {
       }
     }
     else {
+      console.log('not metaadmin\n');
       //Not metaadmin, so we this post must be made from CF Account Request
       //Get and store the cf document record id in the claims object
       admin.auth().getUser(claims.sub)
-        .then((claims, user) => {
+        .then((user) => {
+          console.log('got user\n');
           admin.firestore().collection('communityFoundations').where('personal_email', '==', user.email)
             .get()
             .then(function (querySnapshot) {
               querySnapshot.forEach(function (doc) {
+              console.log('got cf!\n' );
                 admin.auth().setCustomUserClaims(claims.sub, { cfId: doc.id, status: 'requested' })
                   .then(() => {
+                  console.log('set cc!\n');
                     // Tell client to refresh token on user.
                     res.end(JSON.stringify({ status: 'success' }));
                   })
                   .catch((error) => {
+                  console.log('failed cc!\n');
+
                     res.end(JSON.stringify({ status: error }));
                   });
-
+                  console.log('after cc\n');
               });
             })
             .catch((error) => {
@@ -129,10 +137,14 @@ app.post('/setCustomClaims', (req, res) => {
         .catch((error) => {
           res.end(JSON.stringify({ status: error }));
         });
+        console.log('end of not metaadmin\n');
     }
+  })
+  .catch((error) => {
+    console.log('NOOO at the end\n');
+    res.end(JSON.stringify({ status: error }));
   });
-
-  res.end(JSON.stringify({ status: "ERROR: End of method; endpoint executed without resolving." }));
 });
 
-app.listen(process.env.PORT);
+// app.listen(process.env.PORT);
+app.listen(9000, () => console.log('Listening on port 9000')); 	
