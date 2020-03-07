@@ -157,7 +157,6 @@ function FEditGrant(props) {
 
   // Receive changes to the grant data from EditGrant.js
   const callback = (data, type) => {
-    console.log(data, type)
     let newData = { ...grantData };
     let newErrors = {...errors};
 
@@ -182,6 +181,9 @@ function FEditGrant(props) {
           newData.lat = data.lat;
           newData.long = data.long;
           break;
+        case 'nonprofit': 
+          newData.nonprofit_name = data.name;
+          newData.nonprofit_id = data.id;
         default:
           if (newData.hasOwnProperty(type)) {
             newData[type] = data;
@@ -193,7 +195,6 @@ function FEditGrant(props) {
   }
 
   useEffect(() => {
-    console.log(grantData);
     setValid(
       helper.validateField('title', grantData.title) === '' &&
       helper.validateField('desc', grantData.desc) === '' &&
@@ -202,13 +203,6 @@ function FEditGrant(props) {
       helper.validateField('goal_amt', grantData.goal_amt) === '' &&
       helper.validateField('address', grantData.address) === ''
     )
-    console.log('valid', valid,
-      'title', helper.validateField('title', grantData.title) === '',
-      'desc', helper.validateField('desc', grantData.desc) === '',
-      'nonprofit_name', helper.validateField('nonprofit_name', grantData.nonprofit_name) === '',
-      'date_deadline', helper.validateField('date_deadline', grantData.date_deadline) === '',
-      'goal_amt', helper.validateField('goal_amt', grantData.goal_amt) === '',
-      'address', helper.validateField('address', grantData.address) === '')
   }, [grantData])
 
   //////////////////

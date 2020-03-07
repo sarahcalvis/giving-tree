@@ -30,7 +30,6 @@ export default function NonprofitAutocomplete(props) {
   // Select correct nonprofit
   useEffect(() => {
     for (let i in nonprofits) {
-      console.log(nonprofits[i].id, props.initialNonprofit)
       if (nonprofits[i].id === props.initialNonprofit) {
         setSelected(i);
       } else if (i === nonprofits.length - 1) {

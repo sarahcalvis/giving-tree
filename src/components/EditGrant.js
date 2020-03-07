@@ -128,8 +128,6 @@ export default function EditGrant(props) {
     });
   }
 
-  useEffect(() => { console.log(url) }, [url])
-
   // Observe the image array. When an image name is added, reload the image urls
   useEffect(() => {
     getUrls(img);
@@ -138,28 +136,11 @@ export default function EditGrant(props) {
 
   // Delete an image
   const removeImage = async (event) => {
-    console.log('name of the image to be deleted: ', event.target.parentNode.id)
-    const deleteMe = event.target.parentNode.id;
     let newImg = [];
-
     img.forEach((i, index, img) => {
       if (i !== event.target.parentNode.id) newImg.push(i);
       if (newImg.length === img.length - 1) setImg(newImg);
     });
-
-  
-
-    // await Promise.all(img.map(imgName =>
-    //   new Promise((resolve, reject) => {
-    //     resolve(imgName);
-    //   }).then((imgName) => {
-    //     if (imgName !== deleteMe) return imgName;
-    //     else return null;
-    //   })
-    // )).then((imgNames) => {
-    //   console.log(imgNames);
-    //   setImg(imgNames);
-    // });
   }
 
 
@@ -195,8 +176,7 @@ export default function EditGrant(props) {
 
   // Get the nonprofit from NonprofitAutocomplete
   const nonprofitCallback = (event, value) => {
-    props.callback(value.id, 'nonprofit_id');
-    props.callback(value.name, 'nonprofit_name');
+    props.callback(value, 'nonprofit');
   }
 
   // Update the images array
