@@ -30,7 +30,6 @@ function Header(props) {
   const [auth, setAuth] = React.useState(true);
   const [errorMsg, setErrorMsg] = React.useState('');
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
 
   const handleChange = event => {
     setAuth(event.target.checked);
@@ -45,6 +44,7 @@ function Header(props) {
   };
 
   const logout = () => {
+    handleClose();
     firebase.auth().signOut().then(() => {
       props.history.push('/signin');
     }).catch((error) => {
@@ -103,7 +103,7 @@ function Header(props) {
                 vertical: 'top',
                 horizontal: 'right',
               }}
-              open={open}
+              open={Boolean(anchorEl)}
               onClose={handleClose}
             >
             {props.authUser ? <SignedIn/> : <SignedOut/>}
