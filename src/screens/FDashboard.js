@@ -1,4 +1,4 @@
-import React, { useEffect, withContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import SmallGrantCard from '../components/SmallGrantCard.js';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
@@ -20,38 +20,18 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function FDashboard(props) {
+
+  const classes = useStyles();
+
   // List of small grant cards
   const [grants, setGrants] = React.useState([]);
   const [expiredGrants, setExpiredGrants] = React.useState([]);
   const [currentGrants, setCurrentGrants] = React.useState([]);
   const [draftedGrants, setDraftedGrants] = React.useState([]);
-  const [shownGrants, setShownGrants] = React.useState(currentGrants);
-  const [status, setStatus] = React.useState();
+  const [toggleBarStatus, setToggleBarStatus] = React.useState('current');
 
-  const handleChange = (event, newStatus) => {
-    setStatus(newStatus);
-    if(newStatus === 'current') {
-        setShownGrants(currentGrants);
-    } else if(newStatus === 'drafted') {
-        setShownGrants(draftedGrants);
-    } else {
-        setShownGrants(expiredGrants);
-    }
-  };
-
-  const children = [
-    <ToggleButton key={1} value="current">
-      Current
-    </ToggleButton>,
-    <ToggleButton key={2} value="drafted">
-      Drafted
-    </ToggleButton>,
-    <ToggleButton key={3} value="expired">
-      Expired
-    </ToggleButton>
-  ];
   // Foundation ID
-  const cfId = 'p80ZpdUu9hx6nVoYO6Do'; //withContext(UserAuthContext)//.cfId;
+  const user = useContext(UserAuthContext);
 
   // Initialize database and specific grant in database
   const db = firebase.firestore();
@@ -59,12 +39,13 @@ export default function FDashboard(props) {
   const [snapshot, loading, error] = useCollection(db.collection('grants'));
 
   useEffect(() => {
-    var newGrants = [];
-    var newDocs = [];
+    let newGrants = [];
+    let newDocs = [];
+
     if (!loading && !error) {
       snapshot.forEach(function (doc) {
-        if(doc.data().cf_id === cfId) {
-            newDocs.push({
+        if (doc.data().cf_id === user?.cfId) {
+          newDocs.push({
             dist: -1,
             id: doc.id,
             title: doc.data().title,
@@ -82,20 +63,20 @@ export default function FDashboard(props) {
             desc: doc.data().desc,
             tags: doc.data().tags,
             status: doc.data().status,
-            });
-            let grant = <SmallGrantCard
-                        id={doc.id}
-                        title={doc.data().title}
-                        cfName={doc.data().cf_name}
-                        nonprofitName={doc.data().nonprofit_name}
-                        goalAmt={doc.data().goal_amt}
-                        moneyRaised={doc.data().money_raised}
-                        img={doc.data().images[0] || 'GivingTree.png'} />;
-            newGrants.push(grant);
+          });
+          let grant = <SmallGrantCard
+            id={doc.id}
+            title={doc.data().title}
+            cfName={doc.data().cf_name}
+            nonprofitName={doc.data().nonprofit_name}
+            goalAmt={doc.data().goal_amt}
+            moneyRaised={doc.data().money_raised}
+            img={doc.data().images[0] || 'GivingTree.png'} />;
+          newGrants.push(grant);
         }
       });
-      setGrants(newGrants, ()=> {
-        setStatus('current');
+      setGrants(newGrants, () => {
+        setToggleBarStatus('current');
       });
       console.log("newDocs: ", newDocs);
       setDocs(newDocs);
@@ -106,26 +87,26 @@ export default function FDashboard(props) {
     var curGrants = [];
     var exGrants = [];
     var drGrants = [];
-    docs.forEach((doc)=> {
-        let grant = <SmallGrantCard
-                        id={doc.id}
-                        title={doc.title}
-                        cfName={doc.cfName}
-                        nonprofitName={doc.nonprofitName}
-                        goalAmt={doc.goalAmt}
-                        moneyRaised={doc.moneyRaised}
-                        img={doc.img}/>;
-        if(doc.status === 'current') {
-            curGrants.push(grant);
-        } else if (doc.status === 'draft') {
-            drGrants.push(grant);
-        } else if (doc.status === 'expired') {
-            exGrants.push(grant);
-        }
+    docs.forEach((doc) => {
+      let grant = <SmallGrantCard
+        id={doc.id}
+        title={doc.title}
+        cfName={doc.cfName}
+        nonprofitName={doc.nonprofitName}
+        goalAmt={doc.goalAmt}
+        moneyRaised={doc.moneyRaised}
+        img={doc.img} />;
+      if (doc.status === 'current') {
+        curGrants.push(grant);
+      } else if (doc.status === 'draft') {
+        drGrants.push(grant);
+      } else if (doc.status === 'expired') {
+        exGrants.push(grant);
+      }
     });
-      setCurrentGrants(curGrants);
-      setDraftedGrants(drGrants);
-      setExpiredGrants(exGrants);
+    setCurrentGrants(curGrants);
+    setDraftedGrants(drGrants);
+    setExpiredGrants(exGrants);
   }, [grants, docs]);
 
   function searchCallback(childData) {
@@ -147,7 +128,21 @@ export default function FDashboard(props) {
     console.log("newGrants: ", newGrants);
   }
 
-  const classes = useStyles();
+  const handleToggle = (event, status) => {
+    setToggleBarStatus(status);
+  };
+
+  const buttonOptions = [
+    <ToggleButton key={1} value="current">
+      Current
+    </ToggleButton>,
+    <ToggleButton key={2} value="drafted">
+      Drafted
+    </ToggleButton>,
+    <ToggleButton key={3} value="expired">
+      Expired
+    </ToggleButton>
+  ];
 
   return (
     <Container maxWidth='md' className={classes.container}>
@@ -155,14 +150,14 @@ export default function FDashboard(props) {
         <div>
           <Grid container spacing={2} direction="column" alignItems="center">
             <Grid item className={classes.toggleBar}>
-                <ToggleButtonGroup size="small" value={status} exclusive onChange={handleChange}>
-                {children}
-                </ToggleButtonGroup>
+              <ToggleButtonGroup size="small" value={toggleBarStatus} exclusive onChange={handleToggle}>
+                {buttonOptions}
+              </ToggleButtonGroup>
             </Grid>
           </Grid>
           <Search docs={docs} parentCallback={searchCallback} />
           <Grid container spacing={2} >
-            {shownGrants}
+            {toggleBarStatus === 'current' ? currentGrants : toggleBarStatus === 'drafted' ? draftedGrants : expiredGrants}
           </Grid>
         </div>
       }
