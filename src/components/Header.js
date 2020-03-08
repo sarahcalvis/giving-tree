@@ -27,13 +27,8 @@ const useStyles = makeStyles(theme => ({
 
 function Header(props) {
   const classes = useStyles();
-  const [auth, setAuth] = React.useState(true);
   const [errorMsg, setErrorMsg] = React.useState('');
   const [anchorEl, setAnchorEl] = React.useState(null);
-
-  const handleChange = event => {
-    setAuth(event.target.checked);
-  };
 
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
