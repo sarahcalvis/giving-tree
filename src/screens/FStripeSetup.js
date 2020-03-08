@@ -84,10 +84,10 @@ export default function FStripeSetup() {
             </DialogContent>
             <DialogActions>
               <Link
-              textDecoration='none'
-              color='inherit'
-              href='https://stripe.com/about'
-              target='_blank'
+                textDecoration='none'
+                color='inherit'
+                href='https://stripe.com/about'
+                target='_blank'
               >
                 <Button onClick={handleClose} color="primary">
                   Learn More
