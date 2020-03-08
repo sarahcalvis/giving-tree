@@ -7,28 +7,27 @@ admin.initializeApp({
   databaseURL: "https://givingtree-cfs.firebaseio.com"
 });
 
-
+//------------------------------------------------------------
 //Script to add status and cfId to accounts
 //Add the uids into this array and then run this file
-const uids = ['0000','00000'];
+//------------------------------------------------------------
+
+const uids = ['QJbnn1tU1EUCnllEGBAW4ZuLMG42', 'fn7ctzdQSRaDnSy3sd3qtnoHOnH2', 'nGhCVWTti7RFjVxOjbjwNgjxkWi1', 'raVpBAbRpXUscVkcxC3KXo1KZm22'];
 
 uids.forEach((uid) => {
   admin.auth().getUser(uid)
     .then((user) => {
-      console.log('uid: ' + uid + ' \n');
       admin.firestore().collection('communityFoundations').where('personal_email', '==', user.email)
         .get()
         .then(function (querySnapshot) {
           querySnapshot.forEach(function (doc) {
-            console.log('got cf!\n');
             admin.auth().setCustomUserClaims(uid, { cfId: doc.id, status: 'requested' })
               .then(() => {
-                console.log('set cc!\n');
+                console.log('Set claims for ' + uid);
               })
               .catch((error) => {
-                console.log('failed cc!\n');
+                console.log('failed cc!');
               });
-            console.log('after cc\n');
           });
         })
         .catch((error) => {
@@ -38,5 +37,40 @@ uids.forEach((uid) => {
     .catch((error) => {
       console.log("Err err err err " + error);
     });
-
 });
+
+//------------------------------------------------------------
+//Script to delete accounts
+//Add the uids into this array and then run this file
+//------------------------------------------------------------
+
+const uidsDelete = [];
+
+uidsDelete.forEach((uid) => {
+  admin.auth().deleteUser(uid)
+    .then(function () {
+      console.log('Successfully deleted user');
+    })
+    .catch(function (error) {
+      console.log('Error deleting user:', error);
+    });
+});
+
+
+
+
+//------------------------------------------------------------
+//Script to delete all requested CFs
+//------------------------------------------------------------
+
+// admin.firestore().collection("communityFoundations").where('status', '==', 'requested')
+//   .get()
+//   .then(function (querySnapshot) {
+//     querySnapshot.forEach(function (doc) {
+//       admin.firestore().collection("communityFoundations").doc(doc.id).delete().then(function () {
+//         console.log("Document successfully deleted!");
+//       }).catch(function (error) {
+//         console.error("Error removing document: ", error);
+//       });
+//     });
+//   });
