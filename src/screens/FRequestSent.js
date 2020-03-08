@@ -21,7 +21,7 @@ function FRequestSent() {
   const authUser = useContext(AuthUserContext);
 
   useEffect(() => {
-    if(authUser.accepted){
+    if(authUser?.status === 'current'){
       this.props.history.push('/foundation');
     }
   }, [authUser]);
@@ -39,6 +39,6 @@ function FRequestSent() {
 }
 
 
-const condition = (authUser) => authUser && authUser.cf;
-
-export default withAuthProtection(condition)(withRouter(FRequestSent));
+// const condition = (authUser) => authUser &&  !!authUser.status;
+// export default withAuthProtection(condition)(withRouter(FRequestSent));
+export default withRouter(FRequestSent);
