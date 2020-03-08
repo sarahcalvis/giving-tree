@@ -44,7 +44,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function Foundation(props) {
+export default function FoundationCard(props) {
   const classes = useStyles();
   const bull = <span className={classes.bullet}>•</span>;
   const [open, setOpen] = React.useState(false);
