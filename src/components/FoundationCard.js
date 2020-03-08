@@ -3,32 +3,26 @@ import React from 'react';
 import WarningModal from './WarningModal.js';
 
 import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
+import { Card, CardHeader, CardContent, CardActions } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
-
+import IconButton from '@material-ui/core/IconButton';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 const useStyles = makeStyles(theme => ({
   card: {
-    paddingLeft: '4em',
-    paddingRight: '4em',
-    marginLeft: '2em',
-    marginRight: '2em',
-    marginTop: '2em',
-    maxWidth: '90%',
+    maxWidth: 850,
+    margin: '10px',
   },
-  bullet: {
-    display: 'inline-block',
-    margin: '0 2px',
-    transform: 'scale(0.8)',
+  cardHeader: {
+    paddingBottom: '0px',
   },
-  button: {
-    paddingLeft: '4em',
-    paddingRight: '4em',
-    marginRight: '1em',
+  sub1: {
+    fontWeight: 'bold',
+  },
+  sub2: {
+    fontWeight: 'normal',
   },
   modal: {
     display: "flex",
@@ -46,62 +40,115 @@ const useStyles = makeStyles(theme => ({
 
 export default function FoundationCard(props) {
   const classes = useStyles();
-  const bull = <span className={classes.bullet}>•</span>;
-  const [open, setOpen] = React.useState(false);
+  const [modalOpen, setModalOpen] = React.useState(false);
 
-
+  //Open warning modal
   const handleOpen = () => {
-    console.log("handling the open");
-    setOpen(true);
+    setModalOpen(true);
   };
 
+  //Yes on warning modal
   const handleYes = () => {
-    console.log("handling the yes");
-    setOpen(false);
+    setModalOpen(false);
   };
 
+  //No on warning modal
   const handleClose = () => {
-    console.log("handling the close");
-    setOpen(false);
+    setModalOpen(false);
   };
 
+  //Approve button
   const handleApprove = () => {
     console.log("handling approve");
   };
 
+  const {
+    name,
+    public_email,
+    public_phone,
+    personal_email,
+    personal_phone,
+    foundation_url,
+    fname_contact,
+    lname_contact,
+    status,
+    date_requested,
+    date_approved,
+    date_denied,
+    date_deactivated,
+  } = props.data;
+
+  const setSubheader = () => {
+    let str = 'Requested on ' + date_requested;
+
+    if (!!date_approved) {
+      str += ', Approved on ' + date_approved;
+    }
+    if (!!date_denied) {
+      str += ', Denied on ' + date_denied;
+    }
+    if (!!date_deactivated) {
+      str += ', Deactivated on ' + date_deactivated;
+    }
+
+    return str;
+  };
+
   return (
-    <div>
-      <Card className={classes.card}>
-        <CardActionArea>
-          <CardContent className={classes.cardContent}>
-            <div>
-              <Typography gutterBottom variant="h5" component="h2">
-                Woot Woot
-            </Typography>
-              <Typography variant="h5" component="h2">
-                be{bull}nev{bull}o{bull}lent
-            </Typography>
-            </div>
-          </CardContent>
-        </CardActionArea>
-        <CardActions>
-          <Button variant="outlined" color="secondary" onClick={handleApprove} className={classes.button}>
-            Approve
+    <Card className={classes.card}>
+      <CardHeader
+        className={classes.cardHeader}
+        action={
+          <IconButton aria-label="settings">
+            <MoreVertIcon />
+          </IconButton>
+        }
+        title={name}
+        subheader={setSubheader()}
+      />
+      <CardContent>
+        <Grid container spacing={2} xs={12}>
+          <Grid item xs={6}>
+            <Typography variant="subtitle1" className={classes.sub1}> Foundation Info</Typography>
+            <Typography variant="subtitle2" className={classes.sub2} noWrap>{foundation_url}</Typography>
+            <Typography variant="subtitle2" className={classes.sub2} noWrap>{public_email}</Typography>
+            <Typography variant="subtitle2" className={classes.sub2}>{public_phone}</Typography>
+          </Grid>
+          <Grid item xs={6}>
+            <Typography variant="subtitle1" className={classes.sub1}>Personal Info</Typography>
+            <Typography variant="subtitle2" className={classes.sub2} noWrap>{fname_contact + ' ' + lname_contact}</Typography>
+            <Typography variant="subtitle2" className={classes.sub2} noWrap>{personal_email}</Typography>
+            <Typography variant="subtitle2" className={classes.sub2}>{personal_phone}</Typography>
+          </Grid>
+        </Grid>
+      </CardContent>
+
+
+
+      <div>
+        {false &&
+          <CardActions>
+            <Button variant="outlined" color="secondary" onClick={handleApprove} className={classes.button}>
+              Approve
         </Button>
-          <Button variant="outlined" color="primary" onClick={handleOpen} className={classes.button}>
-            Deny
+            <Button variant="outlined" color="primary" onClick={handleOpen} className={classes.button}>
+              Deny
         </Button>
-        </CardActions>
-        <CardContent className={classes.cardContent}>
+          </CardActions>}
+      </div>
+
+      <div>
+        {false &&
           <WarningModal
-            open={open}
+            open={modalOpen}
             handleClose={handleClose}
             handleYes={handleYes}
             cfName={props.cfName}
-          ></WarningModal>
-
-        </CardContent>
-      </Card>
-    </div>
+          ></WarningModal>}
+      </div>
+    </Card>
   );
 }
+
+
+

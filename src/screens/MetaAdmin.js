@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import { useCollection } from 'react-firebase-hooks/firestore';
 
-import FoundationCard from '../components/Foundation.js';
+import FoundationCard from '../components/FoundationCard.js';
+import firebase from '../firebase.js';
+
+import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
-import { useCollection } from 'react-firebase-hooks/firestore';
-import firebase from '../firebase.js';
 import { makeStyles } from '@material-ui/core/styles';
 import ToggleButton from '@material-ui/lab/ToggleButton';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
@@ -21,7 +23,7 @@ const useStyles = makeStyles(theme => ({
 function MetaAdmin(props) {
   const classes = useStyles();
 
-  const [toggleBarStatus, setToggleBarStatus] = React.useState('requested');
+  const [toggleBarStatus, setToggleBarStatus] = React.useState('current');
   const [reqCfs, setReqCfs] = React.useState();
   const [curCfs, setCurCfs] = React.useState();
   const [denCfs, setDenCfs] = React.useState();
@@ -59,8 +61,8 @@ function MetaAdmin(props) {
     }
   }, [snapshot, error, loading]);
 
-  const handleToggle = (event) => {
-    setToggleBarStatus(event.target.value);
+  const handleToggle = (event, status) => {
+    setToggleBarStatus(status);
   };
 
   const buttonOptions = [
@@ -77,7 +79,7 @@ function MetaAdmin(props) {
 
   return (
     <Container maxWidth='md' className={classes.container}>
-      <div>
+    <Typography variant="h4">Meta-Admin</Typography>
         <Grid container spacing={2} direction="column" alignItems="center">
           <Grid item className={classes.toggleBar}>
             <ToggleButtonGroup size="small" value={toggleBarStatus} exclusive onChange={handleToggle}>
@@ -85,10 +87,9 @@ function MetaAdmin(props) {
             </ToggleButtonGroup>
           </Grid>
         </Grid>
-        <Grid container spacing={2} >
+        <Grid item spacing={2} xs={12} >
           {toggleBarStatus === 'requested' ? reqCfs : toggleBarStatus === 'current' ? curCfs : denCfs}
-      </Grid>
-      </div>
+        </Grid>
     </Container>
   );
 }
