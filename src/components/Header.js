@@ -74,7 +74,7 @@ function Header(props) {
             className={classes.menuButton}
             color="inherit"
             aria-label="menu"
-            to={props.authUser?.cf ? '/foundation' : '/'}
+            to={props.authUser?.status !== '' ? '/foundation' : '/'}
             component={Link}>
             <img src={logo} alt="Logo" height="40" width="40" />
           </IconButton>
