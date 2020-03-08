@@ -80,71 +80,71 @@ class FAccountRequest extends Component {
     this.state = { ...INITIAL_STATE };
   }
 
-  addDocument = () => {
-    const cfDoc = {...this.state};
-    delete cfDoc.errors;
-    delete cfDoc.passwordOne;
-    delete cfDoc.passwordTwo;
-    delete cfDoc.isValid;
-    cfDoc.status = 'requested';
-
-    firebase.firestore().collection("communityFoundations").doc().set(cfDoc)
-      .then(() => {
-        //console.log("Document successfully written!");
-      })
-      .catch((error) => {
-        console.error("Error writing document: ", error);
-      });
-  }
-
   onSubmit = event => {
     if (this.state.isValid) {
+      //Prevent user from clicking button multiple times while firebase executes
+      this.setState({ isValid: false });
+      
       const { personal_email, passwordOne } = this.state;
 
       firebase.auth().createUserWithEmailAndPassword(personal_email, passwordOne)
         .then((result) => {
           //Do Misc Stuff for Foundation Account
-          //Post to Server? Set firebase rules?
+          const cfDoc = { ...this.state };
+          delete cfDoc.errors;
+          delete cfDoc.passwordOne;
+          delete cfDoc.passwordTwo;
+          delete cfDoc.isValid;
+          cfDoc.status = 'requested';
 
-          // User is signed in. Get the ID token.
-          result.user.getIdToken().then((idToken) => {
-            // Pass the ID token to the server.
-            $.post(
-              '/setCustomClaims',
-              {
-                idToken: idToken,
-              },
-              (data, status) => {
-                // This is not required. You could just wait until the token is expired
-                // and it proactively refreshes.
-                if (status === 'success' && data) {
-                  const json = JSON.parse(data);
-                  if (json && json.status === 'success') {
-                    // Force token refresh. The token claims will contain the additional claims.
-                    firebase.auth().currentUser.getIdToken(true);
-                  }
-                }
-                else {
-                  console.log("ERROR: " + data);
-                }
-              });
-          })
+          firebase.firestore().collection("communityFoundations").doc().set(cfDoc)
+            .then(() => {
+              console.log("Document successfully written!");
+              // User is signed in. Get the ID token.
+              result.user.getIdToken().then((idToken) => {
+                // Pass the ID token to the server.
+                $.post(
+                  '/setCustomClaims',
+                  {
+                    idToken: idToken,
+                  },
+                  (data, status) => {
+                    // This is not required. You could just wait until the token is expired
+                    // and it proactively refreshes.
+                    if (status === 'success' && data) {
+                      const json = JSON.parse(data);
+                      if (json && json.status === 'success') {
+                        // Force token refresh. The token claims will contain the additional claims.
+                        firebase.auth().currentUser.getIdToken(true);
+                      }
+                    }
+                    else {
+                      console.log("ERROR: " + data);
+                    }
+                  })
+                  .then(() => {
+                    this.props.history.push('/request-sent');
+                  })
+                  .catch((error) => {
+                    console.log("Error with custom claims post");
+                    this.setState({ errors: { ...this.state.errors, submit: error.message } });
+                  });
+              })
+                .catch((error) => {
+                  console.log("Error with getIdToken()");
+                  //Failure
+                  this.setState({ errors: { ...this.state.errors, submit: error.message } });
+                });
+            })
             .catch((error) => {
-              console.log("Error with getIdToken()");
-              //Failure
-              this.setState({ errors: { ...this.state.errors, submit: error.message } });
+              console.error("Error writing document: ", error);
             });
-
         })
         .catch((error) => {
           console.log("Error creating user.");
           //Failure
           //TODO: Cleanup Firebase Error Messages
           this.setState({ errors: { ...this.state.errors, submit: error.message } });
-        })
-        .then(this.addDocument)
-        .then(() => {
-          this.props.history.push('/request-sent');
         });
 
       event.preventDefault();
