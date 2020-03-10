@@ -71,7 +71,8 @@ export default function FDashboard(props) {
             nonprofitName={doc.data().nonprofit_name}
             goalAmt={doc.data().goal_amt}
             moneyRaised={doc.data().money_raised}
-            img={doc.data().images[0] || 'GivingTree.png'} />;
+            img={doc.data().images[0] || 'GivingTree.png'}
+            status={doc.data().status} />;
           newGrants.push(grant);
         }
       });
@@ -111,10 +112,12 @@ export default function FDashboard(props) {
 
   function searchCallback(childData) {
     console.log("childData in dashboard: ", childData);
+    var curGrants = [];
+    var exGrants = [];
+    var drGrants = [];
     var newGrants = [];
     childData.forEach((meta) => {
-      newGrants.push(
-        <SmallGrantCard
+      let grant = <SmallGrantCard
           id={meta.grant.id}
           title={meta.grant.title}
           cfName={meta.grant.cfName}
@@ -122,9 +125,19 @@ export default function FDashboard(props) {
           goalAmt={meta.grant.goalAmt}
           moneyRaised={meta.grant.moneyRaised}
           img={meta.grant.img} />
-      );
+      newGrants.push(grant);
+      if (meta.grant.status === 'current') {
+        curGrants.push(grant);
+      } else if (meta.grant.status === 'draft') {
+        drGrants.push(grant);
+      } else if (meta.grant.status === 'expired') {
+        exGrants.push(grant);
+      }
     });
     setGrants(newGrants);
+    setCurrentGrants(curGrants);
+    setDraftedGrants(drGrants);
+    setExpiredGrants(exGrants);
     console.log("newGrants: ", newGrants);
   }
 
