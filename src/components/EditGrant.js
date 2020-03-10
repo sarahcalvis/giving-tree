@@ -58,6 +58,11 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
+export const getDateFromSeconds = (seconds) => {
+  console.log(new Date(seconds * 1000))
+  return new Date(seconds * 1000);
+}
+
 export default function EditGrant(props) {
   // Styles
   const classes = useStyles();
@@ -74,7 +79,7 @@ export default function EditGrant(props) {
 
   // Hold the date selected by the date picker
   const [selectedDate, handleDateChange] = React.useState(
-    (props.grantData.date_deadline !== '') ? new Date(props.grantData.date_deadline.seconds * 1000) : null
+    (props.grantData.date_deadline !== '') ? getDateFromSeconds(props.grantData.date_deadline.seconds) : null
   );
 
   ///////////
