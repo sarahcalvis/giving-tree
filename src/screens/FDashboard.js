@@ -83,7 +83,7 @@ export default function FDashboard(props) {
       setDocs(newDocs);
     }
   }, [snapshot, error, loading]);
-
+/*
   useEffect(() => {
     var curGrants = [];
     var exGrants = [];
@@ -109,7 +109,7 @@ export default function FDashboard(props) {
     setDraftedGrants(drGrants);
     setExpiredGrants(exGrants);
   }, [grants, docs]);
-
+*/
   function searchCallback(childData) {
     console.log("childData in dashboard: ", childData);
     var curGrants = [];
