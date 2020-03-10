@@ -162,24 +162,46 @@ class Search extends Component {
   }
 
   render() {
-    return (
-      <div className={styles.searchWrapper}>
-        <Grid container spacing={2} >
-          <Grid item xs={12} md={6}>
-            <TagSearch parentCallback={this.tagFreeTextCallback}/>
+    let width = window.innerWidth;
+    if (width > 768) {
+      return (
+        <div className={styles.searchWrapper}>
+          <Grid container spacing={2} maxWidth={500}>
+            <Grid item xs={12} md={6}>
+              <TagSearch parentCallback={this.tagFreeTextCallback}/>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <LocationSearch parentCallback={this.locationCallback}/>
+            </Grid>
+            <Grid item xs={6}>
+              <SearchRadius parentCallback={this.radiusCallback}/>
+            </Grid>
+            <Grid item xs={6}>
+              <SortBy parentCallback={this.sortByCallback}/>
+            </Grid>
           </Grid>
-          <Grid item xs={12} md={6}>
-            <LocationSearch parentCallback={this.locationCallback}/>
+        </div>  
+      );
+    } else {
+      return (
+        <div className={styles.searchWrapper}>
+          <Grid container spacing={2} >
+            <Grid item xs={12} md={6}>
+              <TagSearch parentCallback={this.tagFreeTextCallback}/>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <LocationSearch parentCallback={this.locationCallback}/>
+            </Grid>
+            <Grid item xs={6}>
+              <SearchRadius parentCallback={this.radiusCallback}/>
+            </Grid>
+            <Grid item xs={6}>
+              <SortBy parentCallback={this.sortByCallback}/>
+            </Grid>
           </Grid>
-          <Grid item xs={6}>
-            <SearchRadius parentCallback={this.radiusCallback}/>
-          </Grid>
-          <Grid item xs={6}>
-            <SortBy parentCallback={this.sortByCallback}/>
-          </Grid>
-        </Grid>
-      </div>  
-    );
+        </div>  
+      );
+    }
   }
 }
 
