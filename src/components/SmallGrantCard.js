@@ -39,7 +39,7 @@ export default function SmallGrantCard(props) {
       <Card elevation={3} className={classes.card}>
         <CardActionArea
           component={Link}
-          to={'/grants/' + props.id}>
+          to={'/foundation/grant/' + props.id || '/grants/' + props.id}>
           {!loading && !error &&
             <CardMedia
               className={classes.cardMedia}
