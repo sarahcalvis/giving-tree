@@ -5,6 +5,7 @@ import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
+import CssBaseline from '@material-ui/core/CssBaseline';
 
 function Copyright() {
   return (
@@ -20,10 +21,6 @@ function Copyright() {
 }
 
 const useStyles = makeStyles(theme => ({
-  footerRoot: {
-    align: 'center',
-    minHeight: '10vh',
-  },
   footer: {
     padding: theme.spacing(3, 2),
     marginTop: 'auto',
@@ -31,15 +28,23 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'center',
     backgroundColor: theme.palette.grey[300],
   },
+  root: {
+    align: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    minHeight: '10vh',
+  },
 }));
 
 export default function Footer() {
   const classes = useStyles();
   return (
-    <div className={classes.footerRoot}>
-        <Container className={classes.footer}>
-            <Copyright />
+    <div className={classes.root}>
+      <footer className={classes.footer}>
+        <Container maxWidth="sm">
+          <Copyright />
         </Container>
+      </footer>
     </div>
   );
 }
