@@ -35,35 +35,16 @@ export default function FDashboard(props) {
 
   // Initialize database and specific grant in database
   const db = firebase.firestore();
-  const [docs, setDocs] = React.useState([]);
   const [snapshot, loading, error] = useCollection(db.collection('grants'));
 
   useEffect(() => {
     let newGrants = [];
-    let newDocs = [];
-
+    let curGrants = [];
+    let exGrants = [];
+    let drGrants = [];
     if (!loading && !error) {
       snapshot.forEach(function (doc) {
         if (doc.data().cf_id === user?.cfId) {
-          newDocs.push({
-            dist: -1,
-            id: doc.id,
-            title: doc.data().title,
-            cfName: doc.data().cf_name,
-            nonprofitName: doc.data().nonprofit_name,
-            goalAmt: doc.data().goal_amt,
-            moneyRaised: doc.data().money_raised,
-            img: doc.data().images[0] || 'GivingTree.png',
-            nonprofitId: doc.data().nonprofit_id,
-            address: doc.data().address,
-            lat: doc.data().lat,
-            long: doc.data().long,
-            datePosted: doc.data().date_posted,
-            dateDeadline: doc.data().date_deadline,
-            desc: doc.data().desc,
-            tags: doc.data().tags,
-            status: doc.data().status,
-          });
           let grant = <SmallGrantCard
             id={doc.id}
             title={doc.data().title}
@@ -74,42 +55,24 @@ export default function FDashboard(props) {
             img={doc.data().images[0] || 'GivingTree.png'}
             status={doc.data().status} />;
           newGrants.push(grant);
+          if (doc.data().status === 'current') {
+            curGrants.push(grant);
+          } else if (doc.data().status === 'draft') {
+            drGrants.push(grant);
+          } else if (doc.data().status === 'expired') {
+            exGrants.push(grant);
+          }
         }
       });
-      console.log("newDocs: ", newDocs);
-      setDocs(newDocs);
       setGrants(newGrants);
       setDisplayedGrants(newGrants);
+      setCurrentGrants(curGrants);
+      setDraftedGrants(drGrants);
+      setExpiredGrants(exGrants);
       console.log("these are the newgrants: ", newGrants);
     }
   }, [snapshot, error, loading]);
-/*
-  useEffect(() => {
-    var curGrants = [];
-    var exGrants = [];
-    var drGrants = [];
-    docs.forEach((doc) => {
-      let grant = <SmallGrantCard
-        id={doc.id}
-        title={doc.title}
-        cfName={doc.cfName}
-        nonprofitName={doc.nonprofitName}
-        goalAmt={doc.goalAmt}
-        moneyRaised={doc.moneyRaised}
-        img={doc.img} />;
-      if (doc.status === 'current') {
-        curGrants.push(grant);
-      } else if (doc.status === 'draft') {
-        drGrants.push(grant);
-      } else if (doc.status === 'expired') {
-        exGrants.push(grant);
-      }
-    });
-    setCurrentGrants(curGrants);
-    setDraftedGrants(drGrants);
-    setExpiredGrants(exGrants);
-  }, [grants, docs]);
-  */
+
   function searchCallback(childData) {
     //console.log("childData in dashboard: ", childData);
     var newGrants = [];
@@ -168,7 +131,7 @@ export default function FDashboard(props) {
 
   return (
     <Container maxWidth='md' className={classes.container}>
-      {docs &&
+      {grants &&
         <div>
           <Grid container spacing={2} direction="column" alignItems="center">
             <Grid item className={classes.toggleBar}>
@@ -177,7 +140,7 @@ export default function FDashboard(props) {
               </ToggleButtonGroup>
             </Grid>
           </Grid>
-          <Search docs={docs} parentCallback={searchCallback} />
+          <Search docs={grants} parentCallback={searchCallback} />
           <Grid container spacing={2} >
             {displayedGrants}
           </Grid>
