@@ -29,7 +29,7 @@ export default function FDashboard(props) {
   const [currentGrants, setCurrentGrants] = React.useState([]);
   const [draftedGrants, setDraftedGrants] = React.useState([]);
   const [toggleBarStatus, setToggleBarStatus] = React.useState('current');
-
+  const [displayedGrants, setDisplayedGrants] = React.useState([]);
   // Foundation ID
   const user = useContext(UserAuthContext);
 
@@ -76,11 +76,11 @@ export default function FDashboard(props) {
           newGrants.push(grant);
         }
       });
-      setGrants(newGrants, () => {
-        setToggleBarStatus('current');
-      });
-      //console.log("newDocs: ", newDocs);
+      console.log("newDocs: ", newDocs);
       setDocs(newDocs);
+      setGrants(newGrants);
+      setDisplayedGrants(newGrants);
+      console.log("these are the newgrants: ", newGrants);
     }
   }, [snapshot, error, loading]);
 /*
@@ -138,11 +138,20 @@ export default function FDashboard(props) {
     setCurrentGrants(curGrants);
     setDraftedGrants(drGrants);
     setExpiredGrants(exGrants);
-    //console.log("newGrants: ", newGrants);
+    console.log("newGrants: ", newGrants);
   }
 
   const handleToggle = (event, status) => {
     setToggleBarStatus(status);
+    if(status === 'current') {
+      setDisplayedGrants(currentGrants);
+    }
+    else if(status === 'drafted') {
+      setDisplayedGrants(draftedGrants);
+    }
+    else {
+      setDisplayedGrants(expiredGrants);
+    } 
   };
 
   const buttonOptions = [
@@ -170,7 +179,7 @@ export default function FDashboard(props) {
           </Grid>
           <Search docs={docs} parentCallback={searchCallback} />
           <Grid container spacing={2} >
-            {toggleBarStatus === 'current' ? currentGrants : toggleBarStatus === 'drafted' ? draftedGrants : expiredGrants}
+            {displayedGrants}
           </Grid>
         </div>
       }
