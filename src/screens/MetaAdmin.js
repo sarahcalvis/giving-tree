@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useCollection } from 'react-firebase-hooks/firestore';
+import $ from 'jquery';
 
 import FoundationCard from '../components/FoundationCard.js';
 import firebase from '../firebase.js';
@@ -39,16 +40,18 @@ function MetaAdmin(props) {
 
     if (!loading && !error) {
       snapshot.forEach((doc) => {
+        const card = <FoundationCard data={doc.data()} approveCB={approveCB} denyCB={denyCB} deleteCB={deleteCB} />;
+
         switch (doc.data().status) {
           case 'requested':
-            req.push(<FoundationCard data={doc.data()} />);
+            req.push(card);
             break;
           case 'current':
           case 'deactivated':
-            cur.push(<FoundationCard data={doc.data()} />);
+            cur.push(card);
             break;
           case 'denied':
-            den.push(<FoundationCard data={doc.data()} />);
+            den.push(card);
             break;
           default:
             console.log("Error, Bad CF Document: " + doc.id + ", " + doc.data());
@@ -60,6 +63,73 @@ function MetaAdmin(props) {
       setDenCfs(den);
     }
   }, [snapshot, error, loading]);
+
+  const approveCB = (email) => { updateCf(email, 'current'); }
+  const denyCB = (email) => { updateCf(email, 'denied'); }
+  const deleteCB = (email) => { updateCf(email, 'deleted'); }
+
+  const updateCf = (email, status) => {
+
+    // User is signed in. Get the ID token.
+    firebase.auth().currentUser.getIdToken(true)
+      .then((idToken) => {
+        // Pass the ID token to the server.
+        $.post(
+          '/setCustomClaims',
+          {
+            idToken: idToken,
+            cfEmail: email,
+            cfStatus: status,
+          },
+          (data, postStatus) => {
+            const json = JSON.parse(data);
+
+            if (postStatus === 'success' && data && json && json.status === 'success') {
+
+              db.collection("communityFoundations").where("personal_email", "==", email)
+                .get()
+                .then((querySnapshot) => {
+                  querySnapshot.forEach((doc) => {
+
+                    if (status === 'deleted') {
+                      db.collection("communityFoundations").doc(doc.id).delete()
+                        .then(() => {
+                          console.log("Document successfully deleted!");
+                        })
+                        .catch((error) => {
+                          console.error("Error deleting CF document: ", error);
+                        });
+                    }
+                    else {
+                      db.collection("communityFoundations").doc(doc.id).update({ status: status })
+                        .then(() => {
+                          console.log("Document successfully updated!");
+                        })
+                        .catch((error) => {
+                          console.error("Error updating CF document: ", error);
+                        });
+                    }
+
+                  });
+                })
+                .catch((error) => {
+                  console.error("Error retrieving CF document: ", error);
+                });
+
+            }
+            else {
+              console.error("Error with custom claims post status: " + error);
+            }
+
+          })
+          .catch((error) => {
+            console.error("Error with custom claims post: " + error);
+          });
+      })
+      .catch((error) => {
+        console.error("Error with getIdToken(): " + error);
+      });
+  }
 
   const handleToggle = (event, status) => {
     setToggleBarStatus(status);
@@ -79,17 +149,17 @@ function MetaAdmin(props) {
 
   return (
     <Container maxWidth='md' className={classes.container}>
-    <Typography variant="h4">Meta-Admin</Typography>
-        <Grid container spacing={2} direction="column" alignItems="center">
-          <Grid item className={classes.toggleBar}>
-            <ToggleButtonGroup size="small" value={toggleBarStatus} exclusive onChange={handleToggle}>
-              {buttonOptions}
-            </ToggleButtonGroup>
-          </Grid>
+      <Typography variant="h4">Meta-Admin</Typography>
+      <Grid container spacing={2} direction="column" alignItems="center">
+        <Grid item className={classes.toggleBar}>
+          <ToggleButtonGroup size="small" value={toggleBarStatus} exclusive onChange={handleToggle}>
+            {buttonOptions}
+          </ToggleButtonGroup>
         </Grid>
-        <Grid item spacing={2} xs={12} >
-          {toggleBarStatus === 'requested' ? reqCfs : toggleBarStatus === 'current' ? curCfs : denCfs}
-        </Grid>
+      </Grid>
+      <Grid item spacing={2} xs={12} >
+        {toggleBarStatus === 'requested' ? reqCfs : toggleBarStatus === 'current' ? curCfs : denCfs}
+      </Grid>
     </Container>
   );
 }

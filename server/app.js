@@ -75,29 +75,17 @@ app.post('/setCustomClaims', (req, res) => {
     if (typeof claims.admin !== 'undefined' && claims.admin) {
       //Check that cfEmail and cfStatus were provided in request
       if (typeof cfEmail !== 'undefined' && typeof cfStatus !== 'undefined'
-        && cfEmail !== '' && cfStatus !== '' && typeof claims.cfId !== 'undefined' ) {
+        && cfEmail !== '' && cfStatus !== '' && typeof claims.cfId !== 'undefined') {
         //Get the CF User and update their permissions
         admin.auth().getUserByEmail(cfEmail).then((user) => {
-          if (cfStatus === 'current') {
-            admin.auth().setCustomUserClaims(user.uid, { cfId: claims.cfId, status: 'current' })
-              .then(function () {
-                // Tell client to refresh token on user.
-                res.end(JSON.stringify({ status: 'success' }));
-              })
-              .catch((error) => {
-                res.end(JSON.stringify({ status: error }));
-              });
-          }
-          else if (cfStatus === 'denied') {
-              admin.auth().setCustomUserClaims(user.uid, { cfId: claims.cfId, status: 'denied' })
-                .then(function () {
-                  // Tell client to refresh token on user.
-                  res.end(JSON.stringify({ status: 'success' }));
-                })
-                .catch((error) => {
-                  res.end(JSON.stringify({ status: error }));
-                });
-          }
+          admin.auth().setCustomUserClaims(user.uid, { cfId: claims.cfId, status: cfStatus })
+            .then(function () {
+              // Tell client to refresh token on user.
+              res.end(JSON.stringify({ status: 'success' }));
+            })
+            .catch((error) => {
+              res.end(JSON.stringify({ status: error }));
+            });
         })
           .catch((error) => {
             res.end(JSON.stringify({ status: error }));
@@ -115,19 +103,19 @@ app.post('/setCustomClaims', (req, res) => {
             .get()
             .then(function (querySnapshot) {
               querySnapshot.forEach(function (doc) {
-              console.log('got cf!\n' );
+                console.log('got cf!\n');
                 admin.auth().setCustomUserClaims(claims.sub, { cfId: doc.id, status: 'requested' })
                   .then(() => {
-                  console.log('set cc!\n');
+                    console.log('set cc!\n');
                     // Tell client to refresh token on user.
                     res.end(JSON.stringify({ status: 'success' }));
                   })
                   .catch((error) => {
-                  console.log('failed cc!\n');
+                    console.log('failed cc!\n');
 
                     res.end(JSON.stringify({ status: error }));
                   });
-                  console.log('after cc\n');
+                console.log('after cc\n');
               });
             })
             .catch((error) => {
@@ -137,14 +125,14 @@ app.post('/setCustomClaims', (req, res) => {
         .catch((error) => {
           res.end(JSON.stringify({ status: error }));
         });
-        console.log('end of not metaadmin\n');
+      console.log('end of not metaadmin\n');
     }
   })
-  .catch((error) => {
-    console.log('NOOO at the end\n');
-    res.end(JSON.stringify({ status: error }));
-  });
+    .catch((error) => {
+      console.log('NOOO at the end\n');
+      res.end(JSON.stringify({ status: error }));
+    });
 });
 
 app.listen(process.env.PORT);
-// app.listen(9000, () => console.log('Listening on port 9000')); 	
+// app.listen(9000, () => console.log('Listening on port 9000'));

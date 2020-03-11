@@ -43,6 +43,22 @@ export default function FoundationCard(props) {
   const [modalOpen, setModalOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
 
+  const {
+    name,
+    public_email,
+    public_phone,
+    personal_email,
+    personal_phone,
+    foundation_url,
+    fname_contact,
+    lname_contact,
+    status,
+    date_requested,
+    date_approved,
+    date_denied,
+    date_deactivated,
+  } = props.data;
+
   //Open warning modal
   const handleOpen = () => {
     setModalOpen(true);
@@ -65,40 +81,24 @@ export default function FoundationCard(props) {
 
   const CurCfMenu = () => (
     <React.Fragment>
-      <MenuItem onClick={() => { setAnchorEl(null); }}>Approve</MenuItem>
-      <MenuItem onClick={() => { setAnchorEl(null); }}>Reject</MenuItem>
+      <MenuItem onClick={() => { setAnchorEl(null); props.denyCB(personal_email); }}>Deny</MenuItem>
     </React.Fragment>
   );
 
   const ReqCfMenu = () => (
     <React.Fragment>
-      <MenuItem onClick={() => { setAnchorEl(null); }}>Approve</MenuItem>
-      <MenuItem onClick={() => { setAnchorEl(null); }}>Reject</MenuItem>
+      <MenuItem onClick={() => { setAnchorEl(null); props.approveCB(personal_email); }}>Approve</MenuItem>
+      <MenuItem onClick={() => { setAnchorEl(null); props.denyCB(personal_email); }}>Deny</MenuItem>
+      <MenuItem onClick={() => { setAnchorEl(null); props.deleteCB(personal_email); }}>Delete</MenuItem>
     </React.Fragment>
   );
 
   const DenCfMenu = () => (
     <React.Fragment>
-      <MenuItem onClick={() => { setAnchorEl(null); }}>Approve</MenuItem>
-      <MenuItem onClick={() => { setAnchorEl(null); }}>Reject</MenuItem>
+      <MenuItem onClick={() => { setAnchorEl(null); props.approveCB(personal_email); }}>Approve</MenuItem>
+      <MenuItem onClick={() => { setAnchorEl(null); props.deleteCB(personal_email); }}>Delete</MenuItem>
     </React.Fragment>
   );
-
-  const {
-    name,
-    public_email,
-    public_phone,
-    personal_email,
-    personal_phone,
-    foundation_url,
-    fname_contact,
-    lname_contact,
-    status,
-    date_requested,
-    date_approved,
-    date_denied,
-    date_deactivated,
-  } = props.data;
 
   const setSubheader = () => {
     let str = 'Requested on ' + date_requested;
