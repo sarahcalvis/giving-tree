@@ -71,18 +71,19 @@ export default function FDashboard(props) {
             nonprofitName={doc.data().nonprofit_name}
             goalAmt={doc.data().goal_amt}
             moneyRaised={doc.data().money_raised}
-            img={doc.data().images[0] || 'GivingTree.png'} />;
+            img={doc.data().images[0] || 'GivingTree.png'}
+            status={doc.data().status} />;
           newGrants.push(grant);
         }
       });
       setGrants(newGrants, () => {
         setToggleBarStatus('current');
       });
-      console.log("newDocs: ", newDocs);
+      //console.log("newDocs: ", newDocs);
       setDocs(newDocs);
     }
   }, [snapshot, error, loading]);
-
+  /*
   useEffect(() => {
     var curGrants = [];
     var exGrants = [];
@@ -108,13 +109,15 @@ export default function FDashboard(props) {
     setDraftedGrants(drGrants);
     setExpiredGrants(exGrants);
   }, [grants, docs]);
-
+  */
   function searchCallback(childData) {
-    console.log("childData in dashboard: ", childData);
+    //console.log("childData in dashboard: ", childData);
     var newGrants = [];
+    var curGrants = [];
+    var exGrants = [];
+    var drGrants = [];
     childData.forEach((meta) => {
-      newGrants.push(
-        <SmallGrantCard
+      let grant = <SmallGrantCard
           id={meta.grant.id}
           title={meta.grant.title}
           cfName={meta.grant.cfName}
@@ -122,10 +125,20 @@ export default function FDashboard(props) {
           goalAmt={meta.grant.goalAmt}
           moneyRaised={meta.grant.moneyRaised}
           img={meta.grant.img} />
-      );
+      newGrants.push(grant);
+      if (meta.grant.status === 'current') {
+        curGrants.push(grant);
+      } else if (meta.grant.status === 'draft') {
+        drGrants.push(grant);
+      } else if (meta.grant.status === 'expired') {
+        exGrants.push(grant);
+      }
     });
     setGrants(newGrants);
-    console.log("newGrants: ", newGrants);
+    setCurrentGrants(curGrants);
+    setDraftedGrants(drGrants);
+    setExpiredGrants(exGrants);
+    //console.log("newGrants: ", newGrants);
   }
 
   const handleToggle = (event, status) => {
