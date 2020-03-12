@@ -90,7 +90,8 @@ class FAccountRequest extends Component {
       firebase.auth().createUserWithEmailAndPassword(personal_email, passwordOne)
         .then((result) => {
           //Do Misc Stuff for Foundation Account
-          const cfDoc = { ...this.state };
+          const cfDoc = { ...this.state, date_requested: firebase.firestore.Timestamp.now() };
+
           delete cfDoc.errors;
           delete cfDoc.passwordOne;
           delete cfDoc.passwordTwo;

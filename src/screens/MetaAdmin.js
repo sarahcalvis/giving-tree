@@ -101,7 +101,11 @@ function MetaAdmin(props) {
                         });
                     }
                     else {
-                      db.collection("communityFoundations").doc(doc.id).update({ status: status })
+                      const time = firebase.firestore.Timestamp.now();
+                      const dateField = (status === 'current') ? { date_approved: time } :
+                        ((status === 'denied') ? { date_denied: time } : {});
+
+                      db.collection("communityFoundations").doc(doc.id).update({ ...dateField, status: status })
                         .then(() => {
                           console.log("Document successfully updated!");
                         })
