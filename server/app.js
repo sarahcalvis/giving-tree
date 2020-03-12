@@ -72,21 +72,29 @@ app.post('/updateCf', (req, res) => {
       if (typeof claims.admin !== 'undefined' && claims.admin) {
         //Check that cfEmail and cfStatus were provided in request
         if (typeof cfEmail !== 'undefined' && typeof cfStatus !== 'undefined'
-          && cfEmail !== '' && cfStatus !== '' && typeof claims.cfId !== 'undefined') {
+          && cfEmail !== '' && cfStatus !== '') {
           //Get the CF User and update their permissions
           admin.auth().getUserByEmail(cfEmail).then((user) => {
-            admin.auth().setCustomUserClaims(user.uid, { cfId: claims.cfId, status: cfStatus })
-              .then(function () {
-                // Tell client to refresh token on user.
-                res.end(JSON.stringify({ status: 'success' }));
-              })
-              .catch((error) => {
-                res.end(JSON.stringify({ status: error }));
-              });
+            if (typeof user.customClaims.cfId !== 'undefined') {
+              admin.auth().setCustomUserClaims(user.uid, { cfId: user.customClaims.cfId, status: cfStatus })
+                .then(function () {
+                  // Tell client to refresh token on user.
+                  res.end(JSON.stringify({ status: 'success' }));
+                })
+                .catch((error) => {
+                  res.end(JSON.stringify({ status: error }));
+                });
+            }
+            else{
+              res.end(JSON.stringify({ status: 'ERROR: Could not retrieve cfId from CF custom claims.' }));
+            }
           })
             .catch((error) => {
               res.end(JSON.stringify({ status: error }));
             });
+        }
+        else {
+          res.end(JSON.stringify({ status: 'ERROR: Invalid params' }));
         }
       }
       else {
@@ -140,11 +148,11 @@ app.post('/requestCf', (req, res) => {
       });
     console.log('end of not metaadmin\n');
   })
-  .catch((error) => {
-    console.log('NOOO at the end\n');
-    res.end(JSON.stringify({ status: error }));
-  });
+    .catch((error) => {
+      console.log('NOOO at the end\n');
+      res.end(JSON.stringify({ status: error }));
+    });
 });
 
-app.listen(process.env.PORT);
-// app.listen(9000, () => console.log('Listening on port 9000'));
+// app.listen(process.env.PORT);
+app.listen(9000, () => console.log('Listening on port 9000'));
