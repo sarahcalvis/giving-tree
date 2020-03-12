@@ -9,6 +9,14 @@ import GrantTag from '../../components/GrantTag.js';
 
 describe('Component: GrantTagBar', () => {
 
+  it('Renders correctly', () => {
+    const gtbProps = {
+      tags: ['Tag']
+    };
+    const wrap = shallow(<GrantTagBar id={45} tags={gtbProps.tags} />)
+    expect(wrap).toMatchSnapshot();
+  });
+
   it('State: no tags', () => {
     const gtbProps = {
       tags: []
@@ -57,6 +65,17 @@ describe('Component: GrantTagBar', () => {
 
 
 describe('Component: GrantTag', () => {
+  
+  it('Renders correctly', () => {
+    const tag = 'Tag'
+    const context = {};
+    const wrap = shallow(
+      <StaticRouter location="someLocation" context={context}>
+        <GrantTag tag={tag} />
+      </StaticRouter>
+    )
+    expect(wrap).toMatchSnapshot();
+  });
 
   it('Tag Text', () => {
     const tag = 'Tag'
@@ -74,5 +93,11 @@ describe('Component: GrantTag', () => {
     const tag = 'Tag'
     const wrapper = mount(<MemoryRouter><GrantTag tag={tag} key={0}/></MemoryRouter>);
     expect(wrapper.find('Link').props().to).toEqual({ pathname: "/", state: { "incomingTag": "Tag" } });
+  })
+
+  it('Link button body text', () => {
+    const tag = 'Tag'
+    const wrapper = mount(<MemoryRouter><GrantTag tag={tag} key={0}/></MemoryRouter>);
+    expect(wrapper.find('Link').text()).toEqual("Tag");
   })
 })
