@@ -1,12 +1,11 @@
 import React, { useEffect } from 'react';
 import AuthUserContext from '../auth/context.js';
 
+import {firestore as FIRESTORE} from "firebase/app";
 import firebase from '../firebase.js';
-import * as helper from '../helpers/ValidationHelper.js';
 
 import EditableData from '../components/FSettingsListEditable.js'
 import NonEditableData from '../components/FSettingList.js'
-import { Typography } from '@material-ui/core';
 
 
 export default function FSettings() {
@@ -62,7 +61,7 @@ export default function FSettings() {
     .then(function(querySnapshot) {
       querySnapshot.forEach(function(doc) {
 
-        const time = (cfInfo.date_deactivated === '') ? firebase.firestore.Timestamp.now() : '';
+        const time = (cfInfo.date_deactivated === '') ? FIRESTORE.FieldValue.serverTimestamp() : '';
         db.collection("communityFoundations").doc(doc.id).update({date_deactivated: time});
 
         console.log("Deactivation successfully toggled!");

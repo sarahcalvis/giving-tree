@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import $ from 'jquery';
 
+import {firestore as FIRESTORE} from "firebase/app";
 import firebase from '../firebase.js';
 import * as helper from '../helpers/ValidationHelper.js';
 import Text from '../components/Text.js';
@@ -90,8 +91,7 @@ class FAccountRequest extends Component {
       firebase.auth().createUserWithEmailAndPassword(personal_email, passwordOne)
         .then((result) => {
           //Do Misc Stuff for Foundation Account
-          const cfDoc = { ...this.state, date_requested: firebase.firestore.Timestamp.now() };
-
+          const cfDoc = { ...this.state, date_requested: FIRESTORE.FieldValue.serverTimestamp() };
           delete cfDoc.errors;
           delete cfDoc.passwordOne;
           delete cfDoc.passwordTwo;
