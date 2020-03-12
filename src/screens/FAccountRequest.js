@@ -104,7 +104,7 @@ class FAccountRequest extends Component {
               result.user.getIdToken().then((idToken) => {
                 // Pass the ID token to the server.
                 $.post(
-                  '/setCustomClaims',
+                  '/requestCf',
                   {
                     idToken: idToken,
                   },

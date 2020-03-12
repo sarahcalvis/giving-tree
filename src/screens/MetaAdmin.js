@@ -75,7 +75,7 @@ function MetaAdmin(props) {
       .then((idToken) => {
         // Pass the ID token to the server.
         $.post(
-          '/setCustomClaims',
+          '/updateCf',
           {
             idToken: idToken,
             cfEmail: email,
