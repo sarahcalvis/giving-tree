@@ -1,9 +1,10 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
+import { Link, MemoryRouter } from 'react-router';
 
 import GrantTagBar from '../../components/GrantTagBar.js';
 import { StaticRouter } from 'react-router-dom';
-import GrantTag from '../../components/GrantTagBar.js';
+import GrantTag from '../../components/GrantTag.js';
 
 
 describe('Component: GrantTagBar', () => {
@@ -69,27 +70,9 @@ describe('Component: GrantTag', () => {
   })
 
 
-  /*it('Link takes to Dashboard', () => {
+  it('Link takes to Dashboard', () => {
     const tag = 'Tag'
-    const context = {};
-    const wrap = shallow(
-      <StaticRouter location="someLocation" context={context}>
-        <GrantTag tag={tag} />
-      </StaticRouter>
-    )
-    expect(wrap.find(GrantTag).find('Link').prop('to')).to.be.equal('/mission')
+    const wrapper = mount(<MemoryRouter><GrantTag tag={tag} key={0}/></MemoryRouter>);
+    expect(wrapper.find('Link').props().to).toEqual({ pathname: "/", state: { "incomingTag": "Tag" } });
   })
-
-  it('Link sends tag to Dashboard', () => {
-    const tag = 'Tag'
-    const context = {};
-    const wrap = shallow(
-      <StaticRouter location="someLocation" context={context}>
-        <GrantTag tag={tag} />
-      </StaticRouter>
-    )
-    expect(wrap.state('Tag')).toEqual('Tag')
-  })*/
-  
-  
 })
