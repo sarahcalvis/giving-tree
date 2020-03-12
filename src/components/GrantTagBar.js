@@ -29,7 +29,7 @@ class GrantTagBar extends React.Component {
     const tagElements = []
 
     for (const [index, value] of this.state.tags.entries()) {
-      tagElements.push(<GrantTag tag={value} />)
+      tagElements.push(<GrantTag tag={value} key={index}/>)
     }
 
     return (
