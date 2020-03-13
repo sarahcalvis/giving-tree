@@ -17,44 +17,39 @@ describe('Component: SearchRadius', () => {
   it('Select 10 miles', () => {
     const onSelect = jest.fn();
     const wrap = enzyme.mount(<SearchRadius parentCallback={onSelect} />)
-    const select = wrap.find('#select-radius');
-    console.log("//////////////////////////////////////////////////");
-    console.log("select: ", select);
-    console.log("//////////////////////////////////////////////////");
-    //wrapper.find(Component).at(index).simulate('click');
-    //select.
-    select.simulate('change', { target: { value: '10'} });
+    const select = wrap.find('#select-radius').at(0);
+    //console.log("select: ", select.debug());
+    select.props().onChange({ target: { value: 10} });
     expect(onSelect.mock.calls.length).toBe(1);
-    expect(onSelect.mock.calls[0][0].toBe('10'));
-    //select.simulate('keydown', { keyCode: 13 });
-    //expect(wrap.find('SearchRadius').radius).toEqual(10);//('radius')).toEqual(10)
+    expect(onSelect.mock.calls[0][0]).toBe(10);
   });
 
   it('Select 25 miles', () => {
     const onSelect = jest.fn();
     const wrap = enzyme.mount(<SearchRadius parentCallback={onSelect} />)
-    const select = wrap.find('#select-radius').hostNodes();
-    select.simulate('change', { target: { value: '25'} });
-    //select.simulate('keydown', { keyCode: 13 });
-    expect(wrap.find('SearchRadius').radius).toEqual(25)
+    const select = wrap.find('#select-radius').at(0);
+    //console.log("select: ", select.debug());
+    select.props().onChange({ target: { value: 25} });
+    expect(onSelect.mock.calls.length).toBe(1);
+    expect(onSelect.mock.calls[0][0]).toBe(25);
   });
-
   it('Select 50 miles', () => {
     const onSelect = jest.fn();
     const wrap = enzyme.mount(<SearchRadius parentCallback={onSelect} />)
-    const select = wrap.find('#select-radius').hostNodes();
-    select.simulate('change', { target: { value: '50'} });
-    //select.simulate('keydown', { keyCode: 13 });
-    expect(wrap.find('SearchRadius').radius).toEqual(50)
+    const select = wrap.find('#select-radius').at(0);
+    //console.log("select: ", select.debug());
+    select.props().onChange({ target: { value: 50} });
+    expect(onSelect.mock.calls.length).toBe(1);
+    expect(onSelect.mock.calls[0][0]).toBe(50);
   });
-
   it('Select 100 miles', () => {
     const onSelect = jest.fn();
     const wrap = enzyme.mount(<SearchRadius parentCallback={onSelect} />)
-    const select = wrap.find('#select-radius').hostNodes();
-    select.simulate('change', { target: { value: '100'} });
-    //select.simulate('keydown', { keyCode: 13 });
-    expect(wrap.find('SearchRadius').radius).toEqual(100)
+    const select = wrap.find('#select-radius').at(0);
+    //console.log("select: ", select.debug());
+    select.props().onChange({ target: { value: 100} });
+    expect(onSelect.mock.calls.length).toBe(1);
+    expect(onSelect.mock.calls[0][0]).toBe(100);
   });
 
 })
