@@ -45,7 +45,8 @@ export default function NonEditableData(props){
 						</Button>
 					</Link>
 					<ToggleActive 
-						active={props.cfInfo.status}
+						status={props.cfInfo.status}
+						date_deactivated={props.cfInfo.date_deactivated}
 						toggleAccountActive={props.toggleAccountActive}
 					/>
 				</Grid>
@@ -132,7 +133,6 @@ function StaticItem(props) {
 
 
 function ToggleActive(props) {
-	console.log(props.active);
 	const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -147,7 +147,7 @@ function ToggleActive(props) {
     setOpen(false);
 	};
 	
-	if(props.active === 'current'){
+	if(props.status === 'current' && props.date_deactivated === ''){
 		return(
 			<div>
 				<Button 
@@ -179,7 +179,7 @@ function ToggleActive(props) {
 				</Dialog>
 			</div>
 		);
-	}else if(props.active === 'deactivated'){
+	}else if(props.status === 'current' && props.date_deactivated !== ''){
 		return(
 			<div>
 				<Button 
