@@ -26,6 +26,7 @@ export default function SearchRadius(props) {
   }, []);
 
   const handleChange = event => {
+    props.parentCallback(12);
     setRadius(event.target.value);
     props.parentCallback(event.target.value);
   };

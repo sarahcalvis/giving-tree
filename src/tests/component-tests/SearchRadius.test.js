@@ -1,51 +1,60 @@
 import React from "react";
-import { shallow, render, unmountComponentAtNode } from "react-dom";
-import { act } from "react-dom/test-utils";
+import { shallow, mount } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
 
-import SearchRadius from "./components/SearchRadius.js";
+import SearchRadius from "../../components/SearchRadius.js";
 
-let container = null;
-beforeEach(() => {
-  // setup a DOM element as a render target
-  container = document.createElement("div");
-  // container *must* be attached to document so events work correctly.
-  document.body.appendChild(container);
-});
+describe('Component: SearchRadius', () => {
+  var enzyme = require('enzyme');
+  enzyme.configure({ adapter: new Adapter() });
 
-afterEach(() => {
-  // cleanup on exiting
-  unmountComponentAtNode(container);
-  container.remove();
-  container = null;
-});
-
-it("changes value when clicked", () => {
-  const onSelect = jest.fn();
-  act(() => {
-    shallow(<SearchRadius parentCallback={onSelect} />, container);
+  it('Renders correctly', () => {
+    const onSelect = jest.fn();
+    const wrap = enzyme.mount(<SearchRadius parentCallback={onSelect} />)
+    expect(wrap).toMatchSnapshot();
   });
 
-  //const input = wrapper.find('input');
-  //input.simulate('change', { target: { value: 'abcdefg'} });
-  //input.simulate('keydown', { keyCode: 13 });
-  
-  // get ahold of the select element, and trigger some clicks on it
-  const select = document.querySelector("[labelId=select-radius-label]");
-  expect(select.innerHTML).toBe("-1");
-
-  act(() => {
-    select.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+  it('Select 10 miles', () => {
+    const onSelect = jest.fn();
+    const wrap = enzyme.mount(<SearchRadius parentCallback={onSelect} />)
+    const select = wrap.find('#select-radius');
+    console.log("//////////////////////////////////////////////////");
+    console.log("select: ", select);
+    console.log("//////////////////////////////////////////////////");
+    //wrapper.find(Component).at(index).simulate('click');
+    //select.
+    select.simulate('change', { target: { value: '10'} });
+    expect(onSelect.mock.calls.length).toBe(1);
+    expect(onSelect.mock.calls[0][0].toBe('10'));
+    //select.simulate('keydown', { keyCode: 13 });
+    //expect(wrap.find('SearchRadius').radius).toEqual(10);//('radius')).toEqual(10)
   });
 
-  expect(onSelect).toHaveBeenCalledTimes(1);
-  expect(select.innerHTML).toBe("Turn off");
-
-  act(() => {
-    for (let i = 0; i < 5; i++) {
-        select.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-    }
+  it('Select 25 miles', () => {
+    const onSelect = jest.fn();
+    const wrap = enzyme.mount(<SearchRadius parentCallback={onSelect} />)
+    const select = wrap.find('#select-radius').hostNodes();
+    select.simulate('change', { target: { value: '25'} });
+    //select.simulate('keydown', { keyCode: 13 });
+    expect(wrap.find('SearchRadius').radius).toEqual(25)
   });
 
-  expect(onSelect).toHaveBeenCalledTimes(6);
-  expect(select.innerHTML).toBe("Turn on");
-});
+  it('Select 50 miles', () => {
+    const onSelect = jest.fn();
+    const wrap = enzyme.mount(<SearchRadius parentCallback={onSelect} />)
+    const select = wrap.find('#select-radius').hostNodes();
+    select.simulate('change', { target: { value: '50'} });
+    //select.simulate('keydown', { keyCode: 13 });
+    expect(wrap.find('SearchRadius').radius).toEqual(50)
+  });
+
+  it('Select 100 miles', () => {
+    const onSelect = jest.fn();
+    const wrap = enzyme.mount(<SearchRadius parentCallback={onSelect} />)
+    const select = wrap.find('#select-radius').hostNodes();
+    select.simulate('change', { target: { value: '100'} });
+    //select.simulate('keydown', { keyCode: 13 });
+    expect(wrap.find('SearchRadius').radius).toEqual(100)
+  });
+
+})
