@@ -58,21 +58,8 @@ export default function LocationSearch(props) {
     if(!(value === null)) {
       Geocode.fromAddress(value.description).then(
         response => {
-          // console.log("supposed address: ", value.description);
-          // console.log("the response for lat, long: ", response.results[0].geometry.location);
           const { lat, lng } = response.results[0].geometry.location;
-          // console.log(lat, lng);
-          // console.log(value);
           props.parentCallback({address: value, lat: lat, long: lng});
-          // Geocode.fromLatLng(lat, lng).then(
-          //   response => {
-          //     const address = response.results[0].formatted_address;
-          //     console.log("regurged address: ", address);
-          //   },
-          //   error => {
-          //     console.error(error);
-          //   }
-          // );
         },
         error => {
           console.error(error);
@@ -113,8 +100,6 @@ export default function LocationSearch(props) {
     return () => {
       active = false;
     };
-    
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputValue]);
 
   return (

@@ -57,7 +57,9 @@
   },
   "description": "Giving Tree is a website that provides public access to grant giving opportunites.",
   "main": "index.js",
-  "devDependencies": {},
+  "devDependencies": {
+    "jest-googleapi-mock": "^0.3.3"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sarahcalvis/giving-tree.git"
