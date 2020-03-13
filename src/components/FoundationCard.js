@@ -1,6 +1,8 @@
 import React from 'react';
 
 import WarningModal from './WarningModal.js';
+import { firestore as FIRESTORE } from "firebase/app";
+
 
 import { makeStyles } from '@material-ui/core/styles';
 import { Card, CardHeader, CardContent, CardActions } from '@material-ui/core';
@@ -59,24 +61,15 @@ export default function FoundationCard(props) {
     date_deactivated,
   } = props.data;
 
-  //Open warning modal
-  const handleOpen = () => {
-    setModalOpen(true);
-  };
-
   //Yes on warning modal
   const handleYes = () => {
     setModalOpen(false);
+    props.deleteCB(personal_email);
   };
 
   //No on warning modal
   const handleClose = () => {
     setModalOpen(false);
-  };
-
-  //Approve button
-  const handleApprove = () => {
-    console.log("handling approve");
   };
 
   const CurCfMenu = () => (
@@ -89,28 +82,29 @@ export default function FoundationCard(props) {
     <React.Fragment>
       <MenuItem onClick={() => { setAnchorEl(null); props.approveCB(personal_email); }}>Approve</MenuItem>
       <MenuItem onClick={() => { setAnchorEl(null); props.denyCB(personal_email); }}>Deny</MenuItem>
-      <MenuItem onClick={() => { setAnchorEl(null); props.deleteCB(personal_email); }}>Delete</MenuItem>
+      <MenuItem onClick={() => { setAnchorEl(null); setModalOpen(true); }}>Delete</MenuItem>
     </React.Fragment>
   );
 
   const DenCfMenu = () => (
     <React.Fragment>
       <MenuItem onClick={() => { setAnchorEl(null); props.approveCB(personal_email); }}>Approve</MenuItem>
-      <MenuItem onClick={() => { setAnchorEl(null); props.deleteCB(personal_email); }}>Delete</MenuItem>
+      <MenuItem onClick={() => { setAnchorEl(null); setModalOpen(true); }}>Delete</MenuItem>
     </React.Fragment>
   );
 
   const setSubheader = () => {
-    let str = 'Requested on ' + date_requested;
+    const f = (timestamp) => { return timestamp.toDate().toLocaleDateString("en-US") };
 
+    let str = 'Requested ' + f(date_requested);
     if (!!date_approved) {
-      str += ', Approved on ' + date_approved;
+      str += ', Approved ' + f(date_approved);
     }
     if (!!date_denied) {
-      str += ', Denied on ' + date_denied;
+      str += ', Denied ' + f(date_denied);
     }
     if (!!date_deactivated) {
-      str += ', Deactivated on ' + date_deactivated;
+      str += ', Deactivated ' + f(date_deactivated);
     }
 
     return str;
@@ -161,32 +155,16 @@ export default function FoundationCard(props) {
           horizontal: 'right',
         }}
         open={Boolean(anchorEl)}
-        onClose={()=>{setAnchorEl(null);}}
+        onClose={() => { setAnchorEl(null); }}
       >
-        {status === 'requested' ? <ReqCfMenu/> : status === 'current' ? <CurCfMenu/> : <DenCfMenu/>}
+        {status === 'requested' ? <ReqCfMenu /> : status === 'current' ? <CurCfMenu /> : <DenCfMenu />}
       </Menu>
-
-      <div>
-        {false &&
-          <CardActions>
-            <Button variant="outlined" color="secondary" onClick={handleApprove} className={classes.button}>
-              Approve
-        </Button>
-            <Button variant="outlined" color="primary" onClick={handleOpen} className={classes.button}>
-              Deny
-        </Button>
-          </CardActions>}
-      </div>
-
-      <div>
-        {false &&
-          <WarningModal
-            open={modalOpen}
-            handleClose={handleClose}
-            handleYes={handleYes}
-            cfName={props.cfName}
-          ></WarningModal>}
-      </div>
+      <WarningModal
+        open={modalOpen}
+        handleClose={handleClose}
+        handleYes={handleYes}
+        cfName={name}
+      ></WarningModal>
     </Card>
   );
 }

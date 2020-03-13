@@ -104,7 +104,7 @@ function MetaAdmin(props) {
                     }
                     else {
                       const time = FIRESTORE.FieldValue.serverTimestamp();
-                      const dateField = (status === 'current') ? { date_approved: time } :
+                      const dateField = (status === 'current') ? { date_approved: time, date_denied: ''} :
                         ((status === 'denied') ? { date_denied: time } : {});
 
                       db.collection("communityFoundations").doc(doc.id).update({ ...dateField, status: status })
