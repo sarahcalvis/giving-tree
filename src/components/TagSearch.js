@@ -3,7 +3,6 @@ import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import $ from 'jquery';
 import PropTypes from "prop-types";
 import firebase from '../firebase.js';
 import { withRouter } from 'react-router-dom';
@@ -83,10 +82,6 @@ class TagSearch extends React.Component {
      });
   }
 
-  handleClick = (event) => {
-    this.updateSearch();
-  }
-
 
   setCached(key, val){
     var now = (new Date().getTime());
@@ -94,11 +89,8 @@ class TagSearch extends React.Component {
     sessionStorage.setItem(key, stringVal);
   }
   
-  // If the cached value is present and it is less than
-  //    ttl seconds old, return it.
-  // Otherwise, return null
+  // If the cached value is present and it is less than ttl seconds old, return it. Otherwise, return null
   retrieveCached(key, ttl){
-              
     if(key in sessionStorage){
       var data = JSON.parse(sessionStorage.getItem(key));
       var now = (new Date().getTime());
@@ -111,21 +103,16 @@ class TagSearch extends React.Component {
   }
 
   updateSearch() {
-    
-    function displayResults(results){
-        $("#results").text(results.num_found + " results found.");
-    }
 
     var query = "tagArray";
     var cacheResult = this.retrieveCached(query, 600);
     var tags = [];
+
+    // If we have a cached array, use that. Otherwise, query database
     if(cacheResult){
-      console.log("Getting from cache :)");
       tags = cacheResult;
       this.setState({ tags: tags })
-      displayResults(cacheResult);
     }else{
-      console.log("Have to start over :(");
       var db = firebase.firestore();
       var dbRef = db.collection("tags");
 
@@ -139,7 +126,6 @@ class TagSearch extends React.Component {
 
         this.setState({ tags: tags })
         this.setCached(query, tags);
-        displayResults(tags); 
         
         if(this.state.dataLoaded === false){
           this.setState({ dataLoaded: true })
@@ -198,4 +184,5 @@ class TagSearch extends React.Component {
   }
 }
 
+export { TagSearch };
 export default withRouter(TagSearch);
