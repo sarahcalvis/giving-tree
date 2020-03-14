@@ -1,3 +1,10 @@
+/*
+useful links:
+https://stackoverflow.com/questions/58843037/how-to-test-for-this-function-in-my-react-component-with-jest-and-enzyme
+
+https://stackoverflow.com/questions/56639227/enzyme-unit-testing-onchange-method-using-material-ui-components/56639281#56639281
+*/
+
 import React from "react";
 import { shallow, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
