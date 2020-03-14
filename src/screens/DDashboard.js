@@ -46,16 +46,18 @@ export default function DDashboard() {
           desc: doc.data().desc,
           tags: doc.data().tags
         });
-        newGrants.push(
-          <SmallGrantCard
-            id={doc.id}
-            title={doc.data().title}
-            cfName={doc.data().cf_name}
-            nonprofitName={doc.data().nonprofit_name}
-            goalAmt={doc.data().goal_amt}
-            moneyRaised={doc.data().money_raised}
-            img={doc.data().images[0] || 'GivingTree.png'} />
-        );
+        if(doc.data().status === 'current') {
+          newGrants.push(
+            <SmallGrantCard
+              id={doc.id}
+              title={doc.data().title}
+              cfName={doc.data().cf_name}
+              nonprofitName={doc.data().nonprofit_name}
+              goalAmt={doc.data().goal_amt}
+              moneyRaised={doc.data().money_raised}
+              img={doc.data().images[0] || 'GivingTree.png'} />
+          );
+        }
       });
       setGrants(newGrants);
       //console.log("newDocs: ", newDocs);
