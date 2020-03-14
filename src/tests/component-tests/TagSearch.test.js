@@ -20,6 +20,14 @@ const routeComponentPropsMock = {
   match: {}
 }
 
+let wrap;
+let inst;
+
+beforeEach(() => {
+  sessionStorage.clear();
+  wrap = shallow(<TagSearch {...routeComponentPropsMock} />)
+  inst = wrap.instance();
+})
 
 describe('Tag Search basics', () => {
 
@@ -32,9 +40,8 @@ describe('Tag Search basics', () => {
 })
 
 describe('All things cache', () => {
+  
   it('Sets cache appropriately', () =>{
-    const wrap = shallow(<TagSearch {...routeComponentPropsMock} />)
-    const inst = wrap.instance();
     inst.setCached('blah', 'yada');
     var data = JSON.parse(sessionStorage['blah']);
     
@@ -43,31 +50,20 @@ describe('All things cache', () => {
   })
 
   it('Retrieves cache if cache exists and is recent enough', () =>{
-    sessionStorage.clear();
-    
-    const wrap = shallow(<TagSearch {...routeComponentPropsMock} />)
-    const inst = wrap.instance();
+
     inst.setCached('blah', 'yada');
     const foo = inst.retrieveCached('blah', 100);
     
     expect(foo).toBe('yada');
   })
 
-  it('Returns null if cache does not exist', () =>{
-    sessionStorage.clear();
-    
-    const wrap = shallow(<TagSearch {...routeComponentPropsMock} />)
-    const inst = wrap.instance();
+  it('Returns null if cache does not exist', () =>{  
     const foo = inst.retrieveCached('blah', 100);
     
     expect(foo).toBe(null);
   })
 
   it('Returns null if cache has expired', () =>{
-    sessionStorage.clear();
-    
-    const wrap = shallow(<TagSearch {...routeComponentPropsMock} />)
-    const inst = wrap.instance();
     inst.setCached('blah', 'yada');
     const foo = inst.retrieveCached('blah', 0);
     
@@ -86,24 +82,20 @@ describe('TagSearch method: UpdateSearch', () => {
     },
   });
 
+  let firebase;
+  let db;
+
+  beforeEach(() => {
+    firebase = require('firebase');
+    db = firebase.firestore();
+  });
+
   it('Gets tags from the database',  () =>{
-    const firebase = require('firebase');
-    var db = firebase.firestore();
-    
-    const wrap = shallow(<TagSearch {...routeComponentPropsMock} />)
-    const inst = wrap.instance();
-    
     expect(wrap.state('tags')).toEqual([]);
     inst.updateSearch(db, (tags) => expect(tags).toEqual(['tagOne', 'tagTwo']));
   });
 
   it('Gets tags from cache',  () =>{
-    sessionStorage.clear();
-    const firebase = require('firebase');
-    var db = firebase.firestore();
-
-    const wrap = shallow(<TagSearch {...routeComponentPropsMock} />)
-    const inst = wrap.instance();
     inst.setCached('tagArray', ['tagOne', 'tagTwo']);
     
     inst.updateSearch(db, (tags) => expect(tags).toEqual(['tagOne', 'tagTwo']));
@@ -136,17 +128,11 @@ describe('TagSearch method: SetDefaultAuto', () => {
     expect(inst.setDefaultAuto()).toEqual(['tagOne', 'tagTwo']);
   });
 
-  it('Set default if incoming tags',  () =>{
-    const wrap = shallow(<TagSearch {...routeComponentPropsMock} />)
-    const inst = wrap.instance();
-    
+  it('Set default if incoming tags',  () =>{  
     expect(inst.setDefaultAuto('tagOne')).toEqual(['tagOne']);
   });
 
-  it('Set default if nothing',  () =>{
-    const wrap = shallow(<TagSearch {...routeComponentPropsMock} />)
-    const inst = wrap.instance();
-    
+  it('Set default if nothing',  () =>{ 
     expect(inst.setDefaultAuto()).toEqual(null);
   });
   
@@ -173,6 +159,49 @@ describe('TagSearch method: UpdateParent', () => {
 
 describe('TagSearch method: HandleAutoChange', () => {
 
+  it('Raise one tag and one freeText',  () =>{
+    const wrap = shallow(<TagSearch {...routeComponentPropsMock} 
+      parentCallback={(ret) => {
+        expect(ret).toEqual(
+          { tags: ['tagOne'], freeText: ['freeOne']  }
+        )
+      }  
+    }/>)
+    const inst = wrap.instance();
+    
+    inst.setState({ activeTags: ['tagOne', 'tagTwo'], activeTextSearch: ['freeOne', 'freeTwo']  }, () => { 
+      inst.handleAutoChange(['tagOne', 'freeOne']);
+    });
+  });
+
+  it('Raise two tags and no freeText',  () =>{
+    const wrap = shallow(<TagSearch {...routeComponentPropsMock} 
+      parentCallback={(ret) => {
+        expect(ret).toEqual(
+          { tags: ['tagOne', 'tagThree'], freeText: []  }
+        )
+      }  
+    }/>)
+    const inst = wrap.instance();
+    
+    inst.setState({ activeTags: ['tagOne', 'tagTwo', 'tagThree']  }, () => { 
+      inst.handleAutoChange(['tagOne', 'tagThree']);
+    });
+  });
   
-  
+  it('Raise no tags and two freeText',  () =>{
+    const wrap = shallow(<TagSearch {...routeComponentPropsMock} 
+      parentCallback={(ret) => {
+        expect(ret).toEqual(
+          { tags: [], freeText: ['freeOne', 'freeThree']  }
+        )
+      }  
+    }/>)
+    const inst = wrap.instance();
+    
+    inst.setState({ activeTags: ['tagOne', 'tagTwo'], activeTextSearch: ['freeOne', 'freeTwo', 'freeThree'] }, () => { 
+      inst.handleAutoChange(['freeOne', 'freeThree']);
+    });
+  });
+
 })

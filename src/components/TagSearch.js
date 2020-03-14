@@ -62,7 +62,7 @@ class TagSearch extends React.Component {
     this.props.parentCallback({ tags: this.state.activeTags, freeText: this.state.activeTextSearch})
   }
 
-  handleAutoChange = (event, values) => {
+  handleAutoChange = ( values) => {
     var tagArr = [];
     var freeTextArr = [];
     values.forEach(element => {
@@ -78,8 +78,6 @@ class TagSearch extends React.Component {
     });
     
     this.setState({ activeTags: tagArr, activeTextSearch: freeTextArr  }, () => { 
-      console.log(this.state.activeTags);
-      console.log(this.state.activeTextSearch);
       this.updateParent();
      });
   }
