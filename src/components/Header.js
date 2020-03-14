@@ -62,7 +62,7 @@ function Header(props) {
 
   return (
     <React.Fragment>
-      <AppBar style={{ 'margin-bottom': 15 }} className={classes.appBar} >
+      <AppBar style={{ 'marginBottom': 15 }} className={classes.appBar} >
         <Toolbar>
           <IconButton
             edge="start"
