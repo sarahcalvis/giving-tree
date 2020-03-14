@@ -11,14 +11,15 @@ class TagSearch extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      tags: [{}],
-      //tagString: "",
+      tags: [],
       activeTags: [],
       activeTextSearch: [],
       loading: false,
       incomingTag: null
     };
     
+    
+
     this.setCached = this.setCached.bind(this);
     this.retrieveCached = this.retrieveCached.bind(this);
     this.updateSearch = this.updateSearch.bind(this);
@@ -31,16 +32,17 @@ class TagSearch extends React.Component {
     location: PropTypes.object.isRequired,
     history: PropTypes.object.isRequired
   }
+  
 
   componentWillMount() {
-
-    this.updateSearch();
+    // Get the tags from cache or database and set the 'tags' state accordingly
+    const db = firebase.firestore();
+    this.updateSearch(db, (tags) => this.setState({ tags: tags }));
     
     const { match, location, history } = this.props;
-
-    if(location.state){
+    if(location && location.state){
       console.log(location);
-      if(location && location.state.incomingTag){
+      if(location.state.incomingTag){
         let a = this.state.activeTags.slice(); //creates the clone of the state
         a[0] = location.state.incomingTag;
         console.log(a);
@@ -53,9 +55,9 @@ class TagSearch extends React.Component {
         });
       }
     }
-
   }
 
+  // Pass the selected tags and free text up to the Search component
   updateParent() {
     this.props.parentCallback({ tags: this.state.activeTags, freeText: this.state.activeTextSearch})
   }
@@ -82,7 +84,7 @@ class TagSearch extends React.Component {
      });
   }
 
-
+  // Set the cache
   setCached(key, val){
     var now = (new Date().getTime());
     var stringVal = JSON.stringify({ time: now, value : val});
@@ -102,7 +104,8 @@ class TagSearch extends React.Component {
     return null;
   }
 
-  updateSearch() {
+  // Sets tag state. Checks if there are cached tags. If not, queries the database and caches them
+  updateSearch(db, callback) {
 
     var query = "tagArray";
     var cacheResult = this.retrieveCached(query, 600);
@@ -111,9 +114,8 @@ class TagSearch extends React.Component {
     // If we have a cached array, use that. Otherwise, query database
     if(cacheResult){
       tags = cacheResult;
-      this.setState({ tags: tags })
+      callback(tags)
     }else{
-      var db = firebase.firestore();
       var dbRef = db.collection("tags");
 
       dbRef.get().then((querySnapshot) => {
@@ -124,12 +126,8 @@ class TagSearch extends React.Component {
           }
         });
 
-        this.setState({ tags: tags })
         this.setCached(query, tags);
-        
-        if(this.state.dataLoaded === false){
-          this.setState({ dataLoaded: true })
-        }
+        callback(tags)
       });
     }
   }
