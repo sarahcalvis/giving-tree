@@ -14,16 +14,16 @@ describe('Component: ContactPopout', () => {
     const wrap = enzyme.mount(<ContactPopout cfData={mockCfData} nonprofitData={mockNonprofitData} />)
     expect(wrap).toMatchSnapshot();
   });  
-/*
+
   it('contact button registers clicks', () => {
     const mockCfData = "mockCfData";
     const mockNonprofitData = "mockNonprofitData";
     const click = jest.fn();
     const wrap = enzyme.mount(<ContactPopout cfData={mockCfData} nonprofitData={mockNonprofitData} />)
-    const select = wrap.find('#contact-button').at(0);
-    select.props().onChange({ target: { value: "posting"} });
-    expect(onSelect.mock.calls.length).toBe(1);
-    expect(onSelect.mock.calls[0][0]).toBe("posting");
+    const contactButton = wrap.find('#contact-button').at(0);
+    contactButton.props().onChange({ target: { value: "posting"} });
+    expect(contactButton.mock.calls.length).toBe(1);
+    expect(contactButton.mock.calls[0][0]).toBe("posting");
   });
-*/
+
 })
