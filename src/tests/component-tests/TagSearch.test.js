@@ -103,19 +103,31 @@ describe('TagSearch method: UpdateSearch', () => {
 
 })
 
-describe('TagSearch method: ComponentWillMount', () => {
+describe('TagSearch method: GetLocationTag', () => {
 
-  /*it('No prior location', () => {
-    // TODO: No location
+  it('No prior location', () => {
+    const wrap = shallow(<TagSearch {...routeComponentPropsMock} 
+      parentCallback={(ret) => {
+        expect(ret).toEqual(
+          null
+        )
+      }  
+    }/>)
+    const inst = wrap.instance();
+    inst.getLocationTag(null);
   });
 
   it('Prior location 1', () => {
-    // TODO: Prior location
+    const wrap = shallow(<TagSearch {...routeComponentPropsMock} 
+      parentCallback={(ret) => {
+        expect(ret).toEqual(
+          ['Me, Tag!']
+        )
+      }  
+    }/>)
+    const inst = wrap.instance();
+    inst.getLocationTag('Me, Tag!');
   });
-
-  it('Prior location, returns element', () => {
-    // TODO: Prior location
-  });*/
   
 })
 
@@ -170,7 +182,7 @@ describe('TagSearch method: HandleAutoChange', () => {
     const inst = wrap.instance();
     
     inst.setState({ activeTags: ['tagOne', 'tagTwo'], activeTextSearch: ['freeOne', 'freeTwo']  }, () => { 
-      inst.handleAutoChange(['tagOne', 'freeOne']);
+      inst.handleAutoChange(null, ['tagOne', 'freeOne']);
     });
   });
 
@@ -185,7 +197,7 @@ describe('TagSearch method: HandleAutoChange', () => {
     const inst = wrap.instance();
     
     inst.setState({ activeTags: ['tagOne', 'tagTwo', 'tagThree']  }, () => { 
-      inst.handleAutoChange(['tagOne', 'tagThree']);
+      inst.handleAutoChange(null, ['tagOne', 'tagThree']);
     });
   });
   
@@ -200,7 +212,7 @@ describe('TagSearch method: HandleAutoChange', () => {
     const inst = wrap.instance();
     
     inst.setState({ activeTags: ['tagOne', 'tagTwo'], activeTextSearch: ['freeOne', 'freeTwo', 'freeThree'] }, () => { 
-      inst.handleAutoChange(['freeOne', 'freeThree']);
+      inst.handleAutoChange(null, ['freeOne', 'freeThree']);
     });
   });
 

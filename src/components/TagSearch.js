@@ -40,6 +40,10 @@ class TagSearch extends React.Component {
     this.updateSearch(db, (tags) => this.setState({ tags: tags }));
     
     const { match, location, history } = this.props;
+    this.getLocationTag(location);
+  }
+
+  getLocationTag(location) {
     if(location && location.state){
       console.log(location);
       if(location.state.incomingTag){
@@ -51,7 +55,6 @@ class TagSearch extends React.Component {
           console.log(this.state.incomingTag); 
           this.updateParent();
           return React.createElement('TextField');
-          
         });
       }
     }
@@ -62,7 +65,7 @@ class TagSearch extends React.Component {
     this.props.parentCallback({ tags: this.state.activeTags, freeText: this.state.activeTextSearch})
   }
 
-  handleAutoChange = ( values) => {
+  handleAutoChange = (event, values) => {
     var tagArr = [];
     var freeTextArr = [];
     values.forEach(element => {
