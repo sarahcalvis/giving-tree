@@ -45,14 +45,11 @@ class TagSearch extends React.Component {
 
   getLocationTag(location) {
     if(location && location.state){
-      console.log(location);
       if(location.state.incomingTag){
         let a = this.state.activeTags.slice(); //creates the clone of the state
         a[0] = location.state.incomingTag;
-        console.log(a);
-        this.setState({activeTags: a}, () => { console.log(this.state.activeTags); });
+        this.setState({activeTags: a});
         this.setState({incomingTag: a[0]}, () => { 
-          console.log(this.state.incomingTag); 
           this.updateParent();
           return React.createElement('TextField');
         });
