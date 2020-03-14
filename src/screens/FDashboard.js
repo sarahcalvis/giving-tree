@@ -25,11 +25,12 @@ export default function FDashboard(props) {
 
   // List of small grant cards
   const [grants, setGrants] = React.useState([]);
+  const [docs, setDocs] = React.useState();
   const [expiredGrants, setExpiredGrants] = React.useState([]);
   const [currentGrants, setCurrentGrants] = React.useState([]);
   const [draftedGrants, setDraftedGrants] = React.useState([]);
   const [toggleBarStatus, setToggleBarStatus] = React.useState('current');
-  const [displayedGrants, setDisplayedGrants] = React.useState([]);
+
   // Foundation ID
   const user = useContext(UserAuthContext);
 
@@ -38,13 +39,33 @@ export default function FDashboard(props) {
   const [snapshot, loading, error] = useCollection(db.collection('grants'));
 
   useEffect(() => {
-    let newGrants = [];
+    let newDocs = [];
     let curGrants = [];
     let exGrants = [];
     let drGrants = [];
     if (!loading && !error) {
       snapshot.forEach(function (doc) {
         if (doc.data().cf_id === user?.cfId) {
+          newDocs.push({
+            dist: -1,
+            id: doc.id,
+            title: doc.data().title,
+            cfName: doc.data().cf_name,
+            nonprofitName: doc.data().nonprofit_name,
+            goalAmt: doc.data().goal_amt,
+            moneyRaised: doc.data().money_raised,
+            img: doc.data().images[0] || 'GivingTree.png',
+            nonprofitId: doc.data().nonprofit_id,
+            address: doc.data().address,
+            lat: doc.data().lat,
+            long: doc.data().long,
+            datePosted: doc.data().date_posted,
+            dateDeadline: doc.data().date_deadline,
+            desc: doc.data().desc,
+            tags: doc.data().tags,
+            status: doc.data().status
+          });
+
           let grant = <SmallGrantCard
             id={doc.id}
             title={doc.data().title}
@@ -54,7 +75,6 @@ export default function FDashboard(props) {
             moneyRaised={doc.data().money_raised}
             img={doc.data().images[0] || 'GivingTree.png'}
             status={doc.data().status} />;
-          newGrants.push(grant);
           if (doc.data().status === 'current') {
             curGrants.push(grant);
           } else if (doc.data().status === 'draft') {
@@ -64,31 +84,27 @@ export default function FDashboard(props) {
           }
         }
       });
-      setGrants(newGrants);
-      setDisplayedGrants(newGrants);
+      setDocs(newDocs);
       setCurrentGrants(curGrants);
       setDraftedGrants(drGrants);
       setExpiredGrants(exGrants);
-      console.log("these are the newgrants: ", newGrants);
     }
   }, [snapshot, error, loading]);
 
   function searchCallback(childData) {
-    //console.log("childData in dashboard: ", childData);
-    var newGrants = [];
+    // console.log("childData in dashboard: ", childData);
     var curGrants = [];
     var exGrants = [];
     var drGrants = [];
     childData.forEach((meta) => {
       let grant = <SmallGrantCard
-          id={meta.grant.id}
-          title={meta.grant.title}
-          cfName={meta.grant.cfName}
-          nonprofitName={meta.grant.nonprofitName}
-          goalAmt={meta.grant.goalAmt}
-          moneyRaised={meta.grant.moneyRaised}
-          img={meta.grant.img} />
-      newGrants.push(grant);
+        id={meta.grant.id}
+        title={meta.grant.title}
+        cfName={meta.grant.cfName}
+        nonprofitName={meta.grant.nonprofitName}
+        goalAmt={meta.grant.goalAmt}
+        moneyRaised={meta.grant.moneyRaised}
+        img={meta.grant.img} />
       if (meta.grant.status === 'current') {
         curGrants.push(grant);
       } else if (meta.grant.status === 'draft') {
@@ -97,24 +113,15 @@ export default function FDashboard(props) {
         exGrants.push(grant);
       }
     });
-    setGrants(newGrants);
+    console.log("CURRENT GRANTS: " + curGrants);
+
     setCurrentGrants(curGrants);
     setDraftedGrants(drGrants);
     setExpiredGrants(exGrants);
-    console.log("newGrants: ", newGrants);
   }
 
   const handleToggle = (event, status) => {
     setToggleBarStatus(status);
-    if(status === 'current') {
-      setDisplayedGrants(currentGrants);
-    }
-    else if(status === 'drafted') {
-      setDisplayedGrants(draftedGrants);
-    }
-    else {
-      setDisplayedGrants(expiredGrants);
-    } 
   };
 
   const buttonOptions = [
@@ -131,7 +138,7 @@ export default function FDashboard(props) {
 
   return (
     <Container maxWidth='md' className={classes.container}>
-      {grants &&
+      {docs &&
         <div>
           <Grid container spacing={2} direction="column" alignItems="center">
             <Grid item className={classes.toggleBar}>
@@ -140,9 +147,9 @@ export default function FDashboard(props) {
               </ToggleButtonGroup>
             </Grid>
           </Grid>
-          <Search docs={grants} parentCallback={searchCallback} />
+          <Search docs={docs} parentCallback={searchCallback} />
           <Grid container spacing={2} >
-            {displayedGrants}
+            {toggleBarStatus === 'current' ? currentGrants : toggleBarStatus === 'drafted' ? draftedGrants : expiredGrants}
           </Grid>
         </div>
       }
