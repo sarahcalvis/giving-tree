@@ -60,7 +60,7 @@
   "description": "Giving Tree is a website that provides public access to grant giving opportunites.",
   "main": "index.js",
   "devDependencies": {
-    "jest-googleapi-mock": "^0.3.3"
+    "jest-googleapi-mock": "^0.3.3",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",
     "react-test-renderer": "^16.13.0"
