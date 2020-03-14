@@ -9,18 +9,14 @@ describe('Component: ProgressBar', () => {
   enzyme.configure({ adapter: new Adapter() });
 
   it('Renders correctly', () => {
-    const onSelect = jest.fn();
-    const wrap = enzyme.mount(<ProgressBar parentCallback={onSelect} />)
+    const wrap = enzyme.mount(<ProgressBar raised={100} goal={1000} />)
     expect(wrap).toMatchSnapshot();
   });
 
-  it('Sort by deadline', () => {
-    const onSelect = jest.fn();
-    const wrap = enzyme.mount(<ProgressBar parentCallback={onSelect} />)
-    const select = wrap.find('#select-sort').at(0);
-    select.props().onChange({ target: { value: "deadline"} });
-    expect(onSelect.mock.calls.length).toBe(1);
-    expect(onSelect.mock.calls[0][0]).toBe("deadline");
+  it('update progress bar amount donated', () => {
+    const wrap = enzyme.mount(<ProgressBar raised={100} goal={1000} />)
+    const progress = wrap.find('#lin-prog').at(0);
+    expect(progress.props().value).toBe(10.0);
   });
   
 })
