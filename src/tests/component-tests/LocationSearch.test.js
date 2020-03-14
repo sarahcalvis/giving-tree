@@ -1,3 +1,10 @@
+/*
+helpful links:
+https://www.npmjs.com/package/jest-googleapi-mock
+https://stackoverflow.com/questions/60334129/react-testing-with-jest-and-enzyme-react-google-maps-api-returns-typeerror-can
+https://janmonschke.com/projects/geomock.html
+*/
+
 import React from "react";
 import { shallow, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
