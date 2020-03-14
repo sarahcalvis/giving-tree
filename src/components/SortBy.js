@@ -36,8 +36,8 @@ export default function SortBy(props) {
           Sort By
         </InputLabel>
         <Select
-          labelId="select-radius-label"
-          id="select-radius"
+          labelId="select-sort-label"
+          id="select-sort"
           value={sort}
           onChange={handleChange}
           labelWidth={labelWidth}
