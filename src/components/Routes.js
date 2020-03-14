@@ -7,6 +7,7 @@ import Grant from '../screens/Grant.js';
 import FAccountRequest from '../screens/FAccountRequest.js';
 import FEditGrant from '../screens/FEditGrant.js';
 import FGrants from '../screens/FGrants.js';
+import FDashboard from '../screens/FDashboard.js';
 import FRequestSent from '../screens/FRequestSent.js';
 import FSettings from '../screens/FSettings.js';
 import LInputNewPassword from '../screens/LInputNewPassword.js';
@@ -24,7 +25,7 @@ export default function Routes() {
       <Route exact path='/grants/:grantId/give' component={DGive} />
       <Route exact path='/request-account' component={FAccountRequest} />
       <Route exact path='/request-sent' component={FRequestSent} />
-      <Route exact path='/foundation' component={FGrants} />
+      <Route exact path='/foundation' component={FDashboard} />//component={FGrants} />
       <Route exact path='/foundation/stripe-setup' component={FStripeSetup} />
       <Route exact path='/foundation/grant/:grantId' component={Grant} />
       <Route exact path='/foundation/edit/:grantId' component={FEditGrant} />

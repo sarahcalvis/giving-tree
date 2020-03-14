@@ -1,12 +1,13 @@
 // TODO: will receive props describing grant
 // TODO: split up elements to make it look nicer
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/styles';
 import Text from '../components/Text.js';
 import firebase from '../firebase.js';
 import ProgressBar from '../components/ProgressBar.js';
+import AuthUserContext from '../auth/context.js';
 import LinearProgress from '@material-ui/core/LinearProgress';
 // FYI: removing this unused import does make the whole project crash, do not know why
 import * as naughtyFirebase from 'firebase';
@@ -58,6 +59,8 @@ const useStyles = makeStyles(theme => ({
 
 function PaymentForm(props) {
   const classes = useStyles();
+  const user = useContext(AuthUserContext);
+  // ^^ use user.user_id
 
   // Grant details received as props
   const [grantId] = React.useState(props.grantId);
@@ -165,6 +168,22 @@ function PaymentForm(props) {
           });
 
         });
+
+        let userRef = db.collection('users').doc(user.user_id);
+        // Update the donation collection for the user in firebase
+        userRef.collection('donations').add({
+          amount: Number.parseInt(amount),
+          grant: grantId,
+          timestamp: naughtyFirebase.firestore.Timestamp.fromDate(new Date()),
+        }).then(ref => {
+          console.log('Added donation of ' + amount + ' with ID ' + ref.id + ' to the donations collection');
+          }).then(result => {
+            console.log('User donations updated!');
+            // Record transaction complete
+            setStatus('complete');
+          }).catch(err => {
+            console.log('User donations update error:', err);
+          });
       } else {
         setStatus('error');
       }

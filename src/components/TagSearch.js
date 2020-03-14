@@ -120,12 +120,12 @@ class TagSearch extends React.Component {
     var cacheResult = this.retrieveCached(query, 600);
     var tags = [];
     if(cacheResult){
-      console.log("Getting from cache :)");
+      //console.log("Getting from cache :)");
       tags = cacheResult;
       this.setState({ tags: tags })
       displayResults(cacheResult);
     }else{
-      console.log("Have to start over :(");
+      //console.log("Have to start over :(");
       var db = firebase.firestore();
       var dbRef = db.collection("tags");
 
@@ -149,6 +149,9 @@ class TagSearch extends React.Component {
   }
 
   setDefaultAuto(incoming) {
+    if(this.props.tags) {
+      return this.props.tags;
+    }
     if(incoming) {
       return [incoming];
     }else{
@@ -176,8 +179,8 @@ class TagSearch extends React.Component {
              
           <TextField {...params}
             label="Select Tags"
-            variant="outlined"
             fullWidth
+            multiline
             InputProps={{
               ...params.InputProps,
               endAdornment: (
