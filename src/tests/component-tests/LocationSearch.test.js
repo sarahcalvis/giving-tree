@@ -31,18 +31,22 @@ describe('Component: LocationSearch', () => {
   });
 
   it('Renders correctly', () => {
-    const onSelect = jest.fn();
-    const wrap = enzyme.mount(<LocationSearch parentCallback={onSelect} />)
+    const parentCallback = jest.fn();
+    const error = "";
+    const address = "1421 Bolling Avenue, Norfolk, VA, USA";
+    const wrap = enzyme.mount(<LocationSearch parentCallback={parentCallback} error={error} address={address}/>)
     expect(wrap).toMatchSnapshot();
   });
 
-  it('Sort by deadline', () => {
-    const onSelect = jest.fn();
-    const wrap = enzyme.mount(<LocationSearch parentCallback={onSelect} />)
-    const select = wrap.find('#select-sort').at(0);
-    select.props().onChange({ target: { value: "deadline"} });
-    expect(onSelect.mock.calls.length).toBe(1);
-    expect(onSelect.mock.calls[0][0]).toBe("deadline");
+  it('change address', () => {
+    const parentCallback = jest.fn();
+    const error = "";
+    const address = "1421 Bolling Avenue, Norfolk, VA, USA"; //{lat: -34.397, lng: 150.644}
+    const wrap = enzyme.mount(<LocationSearch parentCallback={parentCallback} error={error} address={address}/>)
+    const locBar = wrap.find('#loc-bar').at(0);
+    locBar.props().onChange("", { value: { description: "1421 Bolling Avenue, Norfolk, VA, USA"} });
+    expect(parentCallback.mock.calls.length).toBe(1);
+    expect(parentCallback.mock.calls[0][0].address).toBe("1421 Bolling Avenue, Norfolk, VA, USA");
   });
 
 })
