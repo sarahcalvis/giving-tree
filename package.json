@@ -57,7 +57,10 @@
   },
   "description": "Giving Tree is a website that provides public access to grant giving opportunites.",
   "main": "index.js",
-  "devDependencies": {},
+  "devDependencies": {
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.2"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sarahcalvis/giving-tree.git"

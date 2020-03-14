@@ -40,8 +40,8 @@ export default function ContactPopout(props) {
 
   return (
     <div>
-      <a className={classes.a} aria-describedby={id} variant="contained" color="primary" onClick={handleClick}>
-        <Button variant='outlined' color='primary'>
+      <a id="a-id" className={classes.a} aria-describedby={id} variant="contained" color="primary" onClick={handleClick}>
+        <Button variant='outlined' color='primary' id="contact-button">
           Contact
         </Button>
       </a>

@@ -9,18 +9,21 @@ describe('Component: ContactPopout', () => {
   enzyme.configure({ adapter: new Adapter() });
 
   it('Renders correctly', () => {
-    const onSelect = jest.fn();
-    const wrap = enzyme.mount(<ContactPopout parentCallback={onSelect} />)
+    const mockCfData = "mockCfData";
+    const mockNonprofitData = "mockNonprofitData";
+    const wrap = enzyme.mount(<ContactPopout cfData={mockCfData} nonprofitData={mockNonprofitData} />)
     expect(wrap).toMatchSnapshot();
-  });
-
-  it('Sort by posting date', () => {
-    const onSelect = jest.fn();
-    const wrap = enzyme.mount(<ContactPopout parentCallback={onSelect} />)
-    const select = wrap.find('#select-sort').at(0);
+  });  
+/*
+  it('contact button registers clicks', () => {
+    const mockCfData = "mockCfData";
+    const mockNonprofitData = "mockNonprofitData";
+    const click = jest.fn();
+    const wrap = enzyme.mount(<ContactPopout cfData={mockCfData} nonprofitData={mockNonprofitData} />)
+    const select = wrap.find('#contact-button').at(0);
     select.props().onChange({ target: { value: "posting"} });
     expect(onSelect.mock.calls.length).toBe(1);
     expect(onSelect.mock.calls[0][0]).toBe("posting");
   });
-
+*/
 })
