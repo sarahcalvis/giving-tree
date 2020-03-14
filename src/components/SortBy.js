@@ -33,12 +33,12 @@ export default function SortBy(props) {
   return (
     <div>
       <FormControl variant="outlined" className={classes.formControl}>
-        <InputLabel ref={inputLabel} id="select-radius-ref">
+        <InputLabel ref={inputLabel} id="select-sort-ref">
           Sort By
         </InputLabel>
         <Select
-          labelId="select-radius-label"
-          id="select-radius"
+          labelId="select-sort-label"
+          id="select-sort"
           value={sort}
           onChange={handleChange}
           labelWidth={labelWidth}
