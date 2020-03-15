@@ -1,14 +1,24 @@
-import { validateField } from '../../helpers/ValidationHelper.js';
+import { validateField, confirmMatching } from '../../helpers/ValidationHelper.js';
 
 describe('Validate Passwords', () => {
-    it('not matching passwording', () => {
-      expect(validateField({name:'passwordOne', value:{passwordOne: "abc", passwordTwo: "ABC"}})).toBe('');
+    it('everything is breakage', () => {
+      expect(validateField('passwordOne', 'blah')).toBe('*Password fails the following requirements: a minimum of 8 characters, a number, an uppercase letter, a special character (e.g. !@#$%^&*)');
     });
 
-    it('matching passwording', () => {
-        expect(validateField({name:'passwordOne', value:{passwordOne: "abc", passwordTwo: "abc"}})).toBe('');
-      }); 
+    it('breakage is not extant', () => {
+        expect(validateField('passwordOne', 'abA123$usid')).toBe('');
+    }); 
   })
+
+describe('Match Passwords', () => {
+  it('not matching passwording', () => {
+    expect(confirmMatching('passwordOne', 'blah')).toBe('*Passwords do not match.');
+  });
+
+  it('matching passwording', () => {
+      expect(validateField('password1', 'password1')).toBe('');
+    });
+})
  
   describe('Validate Title', () => {
     it('empty title', () => {
