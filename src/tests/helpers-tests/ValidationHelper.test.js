@@ -70,11 +70,112 @@ describe('Match Passwords', () => {
     });
 
     it('old date', () => {
-        expect(validateField('date_deadline', (new Date() - 100)/1000 )).toBe('*Please select a grant deadline.');
+        expect(validateField('date_deadline', (new Date() - 100)/1000 )).toBe('*Please choose a deadline that is in the future.');
       });
     
     it('good date', () => {
       expect(validateField('date_deadline', "Good date")).toBe('');
     }); 
   })
+
+  describe('Validate goal', () => {
+    it('empty goal', () => {
+      expect(validateField('goal_amt', '')).toBe('*Please enter a goal amount.');
+    });
+
+    it('bad goal', () => {
+        expect(validateField('goal_amt', "y")).toBe('*Please enter a valid money amount.');
+      });
+    
+    it('negative goal', () => {
+      expect(validateField('goal_amt', -10)).toBe('*Goal must be positive.');
+    });
+    
+    it('good goal', () => {
+        expect(validateField('goal_amt', "100")).toBe('');
+      });
+  })
  
+  describe('Validate email', () => {
+    it('empty email', () => {
+      expect(validateField('email', '')).toBe("*Please enter your email.");
+    });
+
+    it('old date', () => {
+        expect(validateField('email', "aaa" )).toBe("*Please enter a valid email.");
+      });
+    
+    it('good email', () => {
+      expect(validateField('email', "a@a.com")).toBe('');
+    }); 
+  })
+
+  describe('Validate personal email', () => {
+    it('empty email', () => {
+      expect(validateField('personal_email', '')).toBe("*Please enter your email.");
+    });
+
+    it('old date', () => {
+        expect(validateField('personal_email', "aaa" )).toBe("*Please enter a valid email.");
+      });
+    
+    it('good email', () => {
+      expect(validateField('personal_email', "a@a.com")).toBe('');
+    }); 
+  })
+
+  describe('Validate public email', () => {
+    it('empty email', () => {
+      expect(validateField('public_email', '')).toBe("*Please enter your email.");
+    });
+
+    it('old date', () => {
+        expect(validateField('public_email', "aaa" )).toBe("*Please enter a valid email.");
+      });
+    
+    it('good email', () => {
+      expect(validateField('public_email', "a@a.com")).toBe('');
+    }); 
+  })
+
+  describe('Validate number', () => {
+    it('empty number', () => {
+      expect(validateField('number', '')).toBe("*Please enter your phone number.");
+    });
+
+    it('bad number', () => {
+        expect(validateField('number', "7" )).toBe("*Please enter a valid phone number.");
+      });
+    
+    it('good number', () => {
+      expect(validateField('number', "(757)744-3516")).toBe('');
+    }); 
+  })
+
+  describe('Validate personal_phone', () => {
+    it('empty personal_phone', () => {
+      expect(validateField('personal_phone', '')).toBe("*Please enter your phone number.");
+    });
+
+    it('bad personal_phone', () => {
+        expect(validateField('personal_phone', "7" )).toBe("*Please enter a valid phone number.");
+      });
+    
+    it('good personal_phone', () => {
+      expect(validateField('personal_phone', "(757)744-3516")).toBe('');
+    }); 
+  })
+
+  describe('Validate public_phone', () => {
+    it('empty public_phone', () => {
+      expect(validateField('public_phone', '')).toBe("*Please enter your phone number.");
+    });
+
+    it('bad public_phone', () => {
+        expect(validateField('public_phone', "7" )).toBe("*Please enter a valid phone number.");
+      });
+    
+    it('good public_phone', () => {
+      expect(validateField('public_phone', "(757)744-3516")).toBe('');
+    }); 
+  })
