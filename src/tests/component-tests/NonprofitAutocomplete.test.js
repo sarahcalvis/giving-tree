@@ -15,6 +15,13 @@ describe('Component: NonprofitAutocomplete', () => {
     // };
     // const wrap = shallow(<GrantTagBar id={45} tags={gtbProps.tags} />)
     // expect(wrap).toMatchSnapshot();
+    const naProps = {
+      callback: { nonprofitCallback }
+      cfId: { props.cfId }
+      error: { props.errors.nonprofit_name !== '' }
+      helperText: { props.errors.nonprofit_name }
+      initialNonprofit: { props.grantData.nonprofit_id }
+    };
   });
 
   it('State: no tags', () => {
@@ -42,7 +49,7 @@ describe('Component: NonprofitAutocomplete', () => {
         <GrantTagBar tags={gtbProps.tags} />
       </StaticRouter>
     )
-  
+
     expect(wrap.find(GrantTagBar).state('tags')).toEqual(['Tag'])
   })
 
@@ -56,16 +63,16 @@ describe('Component: NonprofitAutocomplete', () => {
         <GrantTagBar id={45} tags={gtbProps.tags} />
       </StaticRouter>
     )
-  
+
     expect(wrap.find(GrantTagBar).state('tags')).toEqual(['First', 'Second'])
   })
-  
-  
+
+
 })
 
 
 describe('Component: GrantTag', () => {
-  
+
   it('Renders correctly', () => {
     const tag = 'Tag'
     const context = {};
@@ -91,13 +98,13 @@ describe('Component: GrantTag', () => {
 
   it('Link takes to Dashboard', () => {
     const tag = 'Tag'
-    const wrapper = mount(<MemoryRouter><GrantTag tag={tag} key={0}/></MemoryRouter>);
+    const wrapper = mount(<MemoryRouter><GrantTag tag={tag} key={0} /></MemoryRouter>);
     expect(wrapper.find('Link').props().to).toEqual({ pathname: "/", state: { "incomingTag": "Tag" } });
   })
 
   it('Link button body text', () => {
     const tag = 'Tag'
-    const wrapper = mount(<MemoryRouter><GrantTag tag={tag} key={0}/></MemoryRouter>);
+    const wrapper = mount(<MemoryRouter><GrantTag tag={tag} key={0} /></MemoryRouter>);
     expect(wrapper.find('Link').text()).toEqual("Tag");
   })
 })

@@ -341,7 +341,6 @@ function FEditGrant(props) {
               direction='row'
               justify='space-around'
               alignItems='flex-start'>
-              {/* <div className={classes.fab}> */}
               {grantStatus === 'edit' && validEditor && validGrant &&
                 <Grid container
                   spacing={2}
@@ -417,5 +416,4 @@ function FEditGrant(props) {
     </div >
   );
 }
-
 export default withAuthProtection()(withRouter(FEditGrant));
