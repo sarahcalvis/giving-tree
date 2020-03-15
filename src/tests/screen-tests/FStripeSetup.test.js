@@ -1,10 +1,8 @@
 import React from 'react';
 //import { shallow, mount } from 'enzyme';
-import { Link, MemoryRouter } from 'react-router';
 import { createMount, createShallow } from '@material-ui/core/test-utils';
 
 import FStripeSetup from '../../screens/FStripeSetup.js';
-import { StaticRouter } from 'react-router-dom';
 
 let mount;
 let shallow;

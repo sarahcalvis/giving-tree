@@ -50,8 +50,7 @@ class TagSearch extends React.Component {
         a[0] = location.state.incomingTag;
         this.setState({activeTags: a});
         this.setState({incomingTag: a[0]}, () => { 
-          this.updateParent();
-          return React.createElement('TextField');
+          this.updateParent();                          //TEST
         });
       }
     }
@@ -154,12 +153,12 @@ class TagSearch extends React.Component {
         disableOpenOnFocus
         multiple
         freeSolo
-        getOptionLabel={option => option}
+        getOptionLabel={option => option}                 //TEST
         onChange={this.handleAutoChange}
         style={{ top: "auto", bottom: "auto", height:"auto", postion: "absolute" }}
         renderInput={params => (
              
-          <TextField {...params}
+          <TextField {...params}                          //TEST
             label="Select Tags"
             fullWidth
             multiline
