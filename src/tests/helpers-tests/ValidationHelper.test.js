@@ -34,6 +34,36 @@ describe('Validate Passwords', () => {
     }); 
   })
 
+  describe('Validate name', () => {
+    it('empty name', () => {
+      expect(validateField('name', '')).toBe('*Please enter a name.');
+    });
+    
+    it('good name', () => {
+      expect(validateField('name', "Good name")).toBe('');
+    }); 
+  })
+
+  describe('Validate fname_contact', () => {
+    it('empty name', () => {
+      expect(validateField('fname_contact', '')).toBe('*Please enter a name.');
+    });
+    
+    it('good name', () => {
+      expect(validateField('fname_contact', "Good name")).toBe('');
+    }); 
+  })
+
+  describe('Validate lname_contact', () => {
+    it('empty name', () => {
+      expect(validateField('lname_contact', '')).toBe('*Please enter a name.');
+    });
+    
+    it('good name', () => {
+      expect(validateField('lname_contact', "Good name")).toBe('');
+    }); 
+  })
+
   describe('Validate nonProfit name', () => {
     it('empty name', () => {
       expect(validateField('nonprofit_name', '')).toBe('*Please select a nonprofit or add a new one.');
@@ -167,5 +197,33 @@ describe('Validate Passwords', () => {
     
     it('good public_phone', () => {
       expect(validateField('public_phone', "(757)744-3516")).toBe('');
+    }); 
+  })
+
+  describe('Validate url', () => {
+    it('empty url', () => {
+      expect(validateField('url', '')).toBe("*Please enter the foundation website URL.");
+    });
+
+    it('bad url', () => {
+        expect(validateField('url', "7" )).toBe("*Please enter a valid URL.");
+      });
+    
+    it('good url', () => {
+      expect(validateField('url', "https://github.com/sarahcalvis/giving-tree/pull/24")).toBe('');
+    }); 
+  })
+
+  describe('Validate foundation_url', () => {
+    it('empty url', () => {
+      expect(validateField('foundation_url', '')).toBe("*Please enter the foundation website URL.");
+    });
+
+    it('bad url', () => {
+        expect(validateField('foundation_url', "7" )).toBe("*Please enter a valid URL.");
+      });
+    
+    it('good url', () => {
+      expect(validateField('foundation_url', "https://github.com/sarahcalvis/giving-tree/pull/24")).toBe('');
     }); 
   })
