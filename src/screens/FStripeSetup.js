@@ -3,8 +3,7 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import Link from '@material-ui/core/Link';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
-import Container from '@material-ui/core/Container';
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import { Dialog, DialogContent, DialogActions, DialogTitle, DialogContentText, Slide, Grid } from '@material-ui/core';
 
 
@@ -41,7 +40,7 @@ export default function FStripeSetup() {
   return (
     <div>
       <Grid container className={classes.pageLayout} justify='center' spacing={2}>
-        <Grid item xs="10">
+        <Grid item xs={10}>
           <Link
             textDecoration='none'
             color='inherit'
@@ -70,24 +69,24 @@ export default function FStripeSetup() {
             <DialogTitle id="alert-dialog-slide-title">{"About Stripe"}</DialogTitle>
             <DialogContent>
               <DialogContentText id="alert-dialog-slide-description">
-                <p>Stripe is a third party payment platform that handles customer payment information and allows donors to contribute to your 
-                  foundation's giving opportunities. </p>
-                <p>After clicking on the link above, you will be taken to a signup page, where you will be prompted to provide your 
-                  foundation's basic information.</p>
-                <p>Additionally, you will be given the opportunity to supply the information that will show up on the donors' banking and 
-                  credit card statements.</p>
-                <p>Finally, you will be asked for your bank account number and routing number.</p>
-                <p>Once all the pertinent information has been provided, you can strengthen your account's security with a second step of
-                  authentication.</p>
-                <p>If you still have questions about Stripe, please click "Learn More" below!</p>
+                <span>Stripe is a third party payment platform that handles customer payment information and allows donors to contribute to your 
+                  foundation's giving opportunities. </span>
+                <span>After clicking on the link above, you will be taken to a signup page, where you will be prompted to provide your 
+                  foundation's basic information.</span>
+                <span>Additionally, you will be given the opportunity to supply the information that will show up on the donors' banking and 
+                  credit card statements.</span>
+                <span>Finally, you will be asked for your bank account number and routing number.</span>
+                <span>Once all the pertinent information has been provided, you can strengthen your account's security with a second step of
+                  authentication.</span>
+                <span>If you still have questions about Stripe, please click "Learn More" below!</span>
               </DialogContentText>
             </DialogContent>
             <DialogActions>
               <Link
-              textDecoration='none'
-              color='inherit'
-              href='https://stripe.com/about'
-              target='_blank'
+                textDecoration='none'
+                color='inherit'
+                href='https://stripe.com/about'
+                target='_blank'
               >
                 <Button onClick={handleClose} color="primary">
                   Learn More
