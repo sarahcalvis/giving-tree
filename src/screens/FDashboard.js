@@ -9,6 +9,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import UserAuthContext from '../auth/context.js';
 import ToggleButton from '@material-ui/lab/ToggleButton';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
+import Snack from '../components/Snack.js';
+import Button from '@material-ui/core/Button';
+import Link from '@material-ui/core/Link';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -22,6 +25,9 @@ const useStyles = makeStyles(theme => ({
 export default function FDashboard(props) {
 
   const classes = useStyles();
+
+  // Set tab title
+  useEffect(() => { document.title = 'Giving Tree Grants'; }, [props.title]);
 
   // List of small grant cards
   const [grants, setGrants] = React.useState([]);
@@ -37,6 +43,55 @@ export default function FDashboard(props) {
   // Initialize database and specific grant in database
   const db = firebase.firestore();
   const [snapshot, loading, error] = useCollection(db.collection('grants'));
+
+
+  /////////////////////////////////////////////////////
+  // MAKE SURE THE FOUNDATION IS CONNECTED TO STRIPE //
+  /////////////////////////////////////////////////////
+  const [stripeId, setStripeId] = React.useState('');
+  const [stripeUpdateCompleted, setStripeUpdateCompleted] = React.useState(false);
+  // If the user is entering this page redirected from the account creation page,
+  // then the url will have two parameters:
+  // scope- I don't think we really care about scope. hopefully it is read/write
+  const qs = require('query-string');
+  const code = qs.parse(props.location.search).code;
+  const stripeError = qs.parse(props.location.search).stripeError;
+
+  // Observe the foundation code
+  useEffect(() => {
+    if (code && user?.cfId) {
+      console.log('in here', user?.cfId);
+      submit();
+    }
+  }, [user]);
+
+  // If there is a code, submit it to Stripe
+  const submit = async () => {
+    if (code) {
+      let response = await fetch('/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain' },
+        body: code,
+      });
+      if (response.ok) {
+        let resJSON = await response.json();
+        setStripeId(resJSON.stripeId);
+        updateStripeIdDB(resJSON.stripeId);
+        //send the id to the database
+      } else {
+        console.log('did not do good');
+        setStripeUpdateCompleted(true);
+        //it went wrong and idk what to do in this case
+      }
+    }
+  }
+
+  // Update Stripe ID In database
+  const updateStripeIdDB = (stripeId) => {
+    console.log('updating account ID to ' + stripeId);
+    db.doc('communityFoundations/' + user?.cfId).update({ 'stripe_id': stripeId })
+    setStripeUpdateCompleted(true);
+  }
 
   useEffect(() => {
     let newDocs = [];
@@ -153,6 +208,36 @@ export default function FDashboard(props) {
           </Grid>
         </div>
       }
+      <div>
+        <Container>
+          <React.Fragment>
+            {code && stripeId !== '' && stripeUpdateCompleted &&
+              <Snack message='Connected to Stripe' />
+            }
+            {code && stripeId === '' && stripeUpdateCompleted &&
+              <Snack message='Sorry- our server failed! Try again later' />
+            }
+            {stripeError &&
+              <div>
+                <Snack message='You gotta connect to stripe for this to work my dude 🤡' />
+                <Link
+                  textDecoration='none'
+                  color='inherit'
+                  //target='_blank'
+                  //rel='noopener noreferrer'
+                  href='https://connect.stripe.com/oauth/authorize?response_type=code&client_id=ca_GblAQuuPHkvIstLgnPzWLGLhh4hMRV3h&scope=read_write'>
+                  <Button
+                    fullWidth
+                    color='primary'
+                    variant='contained'>
+                    Connect to Stripe
+                </Button>
+                </Link>
+              </div>
+            }
+          </React.Fragment>
+        </Container>
+      </div >
     </Container>
   );
 }
