@@ -8,7 +8,7 @@ describe('Component: ProgressBar', () => {
   var enzyme = require('enzyme');
   enzyme.configure({ adapter: new Adapter() });
 
-  it('Renders correctly', () => {
+  it('Renders correctly', () => { 
     const wrap = enzyme.mount(<ProgressBar raised={100} goal={1000} />)
     expect(wrap).toMatchSnapshot();
   });
