@@ -128,6 +128,27 @@ describe('TagSearch method: GetLocationTag', () => {
     const inst = wrap.instance();
     inst.getLocationTag('Me, Tag!');
   });
+
+  it('Parent updated', () => {
+    const wrap = shallow(<TagSearch {...routeComponentPropsMock} 
+      parentCallback={(ret) => {
+        expect(spy).toHaveBeenCalled();
+      }  
+    }/>)
+    const inst = wrap.instance();
+    const spy = jest.spyOn(wrap.instance(), "updateParent");
+    inst.getLocationTag('Me, Tag!')
+  });
+
+  it('Parent updated', () => {
+    const wrap = shallow(<TagSearch {...routeComponentPropsMock} 
+      parentCallback={(ret) => {
+        expect(wrap.state.incomingTag).toEqual('Me, Tag!');
+      }  
+    }/>)
+    const inst = wrap.instance();
+    inst.getLocationTag('Me, Tag!')
+  });
   
 })
 
@@ -213,6 +234,36 @@ describe('TagSearch method: HandleAutoChange', () => {
     
     inst.setState({ activeTags: ['tagOne', 'tagTwo'], activeTextSearch: ['freeOne', 'freeTwo', 'freeThree'] }, () => { 
       inst.handleAutoChange(null, ['freeOne', 'freeThree']);
+    });
+  });
+
+  it('Raise tags not in active',  () =>{
+    const wrap = shallow(<TagSearch {...routeComponentPropsMock} 
+      parentCallback={(ret) => {
+        expect(ret).toEqual(
+          { tags: ['tagOne', 'tagThree'], freeText: []  }
+        )
+      }  
+    }/>)
+    const inst = wrap.instance();
+    
+    inst.setState({ activeTags: ['tagTwo'], tags: ['tagOne', 'tagThree'] }, () => { 
+      inst.handleAutoChange(null, ['tagOne', 'tagThree']);
+    });
+  });
+
+  it('Raise free text not in active or tags',  () =>{
+    const wrap = shallow(<TagSearch {...routeComponentPropsMock} 
+      parentCallback={(ret) => {
+        expect(ret).toEqual(
+          { tags: [], freeText: ['freeOne']  }
+        )
+      }  
+    }/>)
+    const inst = wrap.instance();
+    
+    inst.setState({ activeTags: ['tagTwo'], tags: ['tagOne', 'tagThree'] }, () => { 
+      inst.handleAutoChange(null, ['freeOne']);
     });
   });
 
