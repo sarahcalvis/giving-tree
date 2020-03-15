@@ -109,10 +109,6 @@ describe('Match Passwords', () => {
   })
 
   describe('Validate goal', () => {
-    it('empty goal', () => {
-      expect(validateField('goal_amt', '')).toBe('*Please enter a goal amount.');
-    });
-
     it('bad goal', () => {
         expect(validateField('goal_amt', "y")).toBe('*Please enter a valid money amount.');
       });
