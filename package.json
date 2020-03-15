@@ -43,9 +43,6 @@
     "eject": "react-scripts eject",
     "coverage": "jest --coverage"
   },
-  "jest": {
-    "coverageDirectory": "coverage"
-  },
   "eslintConfig": {
     "extends": "react-app"
   },
