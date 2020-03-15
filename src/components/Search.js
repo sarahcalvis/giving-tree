@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import { withStyles } from '@material-ui/styles';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
 
 import * as helper from '../helpers/SearchHelper.js'; 
 
@@ -13,7 +15,10 @@ import TagSearch from "./TagSearch";
     display: 'flex',
     'flex-wrap': 'wrap',
   },
-  
+  paper: {
+    padding: theme.spacing(2),
+    maxWidth: 400,
+  },
 });
 class Search extends Component {
   constructor(props) {
@@ -162,10 +167,20 @@ class Search extends Component {
   render() {
     return (
       <div className={styles.searchWrapper}>
-        <TagSearch parentCallback={this.tagFreeTextCallback}/>
-        <LocationSearch parentCallback={this.locationCallback}/>
-        <SearchRadius parentCallback={this.radiusCallback}/>
-        <SortBy parentCallback={this.sortByCallback}/>
+        <Grid container spacing={2} >
+          <Grid item xs={12} md={6} lg={4}>
+            <TagSearch parentCallback={this.tagFreeTextCallback}/>
+          </Grid>
+          <Grid item xs={12} md={6} lg={4}>
+            <LocationSearch parentCallback={this.locationCallback}/>
+          </Grid>
+          <Grid item xs={6} lg={2}>
+            <SearchRadius parentCallback={this.radiusCallback}/>
+          </Grid>
+          <Grid item xs={6} lg={2}>
+            <SortBy parentCallback={this.sortByCallback}/>
+          </Grid>
+        </Grid>
       </div>  
     );
   }

@@ -1,13 +1,27 @@
 export const validateField = (name, value) => {
   switch (name) {
+    case 'title':
+      return validateTitle(value);
+    case 'desc':
+      return validateDesc(value);
+    case 'nonprofit_name':
+      return validateNonprofit(value);
+    case 'address':
+      return validateAddress(value);
+    case 'date_deadline':
+      return validateDeadline(value);
+    case 'goal_amt':
+      return validateGoal(value);
     case 'email':
     case 'public_email':
     case 'personal_email':
       return validateEmail(value);
     case 'public_phone':
     case 'personal_phone':
+    case 'number':
       return validatePhone(value);
     case 'foundation_url':
+    case 'url':
       return validateUrl(value);
     case 'name':
     case 'fname_contact':
@@ -39,6 +53,67 @@ export const validateEmail = (email) => {
       errorMsg = "*Please enter a valid email.";
     }
   }
+
+  return errorMsg;
+}
+
+const validateTitle = (title) => {
+  let errorMsg = '';
+  console.log("title: ", title);
+  if (title === '') {
+    errorMsg = '*Please enter a grant title.';
+  }
+  if (title.length > 60) {
+    errorMsg = '*Grant title must be less than 60 characters.';
+  }
+
+  return errorMsg;
+}
+
+const validateDesc = (desc) => {
+  let errorMsg = '';
+  
+  if (desc === '') errorMsg = '*Please enter a grant description.';
+
+  return errorMsg;
+}
+
+const validateNonprofit = (nonprofit) => {
+  let errorMsg = '';
+  
+  if (nonprofit === '') errorMsg = '*Please select a nonprofit or add a new one.';
+
+  return errorMsg;
+}
+
+const validateAddress = (address) => {
+  let errorMsg = '';
+  
+  if (address === '') errorMsg = '*Please select a grant location.';
+
+  return errorMsg;
+}
+
+const validateDeadline = (deadline) => {
+  let errorMsg = '';
+  
+  if (deadline === '') errorMsg = '*Please select a grant deadline.'
+  
+  if (parseFloat(deadline) < (new Date() / 1000)) errorMsg = '*Please choose a deadline that is in the future.'
+
+  return errorMsg;
+}
+
+const validateGoal = (goal) => {
+  let errorMsg = '';
+  
+  let pattern = new RegExp(/^\d+(?:\.\d{0,2})?$/);
+  
+  if (goal === '') errorMsg = '*Please enter a goal amount.';
+  
+  if (!pattern.test(goal)) errorMsg = '*Please enter a valid money amount.';
+
+  if (!isNaN(parseFloat(goal)) && parseFloat(goal) <= 0) errorMsg = '*Goal must be positive.';
 
   return errorMsg;
 }
