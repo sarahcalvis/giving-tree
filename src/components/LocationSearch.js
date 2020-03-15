@@ -54,12 +54,17 @@ export default function LocationSearch(props) {
 
   const handleChange = (event, value) => {
     if (!(value === null)) {
+      console.log("event: ", event);
+      console.log("value: ", value);
       Geocode.fromAddress(value.description).then(
         response => {
           const { lat, lng } = response.results[0].geometry.location;
+          console.log("got into the change response? ");
           props.parentCallback({address: value, lat: lat, long: lng});
         },
         error => {
+          props.parentCallback({address: "1421 Bolling Avenue, Norfolk, VA, USA", lat: 80, long: -40});
+          console.log("didn't get a response :(");
           console.error(error);
         }
       );
