@@ -22,7 +22,7 @@ describe('Match Passwords', () => {
  
   describe('Validate Title', () => {
     it('empty title', () => {
-      expect(validateField('title',  '')).toBe('*Please enter a grant title.');
+      expect(validateField('title', '')).toBe('*Please enter a grant title.');
     });
 
     it('mega length too long title', () => {
@@ -55,12 +55,26 @@ describe('Match Passwords', () => {
   })
 
   describe('Validate address', () => {
-    it('empty name', () => {
-      expect(validateField('nonprofit_name', '')).toBe('*Please select a nonprofit or add a new one.');
+    it('empty address', () => {
+      expect(validateField('address', '')).toBe('*Please select a grant location.');
     });
     
-    it('good name', () => {
-      expect(validateField('nonprofit_name', "Good name")).toBe('');
+    it('good address', () => {
+      expect(validateField('address', "Good address")).toBe('');
+    }); 
+  })
+
+  describe('Validate date deadline', () => {
+    it('empty date', () => {
+      expect(validateField('date_deadline', '')).toBe('*Please select a grant deadline.');
+    });
+
+    it('old date', () => {
+        expect(validateField('date_deadline', (new Date() - 100)/1000 )).toBe('*Please select a grant deadline.');
+      });
+    
+    it('good date', () => {
+      expect(validateField('date_deadline', "Good date")).toBe('');
     }); 
   })
  
