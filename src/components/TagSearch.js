@@ -3,7 +3,6 @@ import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import $ from 'jquery';
 import PropTypes from "prop-types";
 import firebase from '../firebase.js';
 import { withRouter } from 'react-router-dom';
@@ -12,14 +11,15 @@ class TagSearch extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      tags: [{}],
-      //tagString: "",
+      tags: [],
       activeTags: [],
       activeTextSearch: [],
       loading: false,
       incomingTag: null
     };
     
+    
+
     this.setCached = this.setCached.bind(this);
     this.retrieveCached = this.retrieveCached.bind(this);
     this.updateSearch = this.updateSearch.bind(this);
@@ -32,31 +32,32 @@ class TagSearch extends React.Component {
     location: PropTypes.object.isRequired,
     history: PropTypes.object.isRequired
   }
+  
 
   componentWillMount() {
-
-    this.updateSearch();
+    // Get the tags from cache or database and set the 'tags' state accordingly
+    const db = firebase.firestore();
+    this.updateSearch(db, (tags) => this.setState({ tags: tags }));
     
     const { match, location, history } = this.props;
+    this.getLocationTag(location);
+  }
 
-    if(location.state){
-      console.log(location);
-      if(location && location.state.incomingTag){
+  getLocationTag(location) {
+    if(location && location.state){
+      if(location.state.incomingTag){
         let a = this.state.activeTags.slice(); //creates the clone of the state
         a[0] = location.state.incomingTag;
-        console.log(a);
-        this.setState({activeTags: a}, () => { console.log(this.state.activeTags); });
+        this.setState({activeTags: a});
         this.setState({incomingTag: a[0]}, () => { 
-          console.log(this.state.incomingTag); 
           this.updateParent();
           return React.createElement('TextField');
-          
         });
       }
     }
-
   }
 
+  // Pass the selected tags and free text up to the Search component
   updateParent() {
     this.props.parentCallback({ tags: this.state.activeTags, freeText: this.state.activeTextSearch})
   }
@@ -77,28 +78,19 @@ class TagSearch extends React.Component {
     });
     
     this.setState({ activeTags: tagArr, activeTextSearch: freeTextArr  }, () => { 
-      console.log(this.state.activeTags);
-      console.log(this.state.activeTextSearch);
       this.updateParent();
      });
   }
 
-  handleClick = (event) => {
-    this.updateSearch();
-  }
-
-
+  // Set the cache
   setCached(key, val){
     var now = (new Date().getTime());
     var stringVal = JSON.stringify({ time: now, value : val});
     sessionStorage.setItem(key, stringVal);
   }
   
-  // If the cached value is present and it is less than
-  //    ttl seconds old, return it.
-  // Otherwise, return null
+  // If the cached value is present and it is less than ttl seconds old, return it. Otherwise, return null
   retrieveCached(key, ttl){
-              
     if(key in sessionStorage){
       var data = JSON.parse(sessionStorage.getItem(key));
       var now = (new Date().getTime());
@@ -110,23 +102,18 @@ class TagSearch extends React.Component {
     return null;
   }
 
-  updateSearch() {
-    
-    function displayResults(results){
-        $("#results").text(results.num_found + " results found.");
-    }
+  // Sets tag state. Checks if there are cached tags. If not, queries the database and caches them
+  updateSearch(db, callback) {
 
     var query = "tagArray";
     var cacheResult = this.retrieveCached(query, 600);
     var tags = [];
+
+    // If we have a cached array, use that. Otherwise, query database
     if(cacheResult){
-      //console.log("Getting from cache :)");
       tags = cacheResult;
-      this.setState({ tags: tags })
-      displayResults(cacheResult);
+      callback(tags)
     }else{
-      //console.log("Have to start over :(");
-      var db = firebase.firestore();
       var dbRef = db.collection("tags");
 
       dbRef.get().then((querySnapshot) => {
@@ -137,13 +124,8 @@ class TagSearch extends React.Component {
           }
         });
 
-        this.setState({ tags: tags })
         this.setCached(query, tags);
-        displayResults(tags); 
-        
-        if(this.state.dataLoaded === false){
-          this.setState({ dataLoaded: true })
-        }
+        callback(tags)
       });
     }
   }
@@ -198,4 +180,5 @@ class TagSearch extends React.Component {
   }
 }
 
+export { TagSearch };
 export default withRouter(TagSearch);
