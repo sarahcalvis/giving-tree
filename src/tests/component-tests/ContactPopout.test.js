@@ -1,5 +1,6 @@
 import React from 'react';
 //import { shallow, mount } from 'enzyme';
+import { Button, Menu, Typography, Backdrop } from "@material-ui/core";
 import { createMount, createShallow } from '@material-ui/core/test-utils';
 
 import ContactPopout from '../../components/ContactPopout.js';
@@ -63,4 +64,13 @@ describe('Buttons', () => {
     wrap.find('ForwardRef(Button)').at(0).simulate('click')
     expect(wrap.find('ForwardRef(Popover)').at(0).props().open).toBeTruthy();
   });
+
+  it('The appropriate buttons open/close the dialog', () => {
+    wrap.find('ForwardRef(Button)').at(0).simulate('click')
+    expect(wrap.find('ForwardRef(Popover)').at(0).props().open).toBeTruthy();
+    console.log(wrap.debug())
+    wrap.find(Backdrop).simulate("click");
+    expect(wrap.find('ForwardRef(Popover)').at(0).props().open).toBeFalsy();
+  });
+
 });
