@@ -1,56 +1,66 @@
-import { validateField } from '../../helpers/ValidationHelper.js';
+import { validateField, confirmMatching } from '../../helpers/ValidationHelper.js';
 
 describe('Validate Passwords', () => {
-    it('not matching passwording', () => {
-      expect(validateField({name:'passwordOne', value:{passwordOne: "abc", passwordTwo: "ABC"}})).toBe('');
+    it('everything is breakage', () => {
+      expect(validateField('passwordOne', 'blah')).toBe('*Password fails the following requirements: a minimum of 8 characters, a number, an uppercase letter, a special character (e.g. !@#$%^&*)');
     });
 
-    it('matching passwording', () => {
-        expect(validateField({name:'passwordOne', value:{passwordOne: "abc", passwordTwo: "abc"}})).toBe('');
-      }); 
+    it('breakage is not extant', () => {
+        expect(validateField('passwordOne', 'abA123$usid')).toBe('');
+    }); 
   })
+
+describe('Match Passwords', () => {
+  it('not matching passwording', () => {
+    expect(confirmMatching('passwordOne', 'blah')).toBe('*Passwords do not match.');
+  });
+
+  it('matching passwording', () => {
+      expect(validateField('password1', 'password1')).toBe('');
+    });
+})
  
   describe('Validate Title', () => {
     it('empty title', () => {
-      expect(validateField({name:'title', value: ''})).toBe('*Please enter a grant title.');
+      expect(validateField('title',  '')).toBe('*Please enter a grant title.');
     });
 
     it('mega length too long title', () => {
-        expect(validateField({name:'title', title: "abavavaavavadavacabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcc"})).toBe('*Grant title must be less than 60 characters.');
+        expect(validateField('title', "abavavaavavadavacabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcc")).toBe('*Grant title must be less than 60 characters.');
       }); 
     
     it('good title', () => {
-      expect(validateField({name:'title', value: {title: "Good Title"}})).toBe('');
+      expect(validateField('title', "Good Title")).toBe('');
     }); 
   })
 
   describe('Validate Description', () => {
     it('empty desc', () => {
-      expect(validateField({name:'desc', value: ''})).toBe('*Please enter a grant description.');
+      expect(validateField('desc', '')).toBe('*Please enter a grant description.');
     });
     
     it('good desc', () => {
-      expect(validateField({name:'desc', value: "Good Desc"})).toBe('');
+      expect(validateField('desc', "Good Desc")).toBe('');
     }); 
   })
 
   describe('Validate nonProfit name', () => {
     it('empty name', () => {
-      expect(validateField({name:'nonprofit_name', value: ''})).toBe('*Please select a nonprofit or add a new one.');
+      expect(validateField('nonprofit_name', '')).toBe('*Please select a nonprofit or add a new one.');
     });
     
     it('good name', () => {
-      expect(validateField({name:'nonprofit_name', value: "Good name"})).toBe('');
+      expect(validateField('nonprofit_name', "Good name")).toBe('');
     }); 
   })
 
   describe('Validate address', () => {
     it('empty name', () => {
-      expect(validateField({name:'nonprofit_name', value: ''})).toBe('*Please select a nonprofit or add a new one.');
+      expect(validateField('nonprofit_name', '')).toBe('*Please select a nonprofit or add a new one.');
     });
     
     it('good name', () => {
-      expect(validateField({name:'nonprofit_name', value: "Good name"})).toBe('');
+      expect(validateField('nonprofit_name', "Good name")).toBe('');
     }); 
   })
  
