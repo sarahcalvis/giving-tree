@@ -27,7 +27,7 @@ export default function DDashboard() {
     var newDocs = [];
     if (!loading && !error) {
       snapshot.forEach(function (doc) {
-        console.log("a date: ", doc.data().date_deadline);
+        //console.log("a date: ", doc.data().date_deadline);
         newDocs.push({
           dist: -1,
           id: doc.id,
@@ -46,19 +46,21 @@ export default function DDashboard() {
           desc: doc.data().desc,
           tags: doc.data().tags
         });
-        newGrants.push(
-          <SmallGrantCard
-            id={doc.id}
-            title={doc.data().title}
-            cfName={doc.data().cf_name}
-            nonprofitName={doc.data().nonprofit_name}
-            goalAmt={doc.data().goal_amt}
-            moneyRaised={doc.data().money_raised}
-            img={doc.data().images[0] || 'GivingTree.png'} />
-        );
+        if(doc.data().status === 'current') {
+          newGrants.push(
+            <SmallGrantCard
+              id={doc.id}
+              title={doc.data().title}
+              cfName={doc.data().cf_name}
+              nonprofitName={doc.data().nonprofit_name}
+              goalAmt={doc.data().goal_amt}
+              moneyRaised={doc.data().money_raised}
+              img={doc.data().images[0] || 'GivingTree.png'} />
+          );
+        }
       });
       setGrants(newGrants);
-      console.log("newDocs: ", newDocs);
+      //console.log("newDocs: ", newDocs);
       setDocs(newDocs);
     }
   }, [snapshot, error, loading]);

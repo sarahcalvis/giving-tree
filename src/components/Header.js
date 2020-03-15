@@ -27,14 +27,8 @@ const useStyles = makeStyles(theme => ({
 
 function Header(props) {
   const classes = useStyles();
-  const [auth, setAuth] = React.useState(true);
   const [errorMsg, setErrorMsg] = React.useState('');
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
-
-  const handleChange = event => {
-    setAuth(event.target.checked);
-  };
 
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
@@ -45,6 +39,7 @@ function Header(props) {
   };
 
   const logout = () => {
+    handleClose();
     firebase.auth().signOut().then(() => {
       props.history.push('/signin');
     }).catch((error) => {
@@ -67,7 +62,7 @@ function Header(props) {
 
   return (
     <React.Fragment>
-      <AppBar style={{ 'margin-bottom': 15 }} className={classes.appBar} >
+      <AppBar style={{ 'marginBottom': 15 }} className={classes.appBar} >
         <Toolbar>
           <IconButton
             edge="start"
@@ -103,7 +98,7 @@ function Header(props) {
                 vertical: 'top',
                 horizontal: 'right',
               }}
-              open={open}
+              open={Boolean(anchorEl)}
               onClose={handleClose}
             >
             {props.authUser ? <SignedIn/> : <SignedOut/>}
