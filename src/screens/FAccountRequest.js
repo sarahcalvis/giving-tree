@@ -49,16 +49,16 @@ const styles = theme => ({
 });
 
 const INITIAL_STATE = {
-  name: 'a',
-  public_email: 'q@q.coo',
-  public_phone: '11111111111',
-  personal_email: 'q@q.coo',
-  personal_phone: '1111111111',
-  foundation_url: 'sfdafsdf.com',
-  fname_contact: 'dsa',
-  lname_contact: 'dadsa',
-  passwordOne: '!Q1qqqqq',
-  passwordTwo: '!Q1qqqqq',
+  name: '',
+  public_email: '',
+  public_phone: '',
+  personal_email: '',
+  personal_phone: '',
+  foundation_url: '',
+  fname_contact: '',
+  lname_contact: '',
+  passwordOne: '',
+  passwordTwo: '',
   errors: {
     name: '',
     public_email: '',
