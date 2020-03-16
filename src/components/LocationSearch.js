@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function LocationSearch(props) {
-  Geocode.setApiKey("AIzaSyDntA49IGS_w5ZRD3ijey8OVS8CNYpqXqA");
+  Geocode.setApiKey("AIzaSyA8f5dVQik-rPn3dyWa4-jS-A7tnZj5p5Y");
   const classes = useStyles();
   const [inputValue, setInputValue] = React.useState("");
   const [options, setOptions] = React.useState([]);
@@ -39,7 +39,7 @@ export default function LocationSearch(props) {
     //console.log(document.querySelector("#google-maps"));
     if (!document.querySelector("#google-maps")) {
       loadScript(
-        "https://maps.googleapis.com/maps/api/js?key=AIzaSyDntA49IGS_w5ZRD3ijey8OVS8CNYpqXqA&libraries=places",
+        "https://maps.googleapis.com/maps/api/js?key=AIzaSyA8f5dVQik-rPn3dyWa4-jS-A7tnZj5p5Y&libraries=places",
         document.querySelector("head"),
         "google-maps"
       );
