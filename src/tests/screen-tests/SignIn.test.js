@@ -15,7 +15,7 @@ describe('SignIn with no props', () => {
   it('should match the snapshot', () => {
     expect(container.html()).toMatchSnapshot();
   });
-
+ 
   it('should have an email field', () => {
     expect(container.find('#email').at(0).length).toEqual(1);
   });
