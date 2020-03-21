@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import firebase from '../firebase.js';
 import * as helper from '../helpers/ValidationHelper.js';
 
-import { withStyles } from '@material-ui/styles';
+import { withStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Avatar from '@material-ui/core/Avatar';
 import TextField from "@material-ui/core/TextField";
