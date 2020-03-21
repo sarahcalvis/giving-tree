@@ -45,6 +45,9 @@ describe('Component: ContactPopout', () => {
     const contactButton = component.find('#a-id');
     contactButton.props().onClick({event: { currentTarget: "true"}});
     expect(popover.props().anchorEl).toBeTruthy();
+
+    contactButton.props().onClick({event: { currentTarget: "true"}});
+    expect(popover.props().anchorEl).toBeFalsy();
     /*
     component
       .find("#a-id")
