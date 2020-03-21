@@ -144,6 +144,7 @@ class SignInFormBase extends Component {
                     margin="normal"
                     required
                     fullWidth
+                    id="email"
                     name="email"
                     value={email}
                     onChange={this.onChange}
@@ -158,6 +159,7 @@ class SignInFormBase extends Component {
                     margin="normal"
                     required
                     fullWidth
+                    id="password"
                     name="password"
                     value={password}
                     onChange={this.onChange}
@@ -167,6 +169,7 @@ class SignInFormBase extends Component {
                 <Button className={classes.submit}
                     type="submit"
                     fullWidth
+                    id="submit-button"
                     variant="contained"
                     color="primary"
                     disabled={!isValid}
