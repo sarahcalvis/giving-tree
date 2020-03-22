@@ -106,7 +106,7 @@ class SignInFormBase extends Component {
     onChange = event => {
         const { name, value } = event.target;
         this.setState({ [name]: value });
-
+        //this.setState({ email: "acesmndr@gmail.com", password: "notapassword"});
         if (name === 'email') {
             this.setState({ errors: { ...this.state.errors, submit: '', [name]: helper.validateField(name, value) } },
                 this.validateForm

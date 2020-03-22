@@ -90,6 +90,7 @@ describe('SignIn with props', () => {
                 value: 'acesmndr@gmail.com',
             },
         });
+        container.update();
         expect(container.find('#email').at(0).prop('value')).toEqual(
             'acesmndr@gmail.com',
         );
@@ -102,6 +103,7 @@ describe('SignIn with props', () => {
             value: 'notapassword',
           },
         });
+        container.update()
         expect(container.find('#password').at(0).prop('value')).toEqual(
           'notapassword',
         );
