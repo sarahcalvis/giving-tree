@@ -76,11 +76,9 @@ export default function FSettings() {
         cfInfo={cfInfo}
         toggleEdit={toggleEdit}
         onSubmit={(changedText) => FSettingsMethods().onSubmit(cfInfo, changedText, user, db, () => {
-          setGetData(true);
-          setEdit(false);
+          setGetData(true, () => setEdit(false));
         })}
         toggleAccountActive={() => FSettingsMethods().toggleAccountActive(db, user, cfInfo, () => {
-          console.log("ToggleAccountActive's wrapper has been called");
           setGetData(true);
         })}
       />

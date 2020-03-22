@@ -31,6 +31,7 @@ export default function EditableData(props){
 
 	const onChange = (event, field) => {
 		const value = event.target.value;
+		console.log(field+": "+event.target.value);
 		setHelperText({ ...helperText, [field]: helper.validateField(field, value) },
 			setChangedText({ ...changedText, [field]: value })
 		);
