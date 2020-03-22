@@ -49,7 +49,7 @@ export default function FSettings() {
   React.useEffect(() => {
     if(getData){
       if((user !== null)){
-        functionLoadData(user, db, (doc) => {
+        FSettingsMethods().loadData(user, db, (doc) => {
           setCfInfo(doc.data());
           setGetData(false);
         });
@@ -63,11 +63,11 @@ export default function FSettings() {
         isEdit={isEdit}
         cfInfo={cfInfo}
         toggleEdit={toggleEdit}
-        onSubmit={(changedText) => onSubmit(cfInfo, changedText, user, db, () => {
+        onSubmit={(changedText) => FSettingsMethods().onSubmit(cfInfo, changedText, user, db, () => {
           setGetData(true);
           setEdit(false);
         })}
-        functionLoadData={() => functionLoadData}
+        functionLoadData={() => FSettingsMethods().loadData}
       />
     );
   }else{
@@ -75,11 +75,11 @@ export default function FSettings() {
       <NonEditableData
         cfInfo={cfInfo}
         toggleEdit={toggleEdit}
-        onSubmit={(changedText) => onSubmit(cfInfo, changedText, user, db, () => {
+        onSubmit={(changedText) => FSettingsMethods().onSubmit(cfInfo, changedText, user, db, () => {
           setGetData(true);
           setEdit(false);
         })}
-        toggleAccountActive={() => toggleAccountActive(db, user, cfInfo, () => {
+        toggleAccountActive={() => FSettingsMethods().toggleAccountActive(db, user, cfInfo, () => {
           console.log("ToggleAccountActive's wrapper has been called");
           setGetData(true);
         })}
@@ -89,77 +89,86 @@ export default function FSettings() {
 } 
 
 
-
 // All this crapola is outside the original functional component for testing purposes.
 // They say you should write your tests for your code, but since when do "they" know what they're talking about? *sobs*
-const functionLoadData = (user, db, callback) =>{
-  // Foundation query
-  db.collection('communityFoundations').where('personal_email','==', user.email)
-    .get()
-    .then(function(querySnapshot) {
-      querySnapshot.forEach(function(doc) {
-        // doc.data() is never undefined for query doc snapshots
-        console.log(doc.id, " => ", doc.data());
-        callback(doc);
+export const FSettingsMethods = () => {
+  const loadData = (user, db, callback) =>{
+    // Foundation query
+    db.collection('communityFoundations').where('personal_email','==', user.email)
+      .get()
+      .then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+          // doc.data() is never undefined for query doc snapshots
+          //console.log(doc.id, " => ", doc.data());
+          callback(doc);
+        });
+      })
+      .catch(function(error) {
+        console.log("Error getting documents: ", error);
       });
-    })
-    .catch(function(error) {
-      console.log("Error getting documents: ", error);
-    });
-}
-
-
-const onSubmit = (cfInfo, changedText, user, db, callback) =>{
-  var temp = {...cfInfo};
-  for(const key in changedText){
-    temp = { ...temp, [key]: changedText[key] };
   }
-
-  db.collection('communityFoundations').where('personal_email','==',user.email)
-  .get()
-  .then(function(querySnapshot) {
-    querySnapshot.forEach(function(doc) {
-      console.log(doc.id, " => ", doc.data());
-      // Build doc ref from doc.id
-      db.collection("communityFoundations").doc(doc.id).update({
-        name: temp.name,
-        public_email: temp.public_email,
-        public_phone: temp.public_phone,
-        foundation_url: temp.foundation_url,
-        fname_contact: temp.fname_contact,
-        lname_contact: temp.lname_contact,
-        personal_email: temp.personal_email,
-        personal_phone: temp.personal_phone
-      });
-      console.log("Document successfully written!");
-      callback();
-    });
-  })
-  .catch(function(error) {
-    console.error("Error writing document: ", error);
-  });
-}
-
-function toggleAccountActive(db, user, cfInfo, callback){
-  if(user){
+  
+  
+  const onSubmit = (cfInfo, changedText, user, db, callback) =>{
+    var temp = {...cfInfo};
+    for(const key in changedText){
+      temp = { ...temp, [key]: changedText[key] };
+    }
+  
     db.collection('communityFoundations').where('personal_email','==',user.email)
     .get()
     .then(function(querySnapshot) {
       querySnapshot.forEach(function(doc) {
-        const time = (cfInfo.date_deactivated === '') ? FIRESTORE.FieldValue.serverTimestamp() : '';
-        db.collection("communityFoundations").doc(doc.id).update(
-          {date_deactivated: time},
-        ).then(
-          () => callback()
+        //console.log(doc.id, " => ", doc.data());
+        // Build doc ref from doc.id
+        db.collection("communityFoundations").doc(doc.id).update({
+          name: temp.name,
+          public_email: temp.public_email,
+          public_phone: temp.public_phone,
+          foundation_url: temp.foundation_url,
+          fname_contact: temp.fname_contact,
+          lname_contact: temp.lname_contact,
+          personal_email: temp.personal_email,
+          personal_phone: temp.personal_phone
+        }).then(
+          callback(temp)
         );
-        console.log("Deactivation successfully toggled!")
+        console.log("Document successfully written!");
       });
     })
     .catch(function(error) {
       console.error("Error writing document: ", error);
     });
-  }else{
-    console.log("No user");
   }
   
+  const toggleAccountActive = (db, user, cfInfo, callback) => {
+    if(user){
+      db.collection('communityFoundations').where('personal_email','==',user.email)
+      .get()
+      .then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+          const time = (cfInfo.date_deactivated === '') ? FIRESTORE.FieldValue.serverTimestamp() : '';
+          db.collection("communityFoundations").doc(doc.id).update(
+            {date_deactivated: time},
+          ).then(
+            () => callback(time)
+          );
+          console.log("Deactivation successfully toggled!")
+        });
+      })
+      .catch(function(error) {
+        console.error("Error writing document: ", error);
+      });
+    }else{
+      console.log("No user");
+    }
+  }
+
+  return {
+    loadData,
+    onSubmit,
+    toggleAccountActive,
+  };
 }
+
+
