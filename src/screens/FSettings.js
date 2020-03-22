@@ -157,8 +157,6 @@ export const FSettingsMethods = () => {
       .catch(function(error) {
         console.error("Error writing document: ", error);
       });
-    }else{
-      console.log("No user");
     }
   }
 
