@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import firebase from '../firebase.js';
 import * as helper from '../helpers/ValidationHelper.js';
 
-import { withStyles } from '@material-ui/styles';
+import { withStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Avatar from '@material-ui/core/Avatar';
 import TextField from "@material-ui/core/TextField";
@@ -144,6 +144,7 @@ class SignUpFormBase extends Component {
                     margin="normal"
                     required
                     fullWidth
+                    id="email"
                     name="email"
                     value={email}
                     onChange={this.onChange}
@@ -158,6 +159,7 @@ class SignUpFormBase extends Component {
                     margin="normal"
                     required
                     fullWidth
+                    id="passwordOne"
                     name="passwordOne"
                     value={passwordOne}
                     onChange={this.onChange}
@@ -171,6 +173,7 @@ class SignUpFormBase extends Component {
                     margin="normal"
                     required
                     fullWidth
+                    id="passwordTwo"
                     name="passwordTwo"
                     value={passwordTwo}
                     onChange={this.onChange}
@@ -181,6 +184,7 @@ class SignUpFormBase extends Component {
                 />
                 <Button className={classes.submit}
                     type="submit"
+                    id="submit-button"
                     fullWidth
                     variant="contained"
                     color="primary"

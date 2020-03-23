@@ -91,9 +91,16 @@ describe('SignIn with props', () => {
             },
         });
         container.update();
-        expect(container.find('#email').at(0).prop('value')).toEqual(
-            'acesmndr@gmail.com',
-        );
+        expect(container.find('#email').at(0).length).toEqual(1);
+        expect(container.find('SignInFormBase').state()).toEqual({ 
+            "email":  'acesmndr@gmail.com',
+            "errors": {
+                "email": "",
+                "submit": "",
+              },
+             "isValid": false,
+              "password":  '' 
+        });
     });  
 
     it('should set the password value on change event', () => {
@@ -104,9 +111,16 @@ describe('SignIn with props', () => {
           },
         });
         container.update()
-        expect(container.find('#password').at(0).prop('value')).toEqual(
-          'notapassword',
-        );
+        expect(container.find('#password').at(0).length).toEqual(1);
+        expect(container.find('SignInFormBase').state()).toEqual({ 
+            "email": "",
+            "errors": {
+              "email": "",
+              "submit": "",
+            },
+           "isValid": false,
+           "password":  'notapassword' });
+        
       });
     
     it('should have proper props for the submit button', () => {
