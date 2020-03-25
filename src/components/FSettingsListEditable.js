@@ -1,8 +1,7 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import { Button, Typography, Container, TextField, Grid } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
-import ImageIcon from '@material-ui/icons/Image';
 import TitleIcon from '@material-ui/icons/Title'
 import PhoneIcon from '@material-ui/icons/Phone';
 import HttpIcon from '@material-ui/icons/Http';

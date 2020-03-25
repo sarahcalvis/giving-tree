@@ -2,7 +2,6 @@ import React, { useEffect, useContext } from 'react';
 import { withRouter } from 'react-router-dom';
 
 import { AuthUserContext } from '../auth';
-import { withAuthProtection } from '../auth';
 
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
@@ -38,7 +37,4 @@ function FRequestSent() {
   );
 }
 
-
-// const condition = (authUser) => authUser &&  !!authUser.status;
-// export default withAuthProtection(condition)(withRouter(FRequestSent));
 export default withRouter(FRequestSent);

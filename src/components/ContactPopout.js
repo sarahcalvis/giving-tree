@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import Link from '@material-ui/core/Link';
 import Popover from '@material-ui/core/Popover';

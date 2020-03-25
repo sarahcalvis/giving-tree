@@ -30,7 +30,6 @@ export default function FDashboard(props) {
   useEffect(() => { document.title = 'Giving Tree Grants'; }, [props.title]);
 
   // List of small grant cards
-  const [grants, setGrants] = React.useState([]);
   const [docs, setDocs] = React.useState();
   const [expiredGrants, setExpiredGrants] = React.useState([]);
   const [currentGrants, setCurrentGrants] = React.useState([]);
@@ -54,8 +53,9 @@ export default function FDashboard(props) {
   // then the url will have two parameters:
   // scope- I don't think we really care about scope. hopefully it is read/write
   const qs = require('query-string');
-  const code = qs.parse(props.location.search).code;
-  const stripeError = qs.parse(props.location.search).stripeError;
+  const parsed = qs?.parse(props.location.search);
+  const code = parsed?.code;
+  const stripeError = parsed?.stripeError;
 
   // Observe the foundation code
   useEffect(() => {
@@ -75,8 +75,8 @@ export default function FDashboard(props) {
       });
       if (response.ok) {
         let resJSON = await response.json();
-        setStripeId(resJSON.stripeId);
-        updateStripeIdDB(resJSON.stripeId);
+        setStripeId(resJSON?.stripeId);
+        updateStripeIdDB(resJSON?.stripeId);
         //send the id to the database
       } else {
         console.log('did not do good');
@@ -100,41 +100,43 @@ export default function FDashboard(props) {
     let drGrants = [];
     if (!loading && !error) {
       snapshot.forEach(function (doc) {
-        if (doc.data().cf_id === user?.cfId) {
+
+        const fbData = doc.data();
+        if (fbData.cf_id === user?.cfId) {
           newDocs.push({
             dist: -1,
             id: doc.id,
-            title: doc.data().title,
-            cfName: doc.data().cf_name,
-            nonprofitName: doc.data().nonprofit_name,
-            goalAmt: doc.data().goal_amt,
-            moneyRaised: doc.data().money_raised,
-            img: doc.data().images[0] || 'GivingTree.png',
-            nonprofitId: doc.data().nonprofit_id,
-            address: doc.data().address,
-            lat: doc.data().lat,
-            long: doc.data().long,
-            datePosted: doc.data().date_posted,
-            dateDeadline: doc.data().date_deadline,
-            desc: doc.data().desc,
-            tags: doc.data().tags,
-            status: doc.data().status
+            title: fbData.title,
+            cfName: fbData.cf_name,
+            nonprofitName: fbData.nonprofit_name,
+            goalAmt: fbData.goal_amt,
+            moneyRaised: fbData.money_raised,
+            img: fbData.images[0] || 'GivingTree.png',
+            nonprofitId: fbData.nonprofit_id,
+            address: fbData.address,
+            lat: fbData.lat,
+            long: fbData.long,
+            datePosted: fbData.date_posted,
+            dateDeadline: fbData.date_deadline,
+            desc: fbData.desc,
+            tags: fbData.tags,
+            status: fbData.status
           });
 
           let grant = <SmallGrantCard
             id={doc.id}
-            title={doc.data().title}
-            cfName={doc.data().cf_name}
-            nonprofitName={doc.data().nonprofit_name}
-            goalAmt={doc.data().goal_amt}
-            moneyRaised={doc.data().money_raised}
-            img={doc.data().images[0] || 'GivingTree.png'}
-            status={doc.data().status} />;
-          if (doc.data().status === 'current') {
+            title={fbData.title}
+            cfName={fbData.cf_name}
+            nonprofitName={fbData.nonprofit_name}
+            goalAmt={fbData.goal_amt}
+            moneyRaised={fbData.money_raised}
+            img={fbData.images[0] || 'GivingTree.png'}
+            status={fbData.status} />;
+          if (fbData.status === 'current') {
             curGrants.push(grant);
-          } else if (doc.data().status === 'draft') {
+          } else if (fbData.status === 'draft') {
             drGrants.push(grant);
-          } else if (doc.data().status === 'expired') {
+          } else if (fbData.status === 'expired') {
             exGrants.push(grant);
           }
         }

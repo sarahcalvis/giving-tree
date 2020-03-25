@@ -39,12 +39,12 @@ class TagSearch extends React.Component {
     const db = firebase.firestore();
     this.updateSearch(db, (tags) => this.setState({ tags: tags }));
     
-    const { match, location, history } = this.props;
+    const { location } = this.props;
     this.getLocationTag(location);
   }
 
   getLocationTag(location) {
-    if(location && location.state){
+    if(location?.state){
       if(location.state.incomingTag){
         let a = this.state.activeTags.slice(); //creates the clone of the state
         a[0] = location.state.incomingTag;

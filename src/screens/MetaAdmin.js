@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useCollection } from 'react-firebase-hooks/firestore';
 import $ from 'jquery';
 import {firestore as FIRESTORE} from "firebase/app";

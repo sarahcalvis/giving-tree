@@ -1,10 +1,9 @@
-import React, { useEffect, Component } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
 import { Button, Typography, Container, Grid} from '@material-ui/core';
 import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
-import ImageIcon from '@material-ui/icons/Image';
 import TitleIcon from '@material-ui/icons/Title'
 import PhoneIcon from '@material-ui/icons/Phone';
 import HttpIcon from '@material-ui/icons/Http';

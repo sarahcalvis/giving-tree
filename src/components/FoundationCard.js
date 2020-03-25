@@ -1,15 +1,12 @@
 import React from 'react';
 
 import WarningModal from './WarningModal.js';
-import { firestore as FIRESTORE } from "firebase/app";
-
 
 import { makeStyles } from '@material-ui/core/styles';
-import { Card, CardHeader, CardContent, CardActions } from '@material-ui/core';
+import { Card, CardHeader, CardContent } from '@material-ui/core';
 import { IconButton, MenuItem, Menu } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 const useStyles = makeStyles(theme => ({
@@ -43,6 +40,8 @@ const useStyles = makeStyles(theme => ({
 export default function FoundationCard(props) {
   const classes = useStyles();
   const [modalOpen, setModalOpen] = React.useState(false);
+
+  //Anchor element for popover menu
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const {
@@ -72,12 +71,14 @@ export default function FoundationCard(props) {
     setModalOpen(false);
   };
 
+  //Current CF Menu
   const CurCfMenu = () => (
     <React.Fragment>
       <MenuItem onClick={() => { setAnchorEl(null); props.denyCB(personal_email); }}>Deny</MenuItem>
     </React.Fragment>
   );
 
+  //Requested CF Menu
   const ReqCfMenu = () => (
     <React.Fragment>
       <MenuItem onClick={() => { setAnchorEl(null); props.approveCB(personal_email); }}>Approve</MenuItem>
@@ -86,6 +87,7 @@ export default function FoundationCard(props) {
     </React.Fragment>
   );
 
+  //Denied CF Menu
   const DenCfMenu = () => (
     <React.Fragment>
       <MenuItem onClick={() => { setAnchorEl(null); props.approveCB(personal_email); }}>Approve</MenuItem>

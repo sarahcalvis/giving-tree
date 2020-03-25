@@ -7,11 +7,8 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import Backdrop from "@material-ui/core/Backdrop";
-import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import Box from '@material-ui/core/Box';
 import { WarningRounded } from '@material-ui/icons';
 
 const useStyles = makeStyles(theme => ({
@@ -54,7 +51,8 @@ const useStyles = makeStyles(theme => ({
 export default function WarningModal(props) {
     const classes = useStyles();
     const [cfInput, setCfInput] = React.useState(null);
-    const [isValid, setIsValid] = React.useState("true");
+    const [isValid, setIsValid] = React.useState(true);
+    
     const handleInput = (e) => {
       setCfInput(e.target.value);      
     }
