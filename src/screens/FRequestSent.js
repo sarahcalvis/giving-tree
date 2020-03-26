@@ -20,20 +20,20 @@ function FRequestSent() {
   const authUser = useContext(AuthUserContext);
 
   useEffect(() => {
-    if(authUser?.status === 'current'){
+    if (authUser?.status === 'current') {
       this.props.history.push('/foundation');
     }
   }, [authUser]);
 
   return (
     <Container maxWidth="sm" component="main" className={classes.message}>
-        <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
-          Foundation Account Requested
+      <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
+        Foundation Account Requested
         </Typography>
-        <Typography variant="h5" align="center" color="textSecondary" component="p">
-          We have received your request for a foundation account and will be reviewing it shortly. Please check back later.
+      <Typography variant="h5" align="center" color="textSecondary" component="p">
+        We have received your request for a foundation account and will be reviewing it shortly. Please check back later.
         </Typography>
-      </Container>
+    </Container>
   );
 }
 
