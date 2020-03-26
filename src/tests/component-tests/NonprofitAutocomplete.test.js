@@ -1,110 +1,37 @@
-import React from 'react';
-import { shallow, mount } from 'enzyme';
-import { Link, MemoryRouter } from 'react-router';
+// __tests__/hidden-message.js
+// these imports are something you'd normally configure Jest to import for you
+// automatically. Learn more in the setup docs: https://testing-library.com/docs/react-testing-library/setup#cleanup
+import '@testing-library/jest-dom'
+// NOTE: jest-dom adds handy assertions to Jest and is recommended, but not required
 
-import GrantTagBar from '../../components/GrantTagBar.js';
-import { StaticRouter } from 'react-router-dom';
-import NonprofitAutocomplete from '../../components/NonprofitAutocomplete.js';
-
-
-describe('Component: NonprofitAutocomplete', () => {
-
-  it('Renders correctly', () => {
-    // const gtbProps = {
-    //   tags: ['Tag']
-    // };
-    // const wrap = shallow(<GrantTagBar id={45} tags={gtbProps.tags} />)
-    // expect(wrap).toMatchSnapshot();
-    const naProps = {
-      callback: { nonprofitCallback }
-      cfId: { props.cfId }
-      error: { props.errors.nonprofit_name !== '' }
-      helperText: { props.errors.nonprofit_name }
-      initialNonprofit: { props.grantData.nonprofit_id }
-    };
-  });
-
-  it('State: no tags', () => {
-    const gtbProps = {
-      tags: []
-    };
-    const context = {};
-    const wrap = mount(
-      <StaticRouter location="someLocation" context={context}>
-        <GrantTagBar id={45} tags={gtbProps.tags} />
-      </StaticRouter>
-    )
-    //const tree = wrap.toJSON();
-    expect(wrap.find(GrantTagBar).state('tags')).toEqual([])
-  })
+import React from 'react'
+import { render, fireEvent, screen } from '@testing-library/react'
+import NonprofitAutocomplete from '../../components/NonprofitAutocomplete'
 
 
-  it('State: one tag', () => {
-    const gtbProps = {
-      tags: ['Tag']
-    };
-    const context = {};
-    const wrap = mount(
-      <StaticRouter location="someLocation" context={context}>
-        <GrantTagBar tags={gtbProps.tags} />
-      </StaticRouter>
-    )
+test('shows the children when the checkbox is checked', () => {
+  const callback = (event, value) => {
+    console.log(value, 'nonprofit_name');
+  }
+  const cfId = '4a1MMPzzdmREry9CUV6T'
+  const error = false;
+  const helperText = '';
+  const initialNonprofit = '95CmUGFPnxFUEagA1Mc3'
+  render(<NonprofitAutocomplete
+    callback={callback}
+    cfId={cfId}
+    error={error}
+    helperText={helperText}
+    initialNonprofit={initialNonprofit} />)
 
-    expect(wrap.find(GrantTagBar).state('tags')).toEqual(['Tag'])
-  })
+  // query* functions will return the element or null if it cannot be found
+  // get* functions will return the element or throw an error if it cannot be found
+  expect(screen.queryByText('PETA')).toBeNull()
 
-  it('State: two tags', () => {
-    const gtbProps = {
-      tags: ['First', 'Second']
-    };
-    const context = {};
-    const wrap = mount(
-      <StaticRouter location="someLocation" context={context}>
-        <GrantTagBar id={45} tags={gtbProps.tags} />
-      </StaticRouter>
-    )
+  // the queries can accept a regex to make your selectors more resilient to content tweaks and changes.
+  // fireEvent.click(screen.getByLabelText(/show/i))
 
-    expect(wrap.find(GrantTagBar).state('tags')).toEqual(['First', 'Second'])
-  })
-
-
-})
-
-
-describe('Component: GrantTag', () => {
-
-  it('Renders correctly', () => {
-    const tag = 'Tag'
-    const context = {};
-    const wrap = shallow(
-      <StaticRouter location="someLocation" context={context}>
-        <GrantTag tag={tag} />
-      </StaticRouter>
-    )
-    expect(wrap).toMatchSnapshot();
-  });
-
-  it('Tag Text', () => {
-    const tag = 'Tag'
-    const context = {};
-    const wrap = shallow(
-      <StaticRouter location="someLocation" context={context}>
-        <GrantTag tag={tag} />
-      </StaticRouter>
-    )
-    expect(wrap.find(GrantTag).prop('tag')).toEqual('Tag')
-  })
-
-
-  it('Link takes to Dashboard', () => {
-    const tag = 'Tag'
-    const wrapper = mount(<MemoryRouter><GrantTag tag={tag} key={0} /></MemoryRouter>);
-    expect(wrapper.find('Link').props().to).toEqual({ pathname: "/", state: { "incomingTag": "Tag" } });
-  })
-
-  it('Link button body text', () => {
-    const tag = 'Tag'
-    const wrapper = mount(<MemoryRouter><GrantTag tag={tag} key={0} /></MemoryRouter>);
-    expect(wrapper.find('Link').text()).toEqual("Tag");
-  })
+  // .toBeInTheDocument() is an assertion that comes from jest-dom
+  // otherwise you could use .toBeDefined()
+  expect(screen.getByText('PETA')).toBeInTheDocument()
 })
