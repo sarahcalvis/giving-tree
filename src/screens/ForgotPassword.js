@@ -17,157 +17,157 @@ import Typography from "@material-ui/core/Typography";
 
 
 const styles = theme => ({
-    root: {
-        marginTop: theme.spacing(8),
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-    },
-    avatar: {
-        margin: theme.spacing(1),
-        backgroundColor: theme.palette.secondary.main,
-    },
-    form: {
-        marginTop: theme.spacing(1),
-    },
-    submit: {
-        margin: theme.spacing(3, 0, 2),
-    },
-    links: {
-        textDecoration: 'none'
-    },
-    errorMsg: {
-        color: 'red',
-        marginTop: theme.spacing(1),
-    }
+  root: {
+    marginTop: theme.spacing(8),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
+  },
+  form: {
+    marginTop: theme.spacing(1),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+  },
+  links: {
+    textDecoration: 'none'
+  },
+  errorMsg: {
+    color: 'red',
+    marginTop: theme.spacing(1),
+  }
 });
 
 function ForgotPassword(props) {
-    const { classes } = props;
+  const { classes } = props;
 
-    return (
-        <Container component="main" maxWidth="xs">
-            <div className={classes.root}>
-                <Avatar className={classes.avatar}>
-                    <LockOutlinedIcon />
-                </Avatar>
-                <Typography component="h1" variant="h5" className={classes.header}>
-                    Reset Password
+  return (
+    <Container component="main" maxWidth="xs">
+      <div className={classes.root}>
+        <Avatar className={classes.avatar}>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Typography component="h1" variant="h5" className={classes.header}>
+          Reset Password
                     </Typography>
-                <ForgotPasswordForm classes={classes} />
-                <SignInSignUpLink classes={classes} />
-            </div>
-        </Container>
-    );
+        <ForgotPasswordForm classes={classes} />
+        <SignInSignUpLink classes={classes} />
+      </div>
+    </Container>
+  );
 }
 
 const INITIAL_STATE = {
+  email: '',
+  errors: {
     email: '',
-    errors: {
-        email: '',
-        submit: '',
-    },
-    isValid: false,
-    success: false,
+    submit: '',
+  },
+  isValid: false,
+  success: false,
 };
 
 class ForgotPasswordFormBase extends Component {
-    constructor(props) {
-        super(props);
-        this.state = { ...INITIAL_STATE };
+  constructor(props) {
+    super(props);
+    this.state = { ...INITIAL_STATE };
+  }
+
+  onSubmit = event => {
+    if (this.state.isValid) {
+      const { email } = this.state;
+
+      firebase.auth().sendPasswordResetEmail(email)
+        .then(() => {
+          // Email sent.
+          this.setState({ ...INITIAL_STATE, success: true });
+        }).catch((error) => {
+          // An error happened.
+          this.setState({ errors: { ...this.state.errors, submit: error.message } });
+        });
     }
 
-    onSubmit = event => {
-        if (this.state.isValid) {
-            const { email } = this.state;
+    event.preventDefault();
+  }
 
-            firebase.auth().sendPasswordResetEmail(email)
-                .then(() => {
-                    // Email sent.
-                    this.setState({ ...INITIAL_STATE, success: true });
-                }).catch((error) => {
-                    // An error happened.
-                    this.setState({ errors: { ...this.state.errors, submit: error.message } });
-                });
+  //Written generically to match SignUp/AccountRequest/SignIn, even though there's only one field 
+  onChange = event => {
+    const { name, value } = event.target;
+    this.setState({ [name]: value });
+
+    this.setState({ errors: { ...this.state.errors, submit: '', [name]: helper.validateField(name, value) } },
+      this.validateForm
+    );
+  };
+
+  validateForm = () => {
+    const noEmptyFields = Object.values(this.state).filter((s) => { return s === '' }).length === 0
+    const noErrors = Object.values(this.state.errors).filter((s) => { return s !== '' }).length === 0
+    this.setState({ isValid: noErrors && noEmptyFields });
+  }
+
+  render() {
+    const {
+      email,
+      errors,
+      isValid,
+      success,
+    } = this.state;
+
+    const { classes } = this.props;
+
+    return (
+      <form className={classes.form} onSubmit={this.onSubmit} noValidate>
+        {success &&
+          <Snack message='Success! A password reset email has been sent.' />
         }
-
-        event.preventDefault();
-    }
-
-    //Written generically to match SignUp/AccountRequest/SignIn, even though there's only one field 
-    onChange = event => {
-        const { name, value } = event.target;
-        this.setState({ [name]: value });
-
-        this.setState({ errors: { ...this.state.errors, submit: '', [name]: helper.validateField(name, value) } },
-            this.validateForm
-        );
-    };
-
-    validateForm = () => {
-        const noEmptyFields = Object.values(this.state).filter((s) => { return s === '' }).length === 0
-        const noErrors = Object.values(this.state.errors).filter((s) => { return s !== '' }).length === 0
-        this.setState({ isValid: noErrors && noEmptyFields });
-    }
-
-    render() {
-        const {
-            email,
-            errors,
-            isValid,
-            success,
-        } = this.state;
-
-        const { classes } = this.props;
-
-        return (
-            <form className={classes.form} onSubmit={this.onSubmit} noValidate>
-                {success &&
-                    <Snack message='Success! A password reset email has been sent.' />
-                }
-                <Typography component="h6" className={classes.errorMsg} >
-                    {errors.submit}
-                </Typography>
-                <TextField
-                    variant="outlined"
-                    margin="normal"
-                    required
-                    fullWidth
-                    name="email"
-                    value={email}
-                    onChange={this.onChange}
-                    type="text"
-                    label="Email Address"
-                    error={errors.email !== ""}
-                    helperText={errors.email}
-                    autoFocus
-                />
-                <Button className={classes.submit}
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    color="primary"
-                    disabled={!isValid}
-                >
-                    Reset Password
+        <Typography component="h6" className={classes.errorMsg} >
+          {errors.submit}
+        </Typography>
+        <TextField
+          variant="outlined"
+          margin="normal"
+          required
+          fullWidth
+          name="email"
+          value={email}
+          onChange={this.onChange}
+          type="text"
+          label="Email Address"
+          error={errors.email !== ""}
+          helperText={errors.email}
+          autoFocus
+        />
+        <Button className={classes.submit}
+          type="submit"
+          fullWidth
+          variant="contained"
+          color="primary"
+          disabled={!isValid}
+        >
+          Reset Password
                         </Button>
-            </form>
-        );
-    }
+      </form>
+    );
+  }
 }
 const SignInSignUpLink = ({ classes }) => (
-    <Grid container>
-        <Grid item xs>
-            <Link href='/signin' variant="body2">
-                Ready to sign in?
+  <Grid container>
+    <Grid item xs>
+      <Link href='/signin' variant="body2">
+        Ready to sign in?
             </Link>
-        </Grid>
-        <Grid item>
-            <Link href='/signup' variant="body2">
-                Don't have an account? Sign Up
-            </Link>
-        </Grid>
     </Grid>
+    <Grid item>
+      <Link href='/signup' variant="body2">
+        Don't have an account? Sign Up
+            </Link>
+    </Grid>
+  </Grid>
 );
 
 const ForgotPasswordForm = withRouter(ForgotPasswordFormBase);

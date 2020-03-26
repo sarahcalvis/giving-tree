@@ -47,7 +47,7 @@ export default function DDashboard() {
           desc: fbData.desc,
           tags: fbData.tags
         });
-        if(fbData.status === 'current') {
+        if (fbData.status === 'current') {
           newGrants.push(
             <SmallGrantCard
               id={doc.id}

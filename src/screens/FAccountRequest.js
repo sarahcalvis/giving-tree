@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import $ from 'jquery';
 
-import {firestore as FIRESTORE} from "firebase/app";
+import { firestore as FIRESTORE } from "firebase/app";
 import firebase from '../firebase.js';
 import * as helper from '../helpers/ValidationHelper.js';
 import Text from '../components/Text.js';
@@ -85,7 +85,7 @@ class FAccountRequest extends Component {
     if (this.state.isValid) {
       //Prevent user from clicking button multiple times while firebase executes
       this.setState({ isValid: false });
-      
+
       const { personal_email, passwordOne } = this.state;
 
       firebase.auth().createUserWithEmailAndPassword(personal_email, passwordOne)
