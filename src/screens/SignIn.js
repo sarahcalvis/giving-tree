@@ -88,10 +88,32 @@ class SignInFormBase extends Component {
             .then((idTokenResult) => {
               const cc = idTokenResult.claims;
               if (cc.admin) {
-
+                this.props.history.push('/meta-admin');
               }
-              else if (cc.status && cc.status === 'requested') {
-
+              else if (cc.status) {
+                switch (cc.status) {
+                  case 'requested':
+                    this.props.history.push('/request-sent');
+                    break;
+                  case 'denied':
+                    this.props.history.push('/request-denied');
+                    break;
+                  case 'current':
+                    firebase.firestore().collection("communityFoundations").doc(cc.cfId)
+                      .get().then((doc) => {
+                        if (doc.data().stripe_id) {
+                          this.props.history.push('/foundation');
+                        }
+                        else {
+                          this.props.history.push('/foundation/stripe-setup');
+                        }
+                      })
+                      .catch((error) => {
+                        console.error("Error retrieving CF document: ", error);
+                      });
+                    break;
+                  default:
+                }
               }
               else {
                 //Redirect User to Home
