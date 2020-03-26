@@ -84,13 +84,12 @@ describe('SignIn with props', () => {
       </StaticRouter>);
 
     it('should set the email value on change event', () => {
-        container.find('#email').at(0).simulate('change', {
+        container.find('#email').at(0).prop('onChange', {
             target: {
                 name: 'email',
                 value: 'acesmndr@gmail.com',
             },
         });
-        container.update();
         expect(container.find('#email').at(0).length).toEqual(1);
         expect(container.find('SignInFormBase').state()).toEqual({ 
             "email":  'acesmndr@gmail.com',
@@ -104,13 +103,12 @@ describe('SignIn with props', () => {
     });  
 
     it('should set the password value on change event', () => {
-        container.find('#password').at(0).simulate('change', {
+        container.find('#password').at(0).prop('onChange', {
           target: {
             name: 'password',
             value: 'notapassword',
           },
         });
-        container.update()
         expect(container.find('#password').at(0).length).toEqual(1);
         expect(container.find('SignInFormBase').state()).toEqual({ 
             "email": "",
