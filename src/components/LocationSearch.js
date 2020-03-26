@@ -1,10 +1,8 @@
 import React, { useEffect } from "react";
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import LocationOnIcon from "@material-ui/icons/LocationOn";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
 import parse from "autosuggest-highlight/parse";
 import throttle from "lodash/throttle";
 import Geocode from "react-geocode";
@@ -23,24 +21,16 @@ function loadScript(src, position, id) {
 
 const autocompleteService = { current: null };
 
-const useStyles = makeStyles(theme => ({
-  icon: {
-    color: theme.palette.text.secondary,
-    marginRight: theme.spacing(2)
-  }
-}));
-
 export default function LocationSearch(props) {
-  Geocode.setApiKey("AIzaSyDntA49IGS_w5ZRD3ijey8OVS8CNYpqXqA");
-  const classes = useStyles();
+  Geocode.setApiKey("AIzaSyA8f5dVQik-rPn3dyWa4-jS-A7tnZj5p5Y");
   const [inputValue, setInputValue] = React.useState("");
   const [options, setOptions] = React.useState([]);
   const loaded = React.useRef(false);
   if (typeof window !== "undefined" && !loaded.current) {
-    console.log(document.querySelector("#google-maps"));
+    //console.log(document.querySelector("#google-maps"));
     if (!document.querySelector("#google-maps")) {
       loadScript(
-        "https://maps.googleapis.com/maps/api/js?key=AIzaSyDntA49IGS_w5ZRD3ijey8OVS8CNYpqXqA&libraries=places",
+        "https://maps.googleapis.com/maps/api/js?key=AIzaSyA8f5dVQik-rPn3dyWa4-jS-A7tnZj5p5Y&libraries=places",
         document.querySelector("head"),
         "google-maps"
       );
@@ -53,28 +43,19 @@ export default function LocationSearch(props) {
     setInputValue(event.target.value);
   }
 
-
   const handleChange = (event, value) => {
     if (!(value === null)) {
+      console.log("event: ", event);
+      console.log("value: ", value);
       Geocode.fromAddress(value.description).then(
         response => {
-          // console.log("supposed address: ", value.description);
-          // console.log("the response for lat, long: ", response.results[0].geometry.location);
           const { lat, lng } = response.results[0].geometry.location;
-          // console.log(lat, lng);
-          // console.log(value);
-          props.parentCallback({ address: value, lat: lat, long: lng });
-          // Geocode.fromLatLng(lat, lng).then(
-          //   response => {
-          //     const address = response.results[0].formatted_address;
-          //     console.log("regurged address: ", address);
-          //   },
-          //   error => {
-          //     console.error(error);
-          //   }
-          // );
+          console.log("got into the change response? ");
+          props.parentCallback({address: value, lat: lat, long: lng});
         },
         error => {
+          props.parentCallback({address: "1421 Bolling Avenue, Norfolk, VA, USA", lat: 80, long: -40});
+          console.log("didn't get a response :(");
           console.error(error);
         }
       );
@@ -113,8 +94,6 @@ export default function LocationSearch(props) {
     return () => {
       active = false;
     };
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputValue]);
 
   return (
@@ -126,9 +105,9 @@ export default function LocationSearch(props) {
       filterOptions={x => x}
       options={options}
       autoComplete
+      fullWidth
       includeInputInList
       disableOpenOnFocus
-      fullWidth
       defaultValue={props.address}
       onChange={handleChange}
       renderInput={params => (
@@ -151,10 +130,7 @@ export default function LocationSearch(props) {
 
         return (
           <Grid container alignItems="center">
-            <Grid item>
-              <LocationOnIcon className={classes.icon} />
-            </Grid>
-            <Grid item xs>
+            <Grid item xs={12}>
               {parts.map((part, index) => (
                 <span
                   key={index}

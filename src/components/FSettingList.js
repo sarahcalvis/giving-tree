@@ -1,10 +1,9 @@
-import React, { useEffect, Component } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
 import { Button, Typography, Container, Grid} from '@material-ui/core';
 import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
-import ImageIcon from '@material-ui/icons/Image';
 import TitleIcon from '@material-ui/icons/Title'
 import PhoneIcon from '@material-ui/icons/Phone';
 import HttpIcon from '@material-ui/icons/Http';
@@ -45,7 +44,8 @@ export default function NonEditableData(props){
 						</Button>
 					</Link>
 					<ToggleActive 
-						active={props.cfInfo.status}
+						status={props.cfInfo.status}
+						date_deactivated={props.cfInfo.date_deactivated}
 						toggleAccountActive={props.toggleAccountActive}
 					/>
 				</Grid>
@@ -132,7 +132,6 @@ function StaticItem(props) {
 
 
 function ToggleActive(props) {
-	console.log(props.active);
 	const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -147,7 +146,7 @@ function ToggleActive(props) {
     setOpen(false);
 	};
 	
-	if(props.active === 'current'){
+	if(props.status === 'current' && props.date_deactivated === ''){
 		return(
 			<div>
 				<Button 
@@ -179,7 +178,7 @@ function ToggleActive(props) {
 				</Dialog>
 			</div>
 		);
-	}else if(props.active === 'deactivated'){
+	}else if(props.status === 'current' && props.date_deactivated !== ''){
 		return(
 			<div>
 				<Button 

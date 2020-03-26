@@ -1,12 +1,11 @@
 import React, { useEffect } from 'react';
 import AuthUserContext from '../auth/context.js';
 
+import {firestore as FIRESTORE} from "firebase/app";
 import firebase from '../firebase.js';
-import * as helper from '../helpers/ValidationHelper.js';
 
 import EditableData from '../components/FSettingsListEditable.js'
 import NonEditableData from '../components/FSettingList.js'
-import { Typography } from '@material-ui/core';
 
 
 export default function FSettings() {
@@ -28,7 +27,11 @@ export default function FSettings() {
     lname_contact: '',
     personal_email: '',
     personal_phone: '',
-    status: ''
+    status: '',
+    date_requested: '',
+    date_approved: '',
+    date_denied: '',
+    date_deactivated: '',
   });
 
   const [getData, setGetData] = React.useState(true);
@@ -43,17 +46,7 @@ export default function FSettings() {
           // doc.data() is never undefined for query doc snapshots
           console.log(doc.id, " => ", doc.data());
           
-          setCfInfo({ 
-            name: doc.data().name,
-            public_email: doc.data().public_email,
-            public_phone: doc.data().public_phone,
-            foundation_url: doc.data().foundation_url,
-            fname_contact: doc.data().fname_contact,
-            lname_contact: doc.data().lname_contact,
-            personal_email: doc.data().personal_email,
-            personal_phone: doc.data().personal_phone,
-            status: doc.data().status
-          })
+          setCfInfo(doc.data());
           setGetData(false);
         });
       })
@@ -67,18 +60,11 @@ export default function FSettings() {
     .get()
     .then(function(querySnapshot) {
       querySnapshot.forEach(function(doc) {
-        console.log(doc.id, " => ", doc.data());
-        // Build doc ref from doc.id
-        if(cfInfo.status === 'current'){
-          db.collection("communityFoundations").doc(doc.id).update({
-            status: 'deactivated',
-          });
-        }else if(cfInfo.status === 'deactivated'){
-          db.collection("communityFoundations").doc(doc.id).update({
-            status: 'current',
-          });
-        }
-        console.log("Document successfully written!");
+
+        const time = (cfInfo.date_deactivated === '') ? FIRESTORE.FieldValue.serverTimestamp() : '';
+        db.collection("communityFoundations").doc(doc.id).update({date_deactivated: time});
+
+        console.log("Deactivation successfully toggled!");
         setGetData(true);
       });
     })
@@ -148,7 +134,6 @@ export default function FSettings() {
     <Data 
       isEdit={isEdit}
       cfInfo={cfInfo}
-      setCfInfo={setCfInfo}
       toggleEdit={toggleEdit}
       onSubmit={onSubmit}
       functionLoadData={functionLoadData}

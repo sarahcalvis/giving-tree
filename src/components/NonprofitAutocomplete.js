@@ -137,7 +137,7 @@ export default function NonprofitAutocomplete(props) {
           }
           <Grid item>
             {
-              (adding || nonprofits.length == 0) &&
+              (adding || nonprofits.length === 0) &&
               <Container>
                 <TextField
                   id='name'

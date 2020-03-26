@@ -59,10 +59,13 @@ export const validateEmail = (email) => {
 
 const validateTitle = (title) => {
   let errorMsg = '';
-  
-  if (title === '') errorMsg = '*Please enter a grant title.';
-
-  if (title.length > 60) errorMsg = '*Grant title must be less than 60 characters.'
+  console.log("title: ", title);
+  if (title === '') {
+    errorMsg = '*Please enter a grant title.';
+  }
+  if (title.length > 60) {
+    errorMsg = '*Grant title must be less than 60 characters.';
+  }
 
   return errorMsg;
 }

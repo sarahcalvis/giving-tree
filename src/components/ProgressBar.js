@@ -2,8 +2,7 @@ import React, { useEffect } from 'react';
 import Text from './Text.js';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Grid from '@material-ui/core/Grid';
-import { withStyles } from '@material-ui/styles';
-import { makeStyles } from '@material-ui/styles';
+import { withStyles, makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -46,7 +45,7 @@ export default function ProgressBar(props) {
 
   return (
     <div className={classes.root}>
-      <StyledLinearProgress value={progress} variant="determinate" />
+      <StyledLinearProgress id="lin-prog" value={progress} variant="determinate" />
       <Grid container spacing={1} direction="row" justify="flex-start" alignItems="flex-end">
         <Grid item>
           <Text type='progress-bold' text={'$' + raised + ' raised \t'} />

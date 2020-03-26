@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Component: GrantTag Renders correctly 1`] = `ShallowWrapper {}`;
+
+exports[`Component: GrantTagBar Renders correctly 1`] = `ShallowWrapper {}`;

@@ -8,7 +8,6 @@ import firebase from '../firebase.js';
 import { makeStyles } from '@material-ui/core/styles';
 import { AppBar, Toolbar, IconButton, Typography, MenuItem, Menu } from '@material-ui/core';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import { spacing } from '@material-ui/system';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -27,14 +26,7 @@ const useStyles = makeStyles(theme => ({
 
 function Header(props) {
   const classes = useStyles();
-  const [auth, setAuth] = React.useState(true);
-  const [errorMsg, setErrorMsg] = React.useState('');
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
-
-  const handleChange = event => {
-    setAuth(event.target.checked);
-  };
 
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
@@ -45,10 +37,9 @@ function Header(props) {
   };
 
   const logout = () => {
+    handleClose();
     firebase.auth().signOut().then(() => {
       props.history.push('/signin');
-    }).catch((error) => {
-      setErrorMsg(error.message);
     });
   }
 
@@ -67,14 +58,14 @@ function Header(props) {
 
   return (
     <React.Fragment>
-      <AppBar style={{ 'margin-bottom': 15 }} className={classes.appBar} >
+      <AppBar style={{ 'marginBottom': 15 }} className={classes.appBar} >
         <Toolbar>
           <IconButton
             edge="start"
             className={classes.menuButton}
             color="inherit"
             aria-label="menu"
-            to={props.authUser?.status !== '' ? '/foundation' : '/'}
+            to={(props.authUser?.status === null || typeof props.authUser?.status === 'undefined') ? '/' : '/foundation'}
             component={Link}>
             <img src={logo} alt="Logo" height="40" width="40" />
           </IconButton>
@@ -103,7 +94,7 @@ function Header(props) {
                 vertical: 'top',
                 horizontal: 'right',
               }}
-              open={open}
+              open={Boolean(anchorEl)}
               onClose={handleClose}
             >
             {props.authUser ? <SignedIn/> : <SignedOut/>}
