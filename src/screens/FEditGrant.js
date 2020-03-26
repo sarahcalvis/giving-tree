@@ -334,7 +334,7 @@ function FEditGrant(props) {
         {grantStatus === 'create' && <Text type='heading' text='Create Grant' />}
         {
           cfData &&
-          ((grantStatus === 'edit' && loaded && validEditor && validGrant) || grantStatus == 'create') &&
+          ((grantStatus === 'edit' && loaded && validEditor && validGrant) || grantStatus === 'create') &&
           <Paper className={classes.paper}>
             <EditGrant grantData={grantData} cfId={cfData.id} callback={callback} errors={errors} />
             <Grid container

@@ -1,9 +1,5 @@
 import React from "react"
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch
-} from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import DDashboard from '../screens/DDashboard.js';
 import DGive from '../screens/DGive.js';
 import Grant from '../screens/Grant.js';

@@ -107,6 +107,7 @@ class SignInFormBase extends Component {
         const { name, value } = event.target;
         this.setState({ [name]: value });
 
+        //Name is fieldName of the input 
         if (name === 'email') {
             this.setState({ errors: { ...this.state.errors, submit: '', [name]: helper.validateField(name, value) } },
                 this.validateForm

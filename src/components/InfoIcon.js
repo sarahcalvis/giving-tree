@@ -1,4 +1,3 @@
-//FYI: highly reccommend looking at contactpopout for help with this
 import React, { useEffect } from 'react';
 
 import { Info } from '@material-ui/icons';
