@@ -7,6 +7,7 @@ import '@testing-library/jest-dom'
 import React from 'react'
 import { render, fireEvent, screen } from '@testing-library/react'
 import NonprofitAutocomplete from '../../components/NonprofitAutocomplete'
+const { mockFirebase } = require('firestore-jest-mock');
 
 
 test('shows the children when the checkbox is checked', () => {
