@@ -30,6 +30,7 @@ export default function EditableData(props){
 
 	const onChange = (event, field) => {
 		const value = event.target.value;
+		//console.log(field+": "+event.target.value);
 		setHelperText({ ...helperText, [field]: helper.validateField(field, value) },
 			setChangedText({ ...changedText, [field]: value })
 		);
@@ -45,8 +46,10 @@ export default function EditableData(props){
 		if(canSubmit){
 			props.onSubmit(changedText)
 		}else{
-			console.log("Dang it we can't, here's why: ");
-			console.log(helperText)
+			console.log("Dang it we can't, here's why: "+helperText);
+			if(props.errorCallback){
+				props.errorCallback(helperText);
+			}
 		}
 	}
 
@@ -150,7 +153,7 @@ export default function EditableData(props){
 	);
 }
 
-function EditItem(props, disabled=false) {
+export function EditItem(props, disabled=false) {
 	return(
 		<Grid container item spacing={2}>
 			<Grid item>
