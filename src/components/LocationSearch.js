@@ -22,7 +22,11 @@ function loadScript(src, position, id) {
 const autocompleteService = { current: null };
 
 export default function LocationSearch(props) {
-  Geocode.setApiKey("AIzaSyA8f5dVQik-rPn3dyWa4-jS-A7tnZj5p5Y");
+  const k1 = 'AIzaSyAjz9nJV';
+  const k2 = 'KiBKdpCHh9x0';
+  const k3 = 'EuvGbdhD90lmdM';
+  const gck = k1+k2+k3;
+  Geocode.setApiKey(gck);
   const [inputValue, setInputValue] = React.useState("");
   const [options, setOptions] = React.useState([]);
   const loaded = React.useRef(false);
