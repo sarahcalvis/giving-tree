@@ -33,7 +33,7 @@ export default function SearchRadius(props) {
     <div>
       <FormControl fullWidth variant="outlined" className={classes.formControl}>
         <InputLabel ref={inputLabel} id="select-radius-ref">
-          Radius
+          Radius (mi)
         </InputLabel>
         <Select
           labelId="select-radius-label"
