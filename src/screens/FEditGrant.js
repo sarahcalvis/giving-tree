@@ -160,7 +160,6 @@ function FEditGrant(props) {
 
   // Receive changes to the grant data from EditGrant.js
   const callback = (data, type) => {
-    console.log(data + "   " + type);
     let newData = { ...grantData };
     let newErrors = { ...errors };
 
@@ -199,8 +198,6 @@ function FEditGrant(props) {
         }
     }
 
-    console.log(newData);
-    console.log(newErrors);
     setGrantData(newData);
   }
 
