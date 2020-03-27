@@ -8,13 +8,13 @@ import EditableData from '../components/FSettingsListEditable.js'
 import NonEditableData from '../components/FSettingList.js'
 
 
-export default function FSettings() {
- 
+export default function FSettings(props={edit: false}) {
+
   // Set tab title
   useEffect(() => { document.title = 'Settings- Giving Tree'; }, []);
   var db = firebase.firestore();
 
-  const [isEdit, setEdit] = React.useState(false);
+  const [isEdit, setEdit] = React.useState(props.edit||false);
   const user = React.useContext(AuthUserContext);
 
   const [getData, setGetData] = React.useState(true);
@@ -36,15 +36,14 @@ export default function FSettings() {
     date_deactivated: '',
   });
 
-  
-  function toggleEdit()
-  {
-    if(isEdit){
-      setEdit(false);
-    }else{
-      setEdit(true);
-    }
+  const toggle = () => {
+    FSettingsMethods().toggleEdit(isEdit, setEdit);
   }
+
+  React.useEffect(() => {
+    setEdit(props.edit);
+  }, [props.edit]);
+  
 
   React.useEffect(() => {
     if(getData){
@@ -62,7 +61,7 @@ export default function FSettings() {
       <EditableData
         isEdit={isEdit}
         cfInfo={cfInfo}
-        toggleEdit={toggleEdit}
+        toggleEdit={toggle}
         onSubmit={(changedText) => FSettingsMethods().onSubmit(cfInfo, changedText, user, db, () => {
           setGetData(true);
           setEdit(false);
@@ -74,13 +73,13 @@ export default function FSettings() {
     return(
       <NonEditableData
         cfInfo={cfInfo}
-        toggleEdit={toggleEdit}
+        toggleEdit={toggle}
         onSubmit={(changedText) => FSettingsMethods().onSubmit(cfInfo, changedText, user, db, () => {
           setGetData(true, () => setEdit(false));
         })}
-        toggleAccountActive={() => FSettingsMethods().toggleAccountActive(db, user, cfInfo, () => {
+        /*toggleAccountActive={() => FSettingsMethods().toggleAccountActive(db, user, cfInfo, () => {
           setGetData(true);
-        })}
+        })}*/
       />
     );
   }
@@ -90,6 +89,15 @@ export default function FSettings() {
 // All this crapola is outside the original functional component for testing purposes.
 // They say you should write your tests for your code, but since when do "they" know what they're talking about? *sobs*
 export const FSettingsMethods = () => {
+
+  const toggleEdit = (isEdit, setEdit) => {
+    if(isEdit){
+      setEdit(false);
+    }else{
+      setEdit(true);
+    }
+  }
+
   const loadData = (user, db, callback) =>{
     // Foundation query
     db.collection('communityFoundations').where('personal_email','==', user.email)
@@ -139,7 +147,7 @@ export const FSettingsMethods = () => {
     });
   }
   
-  const toggleAccountActive = (db, user, cfInfo, callback) => {
+  /*const toggleAccountActive = (db, user, cfInfo, callback) => {
     if(user){
       db.collection('communityFoundations').where('personal_email','==',user.email)
       .get()
@@ -158,12 +166,13 @@ export const FSettingsMethods = () => {
         console.error("Error writing document: ", error);
       });
     }
-  }
+  }*/
 
   return {
+    toggleEdit,
     loadData,
-    onSubmit,
-    toggleAccountActive,
+    onSubmit
+    //toggleAccountActive,
   };
 }
 
