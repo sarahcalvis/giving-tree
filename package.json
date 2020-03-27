@@ -3,6 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "proxy": "https://gcloud-givingtree.appspot.com",
+  "jest": {
+    "collectCoverageFrom": [
+      "**/src/auth/**",
+      "**/src/components/**",
+      "**/src/helpers/**",
+      "**/src/screens/**",
+      "**/firebase.js**",
+      "**/App.js**"
+    ]
+  },
   "dependencies": {
     "@date-io/date-fns": "^1.3.13",
     "@material-ui/core": "^4.8.1",
