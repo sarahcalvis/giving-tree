@@ -75,7 +75,7 @@ function Grant(props) {
 
   // Query from CF collection
   useEffect(() => {
-    if (grantData) {
+    if (grantData?.cf_id) {
       db.collection('communityFoundations').doc(grantData.cf_id).get()
         .then(doc => {
           if (!doc.exists) {
@@ -92,7 +92,7 @@ function Grant(props) {
 
   // Query from nonprofit collection
   useEffect(() => {
-    if (grantData) {
+    if (grantData?.nonprofit_id && grantData.nonprofit_id !== '') {
       db.collection('nonprofits').doc(grantData.nonprofit_id).get()
         .then(doc => {
           if (!doc.exists) {
