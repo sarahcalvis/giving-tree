@@ -12,7 +12,6 @@ import FEditGrant from '../screens/FEditGrant.js';
 import FDashboard from '../screens/FDashboard.js';
 import FRequestSent from '../screens/FRequestSent.js';
 import FSettings from '../screens/FSettings.js';
-import LInputNewPassword from '../screens/LInputNewPassword.js';
 import SignIn from '../screens/SignIn.js';
 import SignUp from '../screens/SignUp.js';
 import ForgotPassword from '../screens/ForgotPassword.js';
@@ -36,7 +35,6 @@ export default function Routes() {
         <Route exact path='/signin' component={SignIn} />
         <Route exact path='/signup' component={SignUp} />
         <Route exact path='/forgot' component={ForgotPassword} />
-        <Route exact path='/input-new-password' component={LInputNewPassword} />
         <Route exact path='/meta-admin' component={MetaAdmin} />
         {/*<Route component={NotFound} />*/}
       </Switch>

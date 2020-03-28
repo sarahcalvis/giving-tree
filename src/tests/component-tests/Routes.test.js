@@ -14,7 +14,6 @@ import {FEditGrant} from '../../screens/FEditGrant.js';
 import {FDashboard} from '../../screens/FDashboard.js';
 import {FRequestSent} from '../../screens/FRequestSent.js';
 import {FSettings} from '../../screens/FSettings.js';
-import {LInputNewPassword} from '../../screens/LInputNewPassword.js';
 import {SignIn} from '../../screens/SignIn.js';
 import {SignUp} from '../../screens/SignUp.js';
 import {ForgotPassword} from '../../screens/ForgotPassword.js';
@@ -44,7 +43,6 @@ describe('Component: Routes', () => {
         expect(wrapper.find('FDashboard')).toHaveLength(0);
         expect(wrapper.find('FRequestSent')).toHaveLength(0);
         expect(wrapper.find('FSettings')).toHaveLength(0);
-        expect(wrapper.find('LInputNewPassword')).toHaveLength(0);
         expect(wrapper.find('SignIn')).toHaveLength(0);
         expect(wrapper.find('SignUp')).toHaveLength(0);
         expect(wrapper.find('ForgotPassword')).toHaveLength(0);
