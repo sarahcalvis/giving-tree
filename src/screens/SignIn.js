@@ -104,6 +104,8 @@ class SignInFormBase extends Component {
     }
 
     onChange = event => {
+        this.validateForm();
+        
         const { name, value } = event.target;
         this.setState({ [name]: value });
         //this.setState({ email:  'acesmndr@gmail.com', password:  'notapassword' });

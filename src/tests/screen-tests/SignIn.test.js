@@ -98,7 +98,7 @@ describe('SignIn with props', () => {
                 "submit": "",
               },
              "isValid": false,
-              "password":  '' 
+             "password":  '' 
         });
     });  
 
