@@ -26,15 +26,42 @@ beforeEach(() => {
   inst = wrap.instance();
 })
 
-const callback = (event, value) => {
-  console.log(value, 'nonprofit_name');
-}
-const cfId = '4a1MMPzzdmREry9CUV6T'
-const error = false;
-const helperText = '';
-const initialNonprofit = '95CmUGFPnxFUEagA1Mc3'
-
 describe('Nonprofit Autocomplete basics', () => {
+  const callback = jest.fn();
+  const cfId = 'truecf'
+  const error = false;
+  const helperText = '';
+  const initialNonprofit = 'nonprofit1'
+  // mockFirebase({
+  //   database: {
+  //     nonprofits: [
+  //       {
+  //         nonprofit1: {
+  //           cf_id: 'truecf',
+  //           email: 'hello',
+  //           name: 'Correct Nonprofit',
+  //           number: '-1',
+  //           url: 'sarahcalvis.com'
+  //         },
+  //         nonprofit2: {
+  //           cf_id: 'untruecf',
+  //           email: 'hello',
+  //           name: 'Incorrect Nonprofit',
+  //           number: '-1',
+  //           url: 'sarahcalvis.com'
+  //         },
+  //       },
+  //     ],
+  //   },
+  // });
+
+  // let firebase;
+  // let db;
+
+  // beforeEach(() => {
+  //   firebase = require('firebase');
+  //   db = firebase.firestore();
+  // });
 
   it('Renders correctly', () => {
     const wrap = shallow(<NonprofitAutocomplete
@@ -43,11 +70,163 @@ describe('Nonprofit Autocomplete basics', () => {
       error={error}
       helperText={helperText}
       initialNonprofit={initialNonprofit} />)
-    
+
     expect(wrap).toMatchSnapshot();
   });
-  
 })
+
+
+describe('Nonprofit Autocomplete shows text fields if no nonprofits', () => {
+  const callback = jest.fn();
+  const cfId = 'truecf'
+  const error = false;
+  const helperText = '';
+  const initialNonprofit = ''
+  mockFirebase({
+    database: {
+      nonprofits: [],
+    },
+  });
+
+  let firebase;
+  let db;
+
+  beforeEach(() => {
+    firebase = require('firebase');
+    db = firebase.firestore();
+  });
+
+  it('Shows text fields if there is no nonprofit selected', () => {
+    const wrap = render(<NonprofitAutocomplete
+      callback={callback}
+      cfId={cfId}
+      error={error}
+      helperText={helperText}
+      initialNonprofit={initialNonprofit} />)
+
+    // expect(getByText(/Initial/i).textContent).toBe("Initial State")
+
+    expect(wrap.find('TextField').exists()).toBeTruthy();
+
+  });
+})
+
+
+describe('Renders text fields when add button clicked', () => {
+  const callback = jest.fn();
+  const cfId = 'truecf'
+  const error = false;
+  const helperText = '';
+  const initialNonprofit = 'nonprofit1'
+  mockFirebase({
+    database: {
+      nonprofits: [
+        {
+          nonprofit1: {
+            cf_id: 'truecf',
+            email: 'hello',
+            name: 'Correct Nonprofit',
+            number: '-1',
+            url: 'sarahcalvis.com'
+          },
+          nonprofit2: {
+            cf_id: 'untruecf',
+            email: 'hello',
+            name: 'Incorrect Nonprofit',
+            number: '-1',
+            url: 'sarahcalvis.com'
+          },
+        },
+      ],
+    },
+  });
+
+  let firebase;
+  let db;
+
+  beforeEach(() => {
+    firebase = require('firebase');
+    db = firebase.firestore();
+  });
+
+  it('fills nonprofit list correctly', () => {
+    const { wrap } = render(<NonprofitAutocomplete
+      callback={callback}
+      cfId={cfId}
+      error={error}
+      helperText={helperText}
+      initialNonprofit={initialNonprofit} />)
+
+    expect(wrap(/nonprofit1/i).textContent).toBe(
+      [{ id: 'nonprofit1', name: 'Correct Nonprofit', dataLabel: 'Correct Nonprofit' }]
+    )
+  });
+
+  it('Gets nonprofits from the database', () => {
+    expect(wrap.state('nonprofits')).toEqual([]);
+    inst.updateSearch(db, (tags) => expect(tags).toEqual(
+      [{ id: 'nonprofit1', name: 'Correct Nonprofit', dataLabel: 'Correct Nonprofit' }]
+    ));
+  });
+})
+
+
+
+// describe('Nonprofit Autocomplete renders correctly', () => {
+//   const callback = jest.fn();
+//   const cfId = 'truecf'
+//   const error = false;
+//   const helperText = '';
+//   const initialNonprofit = 'nonprofit1'
+//   mockFirebase({
+//     database: {
+//       nonprofits: [
+//         {
+//           nonprofit1: {
+//             cf_id: 'truecf',
+//             email: 'hello',
+//             name: 'Correct Nonprofit',
+//             number: '-1',
+//             url: 'sarahcalvis.com'
+//           },
+//           nonprofit2: {
+//             cf_id: 'untruecf',
+//             email: 'hello',
+//             name: 'Incorrect Nonprofit',
+//             number: '-1',
+//             url: 'sarahcalvis.com'
+//           },
+//         },
+//       ],
+//     },
+//   });
+
+//   let firebase;
+//   let db;
+
+//   beforeEach(() => {
+//     firebase = require('firebase');
+//     db = firebase.firestore();
+//   });
+
+//   it('Renders correctly', () => {
+//     const wrap = shallow(<NonprofitAutocomplete
+//       callback={callback}
+//       cfId={cfId}
+//       error={error}
+//       helperText={helperText}
+//       initialNonprofit={initialNonprofit} />)
+
+//     expect(wrap).toMatchSnapshot();
+//   });
+
+//   it('Gets nonprofits from the database', () => {
+//     expect(wrap.state('nonprofits')).toEqual([]);
+//     inst.updateSearch(db, (tags) => expect(tags).toEqual([
+//       { id: 'nonprofit1', name: 'Correct Nonprofit', dataLabel: 'Correct Nonprofit' }]
+//     ));
+//   });
+// })
 
 // test('shows the children when the checkbox is checked', () => {
 //   const callback = (event, value) => {

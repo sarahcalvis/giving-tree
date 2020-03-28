@@ -13,6 +13,10 @@ export default function NonprofitAutocomplete(props) {
   // nonprofit already in database
   const [nonprofits, setNonprofits] = React.useState([]);
 
+  useEffect(() => {
+    console.log(nonprofits)
+  }, [nonprofits]);
+
   // nonprofit data for new nonprofit
   const [nonprofitData, setNonprofitData] = React.useState({ name: '', number: '', email: '', url: '', cf_id: props.cfId });
 
