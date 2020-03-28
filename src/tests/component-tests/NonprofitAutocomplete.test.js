@@ -97,16 +97,14 @@ describe('Nonprofit Autocomplete shows text fields if no nonprofits', () => {
   });
 
   it('Shows text fields if there is no nonprofit selected', () => {
-    const wrap = render(<NonprofitAutocomplete
+    const wrap = mount(<NonprofitAutocomplete
       callback={callback}
       cfId={cfId}
       error={error}
       helperText={helperText}
       initialNonprofit={initialNonprofit} />)
 
-    // expect(getByText(/Initial/i).textContent).toBe("Initial State")
-
-    expect(wrap.find('TextField').exists()).toBeTruthy();
+    expect(wrap.instance().state.nonprofits).toBe({});
 
   });
 })
@@ -149,17 +147,32 @@ describe('Renders text fields when add button clicked', () => {
     db = firebase.firestore();
   });
 
-  it('fills nonprofit list correctly', () => {
-    const { wrap } = render(<NonprofitAutocomplete
+  it('Does not show text fields if there is an initial nonprofit', () => {
+    render(<NonprofitAutocomplete
       callback={callback}
       cfId={cfId}
       error={error}
       helperText={helperText}
       initialNonprofit={initialNonprofit} />)
 
-    expect(wrap(/nonprofit1/i).textContent).toBe(
-      [{ id: 'nonprofit1', name: 'Correct Nonprofit', dataLabel: 'Correct Nonprofit' }]
-    )
+    expect(screen.queryByText('Nonprofit Name')).toBeNull()
+    expect(screen.queryByText('Nonprofit Phone Number')).toBeNull()
+    expect(screen.queryByText('Nonprofit Email')).toBeNull()
+    expect(screen.queryByText('Nonprofit Website')).toBeNull()
+
+    fireEvent.click(screen.getByText('Add Nonprofit'));
+
+    expect(screen.queryByText('Nonprofit Name')).toBeNull()
+    expect(screen.queryByText('Nonprofit Phone Number')).toBeNull()
+    expect(screen.queryByText('Nonprofit Email')).toBeNull()
+    expect(screen.queryByText('Nonprofit Website')).toBeNull()
+
+    fireEvent.click(screen.getByText('Cancel'));
+
+    expect(screen.queryByText('Nonprofit Name')).toBeNull()
+    expect(screen.queryByText('Nonprofit Phone Number')).toBeNull()
+    expect(screen.queryByText('Nonprofit Email')).toBeNull()
+    expect(screen.queryByText('Nonprofit Website')).toBeNull()
   });
 
   it('Gets nonprofits from the database', () => {

@@ -44,7 +44,7 @@ export default function NonprofitAutocomplete(props) {
   }, [nonprofits])
 
   // Map nonprofit objects to labels
-  let transformedNonprofits = Object.values(nonprofits).map((item, index) => {
+  let transformedNonprofits = Object.values(nonprofits).map((item) => {
     item.dataLabel = item.name;
     return item;
   })
@@ -176,6 +176,7 @@ export default function NonprofitAutocomplete(props) {
                     <Button
                       color='primary'
                       variant='outlined'
+                      title='Cancel'
                       onClick={cancelAddMode}>
                       Cancel
                 </Button>
@@ -184,10 +185,11 @@ export default function NonprofitAutocomplete(props) {
                     <Button
                       color='primary'
                       variant='contained'
+                      title='Add Nonprofit'
                       onClick={addNonprofit}
                       disabled={!valid}>
                       Add Nonprofit
-                </Button>
+                    </Button>
                   </Grid>
                 </Grid>
               </Container>
