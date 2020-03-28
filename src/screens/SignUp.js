@@ -191,7 +191,7 @@ class SignUpFormBase extends Component {
           disabled={!isValid}
         >
           Sign Up
-                        </Button>
+        </Button>
       </form>
     );
   }

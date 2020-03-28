@@ -140,3 +140,43 @@ describe('SignIn with props', () => {
   });
 
 });
+
+describe('SignIn submitting corret props', () => {
+  let context, container;
+
+  beforeEach(() => {
+    context = {};
+    container = mount(
+      <StaticRouter location="someLocation" context={context}>
+        <SignIn />
+      </StaticRouter>);
+  });
+
+  it('should allow user to sign in', () => {
+    container.find('#email').at(0).props().onChange({
+      target: {
+        name: 'email',
+        value: 'acesmndr@gmail.com',
+      },
+    });
+    expect(container.find('#email').at(0).length).toEqual(1);
+    
+    container.find('#password').at(0).props().onChange({
+      target: {
+        name: 'password',
+        value: '1q!Q1q!Q',
+      },
+    });
+    expect(container.find('#password').at(0).length).toEqual(1);
+    expect(container.find('SignInFormBase').state()).toEqual({
+      "email": "acesmndr@gmail.com",
+      "errors": {
+        "email": "",
+        "submit": "",
+      },
+      "isValid": true,
+      "password": '1q!Q1q!Q'
+    });
+  });
+
+});
