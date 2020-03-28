@@ -13,8 +13,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-
-function FRequestSent() {
+function FRequestDenied() {
   const classes = useStyles();
 
   const authUser = useContext(AuthUserContext);
@@ -28,13 +27,13 @@ function FRequestSent() {
   return (
     <Container maxWidth="sm" component="main" className={classes.message}>
       <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
-        Foundation Account Requested
+        Foundation Account Denied
         </Typography>
       <Typography variant="h5" align="center" color="textSecondary" component="p">
-        We have received your request for a foundation account and will be reviewing it shortly. Please check back later.
+        We have reviewed your request for a foundation account and decided that your foundation does not meet our website's criteria. Please contact us if you have any questions.
         </Typography>
     </Container>
   );
 }
 
-export default withRouter(FRequestSent);
+export default withRouter(FRequestDenied);

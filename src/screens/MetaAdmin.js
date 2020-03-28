@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useCollection } from 'react-firebase-hooks/firestore';
 import $ from 'jquery';
-import {firestore as FIRESTORE} from "firebase/app";
+import { firestore as FIRESTORE } from "firebase/app";
 
 import { withAuthProtection } from '../auth';
 import FoundationCard from '../components/FoundationCard.js';
@@ -104,7 +104,7 @@ function MetaAdmin(props) {
                     }
                     else {
                       const time = FIRESTORE.FieldValue.serverTimestamp();
-                      const dateField = (status === 'current') ? { date_approved: time, date_denied: ''} :
+                      const dateField = (status === 'current') ? { date_approved: time, date_denied: '' } :
                         ((status === 'denied') ? { date_denied: time } : {});
 
                       db.collection("communityFoundations").doc(doc.id).update({ ...dateField, status: status })
@@ -170,5 +170,5 @@ function MetaAdmin(props) {
   );
 }
 
-const condition = (authUser) => authUser &&  !!authUser.admin;
+const condition = (authUser) => authUser && !!authUser.admin;
 export default withAuthProtection(condition)(MetaAdmin);

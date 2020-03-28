@@ -1,10 +1,9 @@
-import React, { useEffect, Component } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
 import { Button, Typography, Container, Grid} from '@material-ui/core';
 import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
-import ImageIcon from '@material-ui/icons/Image';
 import TitleIcon from '@material-ui/icons/Title'
 import PhoneIcon from '@material-ui/icons/Phone';
 import HttpIcon from '@material-ui/icons/Http';
@@ -44,11 +43,6 @@ export default function NonEditableData(props){
 							Change Password
 						</Button>
 					</Link>
-					<ToggleActive 
-						status={props.cfInfo.status}
-						date_deactivated={props.cfInfo.date_deactivated}
-						toggleAccountActive={props.toggleAccountActive}
-					/>
 				</Grid>
 			</Grid>
 			
@@ -113,7 +107,7 @@ export default function NonEditableData(props){
 }
 
 
-function StaticItem(props) {
+export function StaticItem(props) {
 	return(
 		<Grid container item spacing={2}>
 			<Grid item>
@@ -132,7 +126,7 @@ function StaticItem(props) {
 }
 
 
-function ToggleActive(props) {
+/*function ToggleActive(props) {
 	const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -215,4 +209,4 @@ function ToggleActive(props) {
 	else{
 		return(null);
 	}
-}
+}*/

@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import { withStyles } from '@material-ui/styles';
 import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
 
 import * as helper from '../helpers/SearchHelper.js'; 
 

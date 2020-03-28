@@ -1,10 +1,8 @@
 import React, { useEffect } from "react";
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import LocationOnIcon from "@material-ui/icons/LocationOn";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
 import parse from "autosuggest-highlight/parse";
 import throttle from "lodash/throttle";
 import Geocode from "react-geocode";
@@ -23,15 +21,12 @@ function loadScript(src, position, id) {
 
 const autocompleteService = { current: null };
 
-const useStyles = makeStyles(theme => ({
-  icon: {
-    color: theme.palette.text.secondary,
-  }
-}));
-
 export default function LocationSearch(props) {
-  Geocode.setApiKey("AIzaSyA8f5dVQik-rPn3dyWa4-jS-A7tnZj5p5Y");
-  const classes = useStyles();
+  const k1 = 'AIzaSyAjz9nJV';
+  const k2 = 'KiBKdpCHh9x0';
+  const k3 = 'EuvGbdhD90lmdM';
+  const gck = k1+k2+k3;
+  Geocode.setApiKey(gck);
   const [inputValue, setInputValue] = React.useState("");
   const [options, setOptions] = React.useState([]);
   const loaded = React.useRef(false);
@@ -117,7 +112,6 @@ export default function LocationSearch(props) {
       fullWidth
       includeInputInList
       disableOpenOnFocus
-      fullWidth
       defaultValue={props.address}
       onChange={handleChange}
       renderInput={params => (

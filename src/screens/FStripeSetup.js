@@ -27,7 +27,7 @@ export default function FStripeSetup() {
 
   // Set tab title
   useEffect(() => { document.title = 'Connect to Stripe' }, []);
-  
+
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => {
     setOpen(true);
@@ -69,11 +69,11 @@ export default function FStripeSetup() {
             <DialogTitle id="alert-dialog-slide-title">{"About Stripe"}</DialogTitle>
             <DialogContent>
               <DialogContentText id="alert-dialog-slide-description">
-                <span>Stripe is a third party payment platform that handles customer payment information and allows donors to contribute to your 
+                <span>Stripe is a third party payment platform that handles customer payment information and allows donors to contribute to your
                   foundation's giving opportunities. </span>
-                <span>After clicking on the link above, you will be taken to a signup page, where you will be prompted to provide your 
+                <span>After clicking on the link above, you will be taken to a signup page, where you will be prompted to provide your
                   foundation's basic information.</span>
-                <span>Additionally, you will be given the opportunity to supply the information that will show up on the donors' banking and 
+                <span>Additionally, you will be given the opportunity to supply the information that will show up on the donors' banking and
                   credit card statements.</span>
                 <span>Finally, you will be asked for your bank account number and routing number.</span>
                 <span>Once all the pertinent information has been provided, you can strengthen your account's security with a second step of

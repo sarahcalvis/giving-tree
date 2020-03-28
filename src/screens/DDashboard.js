@@ -28,34 +28,35 @@ export default function DDashboard() {
     if (!loading && !error) {
       snapshot.forEach(function (doc) {
         //console.log("a date: ", doc.data().date_deadline);
+        const fbData = doc.data();
         newDocs.push({
           dist: -1,
           id: doc.id,
-          title: doc.data().title,
-          cfName: doc.data().cf_name,
-          nonprofitName: doc.data().nonprofit_name,
-          goalAmt: doc.data().goal_amt,
-          moneyRaised: doc.data().money_raised,
-          img: doc.data().images[0] || 'GivingTree.png',
-          nonprofitId: doc.data().nonprofit_id,
-          address: doc.data().address,
-          lat: doc.data().lat,
-          long: doc.data().long,
-          datePosted: doc.data().date_posted,
-          dateDeadline: doc.data().date_deadline,
-          desc: doc.data().desc,
-          tags: doc.data().tags
+          title: fbData.title,
+          cfName: fbData.cf_name,
+          nonprofitName: fbData.nonprofit_name,
+          goalAmt: fbData.goal_amt,
+          moneyRaised: fbData.money_raised,
+          img: fbData.images[0] || 'GivingTree.png',
+          nonprofitId: fbData.nonprofit_id,
+          address: fbData.address,
+          lat: fbData.lat,
+          long: fbData.long,
+          datePosted: fbData.date_posted,
+          dateDeadline: fbData.date_deadline,
+          desc: fbData.desc,
+          tags: fbData.tags
         });
-        if(doc.data().status === 'current') {
+        if (fbData.status === 'current') {
           newGrants.push(
             <SmallGrantCard
               id={doc.id}
-              title={doc.data().title}
-              cfName={doc.data().cf_name}
-              nonprofitName={doc.data().nonprofit_name}
-              goalAmt={doc.data().goal_amt}
-              moneyRaised={doc.data().money_raised}
-              img={doc.data().images[0] || 'GivingTree.png'} />
+              title={fbData.title}
+              cfName={fbData.cf_name}
+              nonprofitName={fbData.nonprofit_name}
+              goalAmt={fbData.goal_amt}
+              moneyRaised={fbData.money_raised}
+              img={fbData.images[0] || 'GivingTree.png'} />
           );
         }
       });
