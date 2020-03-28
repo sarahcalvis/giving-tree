@@ -13,10 +13,6 @@ export default function NonprofitAutocomplete(props) {
   // nonprofit already in database
   const [nonprofits, setNonprofits] = React.useState([]);
 
-  useEffect(() => {
-    console.log(nonprofits)
-  }, [nonprofits]);
-
   // nonprofit data for new nonprofit
   const [nonprofitData, setNonprofitData] = React.useState({ name: '', number: '', email: '', url: '', cf_id: props.cfId });
 
@@ -121,6 +117,7 @@ export default function NonprofitAutocomplete(props) {
                   getOptionLabel={nonprofits => nonprofits.name}
                   autoHighlight
                   disableClearable
+                  testid='dropdown'
                   defaultValue={transformedNonprofits[selected]}
                   onChange={props.callback}
                   renderInput={params => (
@@ -135,7 +132,13 @@ export default function NonprofitAutocomplete(props) {
                 />
               </Grid>
               <Grid item>
-                <Button color='primary' variant='contained' onClick={addMode}>Add a new nonprofit</Button>
+                <Button
+                  color='primary'
+                  variant='contained'
+                  onClick={addMode}
+                  id='Add a new nonprofit'>
+                  Add a new nonprofit
+                </Button>
               </Grid>
             </Grid>
           }
@@ -176,7 +179,7 @@ export default function NonprofitAutocomplete(props) {
                     <Button
                       color='primary'
                       variant='outlined'
-                      title='Cancel'
+                      id='Cancel'
                       onClick={cancelAddMode}>
                       Cancel
                 </Button>
@@ -185,7 +188,7 @@ export default function NonprofitAutocomplete(props) {
                     <Button
                       color='primary'
                       variant='contained'
-                      title='Add Nonprofit'
+                      id='Add Nonprofit'
                       onClick={addNonprofit}
                       disabled={!valid}>
                       Add Nonprofit

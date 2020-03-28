@@ -32,36 +32,6 @@ describe('Nonprofit Autocomplete basics', () => {
   const error = false;
   const helperText = '';
   const initialNonprofit = 'nonprofit1'
-  // mockFirebase({
-  //   database: {
-  //     nonprofits: [
-  //       {
-  //         nonprofit1: {
-  //           cf_id: 'truecf',
-  //           email: 'hello',
-  //           name: 'Correct Nonprofit',
-  //           number: '-1',
-  //           url: 'sarahcalvis.com'
-  //         },
-  //         nonprofit2: {
-  //           cf_id: 'untruecf',
-  //           email: 'hello',
-  //           name: 'Incorrect Nonprofit',
-  //           number: '-1',
-  //           url: 'sarahcalvis.com'
-  //         },
-  //       },
-  //     ],
-  //   },
-  // });
-
-  // let firebase;
-  // let db;
-
-  // beforeEach(() => {
-  //   firebase = require('firebase');
-  //   db = firebase.firestore();
-  // });
 
   it('Renders correctly', () => {
     const wrap = shallow(<NonprofitAutocomplete
@@ -103,12 +73,33 @@ describe('Nonprofit Autocomplete shows text fields if no nonprofits', () => {
       error={error}
       helperText={helperText}
       initialNonprofit={initialNonprofit} />)
-
-    expect(wrap.instance().state.nonprofits).toBe({});
+    
+    expect(screen.queryByText('Nonprofit Name')).toBeDefined()
+    expect(screen.queryByText('Nonprofit Phone Number')).toBeDefined()
+    expect(screen.queryByText('Nonprofit Email')).toBeDefined()
+    expect(screen.queryByText('Nonprofit Website')).toBeDefined()
 
   });
 })
 
+// describe('NonprofitAutocomplete method: UpdateParent', () => {
+
+  // it('Passes tags and freetext up to parent',  () =>{
+  //   const wrap = shallow(<NonprofitAutocomplete {...routeComponentPropsMock} 
+  //     parentCallback={(ret) => {
+  //       expect(ret).toEqual(
+  //         { tags: ['tagOne', 'tagTwo'], freeText: ['freeOne', 'freeTwo']  }
+  //       )
+  //     }  
+  //   }/>)
+  //   const inst = wrap.instance();
+    
+  //   inst.setState({ activeTags: ['tagOne', 'tagTwo'], activeTextSearch: ['freeOne', 'freeTwo']  }, () => { 
+  //     inst.updateParent();
+  //   });
+  // });
+  
+// })
 
 describe('Renders text fields when add button clicked', () => {
   const callback = jest.fn();
@@ -147,6 +138,7 @@ describe('Renders text fields when add button clicked', () => {
     db = firebase.firestore();
   });
 
+
   it('Does not show text fields if there is an initial nonprofit', () => {
     render(<NonprofitAutocomplete
       callback={callback}
@@ -155,115 +147,38 @@ describe('Renders text fields when add button clicked', () => {
       helperText={helperText}
       initialNonprofit={initialNonprofit} />)
 
-    expect(screen.queryByText('Nonprofit Name')).toBeNull()
-    expect(screen.queryByText('Nonprofit Phone Number')).toBeNull()
-    expect(screen.queryByText('Nonprofit Email')).toBeNull()
-    expect(screen.queryByText('Nonprofit Website')).toBeNull()
+    // expect(screen.getByText('Add a new nonprofit')).toBeInTheDOM()
+    // expect(screen.getByText('Add a new nonprofit')).toBeInTheDocument()
 
-    fireEvent.click(screen.getByText('Add Nonprofit'));
+    // expect(screen.queryByText('Nonprofit Name')).toBeNull()
+    // expect(screen.queryByText('Nonprofit Phone Number')).toBeNull()
+    // expect(screen.queryByText('Nonprofit Email')).toBeNull()
+    // expect(screen.queryByText('Nonprofit Website')).toBeNull()
 
-    expect(screen.queryByText('Nonprofit Name')).toBeNull()
-    expect(screen.queryByText('Nonprofit Phone Number')).toBeNull()
-    expect(screen.queryByText('Nonprofit Email')).toBeNull()
-    expect(screen.queryByText('Nonprofit Website')).toBeNull()
-
-    fireEvent.click(screen.getByText('Cancel'));
-
-    expect(screen.queryByText('Nonprofit Name')).toBeNull()
-    expect(screen.queryByText('Nonprofit Phone Number')).toBeNull()
-    expect(screen.queryByText('Nonprofit Email')).toBeNull()
-    expect(screen.queryByText('Nonprofit Website')).toBeNull()
   });
 
-  it('Gets nonprofits from the database', () => {
-    expect(wrap.state('nonprofits')).toEqual([]);
-    inst.updateSearch(db, (tags) => expect(tags).toEqual(
-      [{ id: 'nonprofit1', name: 'Correct Nonprofit', dataLabel: 'Correct Nonprofit' }]
-    ));
+  it('Shows text fields if the user clicks the add new nonprofit button', () => {
+    render(<NonprofitAutocomplete
+      callback={callback}
+      cfId={cfId}
+      error={error}
+      helperText={helperText}
+      initialNonprofit={initialNonprofit} />)
+
+    // fireEvent.click(screen.getByText('Add a new nonprofit'));
+    
+    // expect(screen.getByText('Nonprofit Name')).toBeInTheDOM()
+    // expect(screen.getByText('Nonprofit Phone Number')).toBeInTheDOM()
+    // expect(screen.getByText('Nonprofit Email')).toBeInTheDOM()
+    // expect(screen.getByText('Nonprofit Website')).toBeInTheDOM()
+
   });
+
+
+  // it('Gets nonprofits from the database', () => {
+  //   expect(wrap.state('nonprofits')).toEqual([]);
+  //   inst.updateSearch(db, (tags) => expect(tags).toEqual(
+  //     [{ id: 'nonprofit1', name: 'Correct Nonprofit', dataLabel: 'Correct Nonprofit' }]
+  //   ));
+  // });
 })
-
-
-
-// describe('Nonprofit Autocomplete renders correctly', () => {
-//   const callback = jest.fn();
-//   const cfId = 'truecf'
-//   const error = false;
-//   const helperText = '';
-//   const initialNonprofit = 'nonprofit1'
-//   mockFirebase({
-//     database: {
-//       nonprofits: [
-//         {
-//           nonprofit1: {
-//             cf_id: 'truecf',
-//             email: 'hello',
-//             name: 'Correct Nonprofit',
-//             number: '-1',
-//             url: 'sarahcalvis.com'
-//           },
-//           nonprofit2: {
-//             cf_id: 'untruecf',
-//             email: 'hello',
-//             name: 'Incorrect Nonprofit',
-//             number: '-1',
-//             url: 'sarahcalvis.com'
-//           },
-//         },
-//       ],
-//     },
-//   });
-
-//   let firebase;
-//   let db;
-
-//   beforeEach(() => {
-//     firebase = require('firebase');
-//     db = firebase.firestore();
-//   });
-
-//   it('Renders correctly', () => {
-//     const wrap = shallow(<NonprofitAutocomplete
-//       callback={callback}
-//       cfId={cfId}
-//       error={error}
-//       helperText={helperText}
-//       initialNonprofit={initialNonprofit} />)
-
-//     expect(wrap).toMatchSnapshot();
-//   });
-
-//   it('Gets nonprofits from the database', () => {
-//     expect(wrap.state('nonprofits')).toEqual([]);
-//     inst.updateSearch(db, (tags) => expect(tags).toEqual([
-//       { id: 'nonprofit1', name: 'Correct Nonprofit', dataLabel: 'Correct Nonprofit' }]
-//     ));
-//   });
-// })
-
-// test('shows the children when the checkbox is checked', () => {
-//   const callback = (event, value) => {
-//     console.log(value, 'nonprofit_name');
-//   }
-//   const cfId = '4a1MMPzzdmREry9CUV6T'
-//   const error = false;
-//   const helperText = '';
-//   const initialNonprofit = '95CmUGFPnxFUEagA1Mc3'
-//   render(<NonprofitAutocomplete
-//     callback={callback}
-//     cfId={cfId}
-//     error={error}
-//     helperText={helperText}
-//     initialNonprofit={initialNonprofit} />)
-
-//   // query* functions will return the element or null if it cannot be found
-//   // get* functions will return the element or throw an error if it cannot be found
-//   expect(screen.queryByText('PETA')).toBeNull()
-
-//   // the queries can accept a regex to make your selectors more resilient to content tweaks and changes.
-//   // fireEvent.click(screen.getByLabelText(/show/i))
-
-//   // .toBeInTheDocument() is an assertion that comes from jest-dom
-//   // otherwise you could use .toBeDefined()
-//   expect(screen.getByText('PETA')).toBeInTheDocument()
-// })
