@@ -5,7 +5,7 @@ import firebase from '../firebase.js';
 import * as helper from '../helpers/ValidationHelper.js';
 import Snack from '../components/Snack.js';
 
-import { withStyles } from '@material-ui/styles';
+import { withStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Avatar from '@material-ui/core/Avatar';
 import TextField from "@material-ui/core/TextField";
@@ -14,7 +14,6 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link";
 import Typography from "@material-ui/core/Typography";
-
 
 const styles = theme => ({
   root: {
@@ -44,7 +43,6 @@ const styles = theme => ({
 
 function ForgotPassword(props) {
   const { classes } = props;
-
   return (
     <Container component="main" maxWidth="xs">
       <div className={classes.root}>
@@ -80,7 +78,6 @@ class ForgotPasswordFormBase extends Component {
   onSubmit = event => {
     if (this.state.isValid) {
       const { email } = this.state;
-
       firebase.auth().sendPasswordResetEmail(email)
         .then(() => {
           // Email sent.
@@ -90,7 +87,6 @@ class ForgotPasswordFormBase extends Component {
           this.setState({ errors: { ...this.state.errors, submit: error.message } });
         });
     }
-
     event.preventDefault();
   }
 
@@ -133,6 +129,7 @@ class ForgotPasswordFormBase extends Component {
           margin="normal"
           required
           fullWidth
+          id="email"
           name="email"
           value={email}
           onChange={this.onChange}
@@ -144,6 +141,7 @@ class ForgotPasswordFormBase extends Component {
         />
         <Button className={classes.submit}
           type="submit"
+          id="submit-button"
           fullWidth
           variant="contained"
           color="primary"
