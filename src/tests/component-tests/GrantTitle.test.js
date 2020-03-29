@@ -2,21 +2,21 @@ import '@testing-library/jest-dom'
 import React from 'react'
 import { render, screen } from '@testing-library/react'
 import { mount } from 'enzyme';
-import GrantDescription from '../../components/GrantDescription'
+import GrantTitle from '../../components/GrantTitle'
 
-test('Grant Description Basics', () => {
-  render(<GrantDescription />)
+test('Grant Title Basics', () => {
+  render(<GrantTitle />)
   expect(screen).toMatchSnapshot();
 });
 
-test('Grant Description renders a text field when there is no default text', () => {
+test('Grant Title renders a text field when there is no default text', () => {
   let onChange = jest.fn();
 
-  const wrapper = mount(<GrantDescription
+  const wrapper = mount(<GrantTitle
     error={false}
     helperText={''}
     defaultValue={''}
     onChange={onChange} />);
 
-  expect(wrapper.find('desc')).toBeDefined();
+  expect(wrapper.find('title')).toBeDefined();
 });

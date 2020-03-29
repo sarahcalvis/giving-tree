@@ -6,6 +6,7 @@ import LocationSearch from './LocationSearch.js';
 import TagSearch from './TagSearch.js';
 import NonprofitAutocomplete from './NonprofitAutocomplete.js';
 import GrantDescription from './GrantDescription.js';
+import GrantTitle from './GrantTitle.js';
 
 import Grid from '@material-ui/core/Grid';
 import GridList from '@material-ui/core/GridList';
@@ -174,17 +175,7 @@ export default function EditGrant(props) {
 
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
-      <div className={classes.padding}>
-        <Text type='card-heading' text='Grant Title' />
-        <TextField
-          id='title'
-          defaultValue={props.grantData.title}
-          fullWidth
-          error={props.errors.title !== ''}
-          helperText={props.errors.title}
-          label='Grant Title'
-          onChange={handleInput} />
-      </div>
+      <GrantTitle error={props.errors.title !== ''} helperText={props.errors.title} defaultValue={props.grantData.title} onChange={handleInput} />
       <GrantDescription error={props.errors.desc !== ''} helperText={props.errors.desc} defaultValue={props.grantData.desc} onChange={handleInput} />
       <div className={classes.padding}>
         <Text type='card-heading' text='Affiliated Nonprofit' />
