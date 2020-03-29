@@ -7,7 +7,7 @@ import theme from './theme';
 import Routes from './components/Routes.js';
 import Header from './components/Header.js';
 
-function App(props) {
+function App() {
   return (
     <BrowserRouter>
       <ThemeProvider theme={theme}>
