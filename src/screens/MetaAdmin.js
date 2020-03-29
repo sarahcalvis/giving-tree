@@ -67,7 +67,7 @@ function MetaAdmin(props) {
     }
   }, [snapshot, error, loading]);
 
-  const approveCB = (email) => { const nooo = 0/0;}//updateCf(email, 'current'); }
+  const approveCB = (email) => { updateCf(email, 'current'); }
   const denyCB = (email) => { updateCf(email, 'denied'); }
   const deleteCB = (email) => { updateCf(email, 'deleted'); }
 
