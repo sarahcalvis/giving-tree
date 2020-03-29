@@ -14,7 +14,6 @@ import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link";
 import Typography from "@material-ui/core/Typography";
 
-
 const styles = theme => ({
   root: {
     marginTop: theme.spacing(8),
@@ -52,7 +51,7 @@ function SignUp(props) {
         </Avatar>
         <Typography component="h1" variant="h5" className={classes.header}>
           Sign Up
-                    </Typography>
+        </Typography>
         <SignUpForm classes={classes} />
         <SignInForgotLink classes={classes} />
       </div>
@@ -72,7 +71,6 @@ const INITIAL_STATE = {
   },
   isValid: false,
 };
-
 class SignUpFormBase extends Component {
   constructor(props) {
     super(props);
@@ -82,36 +80,31 @@ class SignUpFormBase extends Component {
   onSubmit = event => {
     if (this.state.isValid) {
       const { email, passwordOne } = this.state;
-
       firebase.auth().createUserWithEmailAndPassword(email, passwordOne)
         .then((result) => {
-          //Do Misc Stuff for Donor Account
-          //Post to Server? Set firebase rules? Create empty donor document?
-
-          //Redirect User to Home
-          this.props.history.push('/');
+            //Do Misc Stuff for Donor Account--Post to Server? Set firebase rules? Create empty donor document?
+            //Redirect User to Home
+            this.props.history.push('/');
         })
         .catch((error) => {
-          //Failure
-          //TODO: Cleanup Firebase Error Messages
-          this.setState({ errors: { ...this.state.errors, submit: error.message } });
+            //Failure--TODO: Cleanup Firebase Error Messages
+            this.setState({ errors: { ...this.state.errors, submit: error.message } 
+          });
         });
     }
-
     event.preventDefault();
   }
 
   onChange = event => {
     const { name, value } = event.target;
     this.setState({ [name]: value });
-
     if (name === 'passwordTwo') {
-      this.setState({ errors: { ...this.state.errors, submit: '', [name]: helper.confirmMatching(this.state.passwordOne, value) } },
+      this.setState({ errors: { ...this.state.errors, submit: '', [name]: helper.confirmMatching(this.state.passwordOne, value) } }, 
         this.validateForm
       );
     }
     else {
-      this.setState({ errors: { ...this.state.errors, submit: '', [name]: helper.validateField(name, value) } },
+      this.setState({ errors: { ...this.state.errors, submit: '', [name]: helper.validateField(name, value) } }, 
         this.validateForm
       );
     }
@@ -202,18 +195,16 @@ const SignInForgotLink = ({ classes }) => (
     <Grid item xs>
       <Link href='/forgot' variant="body2">
         Forgot password?
-            </Link>
+      </Link>
     </Grid>
     <Grid item>
       <Link href='/signin' variant="body2">
         Already have an account? Sign In
-            </Link>
+      </Link>
     </Grid>
   </Grid>
 );
 
 const SignUpForm = withRouter(SignUpFormBase);
-
 export default withStyles(styles)(SignUp);
-
 export { SignUpForm, SignInForgotLink };

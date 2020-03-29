@@ -5,6 +5,9 @@ import { StaticRouter } from 'react-router-dom';
 
 import SignIn from '../../screens/SignIn.js';
 
+const { mockFirebase } = require('firestore-jest-mock');
+const { mockCollection, mockWhere } = require('firestore-jest-mock/mocks/firestore');
+
 describe('SignIn with no props', () => {
   const context = {};
   const container = mount(
@@ -142,6 +145,24 @@ describe('SignIn with props', () => {
 });
 
 describe('SignIn submitting corret props', () => {
+
+  mockFirebase({
+    database: {
+      users: [
+        { email : "",
+          name : "",
+         },
+      ],
+    },
+  });
+
+  let firebase;
+  let db;
+
+  beforeEach(() => {
+    firebase = require('firebase');
+    db = firebase.firestore();
+  });
   let context, container;
 
   beforeEach(() => {

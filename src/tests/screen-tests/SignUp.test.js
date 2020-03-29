@@ -253,7 +253,6 @@ describe('SignUp with props', () => {
         id: "submit-button",
       });
 
-      container.find('#submit-button').at(0).props().onSubmit({});
+      container.find('#submit-button').at(0).props().onSubmit();
     });
-    
   });
