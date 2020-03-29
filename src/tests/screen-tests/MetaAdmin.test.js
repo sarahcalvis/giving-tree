@@ -4,8 +4,6 @@ import FirestoreMock from '../firestore.mock'
 import { MetaAdmin } from '../../screens/MetaAdmin';
 import firebase from 'firebase/app';
 import 'firebase/firestore';
-import {wait} from '@testing-library/react';
-
 
 const mockCfs = [
   {
@@ -59,14 +57,15 @@ describe('MetaAdmin', () => {
       firestoreMock.reset();
     });
 
-    test('loads community foundations on render', () => {
-      // expect.assertions(1);
+    it('call community foundations snapshot on render', async () => {
+      firestoreMock.mockOnSnapshotSuccess = mockCfs;
+      
       const wrapper = shallow(<MetaAdmin />);
       wrapper.update();
-      // await wait(() => expect(firestoreMock.mockCollection).toBeCalledWith('communityFoundations'))
 
       setTimeout(() => {
-        expect(firestoreMock.mockCollection).toBeCalledWith('communityFoundations');
+        expect(firestoreMock.gfdmockCollection).toBeCalled('communityFoundations');
+        expect(firestoreMock.mockOnSnapshot).toBeCalledWith(1);
       }, 1000);
     });
   });
