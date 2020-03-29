@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Adapter from 'enzyme-adapter-react-16';
-import { mount } from 'enzyme';
+import { shallow } from 'enzyme';
 import { MemoryRouter, Route } from 'react-router';
 import { createMemoryHistory } from "history";
 
@@ -24,6 +24,17 @@ jest.mock('firebase/app');
 jest.mock("react-router-dom/BrowserRouter", () => {
     return ({ children }) => <div>{children}</div>;
 });
+
+describe('Routes basics', () => {
+
+    it('Renders correctly', () => {
+        const wrap = shallow(<Routes />)
+
+        expect(wrap).toMatchSnapshot();
+    });
+
+})
+
 
 describe('Component: Routes', () => {
     var enzyme = require('enzyme');
