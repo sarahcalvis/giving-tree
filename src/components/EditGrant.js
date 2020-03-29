@@ -7,6 +7,7 @@ import TagSearch from './TagSearch.js';
 import NonprofitAutocomplete from './NonprofitAutocomplete.js';
 import GrantDescription from './GrantDescription.js';
 import GrantTitle from './GrantTitle.js';
+import DateChooser from './DateChooser.js';
 
 import Grid from '@material-ui/core/Grid';
 import GridList from '@material-ui/core/GridList';
@@ -17,12 +18,6 @@ import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddPhotoAlternateIcon from '@material-ui/icons/AddPhotoAlternate';
 import { makeStyles } from '@material-ui/core/styles';
-import {
-  DatePicker,
-  MuiPickersUtilsProvider,
-} from '@material-ui/pickers';
-
-import DateFnsUtils from '@date-io/date-fns';
 
 const useStyles = makeStyles(theme => ({
   input: {
@@ -62,11 +57,6 @@ export default function EditGrant(props) {
 
   // Initialize Firebase storage
   const storageRef = firebase.storage().ref();
-
-  // Hold the date selected by the date picker
-  const [selectedDate, handleDateChange] = React.useState(
-    (props.grantData.date_deadline !== '') ? new Date(props.grantData.date_deadline.seconds * 1000) : null
-  );
 
   ///////////
   // IMAGE //
@@ -147,13 +137,6 @@ export default function EditGrant(props) {
     }
   }
 
-  // Handle change to the date picker
-  useEffect(() => {
-    if (selectedDate) {
-      props.callback(Math.round(selectedDate.getTime() / 1000), 'date_deadline')
-    }
-  }, [selectedDate]);
-
   // Get the location from LocationSearch
   const locationCallback = (address) => {
     props.callback(address, 'address')
@@ -174,7 +157,7 @@ export default function EditGrant(props) {
   useEffect(() => { props.callback(img, 'images') }, [img]);
 
   return (
-    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+    <div>
       <GrantTitle error={props.errors.title !== ''} helperText={props.errors.title} defaultValue={props.grantData.title} onChange={handleInput} />
       <GrantDescription error={props.errors.desc !== ''} helperText={props.errors.desc} defaultValue={props.grantData.desc} onChange={handleInput} />
       <div className={classes.padding}>
@@ -192,19 +175,7 @@ export default function EditGrant(props) {
         direction='row'
         alignItems='flex-start'
         spacing={3}>
-        <Grid item xs={12} sm={6}>
-          <div className={classes.padding}>
-            <Text type='card-heading' text='Grant Deadline' />
-            <DatePicker
-              label='Pick a date'
-              value={selectedDate}
-              fullWidth
-              error={props.errors.date_deadline !== ''}
-              helperText={props.errors.date_deadline}
-              onChange={handleDateChange}
-            />
-          </div>
-        </Grid>
+        <DateChooser error={props.errors.date_deadline !== ''} helperText={props.errors.date_deadline} callback={props.callback} date_deadline={props.grantData.date_deadline} />
         <Grid item xs={12} sm={6}>
           <div className={classes.padding}>
             <Text type='card-heading' text='Goal Amount' />
@@ -293,6 +264,6 @@ export default function EditGrant(props) {
           onChange={uploadImages}
           multiple />
       </div>
-    </MuiPickersUtilsProvider>
+    </div>
   );
 }

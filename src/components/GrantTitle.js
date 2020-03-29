@@ -25,7 +25,7 @@ export default function GrantTitle(props) {
         error={props.error}
         helperText={props.helperText}
         label='Grant Title'
-        onChange={props.callback} />
+        onChange={props.onChange} />
     </div>
   );
 }
