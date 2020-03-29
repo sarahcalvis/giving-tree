@@ -20,9 +20,6 @@ import {
   MuiPickersUtilsProvider,
 } from '@material-ui/pickers';
 
-// import MaskedInput from 'react-text-mask'
-// import createNumberMask from 'text-mask-addons/dist/createNumberMask'
-
 import DateFnsUtils from '@date-io/date-fns';
 
 const useStyles = makeStyles(theme => ({
@@ -35,7 +32,6 @@ const useStyles = makeStyles(theme => ({
   },
   gridList: {
     width: 800,
-    // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
     transform: 'translateZ(0)',
   },
   titleBar: {
@@ -64,13 +60,6 @@ export default function EditGrant(props) {
 
   // Initialize Firebase storage
   const storageRef = firebase.storage().ref();
-
-  // Money mask
-  // const numberMask = createNumberMask({
-  //   allowDecimal: true,
-  //   prefix: '$ ',
-  //   suffix: '' // This will put the dollar sign at the end, with a space.
-  // })
 
   // Hold the date selected by the date picker
   const [selectedDate, handleDateChange] = React.useState(
@@ -248,14 +237,6 @@ export default function EditGrant(props) {
               error={props.errors.goal_amt !== ''}
               helperText={props.errors.goal_amt}
               fullWidth />
-            {/* <MaskedInput
-          mask={numberMask}
-          onChange={handleInput}
-          defaultValue={props.grantData.goal_amt}
-          id='goal_amt'
-          className='form-control'
-          type='text'
-        /> */}
           </div>
         </Grid>
       </Grid>
