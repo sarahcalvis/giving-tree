@@ -416,5 +416,4 @@ function FEditGrant(props) {
     </div >
   );
 }
-
 export default withAuthProtection()(withRouter(FEditGrant));

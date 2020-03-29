@@ -20,7 +20,6 @@
     "@material-ui/lab": "^4.0.0-alpha.40",
     "@material-ui/pickers": "^3.2.10",
     "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.4.0",
     "@testing-library/user-event": "^7.2.1",
     "autosuggest-highlight": "^3.1.1",
     "body-parser": "^1.19.0",
@@ -72,6 +71,7 @@
   "description": "Giving Tree is a website that provides public access to grant giving opportunites.",
   "main": "index.js",
   "devDependencies": {
+    "@testing-library/react": "^9.5.0",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",
     "jest-google-maps-mock": "^1.0.3",
