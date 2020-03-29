@@ -1,42 +1,66 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import FirestoreMock from '../firestore.mock'
 import { MetaAdmin } from '../../screens/MetaAdmin';
-import firebase from 'firebase/app';
-import 'firebase/firestore';
+import * as FirebaseHooks from 'react-firebase-hooks/firestore';
 
-const mockCfs = [
-  {
-    name: 'The Test Foundation',
-    public_email: 'testy@tester.tested',
-    public_phone: '1112223333',
-    foundation_url: 'testme.com',
-    fname_contact: 'Tabaath',
-    lname_contact: 'Ben Test',
-    personal_email: 'blah@yada.net',
-    personal_phone: '9998887777',
-    status: 'current',
-    date_requested: 'March 12, 2020 at 9:09:34 AM UTC-4',
-    date_approved: 'March 13, 2020 at 10:15:34 PM UTC-4',
-    date_denied: '',
-    date_deactivated: '',
-  },
-  {
-    name: 'Charity Foundation',
-    public_email: 'charity@mail.com',
-    public_phone: '12345678945',
-    foundation_url: 'charity.com',
-    fname_contact: 'Chareth',
-    lname_contact: 'Tyler',
-    personal_email: 'chareth@yahoo.com',
-    personal_phone: '4561237894',
-    status: 'requested',
-    date_requested: 'March 09, 2020 at 9:09:34 AM UTC-4',
-    date_approved: '',
-    date_denied: '',
-    date_deactivated: '',
-  },
+
+const mockCfDocs = [{
+  data: () => {
+    return {
+      name: 'The Test Foundation',
+      public_email: 'testy@tester.tested',
+      public_phone: '1112223333',
+      foundation_url: 'testme.com',
+      fname_contact: 'Tabaath',
+      lname_contact: 'Ben Test',
+      personal_email: 'blah@yada.net',
+      personal_phone: '9998887777',
+      status: 'current',
+      date_requested: 'March 12, 2020 at 9:09:34 AM UTC-4',
+      date_approved: 'March 13, 2020 at 10:15:34 PM UTC-4',
+      date_denied: '',
+      date_deactivated: '',
+    }
+  }
+},
+{
+  data: () => {
+    return {
+      name: 'Charity Foundation',
+      public_email: 'charity@mail.com',
+      public_phone: '12345678945',
+      foundation_url: 'charity.com',
+      fname_contact: 'Chareth',
+      lname_contact: 'Tyler',
+      personal_email: 'chareth@yahoo.com',
+      personal_phone: '4561237894',
+      status: 'requested',
+      date_requested: 'March 09, 2020 at 9:09:34 AM UTC-4',
+      date_approved: '',
+      date_denied: '',
+      date_deactivated: '',
+    }
+  }
+}
 ]
+
+const mockFirestore = new FirestoreMock();
+
+jest.mock('firebase/app', () => ({
+  __esModule: true,
+  initializeApp: () => { },
+  apps: {
+    length: true,
+  },
+  app: () => {
+    return {
+      auth: () => { },
+      firestore: () => { return mockFirestore },
+    }
+  },
+}));
+
 
 describe('MetaAdmin', () => {
 
@@ -44,48 +68,26 @@ describe('MetaAdmin', () => {
     // wrapper = shallow(<MetaAdmin />);
   });
 
-  // it('renders shallowly without crashing', () => {
-  //   const wrapper = shallow(<MetaAdmin />);
-  //   expect(wrapper).toMatchSnapshot();
-  // });
+  it('renders shallowly without crashing', () => {
+    const wrapper = shallow(<MetaAdmin />);
+    expect(wrapper).toMatchSnapshot();
+  });
 
   describe('uses firestore', () => {
-    const firestoreMock = new FirestoreMock();
-
     beforeEach(() => {
-      firebase.firestore().collection = firestoreMock.mockCollection;
-      firestoreMock.reset();
+      // wrapper = shallow(<MetaAdmin />);
+      const forEachMock = jest.fn(() => { return mockCfDocs });
+      const snapshot = { forEach: forEachMock };
+      FirebaseHooks.useCollection = () => { return [snapshot, false, false] };
+      mockFirestore.reset();
     });
 
-    it('call community foundations snapshot on render', async () => {
-      firestoreMock.mockOnSnapshotSuccess = mockCfs;
-
-      const wrapper = shallow(<MetaAdmin />);
+    it('call community foundations snapshot on render', () => {
+      const wrapper = mount(<MetaAdmin />);
       wrapper.update();
-
-      expect(firestoreMock.mockCollection).toBeCalledWith('communityFoundations');
-      // expect(firestoreMock.mockOnSnapshot).toBeCalled(1);
+      expect(mockFirestore.mockCollection).toBeCalledWith('communityFoundations');
+      expect(mockFirestore.mockCollection).toHaveBeenCalledTimes(2);
     });
   });
 
 });
-// describe('The Agreement model', () => {
-//   const firestoreMock = new FirestoreMock()
-//   beforeEach(() => {
-//       firebase.firestore = firestoreMock
-//       firestoreMock.reset()
-//   })
-
-//   it('does something', (done) => {
-//       firestoreMock.mockAddReturn = { id: 'test-id' }
-//       firebase.firestore.collection('foobar')
-//         .add({foo: 'bar'})
-//         .then(res => {
-//           expect(firestoreMock.mockCollection).toBeCalledWith('foobar')
-//           expect(firestoreMock.mockAdd).toBeCalledWith({foo: 'bar'})
-//           expect(res.id).toEqual('test-id')
-//           done()
-//         })
-//         .catch(done)
-//   })
-// })
