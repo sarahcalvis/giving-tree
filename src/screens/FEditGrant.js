@@ -340,7 +340,6 @@ function FEditGrant(props) {
               direction='row'
               justify='space-around'
               alignItems='flex-start'>
-              {/* <div className={classes.fab}> */}
               {grantStatus === 'edit' && validEditor && validGrant &&
                 <Grid container
                   spacing={2}
@@ -351,6 +350,7 @@ function FEditGrant(props) {
                     <Button
                       color='primary'
                       variant='contained'
+                      id='Cancel'
                       onClick={cancel}>
                       Cancel
                 </Button>
