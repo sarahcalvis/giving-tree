@@ -6,7 +6,6 @@ import { withAuthProvider } from './auth';
 import theme from './theme';
 import Routes from './components/Routes.js';
 import Header from './components/Header.js';
-import Footer from './components/Footer.js';
 
 function App(props) {
   return (
@@ -15,7 +14,6 @@ function App(props) {
         <CssBaseline />
         <Header />
         <Routes />
-        <Footer />
       </ThemeProvider>
     </BrowserRouter>
   );
