@@ -90,7 +90,8 @@ class ForgotPasswordFormBase extends Component {
     event.preventDefault();
   }
 
-  //Written generically to match SignUp/AccountRequest/SignIn, even though there's only one field 
+  //Written generically to match SignUp/AccountRequest/SignIn, 
+  //even though there's only one field 
   onChange = event => {
     const { name, value } = event.target;
     this.setState({ [name]: value });
