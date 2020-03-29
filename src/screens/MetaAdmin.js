@@ -172,3 +172,4 @@ function MetaAdmin(props) {
 
 const condition = (authUser) => authUser && !!authUser.admin;
 export default withAuthProtection(condition)(MetaAdmin);
+export { MetaAdmin };
