@@ -182,7 +182,6 @@ export default function EditGrant(props) {
           error={props.errors.title !== ''}
           helperText={props.errors.title}
           label='Grant Title'
-          onBlur={handleInput}
           onChange={handleInput} />
       </div>
       <div className={classes.padding}>
@@ -195,7 +194,6 @@ export default function EditGrant(props) {
           helperText={props.errors.desc}
           defaultValue={props.grantData.desc}
           label='Add a description to help donors understand why this grant is important.'
-          onBlur={handleInput}
           onChange={handleInput} />
       </div>
       <div className={classes.padding}>
@@ -231,7 +229,6 @@ export default function EditGrant(props) {
             <Text type='card-heading' text='Goal Amount' />
             <TextField
               onChange={handleInput}
-              onBlur={handleInput}
               defaultValue={props.grantData.goal_amt}
               id='goal_amt'
               label='Goal amount'
@@ -265,8 +262,7 @@ export default function EditGrant(props) {
               parentCallback={locationCallback}
               address={props.grantData.address}
               error={props.errors.address !== ''}
-              helperText={props.errors.address}
-              onBlur={locationCallback} />
+              helperText={props.errors.address}/>
           </div>
         </Grid>
       </Grid>

@@ -102,6 +102,9 @@ function FEditGrant(props) {
         .then(function (doc) {
           if (doc.data().cf_id === cfData.id) {
             setGrantData(doc.data())
+            if(doc.data().status === 'draft'){
+              setValid(true);
+            }
             setValidEditor(true)
           } else {
             setValidEditor(false)
@@ -145,7 +148,7 @@ function FEditGrant(props) {
   /////////////////////////
   // VALIDATE GRANT DATA //
   /////////////////////////
-  const [valid, setValid] = React.useState(false);
+  const [valid, setValid] = React.useState(true);
   const [errors, setErrors] = React.useState({
     title: '',
     desc: '',
@@ -159,57 +162,56 @@ function FEditGrant(props) {
   const callback = (data, type) => {
     let newData = { ...grantData };
     let newErrors = { ...errors };
-    let error = '';
 
     if (newErrors.hasOwnProperty(type)) {
       if (type === 'nonprofit_name') {
-        error = helper.validateField(type, data.name);
+        newErrors[type] = helper.validateField(type, data.name);
       } else {
-        error = helper.validateField(type, data);
+        newErrors[type] = helper.validateField(type, data);
       }
-      newErrors[type] = error;
     }
+
     setErrors(newErrors);
 
-    if (error === '') {
-      switch (type) {
-        case 'newTags':
-          setNewTags(data);
-          break;
-        case 'date_deadline':
-          newData.date_deadline = { seconds: data, nanoseconds: 0 };
-          break;
-        case 'images':
-          newData.images = data;
-          break;
-        case 'address':
-          newData.address = data.address.description;
-          newData.lat = data.lat;
-          newData.long = data.long;
-          break;
-        case 'nonprofit_name':
-          newData.nonprofit_name = data.name;
-          newData.nonprofit_id = data.id;
-          break;
-        default:
-          if (newData.hasOwnProperty(type)) {
-            newData[type] = data;
-          }
-      }
+    switch (type) {
+      case 'newTags':
+        setNewTags(data);
+        break;
+      case 'date_deadline':
+        newData.date_deadline = { seconds: data, nanoseconds: 0 };
+        break;
+      case 'images':
+        newData.images = data;
+        break;
+      case 'address':
+        newData.address = data.address.description;
+        newData.lat = data.lat;
+        newData.long = data.long;
+        break;
+      case 'nonprofit_name':
+        newData.nonprofit_name = data.name;
+        newData.nonprofit_id = data.id;
+        break;
+      default:
+        if (newData.hasOwnProperty(type)) {
+          newData[type] = data;
+        }
     }
 
     setGrantData(newData);
   }
 
   useEffect(() => {
-    setValid(
-      helper.validateField('title', grantData.title) === '' &&
-      helper.validateField('desc', grantData.desc) === '' &&
-      helper.validateField('nonprofit_name', grantData.nonprofit_name) === '' &&
-      helper.validateField('date_deadline', grantData.date_deadline) === '' &&
-      helper.validateField('goal_amt', grantData.goal_amt) === '' &&
-      helper.validateField('address', grantData.address) === ''
-    )
+    if(grantData?.status !== 'draft'){
+      setValid(
+        helper.validateField('title', grantData.title) === '' &&
+        helper.validateField('desc', grantData.desc) === '' &&
+        helper.validateField('nonprofit_name', grantData.nonprofit_name) === '' &&
+        helper.validateField('date_deadline', grantData.date_deadline) === '' &&
+        helper.validateField('goal_amt', grantData.goal_amt) === '' &&
+        helper.validateField('address', grantData.address) === ''
+      );
+    }
   }, [grantData])
 
   //////////////////
@@ -263,7 +265,7 @@ function FEditGrant(props) {
     setGrantData(newGrantData);
 
     // Add the grant to the database
-    db.collection('grants').doc().set(grantData)
+    db.collection('grants').doc().set(newGrantData)
       .then(function () {
         console.log('Draft saved');
         props.history.push('/foundation');
@@ -302,9 +304,6 @@ function FEditGrant(props) {
     newGrantData.cf_name = cfData.data.name;
     newGrantData.cf_id = cfData.id;
 
-    // Update the grant data
-    setGrantData(newGrantData);
-
     // Set the date posted
     let time = Math.round(new Date().getTime() / 1000);
     newGrantData.date_posted = { seconds: time, nanoseconds: 0 };
@@ -312,7 +311,7 @@ function FEditGrant(props) {
     // Save the changes
     setGrantData(newGrantData);
 
-    db.collection('grants').doc().set(grantData)
+    db.collection('grants').doc().set(newGrantData)
       .then(function () {
         console.log('Grant published');
         props.history.push('/foundation');

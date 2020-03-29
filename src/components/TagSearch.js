@@ -2,6 +2,7 @@
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import { createFilterOptions } from '@material-ui/lab/Autocomplete';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import PropTypes from "prop-types";
 import firebase from '../firebase.js';
@@ -32,6 +33,7 @@ class TagSearch extends React.Component {
     location: PropTypes.object.isRequired,
     history: PropTypes.object.isRequired
   }
+
   
 
   componentWillMount() {
@@ -143,6 +145,10 @@ class TagSearch extends React.Component {
   
 
   render() {
+    const filterOptions = createFilterOptions({
+      matchFrom: 'start'
+    });
+
     return (
       <Autocomplete
         {...this.state}
@@ -153,6 +159,7 @@ class TagSearch extends React.Component {
         disableOpenOnFocus
         multiple
         freeSolo
+        filterOptions={filterOptions}
         getOptionLabel={option => option}                 //TEST
         onChange={this.handleAutoChange}
         style={{ top: "auto", bottom: "auto", height:"auto", postion: "absolute" }}

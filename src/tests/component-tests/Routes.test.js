@@ -5,7 +5,7 @@ import { mount } from 'enzyme';
 import { MemoryRouter, Route } from 'react-router';
 import { createMemoryHistory } from "history";
 
-import { Routes } from '../../components/Routes.js';
+import Routes from '../../components/Routes.js';
 import DDashboard from '../../screens/DDashboard.js';
 import {DGive} from '../../screens/DGive.js';
 import {Grant} from '../../screens/Grant.js';
@@ -33,9 +33,10 @@ describe('Component: Routes', () => {
     it('invalid path should not go to any page', () => {
         const wrapper = enzyme.mount(
             <MemoryRouter initialEntries={[ '/random' ]}>
-                {Routes}
+                <Routes />
             </MemoryRouter>
         );
+        console.log(wrapper.find('Route').at(0).debug());
         expect(wrapper.find(DDashboard)).toHaveLength(0);
         expect(wrapper.find('DGive')).toHaveLength(0);
         expect(wrapper.find('Grant')).toHaveLength(0);

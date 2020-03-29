@@ -29,12 +29,18 @@ export default function NonprofitAutocomplete(props) {
 
   // Select correct nonprofit
   useEffect(() => {
-    for (let i in nonprofits) {
-      if (props.initialNonprofit === '') {
-        setSelected(0)
-      } else if (nonprofits[i].id === props.initialNonprofit) {
-        setSelected(i);
-      } else if (i === nonprofits.length - 1) {
+    if (props.initialNonprofit === '') {
+      setSelected(0);
+      if (typeof props.callback !== 'undefined') {
+        props.callback({}, { name: nonprofits[0]?.name, id: nonprofits[0]?.id });
+      }
+    }
+    else {
+      for (let i in nonprofits) {
+        if (nonprofits[i].id === props.initialNonprofit) {
+          setSelected(i);
+          break;
+        }
       }
     }
   }, [nonprofits])

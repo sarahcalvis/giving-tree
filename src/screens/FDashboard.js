@@ -1,17 +1,23 @@
 import React, { useEffect, useContext } from 'react';
-import SmallGrantCard from '../components/SmallGrantCard.js';
-import Grid from '@material-ui/core/Grid';
-import Container from '@material-ui/core/Container';
-import { useCollection } from 'react-firebase-hooks/firestore';
+import { Link as NavigationLink } from 'react-router-dom';
+
 import firebase from '../firebase.js';
-import Search from '../components/Search';
-import { makeStyles } from '@material-ui/core/styles';
 import UserAuthContext from '../auth/context.js';
+import Search from '../components/Search';
+import Snack from '../components/Snack.js';
+import SmallGrantCard from '../components/SmallGrantCard.js';
+
+import { makeStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
+import Grid from '@material-ui/core/Grid';
+import Link from '@material-ui/core/Link';
+import IconButton from '@material-ui/core/IconButton';
+import AddIcon from '@material-ui/icons/Add';
+import Button from '@material-ui/core/Button';
 import ToggleButton from '@material-ui/lab/ToggleButton';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
-import Snack from '../components/Snack.js';
-import Button from '@material-ui/core/Button';
-import Link from '@material-ui/core/Link';
+
+import { useCollection } from 'react-firebase-hooks/firestore';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -19,7 +25,13 @@ const useStyles = makeStyles(theme => ({
   },
   toggleBar: {
     marginBottom: 4,
-  }
+  },
+  largeIcon: {
+    fontSize: '6em',
+  },
+  link: {
+    textDecoration: 'none',
+  },
 }));
 
 export default function FDashboard(props) {
@@ -205,7 +217,22 @@ export default function FDashboard(props) {
             </Grid>
           </Grid>
           <Search docs={docs} parentCallback={searchCallback} />
-          <Grid container spacing={2} >
+          <Grid container spacing={2} alignItems='center' >
+            {toggleBarStatus === 'current' &&
+              <Grid item xs={12} sm={6} md={4}>
+                <div align='center'>
+                  <IconButton component='span'>
+                    <NavigationLink
+                      className={classes.link}
+                      to={'/foundation/create-grant'}>
+                      <AddIcon
+                        color='primary'
+                        className={classes.largeIcon} />
+                    </NavigationLink>
+                  </IconButton>
+                </div>
+              </Grid>
+            }
             {toggleBarStatus === 'current' ? currentGrants : toggleBarStatus === 'drafted' ? draftedGrants : expiredGrants}
           </Grid>
         </div>
@@ -240,6 +267,6 @@ export default function FDashboard(props) {
           </React.Fragment>
         </Container>
       </div >
-    </Container>
+    </Container >
   );
 }
