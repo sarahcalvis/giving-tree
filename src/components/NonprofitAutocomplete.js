@@ -46,7 +46,7 @@ export default function NonprofitAutocomplete(props) {
   }, [nonprofits])
 
   // Map nonprofit objects to labels
-  let transformedNonprofits = Object.values(nonprofits).map((item, index) => {
+  let transformedNonprofits = Object.values(nonprofits).map((item) => {
     item.dataLabel = item.name;
     return item;
   })
@@ -123,6 +123,7 @@ export default function NonprofitAutocomplete(props) {
                   getOptionLabel={nonprofits => nonprofits.name}
                   autoHighlight
                   disableClearable
+                  testid='dropdown'
                   defaultValue={transformedNonprofits[selected]}
                   onChange={props.callback}
                   renderInput={params => (
@@ -137,7 +138,13 @@ export default function NonprofitAutocomplete(props) {
                 />
               </Grid>
               <Grid item>
-                <Button color='primary' variant='contained' onClick={addMode}>Add a new nonprofit</Button>
+                <Button
+                  color='primary'
+                  variant='contained'
+                  onClick={addMode}
+                  id='Add a new nonprofit'>
+                  Add a new nonprofit
+                </Button>
               </Grid>
             </Grid>
           }
@@ -178,6 +185,7 @@ export default function NonprofitAutocomplete(props) {
                     <Button
                       color='primary'
                       variant='outlined'
+                      id='Cancel'
                       onClick={cancelAddMode}>
                       Cancel
                 </Button>
@@ -186,10 +194,11 @@ export default function NonprofitAutocomplete(props) {
                     <Button
                       color='primary'
                       variant='contained'
+                      id='Add Nonprofit'
                       onClick={addNonprofit}
                       disabled={!valid}>
                       Add Nonprofit
-                </Button>
+                    </Button>
                   </Grid>
                 </Grid>
               </Container>
