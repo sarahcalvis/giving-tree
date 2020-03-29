@@ -5,6 +5,7 @@ import Text from './Text.js';
 import LocationSearch from './LocationSearch.js';
 import TagSearch from './TagSearch.js';
 import NonprofitAutocomplete from './NonprofitAutocomplete.js';
+import GrantDescription from './GrantDescription.js';
 
 import Grid from '@material-ui/core/Grid';
 import GridList from '@material-ui/core/GridList';
@@ -184,18 +185,7 @@ export default function EditGrant(props) {
           label='Grant Title'
           onChange={handleInput} />
       </div>
-      <div className={classes.padding}>
-        <Text type='card-heading' text='Grant Description' />
-        <TextField
-          id='desc'
-          multiline
-          fullWidth
-          error={props.errors.desc !== ''}
-          helperText={props.errors.desc}
-          defaultValue={props.grantData.desc}
-          label='Add a description to help donors understand why this grant is important.'
-          onChange={handleInput} />
-      </div>
+      <GrantDescription error={props.errors.desc !== ''} helperText={props.errors.desc} defaultValue={props.grantData.desc} onChange={handleInput} />
       <div className={classes.padding}>
         <Text type='card-heading' text='Affiliated Nonprofit' />
         <Text type='card-subheading' text={'This information will be publicly visible to donors.'} />
@@ -262,7 +252,7 @@ export default function EditGrant(props) {
               parentCallback={locationCallback}
               address={props.grantData.address}
               error={props.errors.address !== ''}
-              helperText={props.errors.address}/>
+              helperText={props.errors.address} />
           </div>
         </Grid>
       </Grid>
