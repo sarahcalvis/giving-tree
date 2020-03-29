@@ -29,18 +29,24 @@ export default function NonprofitAutocomplete(props) {
 
   // Select correct nonprofit
   useEffect(() => {
-    for (let i in nonprofits) {
-      if (props.initialNonprofit === '') {
-        setSelected(0)
-      } else if (nonprofits[i].id === props.initialNonprofit) {
-        setSelected(i);
-      } else if (i === nonprofits.length - 1) {
+    if (props.initialNonprofit === '') {
+      setSelected(0);
+      if (typeof props.callback !== 'undefined') {
+        props.callback({}, { name: nonprofits[0]?.name, id: nonprofits[0]?.id });
+      }
+    }
+    else {
+      for (let i in nonprofits) {
+        if (nonprofits[i].id === props.initialNonprofit) {
+          setSelected(i);
+          break;
+        }
       }
     }
   }, [nonprofits])
 
   // Map nonprofit objects to labels
-  let transformedNonprofits = Object.values(nonprofits).map((item, index) => {
+  let transformedNonprofits = Object.values(nonprofits).map((item) => {
     item.dataLabel = item.name;
     return item;
   })
@@ -117,6 +123,7 @@ export default function NonprofitAutocomplete(props) {
                   getOptionLabel={nonprofits => nonprofits.name}
                   autoHighlight
                   disableClearable
+                  testid='dropdown'
                   defaultValue={transformedNonprofits[selected]}
                   onChange={props.callback}
                   renderInput={params => (
@@ -131,7 +138,13 @@ export default function NonprofitAutocomplete(props) {
                 />
               </Grid>
               <Grid item>
-                <Button color='primary' variant='contained' onClick={addMode}>Add a new nonprofit</Button>
+                <Button
+                  color='primary'
+                  variant='contained'
+                  onClick={addMode}
+                  id='Add a new nonprofit'>
+                  Add a new nonprofit
+                </Button>
               </Grid>
             </Grid>
           }
@@ -172,6 +185,7 @@ export default function NonprofitAutocomplete(props) {
                     <Button
                       color='primary'
                       variant='outlined'
+                      id='Cancel'
                       onClick={cancelAddMode}>
                       Cancel
                 </Button>
@@ -180,10 +194,11 @@ export default function NonprofitAutocomplete(props) {
                     <Button
                       color='primary'
                       variant='contained'
+                      id='Add Nonprofit'
                       onClick={addNonprofit}
                       disabled={!valid}>
                       Add Nonprofit
-                </Button>
+                    </Button>
                   </Grid>
                 </Grid>
               </Container>

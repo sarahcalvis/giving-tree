@@ -22,3 +22,4 @@ function App(props) {
 }
 
 export default withAuthProvider(App);
+export { App };
