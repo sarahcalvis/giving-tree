@@ -35,7 +35,7 @@ export default function EditGrant(props) {
   const fileInput = React.createRef();
 
   // Store the image names
-  const [img, setImg] = React.useState(props.grantData.images);
+  const [img, setImg] = React.useState(props.grantData?.images);
 
   // Store the image urls
   const [url, setUrl] = React.useState([]);
@@ -126,32 +126,44 @@ export default function EditGrant(props) {
 
   return (
     <div>
-      <GrantTitle error={props.errors.title !== ''} helperText={props.errors.title} defaultValue={props.grantData.title} onChange={handleInput} />
-      <GrantDescription error={props.errors.desc !== ''} helperText={props.errors.desc} defaultValue={props.grantData.desc} onChange={handleInput} />
+      <GrantTitle
+        error={props.errors?.title !== ''}
+        helperText={props.errors?.title}
+        defaultValue={props.grantData?.title}
+        onChange={handleInput} />
+      <GrantDescription
+        error={props.errors?.desc !== ''}
+        helperText={props.errors?.desc}
+        defaultValue={props.grantData?.desc}
+        onChange={handleInput} />
       <div className={classes.padding}>
         <Text type='card-heading' text='Affiliated Nonprofit' />
         <Text type='card-subheading' text={'This information will be publicly visible to donors.'} />
         <NonprofitAutocomplete
           callback={nonprofitCallback}
           cfId={props.cfId}
-          error={props.errors.nonprofit_name !== ''}
-          helperText={props.errors.nonprofit_name}
-          initialNonprofit={props.grantData.nonprofit_id} />
+          error={props.errors?.nonprofit_name !== ''}
+          helperText={props.errors?.nonprofit_name}
+          initialNonprofit={props.grantData?.nonprofit_id} />
       </div>
       <Grid container direction='row' alignItems='flex-start' spacing={3}>
-        <DateChooser error={props.errors.date_deadline !== ''} helperText={props.errors.date_deadline} callback={props.callback} date_deadline={props.grantData.date_deadline} />
+        <DateChooser
+          error={props.errors?.date_deadline !== ''}
+          helperText={props.errors?.date_deadline}
+          callback={props.callback}
+          date_deadline={props.grantData?.date_deadline} />
         <Grid item xs={12} sm={6}>
           <div className={classes.padding}>
             <Text type='card-heading' text='Goal Amount' />
             <TextField
               onChange={handleInput}
-              defaultValue={props.grantData.goal_amt}
+              defaultValue={props.grantData?.goal_amt}
               id='goal_amt'
               label='Goal amount'
               className='form-control'
               type='text'
-              error={props.errors.goal_amt !== ''}
-              helperText={props.errors.goal_amt}
+              error={props.errors?.goal_amt !== ''}
+              helperText={props.errors?.goal_amt}
               fullWidth />
           </div>
         </Grid>
@@ -167,7 +179,7 @@ export default function EditGrant(props) {
             <Text type='card-subheading' text={'Search for a tag or create a new tag to help donors find the grants they are looking for.'} />
             <TagSearch
               parentCallback={tagsCallback}
-              tags={props.grantData.tags} />
+              tags={props.grantData?.tags} />
           </div>
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -176,13 +188,17 @@ export default function EditGrant(props) {
             <Text type='card-subheading' text={'We will not directly share this address with donors. We will use it to calculate a donor\'s distance from a grant.'} />
             <LocationSearch
               parentCallback={locationCallback}
-              address={props.grantData.address}
-              error={props.errors.address !== ''}
-              helperText={props.errors.address} />
+              address={props.grantData?.address}
+              error={props.errors?.address !== ''}
+              helperText={props.errors?.address} />
           </div>
         </Grid>
       </Grid>
-      <ImageTiles uploadImages={uploadImages} url={url} removeImage={removeImage} fileInput={fileInput} callback={props.callback} />
+      <ImageTiles
+        uploadImages={uploadImages}
+        url={url} removeImage={removeImage}
+        fileInput={fileInput}
+        callback={props.callback} />
     </div>
   );
 }

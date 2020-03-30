@@ -2,7 +2,28 @@ import '@testing-library/jest-dom'
 import React from 'react'
 import { render, fireEvent, screen } from '@testing-library/react'
 import FEditGrant from '../../screens/FEditGrant'
+import FirestoreMock from '../firestore.mock'
 
+const mockFirestore = new FirestoreMock();
+
+jest.mock('firebase/app', () => ({
+  __esModule: true,
+  initializeApp: () => { },
+  apps: {
+    length: true,
+  },
+  app: () => {
+    return {
+      auth: () => { },
+      firestore: () => { return mockFirestore },
+      storage: () => {
+        return {
+          get: jest.fn()
+        }
+      }
+    }
+  },
+}));
 test('FEditGrant Basics', () => {
   render(<FEditGrant />)
   expect(screen).toMatchSnapshot();
