@@ -4,8 +4,8 @@ import { render, fireEvent, screen } from '@testing-library/react'
 import EditGrant from '../../components/EditGrant'
 import FirestoreMock from '../firestore.mock'
 import { MemoryRouter } from 'react-router-dom';
-const mockFirestore = new FirestoreMock();
 
+const mockFirestore = new FirestoreMock();
 
 const routeComponentPropsMock = {
   history: {
@@ -16,6 +16,13 @@ const routeComponentPropsMock = {
   },
   match: {},
 }
+
+beforeEach(() => {
+  // wrapper = shallow(<MetaAdmin />);
+
+  mockFirestore.mockGetReturn = [];
+
+});
 
 jest.mock('firebase/app', () => ({
   __esModule: true,
@@ -40,7 +47,7 @@ jest.mock('firebase/app', () => ({
 test('Edit Grant Basics', () => {
   render(
     <MemoryRouter {...routeComponentPropsMock} >
-      <EditGrant />
+      <EditGrant callback={jest.fn()} grantData={{ images: [] }} />
     </MemoryRouter>)
   expect(screen).toMatchSnapshot();
 });
