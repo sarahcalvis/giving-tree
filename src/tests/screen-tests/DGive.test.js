@@ -14,7 +14,7 @@ const routeComponentPropsMock = {
   },
   match: {grantId: '123' }
 }
-describe('<DGive />', () => {
+describe('DGive basics', () => {
   jest.mock('react-router', () => ({
     useParams: jest.fn().mockReturnValue({grantId: '123' }),
   }));

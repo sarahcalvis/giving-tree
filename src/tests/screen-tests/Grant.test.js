@@ -1,18 +1,10 @@
 import '@testing-library/jest-dom'
 import React from 'react'
+import Grant from '../../screens/Grant'
 import { shallow } from 'enzyme';
 import FirestoreMock from '../firestore.mock'
 
-import SmallGrantCard from '../../components/SmallGrantCard'
-
 const mockFirestore = new FirestoreMock();
-
-const routeComponentPropsMock = {
-  history: {},
-  location: {},
-  match: {}
-}
-
 
 jest.mock('firebase/app', () => ({
   __esModule: true,
@@ -26,25 +18,21 @@ jest.mock('firebase/app', () => ({
       firestore: () => { return mockFirestore },
       storage: () => {
         return {
-          get: jest.fn(),
-          ref: () => {
-            return {
-              child: jest.fn(),
-            }
-          }
+          get: jest.fn()
         }
-      },
+      }
     }
   },
 }));
 
-describe('Small Grant Card basics', () => {
+describe('Grant', () => {
 
-  it('Renders correctly', () => {
-    const wrap = shallow(<SmallGrantCard  {...routeComponentPropsMock} />)
-
-    expect(wrap).toMatchSnapshot();
+  beforeEach(() => {
+    // wrapper = shallow(<MetaAdmin />);
   });
 
-})
-
+  it('renders shallowly without crashing', () => {
+    const wrapper = shallow(<Grant />);
+    expect(wrapper).toMatchSnapshot();
+  });
+});

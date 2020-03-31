@@ -17,7 +17,7 @@ function FRequestDenied() {
     <Container maxWidth="sm" component="main" className={classes.message}>
       <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
         4040404 Not Found
-        </Typography>
+      </Typography>
     </Container>
   );
 }

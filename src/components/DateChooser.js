@@ -24,7 +24,7 @@ export default function DateChooser(props) {
 
   // Hold the date selected by the date picker
   const [selectedDate, handleDateChange] = React.useState(
-    (props.date_deadline !== '') ? new Date(props.date_deadline.seconds * 1000) : null
+    (props.date_deadline !== '') ? new Date(props.date_deadline?.seconds * 1000) : null
   );
 
   // Handle change to the date picker
