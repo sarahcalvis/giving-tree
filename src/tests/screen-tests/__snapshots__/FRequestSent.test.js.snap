@@ -2,6 +2,7 @@
 
 exports[`FRequestSent Basics 1`] = `
 Object {
+  "debug": [Function],
   "findAllByAltText": [Function],
   "findAllByDisplayValue": [Function],
   "findAllByLabelText": [Function],
