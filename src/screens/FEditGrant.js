@@ -350,6 +350,7 @@ function FEditGrant(props) {
                     <Button
                       color='primary'
                       variant='contained'
+                      id='Cancel'
                       onClick={cancel}>
                       Cancel
                 </Button>

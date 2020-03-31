@@ -24,9 +24,10 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function Header(props) {
+export function Header(props) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const urlExt = '/signin'
 
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
@@ -39,7 +40,7 @@ function Header(props) {
   const logout = () => {
     handleClose();
     firebase.auth().signOut().then(() => {
-      props.history.push('/signin');
+      props.history.push(urlExt);
     });
   }
 
@@ -52,7 +53,10 @@ function Header(props) {
 
   const SignedOut = () => (
     <React.Fragment>
-      <MenuItem onClick={() => props.history.push('/signin')}>Login</MenuItem>
+      <MenuItem onClick={() => {
+        props.history.push(urlExt)
+      }
+      }>Login</MenuItem>
     </React.Fragment>
   );
 
