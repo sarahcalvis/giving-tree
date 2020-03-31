@@ -77,7 +77,7 @@ describe('DDashboard', () => {
       useParams: jest.fn().mockReturnValue({ id: '123' }),
     }));
     
-    render(<DDashboard />)
+    render(<DDashboard />);
     expect(screen).toMatchSnapshot();
   });
   
