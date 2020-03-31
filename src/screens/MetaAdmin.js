@@ -43,7 +43,7 @@ function MetaAdmin(props) {
 
     if (!loading && !error) {
       snapshot.forEach((doc) => {
-        const card = <FoundationCard c = {1} data={doc.data()} approveCB={approveCB} denyCB={denyCB} deleteCB={deleteCB} />;
+        const card = <FoundationCard data={doc.data()} approveCB={approveCB} denyCB={denyCB} deleteCB={deleteCB} />;
 
         switch (doc.data().status) {
           case 'requested':

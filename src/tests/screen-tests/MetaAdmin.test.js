@@ -4,7 +4,6 @@ import FirestoreMock from '../firestore.mock'
 import { MetaAdmin } from '../../screens/MetaAdmin';
 import * as FirebaseHooks from 'react-firebase-hooks/firestore';
 import FoundationCard from '../../components/FoundationCard';
-import SmallGrantCard from '../../components/SmallGrantCard';
 
 const mockCfDocs = [{
   data: () => {
@@ -98,7 +97,7 @@ describe('MetaAdmin', () => {
     
     it('displays at least one CF card', () => {
       const wrapper = mount(<MetaAdmin />);
-      expect(wrapper.find({}).exists).toBeTruthy();
+      expect(wrapper.find(FoundationCard).exists).toBeTruthy();
     });
   });
 
