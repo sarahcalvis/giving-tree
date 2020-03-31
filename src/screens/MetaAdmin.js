@@ -36,6 +36,7 @@ function MetaAdmin(props) {
   const [snapshot, loading, error] = useCollection(db.collection('communityFoundations'));
 
   useEffect(() => {
+
     let req = [];
     let cur = [];
     let den = [];
@@ -172,3 +173,4 @@ function MetaAdmin(props) {
 
 const condition = (authUser) => authUser && !!authUser.admin;
 export default withAuthProtection(condition)(MetaAdmin);
+export { MetaAdmin };
