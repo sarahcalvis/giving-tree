@@ -29,22 +29,22 @@ test('FEditGrant Basics', () => {
   expect(screen).toMatchSnapshot();
 });
 
-test('Can upload a grant', () => {
-  render(<FEditGrant />)
+// test('Can upload a grant', () => {
+//   render(<FEditGrant />)
 
-  // // fill out the form
-  // fireEvent.change(screen.getByLabelText(/username/i), {
-  //   target: {value: 'chuck'},
-  // })
-  // fireEvent.change(screen.getByLabelText(/password/i), {
-  //   target: {value: 'norris'},
-  // })
+//   // // fill out the form
+//   // fireEvent.change(screen.getByLabelText(/username/i), {
+//   //   target: {value: 'chuck'},
+//   // })
+//   // fireEvent.change(screen.getByLabelText(/password/i), {
+//   //   target: {value: 'norris'},
+//   // })
 
-  // fireEvent.click(screen.getByText(/submit/i))
-});
+//   // fireEvent.click(screen.getByText(/submit/i))
+// });
 
-test('Can cancel new grant', () => {
-  // render(<FEditGrant />)
-  // fireEvent.click(screen.getByText('Save to Drafts'))
+// test('Can cancel new grant', () => {
+//   // render(<FEditGrant />)
+//   // fireEvent.click(screen.getByText('Save to Drafts'))
 
-});
+// });
