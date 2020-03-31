@@ -83,7 +83,8 @@ class Search extends Component {
 
   addByFreeText = (doc) => {
     var tempTemp = this.state.tempMeta;
-    if((this.state.freeText).every(freeText => (doc.grant.desc).includes(freeText))) {
+    if((this.state.freeText).every(freeText => (doc.grant.desc + doc.grant.title + doc.grant.nonprofitName + doc.grant.cfName).includes(freeText))) {
+      console.log("np name: ", doc.grant.nonprofitName);
       tempTemp.push({dist: doc.dist, grant: doc.grant});
       this.setState({tempMeta: tempTemp, tftResults: tempTemp});
     }
