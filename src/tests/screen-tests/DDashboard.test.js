@@ -5,7 +5,7 @@ import { render, screen } from '@testing-library/react'
 import DDashboard from '../../screens/DDashboard'
 import FirestoreMock from '../firestore.mock'
 import * as FirebaseHooks from 'react-firebase-hooks/firestore';
-
+/*
 const mockCfDocs = [{
   data: () => {
     return {
@@ -69,7 +69,7 @@ jest.mock('firebase/app', () => ({
     }
   },
 }));
-
+*/
 describe('DDashboard', () => {
 
   test('DDashboard Basics', () => {
@@ -77,10 +77,10 @@ describe('DDashboard', () => {
       useParams: jest.fn().mockReturnValue({ id: '123' }),
     }));
     
-    render(<DDashboard />);
-    expect(screen).toMatchSnapshot();
+    const wrap = shallow(<DDashboard />);
+    expect(wrap).toMatchSnapshot();
   });
-  
+  /*
   describe('DDashboard with mocked data', () => {
     it('uses the search callback correctly', () => {
   
@@ -102,5 +102,5 @@ describe('DDashboard', () => {
       expect(mockFirestore.mockCollection).toHaveBeenCalledTimes(2);
     });
   });
-
+*/
 })
