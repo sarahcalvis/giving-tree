@@ -124,8 +124,8 @@ function Grant(props) {
   // Tell if we are ready to load a LargeGrantCard
   const [dataLoaded, setDataLoaded] = React.useState(false);
   useEffect(() => {
-    setDataLoaded(grantData && cfData && img);
-  }, [grantData, cfData, img])
+    setDataLoaded(grantData && cfData && nonprofitData && img);
+  }, [grantData, cfData, nonprofitData, img])
 
   // Format dates from Firebase Timestamps
   const formatDate = (time) => {
