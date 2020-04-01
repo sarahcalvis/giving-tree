@@ -5,7 +5,7 @@ import firebase from '../firebase.js';
 import * as helper from '../helpers/ValidationHelper.js';
 import Snack from '../components/Snack.js';
 
-import { withStyles } from '@material-ui/styles';
+import { withStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Avatar from '@material-ui/core/Avatar';
 import TextField from "@material-ui/core/TextField";
@@ -71,17 +71,19 @@ const INITIAL_STATE = {
   success: false,
 };
 
-class ForgotPasswordFormBase extends Component {
+export class ForgotPasswordFormBase extends Component {
   constructor(props) {
     super(props);
     this.state = { ...INITIAL_STATE };
+    this.validateForm = this.validateForm.bind(this);
+    this.onChange = this.onChange.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
   }
-
-  onSubmit = event => {
+  
+  onSubmit(event, fb=firebase) {
     if (this.state.isValid) {
       const { email } = this.state;
-
-      firebase.auth().sendPasswordResetEmail(email)
+      fb.auth().sendPasswordResetEmail(email)
         .then(() => {
           // Email sent.
           this.setState({ ...INITIAL_STATE, success: true });
@@ -95,7 +97,7 @@ class ForgotPasswordFormBase extends Component {
   }
 
   //Written generically to match SignUp/AccountRequest/SignIn, even though there's only one field 
-  onChange = event => {
+  onChange(event) {
     const { name, value } = event.target;
     this.setState({ [name]: value });
 
@@ -104,7 +106,7 @@ class ForgotPasswordFormBase extends Component {
     );
   };
 
-  validateForm = () => {
+  validateForm() {
     const noEmptyFields = Object.values(this.state).filter((s) => { return s === '' }).length === 0
     const noErrors = Object.values(this.state.errors).filter((s) => { return s !== '' }).length === 0
     this.setState({ isValid: noErrors && noEmptyFields });
@@ -117,9 +119,8 @@ class ForgotPasswordFormBase extends Component {
       isValid,
       success,
     } = this.state;
-
+    
     const { classes } = this.props;
-
     return (
       <form className={classes.form} onSubmit={this.onSubmit} noValidate>
         {success &&
