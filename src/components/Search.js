@@ -160,6 +160,7 @@ class Search extends Component {
     } else if(sortBy === "size") {
       sortedBy.sort((a, b) => (a.grant.goalAmt > b.grant.goalAmt ? 1 : -1));
     } else {console.log("nothing selected?");}
+    console.log("sorted array: ", sortedBy);
     this.setState({sortedResults: sortedBy, sortBy: sortBy}, () => {
       this.props.parentCallback(sortedBy);
     });
