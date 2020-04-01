@@ -211,7 +211,7 @@ export default function FDashboard(props) {
         <div>
           <Grid container spacing={2} direction="column" alignItems="center">
             <Grid item className={classes.toggleBar}>
-              <ToggleButtonGroup size="small" value={toggleBarStatus} exclusive onChange={handleToggle}>
+              <ToggleButtonGroup id="toggle" size="small" value={toggleBarStatus} exclusive onChange={handleToggle}>
                 {buttonOptions}
               </ToggleButtonGroup>
             </Grid>

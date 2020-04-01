@@ -25,9 +25,9 @@ class Search extends Component {
     this.state = {
       radius: -1,
       centerLoc: {
-        address: "111 Home St",
-        lat : 40, 
-        long : -80,
+        address: "no where",
+        lat : -1000, 
+        long : -1000,
       },
       sortBy: "",
       tempMeta: [],
@@ -44,7 +44,7 @@ class Search extends Component {
     var newMetaGrants = [];
     this.props.docs.forEach((doc) => {
       newMetaGrants.push({
-        dist: helper.calcDistance(this.state.centerLoc.lat, this.state.centerLoc.long, doc.lat, doc.long),
+        dist: -1, //helper.calcDistance(this.state.centerLoc.lat, this.state.centerLoc.long, doc.lat, doc.long),
         grant: doc,
       });
     });
@@ -83,7 +83,9 @@ class Search extends Component {
 
   addByFreeText = (doc) => {
     var tempTemp = this.state.tempMeta;
-    if((this.state.freeText).every(freeText => (doc.grant.desc).includes(freeText))) {
+    var docText = (doc.grant.desc + doc.grant.title + doc.grant.nonprofitName + doc.grant.cfName).toLowerCase();
+    if((this.state.freeText).every(freeText => (docText).includes(freeText.toLowerCase()))) {
+      console.log("np name: ", doc.grant.nonprofitName);
       tempTemp.push({dist: doc.dist, grant: doc.grant});
       this.setState({tempMeta: tempTemp, tftResults: tempTemp});
     }
@@ -122,6 +124,7 @@ class Search extends Component {
 
   locationCallback = (location) => {
     this.setState({centerLoc: location}, () => {
+      console.log("new location: ", location);
       this.setDists();
     });
   }
@@ -158,6 +161,7 @@ class Search extends Component {
     } else if(sortBy === "size") {
       sortedBy.sort((a, b) => (a.grant.goalAmt > b.grant.goalAmt ? 1 : -1));
     } else {console.log("nothing selected?");}
+    console.log("sorted array: ", sortedBy);
     this.setState({sortedResults: sortedBy, sortBy: sortBy}, () => {
       this.props.parentCallback(sortedBy);
     });
