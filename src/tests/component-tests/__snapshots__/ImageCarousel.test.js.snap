@@ -1,5 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`Component: ImageCarousel Renders correctly 1`] = `ReactWrapper {}`;
-
-exports[`Image Carousel basics Renders correctly 1`] = `ShallowWrapper {}`;
