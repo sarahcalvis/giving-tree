@@ -27,6 +27,9 @@ const useStyles = makeStyles(theme => ({
 export default function SmallGrantCard(props) {
   const classes = useStyles();
 
+  // Does the SmallGrantCard redirect to the foundation or donor view of the LargeGrantCard?
+  const [linkTo] =  React.useState(window.location.pathname.split('/')[1] === 'foundation' ? '/foundation/grant/' : '/grants/');
+
   // Create reference to firebase storage
   let storage = firebase.storage();
   let storageRef = storage.ref();
@@ -39,7 +42,7 @@ export default function SmallGrantCard(props) {
       <Card elevation={3} className={classes.card}>
         <CardActionArea
           component={Link}
-          to={'/foundation/grant/' + props.id || '/grants/' + props.id}>
+          to={linkTo + props.id}>
           {!loading && !error &&
             <CardMedia
               className={classes.cardMedia}

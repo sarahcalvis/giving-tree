@@ -6,36 +6,21 @@ import {firestore as FIRESTORE} from "firebase/app";
 
 import ForgotPassword from '../../screens/ForgotPassword.js';
 import { ForgotPasswordFormBase, SignInSignUpLink } from '../../screens/ForgotPassword.js';
+import { Link, MemoryRouter } from 'react-router';
 import { StaticRouter } from 'react-router-dom';
 
 import { createMount } from '@material-ui/core/test-utils';
 import { createMuiTheme } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/core/styles';
 
+const { mockFirebase } = require('firestore-jest-mock');
+const { mockCollection, mockWhere } = require('firestore-jest-mock/mocks/firestore');
+
 
 function MockTheme({ children }) {
   const theme = createMuiTheme({});
   return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
 }
-
-describe('ForgotPassword', () => {
-
-  let wrap;
-
-  beforeEach(() => {
-    wrap = mount(
-      <StaticRouter>
-        <ForgotPassword/>
-      </StaticRouter>
-      
-    )
-  });
-
-  it('Renders correctly', () => {  
-    expect(wrap).toMatchSnapshot();
-  });
-
-})
 
 
 describe('ForgotPasswordForm', () => {
@@ -111,6 +96,103 @@ describe('ForgotPasswordForm', () => {
     expect(wrap.state('success')).toBeTruthy();
     expect(wrap.state('errors').submit).toEqual('It went wrong!');
   });
+});
+
+
+describe('ForgotPassword with no props', () => {
+  const context = {};
+  const container = mount(
+    <StaticRouter location="someLocation" context={context}>
+      <ForgotPassword />
+    </StaticRouter>);
+
+  it('should match the snapshot', () => {
+    expect(container.html()).toMatchSnapshot();
+  });
+
+  it('should have an email field', () => {
+    expect(container.find('#email').at(0).length).toEqual(1);
+  });
+
+  it('should have proper props for email field', () => {
+    expect(container.find('#email').at(0).props()).toEqual({
+      variant: "outlined",
+      margin: "normal",
+      required: true,
+      fullWidth: true,
+      name: "email",
+      onChange: expect.any(Function),
+      type: "text",
+      label: "Email Address",
+      autoFocus: true,
+      error: false,
+      helperText: "",
+      id: "email",
+      value: "",
+    });
+  });
+
+  it('should have a submit button', () => {
+    expect(container.find('#submit-button').at(0).length).toEqual(1);
+  });
+
+  it('should have proper props for the submit button', () => {
+    expect(container.find('#submit-button').at(0).props()).toEqual({
+      variant: "contained",
+      children: "Reset Password",
+      className: "ForgotPassword-submit-4",
+      color: "primary",
+      disabled: true,
+      fullWidth: true,
+      type: "submit",
+      id: "submit-button",
+    });
+  });
+});
+
+
+describe('ForgotPassword with props', () => {
+  let context, container;
+
+  beforeEach(() => {
+    context = {};
+    container = mount(
+      <StaticRouter location="someLocation" context={context}>
+        <ForgotPassword />
+      </StaticRouter>);
+  });
+
+  it('should set the email value on change event', () => {
+    container.find('#email').at(0).props().onChange({
+      target: {
+        name: 'email',
+        value: 'acesmndr@gmail.com',
+      },
+    });
+    expect(container.find('#email').at(0).length).toEqual(1);
+    expect(container.find('ForgotPasswordFormBase').state()).toEqual({
+      "email": 'acesmndr@gmail.com',
+      "errors": {
+        "email": "",
+        "submit": "",
+      },
+      "isValid": true,
+      "success": false
+    });
+  });
+
+  it('should have proper props for the submit button', () => {
+    expect(container.find('#submit-button').at(0).props()).toEqual({
+      variant: "contained",
+      children: "Reset Password",
+      className: "ForgotPassword-submit-4",
+      color: "primary",
+      disabled: true,
+      fullWidth: true,
+      type: "submit",
+      id: "submit-button",
+    });
+  });
 
 });
 
@@ -118,7 +200,6 @@ describe('ForgotPasswordForm', () => {
 describe('SigninSignupLink', () => {
   
   let wrap;
-
   
   beforeEach(() => {
     wrap = shallow(
@@ -130,5 +211,5 @@ describe('SigninSignupLink', () => {
     expect(wrap).toMatchSnapshot();
   });
 
-  
 });
+

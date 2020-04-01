@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
-import { Link, withRouter, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import LargeGrantCard from '../components/LargeGrantCard.js';
 import Text from '../components/Text.js';
 import firebase from '../firebase.js';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import CardContent from '@material-ui/core/CardContent';
-import { withStyles } from '@material-ui/styles';
+import { withStyles } from '@material-ui/core/styles';
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
@@ -124,8 +124,8 @@ function Grant(props) {
   // Tell if we are ready to load a LargeGrantCard
   const [dataLoaded, setDataLoaded] = React.useState(false);
   useEffect(() => {
-    setDataLoaded(grantData && cfData && img);
-  }, [grantData, cfData, img])
+    setDataLoaded(grantData && cfData && nonprofitData && img);
+  }, [grantData, cfData, nonprofitData, img])
 
   // Format dates from Firebase Timestamps
   const formatDate = (time) => {
@@ -365,4 +365,4 @@ function Grant(props) {
   );
 }
 
-export default withRouter(withStyles(styles)(Grant));
+export default withStyles(styles)(Grant);

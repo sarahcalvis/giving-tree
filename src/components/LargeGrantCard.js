@@ -12,7 +12,7 @@ import CardContent from '@material-ui/core/CardContent';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -30,8 +30,6 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export default function LargeGrantCard(props) {
-  console.log(props.img);
-
   const classes = useStyles();
 
   // Set tab title
@@ -53,7 +51,7 @@ export default function LargeGrantCard(props) {
           <div className={classes.topCard}>
             <Text type='card-aboveheading' text={props.nonprofitData && props.nonprofitData.name} />
             <Text type='card-heading' text={props.title} />
-            <Text type='card-subheading' text={props.cfData.name} />
+            <Text type='card-subheading' text={props.cfData?.name} />
           </div>
           <div className={classes.topCard}>
             <Grid container direction='row' justify='space-between' alignItems='flex-end' spacing={0}>

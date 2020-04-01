@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import firebase from '../firebase.js';
 import * as helper from '../helpers/ValidationHelper.js';
 
-import { withStyles } from '@material-ui/styles';
+import { withStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Avatar from '@material-ui/core/Avatar';
 import TextField from "@material-ui/core/TextField";
@@ -13,7 +13,6 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link";
 import Typography from "@material-ui/core/Typography";
-
 
 const styles = theme => ({
   root: {
@@ -52,7 +51,7 @@ function SignIn(props) {
         </Avatar>
         <Typography component="h1" variant="h5" className={classes.header}>
           Sign In
-                    </Typography>
+        </Typography>
         <SignInForm classes={classes} />
         <SignUpForgotLink classes={classes} />
       </div>
@@ -69,7 +68,6 @@ const INITIAL_STATE = {
   },
   isValid: false,
 };
-
 class SignInFormBase extends Component {
   constructor(props) {
     super(props);
@@ -79,7 +77,6 @@ class SignInFormBase extends Component {
   onSubmit = event => {
     if (this.state.isValid) {
       const { email, password } = this.state;
-
       firebase.auth().signInWithEmailAndPassword(email, password)
         .then((result) => {
           // User is signed in. Get custom claims.
@@ -87,8 +84,8 @@ class SignInFormBase extends Component {
           result.user.getIdTokenResult()
             .then((idTokenResult) => {
               const cc = idTokenResult.claims;
-              if (cc.admin) {
-                this.props.history.push('/meta-admin');
+              if (cc.admin) { 
+                this.props.history.push('/meta-admin');   
               }
               else if (cc.status) {
                 switch (cc.status) {
@@ -99,17 +96,16 @@ class SignInFormBase extends Component {
                     this.props.history.push('/request-denied');
                     break;
                   case 'current':
-                    firebase.firestore().collection("communityFoundations").doc(cc.cfId)
-                      .get().then((doc) => {
-                        if (doc.data().stripe_id) {
-                          this.props.history.push('/foundation');
+                    firebase.firestore().collection("communityFoundations").doc(cc.cfId).get()
+                      .then((doc) => {
+                        if (doc.data().stripe_id) { 
+                          this.props.history.push('/foundation'); 
                         }
-                        else {
-                          this.props.history.push('/foundation/stripe-setup');
+                        else { 
+                          this.props.history.push('/foundation/stripe-setup'); 
                         }
-                      })
-                      .catch((error) => {
-                        console.error("Error retrieving CF document: ", error);
+                      }).catch((error) => { 
+                        console.error("Error retrieving CF document: ", error); 
                       });
                     break;
                   default:
@@ -119,28 +115,22 @@ class SignInFormBase extends Component {
                 //Redirect User to Home
                 this.props.history.push('/');
               }
-
             })
-            .catch((error) => {
-              console.log("ERROR: " + error.message);
+            .catch((error) => { 
+              console.log("ERROR: " + error.message); 
             });
-
         })
         .catch((error) => {
-          //Failure
-          //TODO: Cleanup Firebase Error Messages
+          //Failure/TODO: Cleanup Firebase Error Messages
           this.setState({ errors: { ...this.state.errors, submit: error.message } });
         });
-
     }
-
     event.preventDefault();
   }
 
   onChange = event => {
     const { name, value } = event.target;
     this.setState({ [name]: value });
-
     //Name is fieldName of the input 
     if (name === 'email') {
       this.setState({ errors: { ...this.state.errors, submit: '', [name]: helper.validateField(name, value) } },
@@ -158,59 +148,61 @@ class SignInFormBase extends Component {
     this.setState({ isValid: noErrors && noEmptyFields });
   }
 
+    render() {
+        const {
+            email,
+            password,
+            errors,
+            isValid,
+        } = this.state;
 
-  render() {
-    const {
-      email,
-      password,
-      errors,
-      isValid,
-    } = this.state;
+        const { classes } = this.props;
 
-    const { classes } = this.props;
-
-    return (
-      <form className={classes.form} onSubmit={this.onSubmit} noValidate>
-        <Typography component="h6" className={classes.errorMsg} >
-          {errors.submit}
-        </Typography>
-        <TextField
-          variant="outlined"
-          margin="normal"
-          required
-          fullWidth
-          name="email"
-          value={email}
-          onChange={this.onChange}
-          type="text"
-          label="Email Address"
-          error={errors.email !== ""}
-          helperText={errors.email}
-          autoFocus
-        />
-        <TextField
-          variant="outlined"
-          margin="normal"
-          required
-          fullWidth
-          name="password"
-          value={password}
-          onChange={this.onChange}
-          type="password"
-          label="Password"
-        />
-        <Button className={classes.submit}
-          type="submit"
-          fullWidth
-          variant="contained"
-          color="primary"
-          disabled={!isValid}
-        >
-          Sign In
-        </Button>
-      </form>
-    );
-  }
+        return (
+            <form className={classes.form} onSubmit={this.onSubmit} noValidate>
+                <Typography component="h6" className={classes.errorMsg} >
+                    {errors.submit}
+                </Typography>
+                <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="email"
+                    name="email"
+                    value={email}
+                    onChange={this.onChange}
+                    type="text"
+                    label="Email Address"
+                    error={errors.email !== ""}
+                    helperText={errors.email}
+                    autoFocus
+                />
+                <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="password"
+                    name="password"
+                    value={password}
+                    onChange={this.onChange}
+                    type="password"
+                    label="Password"
+                />
+                <Button className={classes.submit}
+                    type="submit"
+                    fullWidth
+                    id="submit-button"
+                    variant="contained"
+                    color="primary"
+                    disabled={!isValid}
+                >
+                    Sign In
+                        </Button>
+            </form>
+        );
+    }
 }
 const SignUpForgotLink = ({ classes }) => (
   <Grid container>
@@ -228,7 +220,5 @@ const SignUpForgotLink = ({ classes }) => (
 );
 
 const SignInForm = withRouter(SignInFormBase);
-
 export default withStyles(styles)(SignIn);
-
 export { SignInForm, SignUpForgotLink };

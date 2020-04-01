@@ -15,7 +15,6 @@ import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link";
 import Typography from "@material-ui/core/Typography";
 
-
 const styles = theme => ({
   root: {
     marginTop: theme.spacing(8),
@@ -44,7 +43,6 @@ const styles = theme => ({
 
 function ForgotPassword(props) {
   const { classes } = props;
-
   return (
     <Container component="main" maxWidth="xs">
       <div className={classes.root}>
@@ -92,7 +90,6 @@ export class ForgotPasswordFormBase extends Component {
           this.setState({ errors: { ...this.state.errors, submit: error.message } });
         });
     }
-
     event.preventDefault();
   }
 
@@ -134,6 +131,7 @@ export class ForgotPasswordFormBase extends Component {
           margin="normal"
           required
           fullWidth
+          id="email"
           name="email"
           value={email}
           onChange={this.onChange}
@@ -145,6 +143,7 @@ export class ForgotPasswordFormBase extends Component {
         />
         <Button className={classes.submit}
           type="submit"
+          id="submit-button"
           fullWidth
           variant="contained"
           color="primary"
