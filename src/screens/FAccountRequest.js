@@ -401,3 +401,6 @@ class FAccountRequest extends Component {
 }
 
 export default withStyles(styles)(FAccountRequest);
+
+export { FAccountRequest };
+
