@@ -53,3 +53,5 @@ Object {
   "queryByTitle": [Function],
 }
 `;
+
+exports[`FDashboard toggle tests toggles correctly 1`] = `ReactWrapper {}`;
