@@ -133,7 +133,7 @@ class Search extends Component {
     let newDist = helper.calcDistance(this.state.centerLoc.lat, this.state.centerLoc.long, doc.grant.lat, doc.grant.long);
     var tempTemp = this.state.tempMeta;
     tempTemp.push({dist: newDist, grant: doc.grant});
-    tempTemp.sort((a, b) => (a.dist > b.dist ? 1 : -1));
+    tempTemp.sort((a, b) => { return (a.dist - b.dist)});
     this.setState({tempMeta: tempTemp}
     );
   }
@@ -149,7 +149,6 @@ class Search extends Component {
   }
 
   sortByCallback = (sortBy) => {
-    console.log("radResults in sortBy: ", this.state.radiusResults);
     var sortedBy = this.state.radiusResults; //[this.state.radiusResults || this.state.metaGrants];
     if(sortBy === "deadline") { 
       sortedBy.sort((a, b) => { return (a.grant.dateDeadline.seconds - b.grant.dateDeadline.seconds)});
@@ -162,10 +161,8 @@ class Search extends Component {
     } else if(sortBy === "size") {
       sortedBy.sort((a, b) => { return (a.grant.goalAmt - b.grant.goalAmt)});
     } else {console.log("nothing selected?");}
-    console.log("sorted array: ", sortedBy);
     this.setState({sortedResults: sortedBy, sortBy: sortBy}, () => {
       this.props.parentCallback(sortedBy);
-      console.log("after set state, sorted array: ", sortedBy);
     });
   }
 
