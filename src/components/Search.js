@@ -44,7 +44,7 @@ class Search extends Component {
     var newMetaGrants = [];
     this.props.docs.forEach((doc) => {
       newMetaGrants.push({
-        dist: -1, //helper.calcDistance(this.state.centerLoc.lat, this.state.centerLoc.long, doc.lat, doc.long),
+        dist: -1,
         grant: doc,
       });
     });
@@ -171,6 +171,24 @@ class Search extends Component {
       <div className={styles.searchWrapper}>
         <Grid container spacing={2} >
           <Grid item xs={12} md={6} lg={4}>
+            <LocationSearch parentCallback={this.locationCallback}/>
+          </Grid>
+          <Grid item xs={6} lg={2}>
+            <SearchRadius parentCallback={this.radiusCallback}/>
+          </Grid>
+          <Grid item xs={6} lg={2}>
+            <SortBy parentCallback={this.sortByCallback}/>
+          </Grid>
+        </Grid>
+      </div>  
+    );
+  }
+  /*
+  render() {
+    return (
+      <div className={styles.searchWrapper}>
+        <Grid container spacing={2} >
+          <Grid item xs={12} md={6} lg={4}>
             <TagSearch parentCallback={this.tagFreeTextCallback}/>
           </Grid>
           <Grid item xs={12} md={6} lg={4}>
@@ -186,6 +204,7 @@ class Search extends Component {
       </div>  
     );
   }
+  */
 }
 
 export default withStyles(styles)(Search);
