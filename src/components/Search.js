@@ -149,21 +149,23 @@ class Search extends Component {
   }
 
   sortByCallback = (sortBy) => {
+    console.log("radResults in sortBy: ", this.state.radiusResults);
     var sortedBy = this.state.radiusResults; //[this.state.radiusResults || this.state.metaGrants];
     if(sortBy === "deadline") { 
-      sortedBy.sort((a, b) => (a.grant.dateDeadline > b.grant.dateDeadline ? 1 : -1));
+      sortedBy.sort((a, b) => { return (a.grant.dateDeadline.seconds - b.grant.dateDeadline.seconds)});
     } else if(sortBy === "posting") {
-      sortedBy.sort((a, b) => (a.grant.datePosted > b.grant.datePosted ? 1 : -1));
+      sortedBy.sort((a, b) => { return (a.grant.datePosted.seconds - b.grant.datePosted.seconds)});
     } else if(sortBy === "goalD") {
-      sortedBy.sort((a, b) => ((a.grant.moneyRaised / a.grant.goalAmt) < (b.grant.moneyRaised / b.grant.goalAmt) ? 1 : -1));
+      sortedBy.sort((a, b) => { return ((b.grant.moneyRaised / b.grant.goalAmt) - (a.grant.moneyRaised / a.grant.goalAmt))});
     } else if(sortBy === "goalI") {
-      sortedBy.sort((a, b) => ((a.grant.moneyRaised / a.grant.goalAmt) > (b.grant.moneyRaised / b.grant.goalAmt) ? 1 : -1));
+      sortedBy.sort((a, b) => { return ((a.grant.moneyRaised / a.grant.goalAmt) - (b.grant.moneyRaised / b.grant.goalAmt))});
     } else if(sortBy === "size") {
-      sortedBy.sort((a, b) => (a.grant.goalAmt > b.grant.goalAmt ? 1 : -1));
+      sortedBy.sort((a, b) => { return (a.grant.goalAmt - b.grant.goalAmt)});
     } else {console.log("nothing selected?");}
     console.log("sorted array: ", sortedBy);
     this.setState({sortedResults: sortedBy, sortBy: sortBy}, () => {
       this.props.parentCallback(sortedBy);
+      console.log("after set state, sorted array: ", sortedBy);
     });
   }
 
