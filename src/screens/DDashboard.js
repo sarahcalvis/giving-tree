@@ -29,13 +29,12 @@ export default function DDashboard() {
       snapshot.forEach(function (doc) {
         //console.log("a date: ", doc.data().date_deadline);
         const fbData = doc.data();
-        console.log("title: ", fbData.title);
-        console.log("status: ", fbData.status);
-        console.log("date comparison", fbData.date_deadline.seconds, '> ',Date.now()/1000 );
-        console.log("date comparison", fbData.date_deadline.seconds > Date.now()/1000 );
+        //console.log("title: ", fbData.title);
+        //console.log("status: ", fbData.status);
+        //console.log("date comparison", fbData.date_deadline.seconds, '> ',Date.now()/1000 );
+        //console.log("date comparison", fbData.date_deadline.seconds > Date.now()/1000 );
         //comparing by seconds vs milliseconds
-        if (fbData.status === 'current' && fbData.date_deadline.seconds > Date.now()/1000) {
-          
+        if (fbData.status === 'current' && fbData.date_deadline.seconds > Date.now()/1000) {   
           newDocs.push({
             dist: -1,
             id: doc.id,
@@ -88,7 +87,7 @@ export default function DDashboard() {
       );
     });
     setGrants(newGrants);
-    console.log("newGrants: ", newGrants);
+    //console.log("newGrants: ", newGrants);
   }
 
   const classes = useStyles();
