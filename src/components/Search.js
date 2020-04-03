@@ -171,6 +171,9 @@ class Search extends Component {
       <div className={styles.searchWrapper}>
         <Grid container spacing={2} >
           <Grid item xs={12} md={6} lg={4}>
+            <TagSearch parentCallback={this.tagFreeTextCallback}/>
+          </Grid>
+          <Grid item xs={12} md={6} lg={4}>
             <LocationSearch parentCallback={this.locationCallback}/>
           </Grid>
           <Grid item xs={6} lg={2}>
