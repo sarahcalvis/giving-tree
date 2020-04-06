@@ -3,6 +3,7 @@ import React, { useEffect, useContext } from 'react';
 
 import EditGrant from '../components/EditGrant.js';
 import Text from '../components/Text.js';
+import ContactPopout from '../components/InfoIcon.js'
 import firebase from '../firebase';
 import * as helper from '../helpers/ValidationHelper.js';
 
@@ -15,6 +16,7 @@ import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Container from '@material-ui/core/Container';
 import { withRouter } from 'react-router-dom'
+
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -369,33 +371,48 @@ function FEditGrant(props) {
               {grantStatus === 'create' &&
                 <Grid container
                   spacing={2}
-                  direction='row'
+                  direction='column'
                   justify='flex-end'
-                  alignItems='flex-start'>
-                  <Grid item>
-                    <Button
-                      color='primary'
-                      variant='contained'
-                      onClick={cancel}>
-                      Discard
-                  </Button>
+                  alignItems='flex-end'>
+                  <Grid container direction='row' justify='flex-start' alignContent='flex-center'>
+                    <Grid item>
+                      <Button
+                        color='primary'
+                        variant='contained'
+                        onClick={cancel}>
+                        Discard
+                      </Button>
+                    </Grid>
+                    <Grid item>
+                      <ContactPopout infoMessage="Delete grant (this action cannot be undone)."/>
+                    </Grid>
                   </Grid>
-                  <Grid item>
-                    <Button
-                      onClick={saveToDrafts}
-                      color='primary'
-                      variant='contained'>
-                      Save to Drafts
-                </Button>
+                  <Grid container direction='row' justify='flex-start' alignContent='flex-center'>
+                    <Grid item>
+                      <Button
+                        onClick={saveToDrafts}
+                        color='primary'
+                        variant='contained'>
+                        Save to Drafts
+                      </Button>
+                    </Grid>
+                    <Grid item>
+                      <ContactPopout infoMessage="Save to edit and/or publish at a later time. Donors won't be able to see your grant."/>
+                    </Grid>
                   </Grid>
-                  <Grid item>
-                    <Button
-                      color='primary'
-                      variant='contained'
-                      disabled={!valid}
-                      onClick={publish}>
-                      Publish
-                    </Button>
+                  <Grid container direction='row' justify='flex-start' alignContent='flex-center'>                   
+                    <Grid item>
+                      <Button
+                        color='primary'
+                        variant='contained'
+                        disabled={!valid}
+                        onClick={publish}>
+                        Publish
+                      </Button>
+                    </Grid>
+                    <Grid item>
+                      <ContactPopout infoMessage="Donors will be able to see your grant and donate to it."/>
+                    </Grid>
                   </Grid>
                 </Grid>
               }
