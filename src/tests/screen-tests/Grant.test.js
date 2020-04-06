@@ -6,6 +6,7 @@ import FirestoreMock from '../firestore.mock'
 
 const mockFirestore = new FirestoreMock();
 
+
 jest.mock('firebase/app', () => ({
   __esModule: true,
   initializeApp: () => { },
