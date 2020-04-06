@@ -58,7 +58,7 @@ class Search extends Component {
 
   tagFreeTextCallback = (tagsAndFreeText) => {
     this.setState({tags: tagsAndFreeText.tags, freeText: tagsAndFreeText.freeText}, () => {
-      console.log("tags and free text: ", tagsAndFreeText);
+      //console.log("tags and free text: ", tagsAndFreeText);
       if(!(this.state.tags === [] && this.state.freeText === [])) {
         this.setByTags();
       }
@@ -85,7 +85,7 @@ class Search extends Component {
     var tempTemp = this.state.tempMeta;
     var docText = (doc.grant.desc + doc.grant.title + doc.grant.nonprofitName + doc.grant.cfName).toLowerCase();
     if((this.state.freeText).every(freeText => (docText).includes(freeText.toLowerCase()))) {
-      console.log("np name: ", doc.grant.nonprofitName);
+      //console.log("np name: ", doc.grant.nonprofitName);
       tempTemp.push({dist: doc.dist, grant: doc.grant});
       this.setState({tempMeta: tempTemp, tftResults: tempTemp});
     }
@@ -100,19 +100,19 @@ class Search extends Component {
   }
 
   radiusCallback = (radius) => {  
-    console.log("central location: ", this.state.centerLoc);  
+    //console.log("central location: ", this.state.centerLoc);  
     var newRadRes = [];  
     if(radius === -1) {
       newRadRes = this.state.tftResults;
     }
     else {
       this.state.tftResults.forEach((meta) => {
-        console.log("distance from center: ", meta.dist);
-        console.log("radius: ", radius);
-        console.log("meta.dist < radius", meta.dist < radius);
+        //console.log("distance from center: ", meta.dist);
+        //console.log("radius: ", radius);
+        //console.log("meta.dist < radius", meta.dist < radius);
         if(meta.dist < radius) {
           newRadRes.push(meta);
-          console.log("radius grant results: ", newRadRes);
+          //console.log("radius grant results: ", newRadRes);
         }
       }); 
     }
@@ -165,7 +165,7 @@ class Search extends Component {
       this.props.parentCallback(sortedBy);
     });
   }
-
+  
   render() {
     return (
       <div className={styles.searchWrapper}>
@@ -186,28 +186,6 @@ class Search extends Component {
       </div>  
     );
   }
-  /*
-  render() {
-    return (
-      <div className={styles.searchWrapper}>
-        <Grid container spacing={2} >
-          <Grid item xs={12} md={6} lg={4}>
-            <TagSearch parentCallback={this.tagFreeTextCallback}/>
-          </Grid>
-          <Grid item xs={12} md={6} lg={4}>
-            <LocationSearch parentCallback={this.locationCallback}/>
-          </Grid>
-          <Grid item xs={6} lg={2}>
-            <SearchRadius parentCallback={this.radiusCallback}/>
-          </Grid>
-          <Grid item xs={6} lg={2}>
-            <SortBy parentCallback={this.sortByCallback}/>
-          </Grid>
-        </Grid>
-      </div>  
-    );
-  }
-  */
 }
 
 export default withStyles(styles)(Search);
