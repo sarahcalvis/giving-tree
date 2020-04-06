@@ -19,7 +19,7 @@ test('FDashboard Basics', () => {
 
 // current drafted expired id=toggle onChange=handleToggle
 // change toggle val
-
+/*
 describe('FDashboard toggle tests', () => {
   it('toggles correctly', () => {
     const wrap = mount(<FDashboard{...routeComponentPropsMock} />)
@@ -29,3 +29,4 @@ describe('FDashboard toggle tests', () => {
   })
 
 });
+*/

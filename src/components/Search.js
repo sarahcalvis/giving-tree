@@ -44,7 +44,7 @@ class Search extends Component {
     var newMetaGrants = [];
     this.props.docs.forEach((doc) => {
       newMetaGrants.push({
-        dist: -1, //helper.calcDistance(this.state.centerLoc.lat, this.state.centerLoc.long, doc.lat, doc.long),
+        dist: -1,
         grant: doc,
       });
     });
@@ -58,7 +58,7 @@ class Search extends Component {
 
   tagFreeTextCallback = (tagsAndFreeText) => {
     this.setState({tags: tagsAndFreeText.tags, freeText: tagsAndFreeText.freeText}, () => {
-      console.log("tags and free text: ", tagsAndFreeText);
+      //console.log("tags and free text: ", tagsAndFreeText);
       if(!(this.state.tags === [] && this.state.freeText === [])) {
         this.setByTags();
       }
@@ -85,7 +85,7 @@ class Search extends Component {
     var tempTemp = this.state.tempMeta;
     var docText = (doc.grant.desc + doc.grant.title + doc.grant.nonprofitName + doc.grant.cfName).toLowerCase();
     if((this.state.freeText).every(freeText => (docText).includes(freeText.toLowerCase()))) {
-      console.log("np name: ", doc.grant.nonprofitName);
+      //console.log("np name: ", doc.grant.nonprofitName);
       tempTemp.push({dist: doc.dist, grant: doc.grant});
       this.setState({tempMeta: tempTemp, tftResults: tempTemp});
     }
@@ -100,19 +100,19 @@ class Search extends Component {
   }
 
   radiusCallback = (radius) => {  
-    console.log("central location: ", this.state.centerLoc);  
+    //console.log("central location: ", this.state.centerLoc);  
     var newRadRes = [];  
     if(radius === -1) {
       newRadRes = this.state.tftResults;
     }
     else {
       this.state.tftResults.forEach((meta) => {
-        console.log("distance from center: ", meta.dist);
-        console.log("radius: ", radius);
-        console.log("meta.dist < radius", meta.dist < radius);
+        //console.log("distance from center: ", meta.dist);
+        //console.log("radius: ", radius);
+        //console.log("meta.dist < radius", meta.dist < radius);
         if(meta.dist < radius) {
           newRadRes.push(meta);
-          console.log("radius grant results: ", newRadRes);
+          //console.log("radius grant results: ", newRadRes);
         }
       }); 
     }
@@ -133,7 +133,7 @@ class Search extends Component {
     let newDist = helper.calcDistance(this.state.centerLoc.lat, this.state.centerLoc.long, doc.grant.lat, doc.grant.long);
     var tempTemp = this.state.tempMeta;
     tempTemp.push({dist: newDist, grant: doc.grant});
-    tempTemp.sort((a, b) => (a.dist > b.dist ? 1 : -1));
+    tempTemp.sort((a, b) => { return (a.dist - b.dist)});
     this.setState({tempMeta: tempTemp}
     );
   }
@@ -151,22 +151,21 @@ class Search extends Component {
   sortByCallback = (sortBy) => {
     var sortedBy = this.state.radiusResults; //[this.state.radiusResults || this.state.metaGrants];
     if(sortBy === "deadline") { 
-      sortedBy.sort((a, b) => (a.grant.dateDeadline > b.grant.dateDeadline ? 1 : -1));
+      sortedBy.sort((a, b) => { return (a.grant.dateDeadline.seconds - b.grant.dateDeadline.seconds)});
     } else if(sortBy === "posting") {
-      sortedBy.sort((a, b) => (a.grant.datePosted > b.grant.datePosted ? 1 : -1));
+      sortedBy.sort((a, b) => { return (a.grant.datePosted.seconds - b.grant.datePosted.seconds)});
     } else if(sortBy === "goalD") {
-      sortedBy.sort((a, b) => ((a.grant.moneyRaised / a.grant.goalAmt) < (b.grant.moneyRaised / b.grant.goalAmt) ? 1 : -1));
+      sortedBy.sort((a, b) => { return ((b.grant.moneyRaised / b.grant.goalAmt) - (a.grant.moneyRaised / a.grant.goalAmt))});
     } else if(sortBy === "goalI") {
-      sortedBy.sort((a, b) => ((a.grant.moneyRaised / a.grant.goalAmt) > (b.grant.moneyRaised / b.grant.goalAmt) ? 1 : -1));
+      sortedBy.sort((a, b) => { return ((a.grant.moneyRaised / a.grant.goalAmt) - (b.grant.moneyRaised / b.grant.goalAmt))});
     } else if(sortBy === "size") {
-      sortedBy.sort((a, b) => (a.grant.goalAmt > b.grant.goalAmt ? 1 : -1));
+      sortedBy.sort((a, b) => { return (a.grant.goalAmt - b.grant.goalAmt)});
     } else {console.log("nothing selected?");}
-    console.log("sorted array: ", sortedBy);
     this.setState({sortedResults: sortedBy, sortBy: sortBy}, () => {
       this.props.parentCallback(sortedBy);
     });
   }
-
+  
   render() {
     return (
       <div className={styles.searchWrapper}>

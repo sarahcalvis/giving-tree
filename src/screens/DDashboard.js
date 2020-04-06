@@ -29,25 +29,30 @@ export default function DDashboard() {
       snapshot.forEach(function (doc) {
         //console.log("a date: ", doc.data().date_deadline);
         const fbData = doc.data();
-        newDocs.push({
-          dist: -1,
-          id: doc.id,
-          title: fbData.title,
-          cfName: fbData.cf_name,
-          nonprofitName: fbData.nonprofit_name,
-          goalAmt: fbData.goal_amt,
-          moneyRaised: fbData.money_raised,
-          img: fbData.images[0] || 'GivingTree.png',
-          nonprofitId: fbData.nonprofit_id,
-          address: fbData.address,
-          lat: fbData.lat,
-          long: fbData.long,
-          datePosted: fbData.date_posted,
-          dateDeadline: fbData.date_deadline,
-          desc: fbData.desc,
-          tags: fbData.tags
-        });
-        if (fbData.status === 'current') {
+        //console.log("title: ", fbData.title);
+        //console.log("status: ", fbData.status);
+        //console.log("date comparison", fbData.date_deadline.seconds, '> ',Date.now()/1000 );
+        //console.log("date comparison", fbData.date_deadline.seconds > Date.now()/1000 );
+        //comparing by seconds vs milliseconds
+        if (fbData.status === 'current' && fbData.date_deadline.seconds > Date.now()/1000) {   
+          newDocs.push({
+            dist: -1,
+            id: doc.id,
+            title: fbData.title,
+            cfName: fbData.cf_name,
+            nonprofitName: fbData.nonprofit_name,
+            goalAmt: fbData.goal_amt,
+            moneyRaised: fbData.money_raised,
+            img: fbData.images[0] || 'GivingTree.png',
+            nonprofitId: fbData.nonprofit_id,
+            address: fbData.address,
+            lat: fbData.lat,
+            long: fbData.long,
+            datePosted: fbData.date_posted,
+            dateDeadline: fbData.date_deadline,
+            desc: fbData.desc,
+            tags: fbData.tags
+          });
           newGrants.push(
             <SmallGrantCard
               id={doc.id}
@@ -82,7 +87,7 @@ export default function DDashboard() {
       );
     });
     setGrants(newGrants);
-    console.log("newGrants: ", newGrants);
+    //console.log("newGrants: ", newGrants);
   }
 
   const classes = useStyles();
