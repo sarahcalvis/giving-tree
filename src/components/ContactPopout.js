@@ -4,7 +4,7 @@ import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import ArrowDropDown from '@material-ui/icons/ArrowDropDown';
-import ArrowRight from '@material-ui/icons/ArrowRight';
+import ArrowDropUp from '@material-ui/icons/ArrowDropUp';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
@@ -24,7 +24,7 @@ export default function ContactPopout(props) {
       setIcon(<ArrowDropDown />)
     } else {
       setOpen(true);
-      setIcon(<ArrowRight />)
+      setIcon(<ArrowDropUp />)
     }
   };
 
