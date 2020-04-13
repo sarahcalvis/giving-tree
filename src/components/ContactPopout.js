@@ -40,30 +40,46 @@ export default function ContactPopout(props) {
       {open &&
         <div>
           <Typography variant="body2">
-            Please contact <Link
+          &emsp;Please direct any concerns to:
+            <span style={{'fontWeight': 380}}>
+            <br/>&emsp;&emsp;
+            <Link
               textDecoration='none'
               target='_blank'
               rel='noopener noreferrer'
               href={props.cfData.url}>
               {props.cfData.name}
-            </Link> with any concerns at <Link href={'tel:' + props.cfData.phone}>
-              {props.cfData.public_phone}
-            </Link> or <Link href={'mailto:' + props.cfData.public_email}>
-              {props.cfData.email}
             </Link>
-          </Typography>
-          <Typography variant="body2">
+            <br/>
+            {props.cfData.public_phone && 
+            <span>&emsp;&emsp;&emsp;Call:&nbsp;
+              <Link href={'tel:' + props.cfData.public_phone}> {props.cfData.public_phone} </Link>
+            </span>}
+            {props.cfData.public_email && 
+            <span>&emsp;&emsp;&emsp;Email:&nbsp;
+              <Link href={'mailto:' + props.cfData.public_email}> {props.cfData.public_email} </Link>
+            </span>}
+
+            <br/>&emsp;&emsp;
             <Link
               textDecoration='none'
               target='_blank'
               rel='noopener noreferrer'
-              href={props.nonprofitData.url}>{props.nonprofitData.name}
-            </Link> can be reached at <Link href={'tel:' + props.nonprofitData.phone}>
-              {props.nonprofitData.phone}
-            </Link> or <Link href={'mailto:' + props.nonprofitData.email}>
-              {props.nonprofitData.email}
+              href={props.nonprofitData.url}>
+              {props.nonprofitData.name}
             </Link>
+            <br/>
+            {props.nonprofitData.phone && 
+            <span>&emsp;&emsp;&emsp;Call:&nbsp;
+              <Link href={'tel:' + props.nonprofitData.phone}> {props.nonprofitData.phone} </Link>
+            </span>}
+            {props.nonprofitData.email && 
+            <span>&emsp;&emsp;&emsp;Email:&nbsp;
+              <Link href={'mailto:' + props.nonprofitData.email}> {props.nonprofitData.email} </Link>
+            </span>}
+            </span>
           </Typography>
+          <br/>
         </div>
       }
     </div>
