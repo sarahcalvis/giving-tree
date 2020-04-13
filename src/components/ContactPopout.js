@@ -42,7 +42,7 @@ export default function ContactPopout(props) {
           <Typography variant="body2">
           &emsp;Please direct any concerns to:
             <span style={{'fontWeight': 380}}>
-            <br/>&emsp;&emsp;
+            <br/>&emsp;
             <Link
               textDecoration='none'
               target='_blank'
@@ -52,15 +52,15 @@ export default function ContactPopout(props) {
             </Link>
             <br/>
             {props.cfData.public_phone && 
-            <span>&emsp;&emsp;&emsp;Call:&nbsp;
+            <span>&emsp;&emsp;Call:&nbsp;
               <Link href={'tel:' + props.cfData.public_phone}> {props.cfData.public_phone} </Link>
             </span>}
             {props.cfData.public_email && 
-            <span>&emsp;&emsp;&emsp;Email:&nbsp;
+            <span>&emsp;&emsp;Email:&nbsp;
               <Link href={'mailto:' + props.cfData.public_email}> {props.cfData.public_email} </Link>
             </span>}
 
-            <br/>&emsp;&emsp;
+            <br/>&emsp;
             <Link
               textDecoration='none'
               target='_blank'
@@ -70,11 +70,11 @@ export default function ContactPopout(props) {
             </Link>
             <br/>
             {props.nonprofitData.phone && 
-            <span>&emsp;&emsp;&emsp;Call:&nbsp;
+            <span>&emsp;&emsp;Call:&nbsp;
               <Link href={'tel:' + props.nonprofitData.phone}> {props.nonprofitData.phone} </Link>
             </span>}
             {props.nonprofitData.email && 
-            <span>&emsp;&emsp;&emsp;Email:&nbsp;
+            <span>&emsp;&emsp;Email:&nbsp;
               <Link href={'mailto:' + props.nonprofitData.email}> {props.nonprofitData.email} </Link>
             </span>}
             </span>
