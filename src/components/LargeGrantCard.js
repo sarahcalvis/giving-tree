@@ -71,20 +71,16 @@ export default function LargeGrantCard(props) {
             <GrantTagBar tags={props.tags} />
           </div>
           {props.user === 'donor' &&
-            <Grid container direction='row' justify='space-between' alignItems='flex-end'>
-              <Grid item>
-                <ContactPopout
-                  cfData={props.cfData}
-                  nonprofitData={props.nonprofitData} />
-              </Grid>
-              <Grid item  >
-                <Link className={classes.link} to={'/grants/' + props.id + '/give'}>
-                  <Button variant='contained' color='primary'>
-                    Donate
+            <div>
+              <ContactPopout
+                cfData={props.cfData}
+                nonprofitData={props.nonprofitData} />
+              <Link className={classes.link} to={'/grants/' + props.id + '/give'}>
+                <Button fullWidth variant='contained' color='primary'>
+                  Donate
                   </Button>
-                </Link>
-              </Grid>
-            </Grid>
+              </Link>
+            </div>
           }
         </CardContent>
       </Card>

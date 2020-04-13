@@ -1,95 +1,87 @@
 import React from 'react';
 
 import Link from '@material-ui/core/Link';
-import Popover from '@material-ui/core/Popover';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import ArrowDropDown from '@material-ui/icons/ArrowDropDown';
+import ArrowDropUp from '@material-ui/icons/ArrowDropUp';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
   a: {
     cursor: 'pointer',
   },
-  popover: {
-    maxWidth: 500,
-  },
-  typographyTop: {
-    padding: theme.spacing(2),
-  },
-  typographyBottom: {
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2),
-    paddingBottom: theme.spacing(2),
-  }
 }));
 
 export default function ContactPopout(props) {
   const classes = useStyles();
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [open, setOpen] = React.useState(false);
+  const [icon, setIcon] = React.useState(<ArrowDropDown />);
 
   const handleClick = event => {
-    setAnchorEl(event.currentTarget);
+    if (open) {
+      setOpen(false)
+      setIcon(<ArrowDropDown />)
+    } else {
+      setOpen(true);
+      setIcon(<ArrowDropUp />)
+    }
   };
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const open = Boolean(anchorEl);
   const id = open ? 'Contact information' : undefined;
 
   return (
     <div>
       <a className={classes.a} aria-describedby={id} variant="contained" color="primary" onClick={handleClick}>
-        <Button variant='outlined' color='primary'>
+        <Button endIcon={icon} >
           Contact
         </Button>
       </a>
-      <Popover
-        className={classes.popover}
-        id={id}
-        open={open}
-        anchorEl={anchorEl}
-        onClose={handleClose}
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
-        }}
-        transformOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
-        }}
-      >
-        <Typography
-          className={classes.typographyTop}
-          variant="body2">
-          Please contact <Link
-            textDecoration='none'
-            target='_blank'
-            rel='noopener noreferrer'
-            href={props.cfData.url}>
-            {props.cfData.name}
-          </Link> with any concerns at <Link href={'tel:' + props.cfData.phone}>
-            {props.cfData.public_phone}
-          </Link> or <Link href={'mailto:' + props.cfData.public_email}>
-            {props.cfData.email}
-          </Link>
-        </Typography>
-        <Typography
-          className={classes.typographyBottom}
-          variant="body2">
-          <Link
-            textDecoration='none'
-            target='_blank'
-            rel='noopener noreferrer'
-            href={props.nonprofitData.url}>{props.nonprofitData.name}
-          </Link> can be reached at <Link href={'tel:' + props.nonprofitData.phone}>
-            {props.nonprofitData.phone}
-          </Link> or <Link href={'mailto:' + props.nonprofitData.email}>
-            {props.nonprofitData.email}
-          </Link>
-        </Typography>
-      </Popover>
+      {open &&
+        <div>
+          <Typography variant="body2">
+          &emsp;Please direct any concerns to:
+            <span style={{'fontWeight': 380}}>
+            <br/>&emsp;
+            <Link
+              textDecoration='none'
+              target='_blank'
+              rel='noopener noreferrer'
+              href={props.cfData.url}>
+              {props.cfData.name}
+            </Link>
+            <br/>
+            {props.cfData.public_phone && 
+            <span>&emsp;&emsp;Call:&nbsp;
+              <Link href={'tel:' + props.cfData.public_phone}> {props.cfData.public_phone} </Link>
+            </span>}
+            {props.cfData.public_email && 
+            <span>&emsp;&emsp;Email:&nbsp;
+              <Link href={'mailto:' + props.cfData.public_email}> {props.cfData.public_email} </Link>
+            </span>}
+
+            <br/>&emsp;
+            <Link
+              textDecoration='none'
+              target='_blank'
+              rel='noopener noreferrer'
+              href={props.nonprofitData.url}>
+              {props.nonprofitData.name}
+            </Link>
+            <br/>
+            {props.nonprofitData.phone && 
+            <span>&emsp;&emsp;Call:&nbsp;
+              <Link href={'tel:' + props.nonprofitData.phone}> {props.nonprofitData.phone} </Link>
+            </span>}
+            {props.nonprofitData.email && 
+            <span>&emsp;&emsp;Email:&nbsp;
+              <Link href={'mailto:' + props.nonprofitData.email}> {props.nonprofitData.email} </Link>
+            </span>}
+            </span>
+          </Typography>
+          <br/>
+        </div>
+      }
     </div>
   );
 }
