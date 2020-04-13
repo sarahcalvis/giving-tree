@@ -16,15 +16,15 @@ const useStyles = makeStyles(theme => ({
 export default function ContactPopout(props) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
-  const [icon, setIcon] = React.useState(<ArrowRight />);
+  const [icon, setIcon] = React.useState(<ArrowDropDown />);
 
   const handleClick = event => {
     if (open) {
       setOpen(false)
-      setIcon(<ArrowRight />)
+      setIcon(<ArrowDropDown />)
     } else {
       setOpen(true);
-      setIcon(<ArrowDropDown />)
+      setIcon(<ArrowRight />)
     }
   };
 
