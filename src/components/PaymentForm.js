@@ -136,11 +136,8 @@ function PaymentForm(props) {
         body: token.id + ' amount: ' + (amount * 100) + ' description: ' + grant + ' account: ' + stripeId,
       });
 
-      console.log(response);
-
       if (response.ok) {
-        let resJSON = await response.json();
-        console.log(JSON.stringify(resJSON));
+        let res = await response.text();
 
         let grantRef = db.collection('grants').doc(grantId);
 
@@ -149,18 +146,14 @@ function PaymentForm(props) {
           donation: Number.parseInt(amount),
           timestamp: naughtyFirebase.firestore.Timestamp.fromDate(new Date()),
         }).then(ref => {
-          console.log('Added donation of ' + amount + ' with ID ' + ref.id + ' to the donations collection');
           // Update the total donation amount for the grant in firebase
-          // TODO: make a docref!
-          let transaction = db.runTransaction(t => {
+          db.runTransaction(t => {
             return t.get(grantRef)
               .then(doc => {
                 let newMoneyRaised = doc.data().money_raised + Number.parseInt(amount);
                 t.update(grantRef, { money_raised: newMoneyRaised });
               });
           }).then(result => {
-            console.log('Grant total updated!');
-
             // Record transaction complete
             setStatus('complete');
           }).catch(err => {
@@ -176,9 +169,7 @@ function PaymentForm(props) {
           grant: grantId,
           timestamp: naughtyFirebase.firestore.Timestamp.fromDate(new Date()),
         }).then(ref => {
-          console.log('Added donation of ' + amount + ' with ID ' + ref.id + ' to the donations collection');
           }).then(result => {
-            console.log('User donations updated!');
             // Record transaction complete
             setStatus('complete');
           }).catch(err => {
