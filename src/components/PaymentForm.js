@@ -137,7 +137,7 @@ function PaymentForm(props) {
       });
 
       if (response.ok) {
-        let resJSON = await response.json();
+        let res = await response.text();
 
         let grantRef = db.collection('grants').doc(grantId);
 
@@ -147,8 +147,7 @@ function PaymentForm(props) {
           timestamp: naughtyFirebase.firestore.Timestamp.fromDate(new Date()),
         }).then(ref => {
           // Update the total donation amount for the grant in firebase
-          // TODO: make a docref!
-          let transaction = db.runTransaction(t => {
+          db.runTransaction(t => {
             return t.get(grantRef)
               .then(doc => {
                 let newMoneyRaised = doc.data().money_raised + Number.parseInt(amount);
