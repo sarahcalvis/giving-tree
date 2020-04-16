@@ -34,7 +34,7 @@ export default function DDashboard() {
         //console.log("date comparison", fbData.date_deadline.seconds, '> ',Date.now()/1000 );
         //console.log("date comparison", fbData.date_deadline.seconds > Date.now()/1000 );
         //comparing by seconds vs milliseconds
-        if (fbData.status === 'current' && fbData.date_deadline.seconds > Date.now()/1000) {   
+        if (fbData.status === 'current') {   
           newDocs.push({
             dist: -1,
             id: doc.id,

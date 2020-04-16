@@ -55,6 +55,29 @@ app.post('/create', async (req, res) => {
   }
 });
 
+app.get('/updateExpirations', (req, res) => {
+  try {
+    admin.firestore().collection("grants").get()
+      .then(snap => {
+        snap.docs
+          .forEach(doc => {
+            const { date_deadline, goal_amt, money_raised } = doc.data();
+            if (Date.now() > (Number(date_deadline['seconds']) * 1000) || money_raised >= goal_amt) {
+              doc.ref.update({ status: 'expired' });
+            }
+          })
+      })
+      .then(() => {
+        res.status(200).send(JSON.stringify({ status: 'success' }));
+      })
+      .catch((e) => {
+        res.status(400).send(JSON.stringify({ status: 'failed to update grant expirations', error: e }));
+      });
+  } catch (e) {
+    res.status(400).send(JSON.stringify({ status: 'failed to update grant expirations', error: e }));
+  }
+});
+
 //Metaadmin Endpoint
 app.post('/updateCf', (req, res) => {
 
@@ -85,7 +108,7 @@ app.post('/updateCf', (req, res) => {
                   res.end(JSON.stringify({ status: error }));
                 });
             }
-            else{
+            else {
               res.end(JSON.stringify({ status: 'ERROR: Could not retrieve cfId from CF custom claims.' }));
             }
           })

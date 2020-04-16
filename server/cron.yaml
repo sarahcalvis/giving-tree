@@ -1,0 +1,5 @@
+cron:
+- description: "Expire Grants w/ Passed Deadline or Met Goal"
+  url: /updateExpirations
+  schedule: every day 4:00
+  timezone: America/New_York
