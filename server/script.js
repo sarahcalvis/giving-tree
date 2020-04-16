@@ -7,6 +7,22 @@ admin.initializeApp({
   databaseURL: "https://givingtree-cfs.firebaseio.com"
 });
 
+admin.firestore().collection("grants").get()
+  .then(snap => {
+    snap.docs
+      .forEach(doc => {
+        const { status } = doc.data();
+        if (status === 'expired') {
+          doc.ref.update({ status: 'current' });
+        }
+      })
+  })
+  .then(() => {
+    console.log("success");
+  })
+  .catch((e) => {
+    console.log("failure " + e);
+  });
 //------------------------------------------------------------
 //Script to set admin
 //------------------------------------------------------------
