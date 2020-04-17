@@ -1,6 +1,7 @@
 import React, { useEffect, useContext } from 'react';
 import { Link as NavigationLink } from 'react-router-dom';
 
+import { withAuthProtection } from '../auth';
 import firebase from '../firebase.js';
 import UserAuthContext from '../auth/context.js';
 import Search from '../components/Search';
@@ -34,7 +35,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function FDashboard(props) {
+function FDashboard(props) {
 
   const classes = useStyles();
 
@@ -270,3 +271,4 @@ export default function FDashboard(props) {
     </Container >
   );
 }
+export default withAuthProtection()(FDashboard);

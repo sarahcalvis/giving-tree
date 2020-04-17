@@ -46,7 +46,9 @@ export function Header(props) {
 
   const SignedIn = () => (
     <React.Fragment>
-      <MenuItem onClick={handleClose} to='/foundation/settings' component={Link}>Profile</MenuItem>
+      {props.authUser?.status === 'current' &&
+        <MenuItem onClick={handleClose} to='/foundation/settings' component={Link}>Profile</MenuItem>
+      }
       <MenuItem onClick={logout}>Logout</MenuItem>
     </React.Fragment>
   );

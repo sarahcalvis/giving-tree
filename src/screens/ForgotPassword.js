@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 
+import { withAuthConsumer } from '../auth';
 import firebase from '../firebase.js';
 import * as helper from '../helpers/ValidationHelper.js';
 import Snack from '../components/Snack.js';

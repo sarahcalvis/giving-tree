@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import AuthUserContext from '../auth/context.js';
 
+import { withAuthProtection } from '../auth';
 import {firestore as FIRESTORE} from "firebase/app";
 import firebase from '../firebase.js';
 
@@ -8,7 +9,7 @@ import EditableData from '../components/FSettingsListEditable.js'
 import NonEditableData from '../components/FSettingList.js'
 
 
-export default function FSettings(props={edit: false}) {
+function FSettings(props={edit: false}) {
 
   // Set tab title
   useEffect(() => { document.title = 'Settings- Giving Tree'; }, []);
@@ -176,4 +177,4 @@ export const FSettingsMethods = () => {
   };
 }
 
-
+export default withAuthProtection()(FSettings);

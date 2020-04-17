@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import $ from 'jquery';
 
+import { withAuthConsumer } from '../auth';
 import { firestore as FIRESTORE } from "firebase/app";
 import firebase from '../firebase.js';
 import * as helper from '../helpers/ValidationHelper.js';
@@ -191,10 +192,9 @@ class FAccountRequest extends Component {
       isValid,
     } = this.state;
 
-    const { classes } = this.props;
+    const { classes, authUser } = this.props;
 
     return (
-
       <Container component="main" maxWidth="md" >
         <CssBaseline />
         <div className={classes.paper}>
@@ -202,202 +202,208 @@ class FAccountRequest extends Component {
             <LockOutlinedIcon />
           </Avatar>
           <Text type='card-heading' text={'Foundation Account Request'} />
-          <form className={classes.form} onSubmit={this.onSubmit} noValidate>
-            <Grid container spacing={2}>
-
-              <Container maxWidth="xs" className={classes.marginBottom}>
-                <Grid container spacing={2}>
-                  <Grid container item xs={12}>
-                    <Text type='card-sectionheading' text={'Foundation Info'} />
-                    <Text type='card-subheading' text={'This information will be displayed publicly on all published giving opportunities.'} />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      name="name"
-                      variant="outlined"
-                      required
-                      fullWidth
-                      autoFocus
-                      id="name"
-                      label="Foundation Name"
-                      onChange={this.onChange}
-                      value={name}
-                      error={errors.name !== ""}
-                      helperText={errors.name}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      name="foundation_url"
-                      variant="outlined"
-                      required
-                      fullWidth
-                      id="foundation_url"
-                      label="Website URL"
-                      placeholder="www.communityfoundation.com"
-                      onChange={this.onChange}
-                      value={foundation_url}
-                      error={errors.foundation_url !== ""}
-                      helperText={errors.foundation_url}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      name="public_email"
-                      variant="outlined"
-                      required
-                      fullWidth
-                      id="public_email"
-                      label="Public Email"
-                      placeholder="contact@cf.com"
-                      onChange={this.onChange}
-                      value={public_email}
-                      error={errors.public_email !== ""}
-                      helperText={errors.public_email}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      name="public_phone"
-                      variant="outlined"
-                      required
-                      fullWidth
-                      id="public_phone"
-                      label="Public Phone"
-                      onChange={this.onChange}
-                      value={public_phone}
-                      error={errors.public_phone !== ""}
-                      helperText={errors.public_phone}
-                    />
-                  </Grid>
-                </Grid>
-              </Container>
-
-              <Container maxWidth="xs">
-                <Grid container spacing={2}>
-                  <Grid container item xs={12}>
-                    <Text type='card-sectionheading' text={'Personal Contact Info'} />
-                    <Text type='card-subheading' text={'This information will be used to sign into and manage your account.'} />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      name="fname_contact"
-                      variant="outlined"
-                      required
-                      fullWidth
-                      id="fname_contact"
-                      label="First Name"
-                      onChange={this.onChange}
-                      value={fname_contact}
-                      error={errors.fname_contact !== ""}
-                      helperText={errors.fname_contact}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      variant="outlined"
-                      required
-                      fullWidth
-                      id="lname_contact"
-                      label="Last Name"
-                      name="lname_contact"
-                      onChange={this.onChange}
-                      value={lname_contact}
-                      error={errors.lname_contact !== ""}
-                      helperText={errors.lname_contact}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      variant="outlined"
-                      required
-                      fullWidth
-                      id="personal_email"
-                      label="Personal Email"
-                      name="personal_email"
-                      onChange={this.onChange}
-                      value={personal_email}
-                      error={errors.personal_email !== ""}
-                      helperText={errors.personal_email}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      name="personal_phone"
-                      variant="outlined"
-                      required
-                      fullWidth
-                      id="personal_phone"
-                      label="Personal Phone"
-                      onChange={this.onChange}
-                      value={personal_phone}
-                      error={errors.personal_phone !== ""}
-                      helperText={errors.personal_phone}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      variant="outlined"
-                      required
-                      fullWidth
-                      name="passwordOne"
-                      label="Password"
-                      type="password"
-                      id="passwordOne"
-                      onChange={this.onChange}
-                      value={passwordOne}
-                      error={errors.passwordOne !== ""}
-                      helperText={errors.passwordOne}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      variant="outlined"
-                      required
-                      fullWidth
-                      name="passwordTwo"
-                      label="Confirm Password"
-                      type="password"
-                      id="passwordTwo"
-                      onChange={this.onChange}
-                      value={passwordTwo}
-                      error={errors.passwordTwo !== ""}
-                      helperText={errors.passwordTwo}
-                    />
-                  </Grid>
-                </Grid>
-              </Container>
 
 
-              <Container maxWidth="xs">
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  disabled={!isValid}
-                  className={classes.submit}
-                >
-                  Request Account
-                </Button>
-                <Grid container justify="flex-end">
-                  <Grid item>
-                    <Link href="/signin" variant="body2">
-                      Already have an account? Sign in
+          {!authUser &&
+            <form className={classes.form} onSubmit={this.onSubmit} noValidate>
+              <Grid container spacing={2}>
+                <Container maxWidth="xs" className={classes.marginBottom}>
+                  <Grid container spacing={2}>
+                    <Grid container item xs={12}>
+                      <Text type='card-sectionheading' text={'Foundation Info'} />
+                      <Text type='card-subheading' text={'This information will be displayed publicly on all published giving opportunities.'} />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TextField
+                        name="name"
+                        variant="outlined"
+                        required
+                        fullWidth
+                        autoFocus
+                        id="name"
+                        label="Foundation Name"
+                        onChange={this.onChange}
+                        value={name}
+                        error={errors.name !== ""}
+                        helperText={errors.name}
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TextField
+                        name="foundation_url"
+                        variant="outlined"
+                        required
+                        fullWidth
+                        id="foundation_url"
+                        label="Website URL"
+                        placeholder="www.communityfoundation.com"
+                        onChange={this.onChange}
+                        value={foundation_url}
+                        error={errors.foundation_url !== ""}
+                        helperText={errors.foundation_url}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        name="public_email"
+                        variant="outlined"
+                        required
+                        fullWidth
+                        id="public_email"
+                        label="Public Email"
+                        placeholder="contact@cf.com"
+                        onChange={this.onChange}
+                        value={public_email}
+                        error={errors.public_email !== ""}
+                        helperText={errors.public_email}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        name="public_phone"
+                        variant="outlined"
+                        required
+                        fullWidth
+                        id="public_phone"
+                        label="Public Phone"
+                        onChange={this.onChange}
+                        value={public_phone}
+                        error={errors.public_phone !== ""}
+                        helperText={errors.public_phone}
+                      />
+                    </Grid>
+                  </Grid>
+                </Container>
+
+                <Container maxWidth="xs">
+                  <Grid container spacing={2}>
+                    <Grid container item xs={12}>
+                      <Text type='card-sectionheading' text={'Personal Contact Info'} />
+                      <Text type='card-subheading' text={'This information will be used to sign into and manage your account.'} />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        name="fname_contact"
+                        variant="outlined"
+                        required
+                        fullWidth
+                        id="fname_contact"
+                        label="First Name"
+                        onChange={this.onChange}
+                        value={fname_contact}
+                        error={errors.fname_contact !== ""}
+                        helperText={errors.fname_contact}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        variant="outlined"
+                        required
+                        fullWidth
+                        id="lname_contact"
+                        label="Last Name"
+                        name="lname_contact"
+                        onChange={this.onChange}
+                        value={lname_contact}
+                        error={errors.lname_contact !== ""}
+                        helperText={errors.lname_contact}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        variant="outlined"
+                        required
+                        fullWidth
+                        id="personal_email"
+                        label="Personal Email"
+                        name="personal_email"
+                        onChange={this.onChange}
+                        value={personal_email}
+                        error={errors.personal_email !== ""}
+                        helperText={errors.personal_email}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        name="personal_phone"
+                        variant="outlined"
+                        required
+                        fullWidth
+                        id="personal_phone"
+                        label="Personal Phone"
+                        onChange={this.onChange}
+                        value={personal_phone}
+                        error={errors.personal_phone !== ""}
+                        helperText={errors.personal_phone}
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TextField
+                        variant="outlined"
+                        required
+                        fullWidth
+                        name="passwordOne"
+                        label="Password"
+                        type="password"
+                        id="passwordOne"
+                        onChange={this.onChange}
+                        value={passwordOne}
+                        error={errors.passwordOne !== ""}
+                        helperText={errors.passwordOne}
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TextField
+                        variant="outlined"
+                        required
+                        fullWidth
+                        name="passwordTwo"
+                        label="Confirm Password"
+                        type="password"
+                        id="passwordTwo"
+                        onChange={this.onChange}
+                        value={passwordTwo}
+                        error={errors.passwordTwo !== ""}
+                        helperText={errors.passwordTwo}
+                      />
+                    </Grid>
+                  </Grid>
+                </Container>
+
+
+                <Container maxWidth="xs">
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    disabled={!isValid}
+                    className={classes.submit}
+                  >
+                    Request Account
+                    </Button>
+                  <Grid container justify="flex-end">
+                    <Grid item>
+                      <Link href="/signin" variant="body2">
+                        Already have an account? Sign in
                     </Link>
+                    </Grid>
                   </Grid>
-                </Grid>
-                <Typography component="h6" className={classes.errorMsg} >
-                  {errors.submit}
-                </Typography>
-              </Container>
+                  <Typography component="h6" className={classes.errorMsg} >
+                    {errors.submit}
+                  </Typography>
+                </Container>
 
-            </Grid>
-          </form>
+              </Grid>
+            </form>
+          }
+          {!!authUser &&
+            <Typography component="h1" variant="h4" className={classes.header}>You're already logged in!</Typography>
+          }
         </div>
       </Container>
     );
   }
 }
 
-export default withStyles(styles)(FAccountRequest);
+export default withStyles(styles)(withAuthConsumer(FAccountRequest));
