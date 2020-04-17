@@ -200,7 +200,7 @@ function PaymentForm(props) {
     let error = helper.validateField('donation', val);
     console.log("HEYY " + error);
 
-    if (error === '' && Number.parseInt(val) >= (goal-raised)) error = 'Please enter a donation amount that will not exceed the goal.';
+    if (error === '' && Number.parseInt(val) > (goal-raised)) error = 'Please enter a donation amount that will not exceed the goal.';
     setErrorMsg(error);
 
     if (error === '') setAmount(val);

@@ -166,7 +166,7 @@ class TagSearch extends React.Component {
         renderInput={params => (
              
           <TextField {...params}                          //TEST
-            label="Select Tags"
+            label={this.props.textLabel || "Search"}
             fullWidth
             multiline
             InputProps={{

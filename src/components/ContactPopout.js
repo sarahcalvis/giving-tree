@@ -43,6 +43,7 @@ export default function ContactPopout(props) {
           &emsp;Please direct any concerns to:
             <span style={{'fontWeight': 380}}>
             <br/>&emsp;
+            {props.cfData?.url &&
             <Link
               textDecoration='none'
               target='_blank'
@@ -50,6 +51,8 @@ export default function ContactPopout(props) {
               href={props.cfData.url}>
               {props.cfData.name}
             </Link>
+            }
+            {!props.cfData?.url && <span>{props.cfData.name}</span>}
             <br/>
             {props.cfData.public_phone && 
             <span>&emsp;&emsp;Call:&nbsp;
@@ -61,13 +64,15 @@ export default function ContactPopout(props) {
             </span>}
 
             <br/>&emsp;
+            {props.nonprofitData?.url &&
             <Link
               textDecoration='none'
               target='_blank'
               rel='noopener noreferrer'
               href={props.nonprofitData.url}>
               {props.nonprofitData.name}
-            </Link>
+            </Link>}
+            {!props.nonprofitData?.url && <span>{props.nonprofitData.name}</span>}
             <br/>
             {props.nonprofitData.phone && 
             <span>&emsp;&emsp;Call:&nbsp;

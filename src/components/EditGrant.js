@@ -179,6 +179,7 @@ export default function EditGrant(props) {
             <Text type='card-subheading' text={'Search for a tag or create a new tag to help donors find the grants they are looking for.'} />
             <TagSearch
               parentCallback={tagsCallback}
+              textLabel="Select Tags"
               tags={props.grantData?.tags} />
           </div>
         </Grid>

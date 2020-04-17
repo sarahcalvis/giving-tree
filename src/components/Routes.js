@@ -32,7 +32,7 @@ export default function Routes() {
         <Route exact path='/foundation/create-grant' component={FEditGrant} />
         <Route exact path='/foundation/settings' component={FSettings} />
         <Route exact path='/signin' component={SignIn} />
-        <Route exact path='/signup' component={SignUp} />
+        {/* <Route exact path='/signup' component={SignUp} /> */}
         <Route exact path='/forgot' component={ForgotPassword} />
         <Route exact path='/meta-admin' component={MetaAdmin} />
         <Route component={NotFound} />
