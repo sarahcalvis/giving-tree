@@ -51,7 +51,7 @@ function SignIn(props) {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5" className={classes.header}>
-          Sign In
+          Foundation Sign In
         </Typography>
         {!authUser &&
           <React.Fragment>
@@ -207,7 +207,7 @@ class SignInFormBase extends Component {
           disabled={!isValid}
         >
           Sign In
-                        </Button>
+        </Button>
       </form>
     );
   }
@@ -220,7 +220,7 @@ const SignUpForgotLink = ({ classes }) => (
       </Link>
     </Grid>
     <Grid item>
-      <Link href='/signup' variant="body2">
+      <Link href='/request-account' variant="body2">
         Don't have an account? Sign Up
       </Link>
     </Grid>

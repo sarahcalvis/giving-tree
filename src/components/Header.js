@@ -55,10 +55,7 @@ export function Header(props) {
 
   const SignedOut = () => (
     <React.Fragment>
-      <MenuItem onClick={() => {
-        props.history.push(urlExt)
-      }
-      }>Login</MenuItem>
+      <MenuItem onClick={() => {handleClose(); props.history.push(urlExt);}}>Foundation Login</MenuItem>
     </React.Fragment>
   );
 
