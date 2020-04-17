@@ -2,6 +2,7 @@ import React, { useEffect, useContext } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import AuthUserContext from '../auth/context.js';
 import LargeGrantCard from '../components/LargeGrantCard.js';
+import InfoIcon from '../components/InfoIcon.js'
 import Text from '../components/Text.js';
 import firebase from '../firebase.js';
 import Button from '@material-ui/core/Button';
@@ -241,6 +242,7 @@ function Grant(props) {
                         direction="column"
                         justify="flex-end"
                         alignItems="flex-start">
+                        <Grid container direction='row' justify='flex-start' alignContent='flex-center'>
                         <Grid item>
                           <Button
                             color='primary'
@@ -248,6 +250,10 @@ function Grant(props) {
                             onClick={toggleModal}>
                             Delete
                           </Button>
+                        </Grid>
+                          <Grid item>
+                            <InfoIcon infoMessage="Delete grant (this action cannot be undone)." />
+                          </Grid>
                         </Grid>
                         <Grid item>
                           <Link
@@ -260,6 +266,7 @@ function Grant(props) {
                             </Button>
                           </Link>
                         </Grid>
+                        <Grid container direction='row' justify='flex-start' alignContent='flex-center'>
                         <Grid item>
                           <Button
                             color='primary'
@@ -267,6 +274,10 @@ function Grant(props) {
                             onClick={draftifyGrant}>
                             Unpublish and save to drafts
                           </Button>
+                        </Grid>
+                          <Grid item>
+                            <InfoIcon infoMessage="Donors will not see your grant and or be able to donate to it. The grant will be saved as a draft." />
+                          </Grid>
                         </Grid>
                       </Grid>
                     }
@@ -276,13 +287,18 @@ function Grant(props) {
                         direction="column"
                         justify="flex-end"
                         alignItems="flex-start">
-                        <Grid item>
-                          <Button
-                            color='primary'
-                            variant='contained'
-                            onClick={toggleModal}>
-                            Delete
+                        <Grid container direction='row' justify='flex-start' alignContent='flex-center'>
+                          <Grid item>
+                            <Button
+                              color='primary'
+                              variant='contained'
+                              onClick={toggleModal}>
+                              Delete
                           </Button>
+                          </Grid>
+                          <Grid item>
+                            <InfoIcon infoMessage="Delete grant (this action cannot be undone)." />
+                          </Grid>
                         </Grid>
                         <Grid item>
                           <Link
@@ -295,6 +311,7 @@ function Grant(props) {
                             </Button>
                           </Link>
                         </Grid>
+                        <Grid container direction='row' justify='flex-start' alignContent='flex-center'>
                         <Grid item>
                           <Button
                             color='primary'
@@ -302,6 +319,10 @@ function Grant(props) {
                             onClick={publishGrant}>
                             Publish
                           </Button>
+                        </Grid>
+                          <Grid item>
+                            <InfoIcon infoMessage="Donors will be able to see your grant and donate to it." />
+                          </Grid>
                         </Grid>
                       </Grid>
                     }
@@ -311,6 +332,7 @@ function Grant(props) {
                         direction="column"
                         justify="flex-end"
                         alignItems="flex-start">
+                        <Grid container direction='row' justify='flex-start' alignContent='flex-center'>
                         <Grid item>
                           <Button
                             onClick={createDraft}
@@ -318,6 +340,10 @@ function Grant(props) {
                             variant='contained'>
                             Copy to Drafts
                           </Button>
+                        </Grid>
+                          <Grid item>
+                            <InfoIcon infoMessage="Save a duplicate of this grant to your drafted grants." />
+                          </Grid>
                         </Grid>
                       </Grid>
                     }

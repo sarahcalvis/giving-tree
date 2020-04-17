@@ -3,7 +3,7 @@ import React, { useEffect, useContext } from 'react';
 
 import EditGrant from '../components/EditGrant.js';
 import Text from '../components/Text.js';
-import ContactPopout from '../components/InfoIcon.js'
+import InfoIcon from '../components/InfoIcon.js'
 import firebase from '../firebase';
 import * as helper from '../helpers/ValidationHelper.js';
 
@@ -384,7 +384,7 @@ function FEditGrant(props) {
                       </Button>
                     </Grid>
                     <Grid item>
-                      <ContactPopout infoMessage="Delete grant (this action cannot be undone)."/>
+                      <InfoIcon infoMessage="Delete grant (this action cannot be undone)."/>
                     </Grid>
                   </Grid>
                   <Grid container direction='row' justify='flex-start' alignContent='flex-center'>
@@ -397,7 +397,7 @@ function FEditGrant(props) {
                       </Button>
                     </Grid>
                     <Grid item>
-                      <ContactPopout infoMessage="Save to edit and/or publish at a later time. Donors won't be able to see your grant."/>
+                      <InfoIcon infoMessage="Save to edit and/or publish at a later time. Donors won't be able to see your grant."/>
                     </Grid>
                   </Grid>
                   <Grid container direction='row' justify='flex-start' alignContent='flex-center'>                   
@@ -411,7 +411,7 @@ function FEditGrant(props) {
                       </Button>
                     </Grid>
                     <Grid item>
-                      <ContactPopout infoMessage="Donors will be able to see your grant and donate to it."/>
+                      <InfoIcon infoMessage="Donors will be able to see your grant and donate to it."/>
                     </Grid>
                   </Grid>
                 </Grid>
