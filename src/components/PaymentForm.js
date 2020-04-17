@@ -9,6 +9,7 @@ import firebase from '../firebase.js';
 import ProgressBar from '../components/ProgressBar.js';
 import AuthUserContext from '../auth/context.js';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import * as helper from '../helpers/ValidationHelper.js';
 // FYI: removing this unused import does make the whole project crash, do not know why
 import * as naughtyFirebase from 'firebase';
 import {
@@ -19,6 +20,7 @@ import Button from '@material-ui/core/Button';
 import { useDocument } from 'react-firebase-hooks/firestore';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
+import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -53,6 +55,9 @@ const useStyles = makeStyles(theme => ({
   },
   padding: {
     paddingBottom: theme.spacing(2),
+  },
+  errorMsg: {
+    color: 'red',
   }
 }))
 
@@ -67,6 +72,7 @@ function PaymentForm(props) {
   // Record transaction state
   const [status, setStatus] = React.useState('incomplete');
   const [amount, setAmount] = React.useState('');
+  const [errorMsg, setErrorMsg] = React.useState(' ');
   const [clicked, setClicked] = React.useState(false);
 
   // Details about the grant we will get from the database
@@ -120,76 +126,85 @@ function PaymentForm(props) {
     setClicked(true);
 
     // Confirm payment amount is in bounds
-    if (amountIsGood() && stripeId !== '') {
+    if (errorMsg ==='' && stripeId !== '') {
 
       // Make the token
       let { token } = await props.stripe.createToken({ name: 'Giving Tree Donor' });
 
+      if (token) {
+        
+
       // Set the status to waiting
       setStatus('waiting');
 
-      // Send the payment to the server
-      let response = await fetch('/charge', {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain' },
-        body: token.id + ' amount: ' + (amount * 100) + ' description: ' + grant + ' account: ' + stripeId,
-      });
-
-      if (response.ok) {
-        let res = await response.text();
-
-        let grantRef = db.collection('grants').doc(grantId);
-
-        // Update the donation collection for the grant in firebase
-        grantRef.collection('donations').add({
-          donation: Number.parseInt(amount),
-          timestamp: naughtyFirebase.firestore.Timestamp.fromDate(new Date()),
-        }).then(ref => {
-          // Update the total donation amount for the grant in firebase
-          db.runTransaction(t => {
-            return t.get(grantRef)
-              .then(doc => {
-                let newMoneyRaised = doc.data().money_raised + Number.parseInt(amount);
-                t.update(grantRef, { money_raised: newMoneyRaised });
-              });
-          }).then(result => {
-            // Record transaction complete
-            setStatus('complete');
-          }).catch(err => {
-            console.log('Grant total update error:', err);
-          });
-
+        // Send the payment to the server
+        let response = await fetch('/charge', {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain' },
+          body: token.id + ' amount: ' + (amount * 100) + ' description: ' + grant + ' account: ' + stripeId,
         });
 
-        let userRef = db.collection('users').doc(user.user_id);
-        // Update the donation collection for the user in firebase
-        userRef.collection('donations').add({
-          amount: Number.parseInt(amount),
-          grant: grantId,
-          timestamp: naughtyFirebase.firestore.Timestamp.fromDate(new Date()),
-        }).then(ref => {
-          }).then(result => {
-            // Record transaction complete
-            setStatus('complete');
-          }).catch(err => {
-            console.log('User donations update error:', err);
+        if (response.ok) {
+          let res = await response.text();
+
+          let grantRef = db.collection('grants').doc(grantId);
+
+          // Update the donation collection for the grant in firebase
+          grantRef.collection('donations').add({
+            donation: Number.parseInt(amount),
+            timestamp: naughtyFirebase.firestore.Timestamp.fromDate(new Date()),
+          }).then(ref => {
+            // Update the total donation amount for the grant in firebase
+            db.runTransaction(t => {
+              return t.get(grantRef)
+                .then(doc => {
+                  let newMoneyRaised = doc.data().money_raised + Number.parseInt(amount);
+                  t.update(grantRef, { money_raised: newMoneyRaised });
+                });
+            }).then(result => {
+              // Record transaction complete
+              setStatus('complete');
+            }).catch(err => {
+              console.log('Grant total update error:', err);
+            });
+
           });
-      } else {
-        setStatus('error');
+          if(user && user.user_id){
+            let userRef = db.collection('users').doc(user.user_id);
+            // Update the donation collection for the user in firebase
+            userRef.collection('donations').add({
+              amount: Number.parseInt(amount),
+              grant: grantId,
+              timestamp: naughtyFirebase.firestore.Timestamp.fromDate(new Date()),
+            }).then(ref => {
+            }).then(result => {
+              // Record transaction complete
+              setStatus('complete');
+            }).catch(err => {
+              console.log('User donations update error:', err);
+            });
+          }
+        } else {
+          setStatus('error');
+        }
+      }
+      else{
+        setClicked(false);
+        setErrorMsg("Invalid payment details entered.");
       }
     }
   }
 
-  // Tell whether donation amount is valid
-  const amountIsGood = () => {
-    if (Number.parseInt(amount) > 0 &&
-      !Number.parseInt(amount).isNaN &&
-      Number.parseInt(amount) <= (goal - raised)) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+  const handleChange = event => {
+    const val = event.target.value;
+    let error = helper.validateField('donation', val);
+    console.log("HEYY " + error);
+
+    if (error === '' && Number.parseInt(val) >= (goal-raised)) error = 'Please enter a donation amount that will not exceed the goal.';
+    setErrorMsg(error);
+
+    if (error === '') setAmount(val);
+  };
 
   return (
     <Container className={classes.card}>
@@ -205,15 +220,19 @@ function PaymentForm(props) {
               <input
                 className={classes.stripeElement}
                 placeholder="Amount"
-                onInput={e => setAmount(e.target.value)} />
+                onChange={handleChange}
+              />
+              <Typography component="p" variant = 'subtitle1' className={classes.errorMsg} >
+                {errorMsg}
+              </Typography>
               <Button
-                disabled={!amountIsGood() || clicked}
+                disabled={errorMsg !== '' || clicked}
                 fullWidth
                 color="primary"
                 className={classes.button}
                 variant="contained"
                 onClick={submit}>
-                Donate {amountIsGood() && !clicked ? ('$' + amount) : ''}
+                Donate {errorMsg === '' && !clicked ? ('$' + amount) : ''}
               </Button>
             </div>
           }

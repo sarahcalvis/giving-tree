@@ -10,6 +10,7 @@ export const validateField = (name, value) => {
       return validateAddress(value);
     case 'date_deadline':
       return validateDeadline(value);
+    case 'donation':
     case 'goal_amt':
       return validateGoal(value);
     case 'email':
@@ -107,13 +108,19 @@ const validateDeadline = (deadline) => {
 const validateGoal = (goal) => {
   let errorMsg = '';
   
-  let pattern = new RegExp(/^\d+(?:\.\d{0,2})?$/);
+  let pattern = new RegExp(/^\d+$/);
+  let patternDecimals = new RegExp(/^\d+(?:\.\d{0,2})?$/);
   
-  if (goal === '') errorMsg = '*Please enter a goal amount.';
+  if (goal === '') errorMsg = '*Please enter an amount.';
   
   if (!pattern.test(goal)) errorMsg = '*Please enter a valid money amount.';
+  
+  if (!pattern.test(goal)){
+    if(!patternDecimals.test(goal)) errorMsg = '*Please enter a valid money amount.';
+    else errorMsg = '*Please enter a valid money amount in full dollars (without decimals).';
+  }   
 
-  if (!isNaN(parseFloat(goal)) && parseFloat(goal) <= 0) errorMsg = '*Goal must be positive.';
+  if (!isNaN(parseFloat(goal)) && parseFloat(goal) <= 0) errorMsg = '*Amount must be positive.';
 
   return errorMsg;
 }
