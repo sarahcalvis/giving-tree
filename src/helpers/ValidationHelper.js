@@ -117,7 +117,7 @@ const validateGoal = (goal) => {
   
   if (!pattern.test(goal)){
     if(!patternDecimals.test(goal)) errorMsg = '*Please enter a valid money amount.';
-    else errorMsg = '*Please enter a valid money amount in full dollars (without cents).';
+    else errorMsg = '*Please enter a valid money amount in full dollars (without decimals).';
   }   
 
   if (!isNaN(parseFloat(goal)) && parseFloat(goal) <= 0) errorMsg = '*Amount must be positive.';
