@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 
+import { withAuthConsumer } from '../auth';
 import firebase from '../firebase.js';
 import * as helper from '../helpers/ValidationHelper.js';
 
@@ -41,7 +42,7 @@ const styles = theme => ({
 });
 
 function SignIn(props) {
-  const { classes } = props;
+  const { classes, authUser } = props;
 
   return (
     <Container component="main" maxWidth="xs">
@@ -52,8 +53,15 @@ function SignIn(props) {
         <Typography component="h1" variant="h5" className={classes.header}>
           Sign In
         </Typography>
-        <SignInForm classes={classes} />
-        <SignUpForgotLink classes={classes} />
+        {!authUser &&
+          <React.Fragment>
+            <SignInForm classes={classes} />
+            <SignUpForgotLink classes={classes} />
+          </React.Fragment>
+        }
+        {!!authUser &&
+          <Typography component="h1" variant="h4" className={classes.header}>You're already logged in!</Typography>
+        }
       </div>
     </Container>
   );
@@ -84,8 +92,8 @@ class SignInFormBase extends Component {
           result.user.getIdTokenResult()
             .then((idTokenResult) => {
               const cc = idTokenResult.claims;
-              if (cc.admin) { 
-                this.props.history.push('/meta-admin');   
+              if (cc.admin) {
+                this.props.history.push('/meta-admin');
               }
               else if (cc.status) {
                 switch (cc.status) {
@@ -98,14 +106,14 @@ class SignInFormBase extends Component {
                   case 'current':
                     firebase.firestore().collection("communityFoundations").doc(cc.cfId).get()
                       .then((doc) => {
-                        if (doc.data().stripe_id) { 
-                          this.props.history.push('/foundation'); 
+                        if (doc.data().stripe_id) {
+                          this.props.history.push('/foundation');
                         }
-                        else { 
-                          this.props.history.push('/foundation/stripe-setup'); 
+                        else {
+                          this.props.history.push('/foundation/stripe-setup');
                         }
-                      }).catch((error) => { 
-                        console.error("Error retrieving CF document: ", error); 
+                      }).catch((error) => {
+                        console.error("Error retrieving CF document: ", error);
                       });
                     break;
                   default:
@@ -116,8 +124,8 @@ class SignInFormBase extends Component {
                 this.props.history.push('/');
               }
             })
-            .catch((error) => { 
-              console.log("ERROR: " + error.message); 
+            .catch((error) => {
+              console.log("ERROR: " + error.message);
             });
         })
         .catch((error) => {
@@ -148,77 +156,77 @@ class SignInFormBase extends Component {
     this.setState({ isValid: noErrors && noEmptyFields });
   }
 
-    render() {
-        const {
-            email,
-            password,
-            errors,
-            isValid,
-        } = this.state;
+  render() {
+    const {
+      email,
+      password,
+      errors,
+      isValid,
+    } = this.state;
 
-        const { classes } = this.props;
+    const { classes } = this.props;
 
-        return (
-            <form className={classes.form} onSubmit={this.onSubmit} noValidate>
-                <Typography component="h6" className={classes.errorMsg} >
-                    {errors.submit}
-                </Typography>
-                <TextField
-                    variant="outlined"
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="email"
-                    name="email"
-                    value={email}
-                    onChange={this.onChange}
-                    type="text"
-                    label="Email Address"
-                    error={errors.email !== ""}
-                    helperText={errors.email}
-                    autoFocus
-                />
-                <TextField
-                    variant="outlined"
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="password"
-                    name="password"
-                    value={password}
-                    onChange={this.onChange}
-                    type="password"
-                    label="Password"
-                />
-                <Button className={classes.submit}
-                    type="submit"
-                    fullWidth
-                    id="submit-button"
-                    variant="contained"
-                    color="primary"
-                    disabled={!isValid}
-                >
-                    Sign In
+    return (
+      <form className={classes.form} onSubmit={this.onSubmit} noValidate>
+        <Typography component="h6" className={classes.errorMsg} >
+          {errors.submit}
+        </Typography>
+        <TextField
+          variant="outlined"
+          margin="normal"
+          required
+          fullWidth
+          id="email"
+          name="email"
+          value={email}
+          onChange={this.onChange}
+          type="text"
+          label="Email Address"
+          error={errors.email !== ""}
+          helperText={errors.email}
+          autoFocus
+        />
+        <TextField
+          variant="outlined"
+          margin="normal"
+          required
+          fullWidth
+          id="password"
+          name="password"
+          value={password}
+          onChange={this.onChange}
+          type="password"
+          label="Password"
+        />
+        <Button className={classes.submit}
+          type="submit"
+          fullWidth
+          id="submit-button"
+          variant="contained"
+          color="primary"
+          disabled={!isValid}
+        >
+          Sign In
                         </Button>
-            </form>
-        );
-    }
+      </form>
+    );
+  }
 }
 const SignUpForgotLink = ({ classes }) => (
   <Grid container>
     <Grid item xs>
       <Link href='/forgot' variant="body2">
         Forgot password?
-            </Link>
+      </Link>
     </Grid>
     <Grid item>
       <Link href='/signup' variant="body2">
         Don't have an account? Sign Up
-            </Link>
+      </Link>
     </Grid>
   </Grid>
 );
 
 const SignInForm = withRouter(SignInFormBase);
-export default withStyles(styles)(SignIn);
+export default withStyles(styles)(withAuthConsumer(SignIn));
 export { SignInForm, SignUpForgotLink };
