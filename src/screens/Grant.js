@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import AuthUserContext from '../auth/context.js';
 import LargeGrantCard from '../components/LargeGrantCard.js';
 import Text from '../components/Text.js';
 import firebase from '../firebase.js';
@@ -205,6 +206,7 @@ function Grant(props) {
 
   // Find out if we are a foundation or a donor
   const [user] = React.useState(window.location.pathname.split('/')[1] === 'grants' ? 'donor' : 'foundation');
+  const authUser = useContext(AuthUserContext);
 
   return (
     <div className={classes.card}>
@@ -231,7 +233,7 @@ function Grant(props) {
                   />
                 </Grid>
 
-                {user === 'foundation' &&
+                {user === 'foundation' && authUser?.status === 'current' &&
                   <Grid item>
                     {grantData.status === 'current' &&
                       <Grid container

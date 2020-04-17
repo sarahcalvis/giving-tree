@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 
+import { withAuthConsumer } from '../auth';
 import firebase from '../firebase.js';
 import * as helper from '../helpers/ValidationHelper.js';
 
@@ -41,7 +42,7 @@ const styles = theme => ({
 });
 
 function SignUp(props) {
-  const { classes } = props;
+  const { classes, authUser } = props;
 
   return (
     <Container component="main" maxWidth="xs">
@@ -52,8 +53,15 @@ function SignUp(props) {
         <Typography component="h1" variant="h5" className={classes.header}>
           Sign Up
         </Typography>
-        <SignUpForm classes={classes} />
-        <SignInForgotLink classes={classes} />
+        {!authUser &&
+          <React.Fragment>
+            <SignUpForm classes={classes} />
+            <SignInForgotLink classes={classes} />
+          </React.Fragment>
+        }
+        {!!authUser &&
+          <Typography component="h1" variant="h4" className={classes.header}>You're already logged in!</Typography>
+        }
       </div>
     </Container>
   );
@@ -82,13 +90,14 @@ class SignUpFormBase extends Component {
       const { email, passwordOne } = this.state;
       firebase.auth().createUserWithEmailAndPassword(email, passwordOne)
         .then((result) => {
-            //Do Misc Stuff for Donor Account--Post to Server? Set firebase rules? Create empty donor document?
-            //Redirect User to Home
-            this.props.history.push('/');
+          //Do Misc Stuff for Donor Account--Post to Server? Set firebase rules? Create empty donor document?
+          //Redirect User to Home
+          this.props.history.push('/');
         })
         .catch((error) => {
-            //Failure--TODO: Cleanup Firebase Error Messages
-            this.setState({ errors: { ...this.state.errors, submit: error.message } 
+          //Failure--TODO: Cleanup Firebase Error Messages
+          this.setState({
+            errors: { ...this.state.errors, submit: error.message }
           });
         });
     }
@@ -99,12 +108,12 @@ class SignUpFormBase extends Component {
     const { name, value } = event.target;
     this.setState({ [name]: value });
     if (name === 'passwordTwo') {
-      this.setState({ errors: { ...this.state.errors, submit: '', [name]: helper.confirmMatching(this.state.passwordOne, value) } }, 
+      this.setState({ errors: { ...this.state.errors, submit: '', [name]: helper.confirmMatching(this.state.passwordOne, value) } },
         this.validateForm
       );
     }
     else {
-      this.setState({ errors: { ...this.state.errors, submit: '', [name]: helper.validateField(name, value) } }, 
+      this.setState({ errors: { ...this.state.errors, submit: '', [name]: helper.validateField(name, value) } },
         this.validateForm
       );
     }
@@ -206,5 +215,5 @@ const SignInForgotLink = ({ classes }) => (
 );
 
 const SignUpForm = withRouter(SignUpFormBase);
-export default withStyles(styles)(SignUp);
+export default withStyles(styles)(withAuthConsumer(SignUp));
 export { SignUpForm, SignInForgotLink };

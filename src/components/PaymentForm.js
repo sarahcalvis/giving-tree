@@ -60,7 +60,6 @@ const useStyles = makeStyles(theme => ({
 function PaymentForm(props) {
   const classes = useStyles();
   const user = useContext(AuthUserContext);
-  // ^^ use user.user_id
 
   // Grant details received as props
   const [grantId] = React.useState(props.grantId);

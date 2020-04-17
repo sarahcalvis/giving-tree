@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { withAuthProtection } from '../auth';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import Link from '@material-ui/core/Link';
@@ -22,7 +23,7 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-export default function FStripeSetup() {
+function FStripeSetup() {
   const classes = useStyles();
 
   // Set tab title
@@ -106,3 +107,5 @@ export default function FStripeSetup() {
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
+
+export default withAuthProtection()(FStripeSetup);

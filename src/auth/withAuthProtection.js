@@ -3,13 +3,13 @@ import React, { useEffect } from 'react';
 import Text from '../components/Text.js';
 import { withAuthConsumer } from './context';
 
-const withAuthProtection = (condition = (authUser) => !!authUser) => Component => {
+const withAuthProtection = (condition = (authUser) => {return authUser && authUser.status === 'current'}) => Component => {
   function WithAuthorization(props) {
     const [message, setMessage] = React.useState("");
 
     useEffect(() => {
       setTimeout(() => {
-        setMessage("You are not authorized to view this page. Please sign in.")
+        setMessage("You are not authorized to view this page.")
       }, 1000);
     }, []);
 

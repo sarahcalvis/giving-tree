@@ -1,6 +1,7 @@
 import React, { useEffect, useContext } from 'react';
 import { withRouter } from 'react-router-dom';
 
+import { withAuthProtection } from '../auth';
 import { AuthUserContext } from '../auth';
 
 import Container from '@material-ui/core/Container';
@@ -36,4 +37,5 @@ function FRequestDenied() {
   );
 }
 
-export default withRouter(FRequestDenied);
+const condition = (authUser) => authUser && authUser.status === 'denied';
+export default withRouter(withAuthProtection(condition)(FRequestDenied));
