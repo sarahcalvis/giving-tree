@@ -85,6 +85,7 @@ function MetaAdmin(props) {
             cfStatus: status,
           },
           (data, postStatus) => {
+            console.log(data);
             const json = JSON.parse(data);
 
             if (postStatus === 'success' && data && json && json.status === 'success') {

@@ -97,36 +97,37 @@ app.post('/updateCf', (req, res) => {
         if (typeof cfEmail !== 'undefined' && typeof cfStatus !== 'undefined'
           && cfEmail !== '' && cfStatus !== '') {
           //Get the CF User and update their permissions
-          admin.auth().getUserByEmail(cfEmail).then((user) => {
-            if (typeof user.customClaims.cfId !== 'undefined') {
-              admin.auth().setCustomUserClaims(user.uid, { cfId: user.customClaims.cfId, status: cfStatus })
-                .then(function () {
-                  // Tell client to refresh token on user.
-                  res.end(JSON.stringify({ status: 'success' }));
-                })
-                .catch((error) => {
-                  res.end(JSON.stringify({ status: error }));
-                });
-            }
-            else {
-              res.end(JSON.stringify({ status: 'ERROR: Could not retrieve cfId from CF custom claims.' }));
-            }
-          })
+          admin.auth().getUserByEmail(cfEmail)
+            .then((user) => {
+              if (typeof user.customClaims.cfId !== 'undefined') {
+                admin.auth().setCustomUserClaims(user.uid, { cfId: user.customClaims.cfId, status: cfStatus })
+                  .then(function () {
+                    // Tell client to refresh token on user.
+                    res.send(JSON.stringify({ status: 'success' }));
+                  })
+                  .catch((error) => {
+                    res.send(JSON.stringify({ status: error.message }));
+                  });
+              }
+              else {
+                res.send(JSON.stringify({ status: 'ERROR: Could not retrieve cfId from CF custom claims.' }));
+              }
+            })
             .catch((error) => {
-              res.end(JSON.stringify({ status: error }));
+              res.send(JSON.stringify({ status: error.message }));
             });
         }
         else {
-          res.end(JSON.stringify({ status: 'ERROR: Invalid params' }));
+          res.send(JSON.stringify({ status: 'ERROR: Invalid params' }));
         }
       }
       else {
-        res.end(JSON.stringify({ status: 'ERROR: Not metaadmin' }));
+        res.send(JSON.stringify({ status: 'ERROR: Not metaadmin' }));
       }
     })
     .catch((error) => {
       console.log('NOOO at the end\n');
-      res.end(JSON.stringify({ status: error }));
+      res.send(JSON.stringify({ status: error.message }));
     });
 
 });
@@ -152,28 +153,28 @@ app.post('/requestCf', (req, res) => {
                 .then(() => {
                   console.log('set cc!\n');
                   // Tell client to refresh token on user.
-                  res.end(JSON.stringify({ status: 'success' }));
+                  res.status(201).json(JSON.stringify({ status: 'success' }));
                 })
                 .catch((error) => {
                   console.log('failed cc!\n');
 
-                  res.end(JSON.stringify({ status: error }));
+                  res.status(401).json(JSON.stringify({ status: error.message }));
                 });
               console.log('after cc\n');
             });
           })
           .catch((error) => {
-            res.end(JSON.stringify({ status: error }));
+            res.status(402).json(JSON.stringify({ status: error.message }));
           });
       })
       .catch((error) => {
-        res.end(JSON.stringify({ status: error }));
+        res.status(403).json(JSON.stringify({ status: error.message }));
       });
     console.log('end of not metaadmin\n');
   })
     .catch((error) => {
       console.log('NOOO at the end\n');
-      res.end(JSON.stringify({ status: error }));
+      res.status(405).json(JSON.stringify({ status: error.message }));
     });
 });
 

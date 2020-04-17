@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function ContactPopout(props) {
+export default function InfoIcon(props) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
