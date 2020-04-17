@@ -99,9 +99,9 @@ export default function EditGrant(props) {
   // Get input from text fields
   const handleInput = (e) => {
     if (e.target.id === 'goal_amt') {
-      props.callback(e.target.value.replace('$', '').replace(/,/g, ''), e.target.id);
+      props.callback(e.target.value.replace('$', '').replace(/,/g, '').trim(), e.target.id);
     } else {
-      props.callback(e.target.value, e.target.id);
+      props.callback(e.target.value.trim(), e.target.id);
     }
   }
 
