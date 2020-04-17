@@ -153,28 +153,28 @@ app.post('/requestCf', (req, res) => {
                 .then(() => {
                   console.log('set cc!\n');
                   // Tell client to refresh token on user.
-                  res.send(JSON.stringify({ status: 'success' }));
+                  res.status(201).json(JSON.stringify({ status: 'success' }));
                 })
                 .catch((error) => {
                   console.log('failed cc!\n');
 
-                  res.send(JSON.stringify({ status: error.message }));
+                  res.status(401).json(JSON.stringify({ status: error.message }));
                 });
               console.log('after cc\n');
             });
           })
           .catch((error) => {
-            res.send(JSON.stringify({ status: error.message }));
+            res.status(402).json(JSON.stringify({ status: error.message }));
           });
       })
       .catch((error) => {
-        res.send(JSON.stringify({ status: error.message }));
+        res.status(403).json(JSON.stringify({ status: error.message }));
       });
     console.log('end of not metaadmin\n');
   })
     .catch((error) => {
       console.log('NOOO at the end\n');
-      res.send(JSON.stringify({ status: error.message }));
+      res.status(405).json(JSON.stringify({ status: error.message }));
     });
 });
 
