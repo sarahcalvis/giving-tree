@@ -73,7 +73,6 @@ function FDashboard(props) {
   // Observe the foundation code
   useEffect(() => {
     if (code && user?.cfId) {
-      console.log('in here', user?.cfId);
       submit();
     }
   }, [user]);
@@ -92,7 +91,7 @@ function FDashboard(props) {
         updateStripeIdDB(resJSON?.stripeId);
         //send the id to the database
       } else {
-        console.log('did not do good');
+        console.log('Error submitting.');
         setStripeUpdateCompleted(true);
         //it went wrong and idk what to do in this case
       }
@@ -101,7 +100,6 @@ function FDashboard(props) {
 
   // Update Stripe ID In database
   const updateStripeIdDB = (stripeId) => {
-    console.log('updating account ID to ' + stripeId);
     db.doc('communityFoundations/' + user?.cfId).update({ 'stripe_id': stripeId })
     setStripeUpdateCompleted(true);
   }
@@ -162,7 +160,6 @@ function FDashboard(props) {
   }, [snapshot, error, loading]);
 
   function searchCallback(childData) {
-    // console.log("childData in dashboard: ", childData);
     var curGrants = [];
     var exGrants = [];
     var drGrants = [];
@@ -183,7 +180,6 @@ function FDashboard(props) {
         exGrants.push(grant);
       }
     });
-    console.log("CURRENT GRANTS: " + curGrants);
 
     setCurrentGrants(curGrants);
     setDraftedGrants(drGrants);

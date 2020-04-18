@@ -27,12 +27,7 @@ export default function DDashboard() {
     var newDocs = [];
     if (!loading && !error) {
       snapshot.forEach(function (doc) {
-        //console.log("a date: ", doc.data().date_deadline);
         const fbData = doc.data();
-        //console.log("title: ", fbData.title);
-        //console.log("status: ", fbData.status);
-        //console.log("date comparison", fbData.date_deadline.seconds, '> ',Date.now()/1000 );
-        //console.log("date comparison", fbData.date_deadline.seconds > Date.now()/1000 );
         //comparing by seconds vs milliseconds
         if (fbData.status === 'current') {   
           newDocs.push({
@@ -66,13 +61,11 @@ export default function DDashboard() {
         }
       });
       setGrants(newGrants);
-      //console.log("newDocs: ", newDocs);
       setDocs(newDocs);
     }
   }, [snapshot, error, loading]);
 
   function searchCallback(childData) {
-    console.log("childData in dashboard: ", childData);
     var newGrants = [];
     childData.forEach((meta) => {
       newGrants.push(
@@ -87,7 +80,6 @@ export default function DDashboard() {
       );
     });
     setGrants(newGrants);
-    //console.log("newGrants: ", newGrants);
   }
 
   const classes = useStyles();

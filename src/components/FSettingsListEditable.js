@@ -30,7 +30,6 @@ export default function EditableData(props){
 
 	const onChange = (event, field) => {
 		const value = event.target.value;
-		//console.log(field+": "+event.target.value);
 		setHelperText({ ...helperText, [field]: helper.validateField(field, value) },
 			setChangedText({ ...changedText, [field]: value })
 		);
@@ -46,7 +45,6 @@ export default function EditableData(props){
 		if(canSubmit){
 			props.onSubmit(changedText)
 		}else{
-			console.log("Dang it we can't, here's why: "+helperText);
 			if(props.errorCallback){
 				props.errorCallback(helperText);
 			}
