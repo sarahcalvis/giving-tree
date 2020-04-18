@@ -60,7 +60,6 @@ export const validateEmail = (email) => {
 
 const validateTitle = (title) => {
   let errorMsg = '';
-  console.log("title: ", title);
   if (title === '') {
     errorMsg = '*Please enter a grant title.';
   }

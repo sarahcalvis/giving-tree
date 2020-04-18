@@ -65,7 +65,6 @@ function Grant(props) {
           if (!doc.exists) {
             console.log('No such document for grant ' + id);
           } else {
-            console.log(doc.data());
             setGrantData(doc.data());
           }
         })
@@ -146,7 +145,6 @@ function Grant(props) {
       status: 'deleted'
     }).then(function () {
       toggleModal();
-      console.log('Grant deleted');
       props.history.push('/foundation')
     });
   }
@@ -156,7 +154,6 @@ function Grant(props) {
     db.collection('grants').doc(id).update({
       status: 'draft'
     }).then(function () {
-      console.log('Grant moved to drafts');
       props.history.push('/foundation')
     });
   }
@@ -166,7 +163,6 @@ function Grant(props) {
     db.collection('grants').doc(id).update({
       status: 'current'
     }).then(function () {
-      console.log('Grant published');
       props.history.push('/foundation')
     });
   }
