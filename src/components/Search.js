@@ -177,7 +177,9 @@ class Search extends Component {
             <LocationSearch parentCallback={this.locationCallback}/>
           </Grid>
           <Grid item xs={6} lg={2}>
-            <SearchRadius parentCallback={this.radiusCallback}/>
+            <SearchRadius 
+              loc={this.state.centerLoc.address !== 'no where'}
+              parentCallback={this.radiusCallback}/>
           </Grid>
           <Grid item xs={6} lg={2}>
             <SortBy parentCallback={this.sortByCallback}/>

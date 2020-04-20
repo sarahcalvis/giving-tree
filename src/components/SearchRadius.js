@@ -5,6 +5,11 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 
+
+// 1) Radius should be set to none and disabled when nothing is in search.
+// 2) Radius should be enabled and default to 25mi when location is chosen.
+// 3) (1) and (2) should properly switch between each other.
+
 const useStyles = makeStyles(theme => ({
   formControl: {
     minWidth: 120
@@ -18,7 +23,7 @@ export default function SearchRadius(props) {
   const classes = useStyles();
   const [radius, setRadius] = React.useState("");
 
-  const inputLabel = React.useRef(null);
+  const inputLabel = React.useRef("None");
   const [labelWidth, setLabelWidth] = React.useState(0);
   React.useEffect(() => {
     setLabelWidth(inputLabel.current.offsetWidth);
@@ -28,6 +33,10 @@ export default function SearchRadius(props) {
     setRadius(event.target.value);
     props.parentCallback(event.target.value);
   };
+
+  React.useEffect(() => {
+    console.log(props.loc)
+  }, [props.loc])
 
   return (
     <div>
