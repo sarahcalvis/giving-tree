@@ -106,7 +106,6 @@ export const FSettingsMethods = () => {
       .then(function(querySnapshot) {
         querySnapshot.forEach(function(doc) {
           // doc.data() is never undefined for query doc snapshots
-          //console.log(doc.id, " => ", doc.data());
           callback(doc);
         });
       })
@@ -126,7 +125,6 @@ export const FSettingsMethods = () => {
     .get()
     .then(function(querySnapshot) {
       querySnapshot.forEach(function(doc) {
-        //console.log(doc.id, " => ", doc.data());
         // Build doc ref from doc.id
         db.collection("communityFoundations").doc(doc.id).update({
           name: temp.name,
@@ -147,33 +145,11 @@ export const FSettingsMethods = () => {
       console.error("Error writing document: ", error);
     });
   }
-  
-  /*const toggleAccountActive = (db, user, cfInfo, callback) => {
-    if(user){
-      db.collection('communityFoundations').where('personal_email','==',user.email)
-      .get()
-      .then(function(querySnapshot) {
-        querySnapshot.forEach(function(doc) {
-          const time = (cfInfo.date_deactivated === '') ? FIRESTORE.FieldValue.serverTimestamp() : '';
-          db.collection("communityFoundations").doc(doc.id).update(
-            {date_deactivated: time},
-          ).then(
-            () => callback(time)
-          );
-          console.log("Deactivation successfully toggled!")
-        });
-      })
-      .catch(function(error) {
-        console.error("Error writing document: ", error);
-      });
-    }
-  }*/
 
   return {
     toggleEdit,
     loadData,
     onSubmit
-    //toggleAccountActive,
   };
 }
 

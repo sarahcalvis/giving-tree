@@ -18,10 +18,10 @@ admin.firestore().collection("grants").get()
       })
   })
   .then(() => {
-    console.log("success");
+    //console.log("success");
   })
   .catch((e) => {
-    console.log("failure " + e);
+    //console.log("failure " + e);
   });
 //------------------------------------------------------------
 //Script to set admin

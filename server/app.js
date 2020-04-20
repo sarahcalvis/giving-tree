@@ -89,7 +89,6 @@ app.post('/updateCf', (req, res) => {
   // Verify the ID token and decode its payload.
   admin.auth().verifyIdToken(idToken)
     .then((claims) => {
-      console.log('verified token\n');
 
       //Check if metaadmin
       if (typeof claims.admin !== 'undefined' && claims.admin) {
@@ -126,7 +125,6 @@ app.post('/updateCf', (req, res) => {
       }
     })
     .catch((error) => {
-      console.log('NOOO at the end\n');
       res.send(JSON.stringify({ status: error.message }));
     });
 
@@ -139,28 +137,22 @@ app.post('/requestCf', (req, res) => {
 
   // Verify the ID token and decode its payload.
   admin.auth().verifyIdToken(idToken).then((claims) => {
-    console.log('verified token\n');
     //Get and store the cf document record id in the claims object
     admin.auth().getUser(claims.sub)
       .then((user) => {
-        console.log('got user\n');
         admin.firestore().collection('communityFoundations').where('personal_email', '==', user.email)
           .get()
           .then(function (querySnapshot) {
             querySnapshot.forEach(function (doc) {
-              console.log('got cf!\n');
               admin.auth().setCustomUserClaims(claims.sub, { cfId: doc.id, status: 'requested' })
                 .then(() => {
-                  console.log('set cc!\n');
                   // Tell client to refresh token on user.
                   res.status(201).json(JSON.stringify({ status: 'success' }));
                 })
                 .catch((error) => {
-                  console.log('failed cc!\n');
 
                   res.status(401).json(JSON.stringify({ status: error.message }));
                 });
-              console.log('after cc\n');
             });
           })
           .catch((error) => {
@@ -170,13 +162,10 @@ app.post('/requestCf', (req, res) => {
       .catch((error) => {
         res.status(403).json(JSON.stringify({ status: error.message }));
       });
-    console.log('end of not metaadmin\n');
   })
     .catch((error) => {
-      console.log('NOOO at the end\n');
       res.status(405).json(JSON.stringify({ status: error.message }));
     });
 });
 
 app.listen(process.env.PORT);
-// app.listen(9000, () => console.log('Listening on port 9000'));
