@@ -35,7 +35,8 @@ export default function SearchRadius(props) {
   };
 
   React.useEffect(() => {
-    console.log(props.loc)
+    if (props.loc && radius == '') setRadius(25)
+    props.parentCallback(25);
   }, [props.loc])
 
   return (
