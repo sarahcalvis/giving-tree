@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function SearchRadius(props) {
   const classes = useStyles();
-  const [radius, setRadius] = React.useState("");
+  const [radius, setRadius] = React.useState(-1);
 
   const inputLabel = React.useRef("None");
   const [labelWidth, setLabelWidth] = React.useState(0);
@@ -35,8 +35,14 @@ export default function SearchRadius(props) {
   };
 
   React.useEffect(() => {
-    if (props.loc && radius == '') setRadius(25)
-    props.parentCallback(25);
+    if (props.loc && radius == -1) {
+      setRadius(25)
+      props.parentCallback(25);
+    }
+    if (!props.loc) {
+      setRadius(-1)
+      props.parentCallback(-1);
+    }
   }, [props.loc])
 
   return (
