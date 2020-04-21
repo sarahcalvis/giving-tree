@@ -29,7 +29,8 @@ export default function Search(props) {
   const [searchResults, setSearchResults] = useState([{ dist: -1, data: {} }]);
   const [tagSearchResults, setTagSearchResults] = useState({ tags: [], freeText: [] });
   const [radius, setRadius] = useState(-1);
-  const [location, setLocation] = useState({ address: '', lat: -1000, long: -1000 });
+  const [location, setLocation] = useState({ address: '', lat: 0, long: 0 });
+  const [clearLocationVal, setClearLocationVal] = useState(false);
   const [sortBy, setSortBy] = useState('');
   const [updateDistCount, setUpdateDistCount] = useState(0);
 
@@ -135,9 +136,18 @@ export default function Search(props) {
 
 
   const tagFreeTextCallback = (tagsAndFreeText) => setTagSearchResults({ tags: tagsAndFreeText.tags, freeText: tagsAndFreeText.freeText });
-  const radiusCallback = (radius) => setRadius(radius);
+  const radiusCallback = (radius) => {
+    if (radius === -1) {
+      setLocation({ address: '', lat: 0, long: 0 });
+      setClearLocationVal(true);
+    }
+    setRadius(radius);
+  }
   const sortByCallback = (sortBy) => setSortBy(sortBy);
-  const locationCallback = (location) => setLocation(location);
+  const locationCallback = (location) => {
+    setClearLocationVal(false);
+    setLocation(location);
+  }
 
   return (
     <div className={classes.searchWrapper}>
@@ -146,10 +156,10 @@ export default function Search(props) {
           <TagSearch parentCallback={tagFreeTextCallback} />
         </Grid>
         <Grid item xs={12} md={6} lg={4}>
-          <LocationSearch parentCallback={locationCallback} />
+          <LocationSearch clearLocationVal={clearLocationVal} parentCallback={locationCallback} />
         </Grid>
         <Grid item xs={6} lg={2}>
-          <SearchRadius
+          <SearchRadius isDisabled={location.address === ''}
             parentCallback={radiusCallback} />
         </Grid>
         <Grid item xs={6} lg={2}>

@@ -28,6 +28,7 @@ export default function LocationSearch(props) {
   const gck = k1+k2+k3;
   Geocode.setApiKey(gck);
   const [inputValue, setInputValue] = React.useState("");
+  const [locationVal, setLocationVal] = React.useState("");
   const [options, setOptions] = React.useState([]);
   const loaded = React.useRef(false);
   if (typeof window !== "undefined" && !loaded.current) {
@@ -47,6 +48,7 @@ export default function LocationSearch(props) {
   }
 
   const handleChange = (event, value) => {
+    setLocationVal(value);
     if (value && typeof value !== 'undefined' && value.description.trim() !== '') {
       Geocode.fromAddress(value.description).then(
         response => {
@@ -111,7 +113,7 @@ export default function LocationSearch(props) {
       fullWidth
       includeInputInList
       disableOpenOnFocus
-      value={props.overrideVal}
+      value={(props.clearLocationVal) ? '' : locationVal}
       defaultValue={props.address}
       onChange={handleChange}
       renderInput={params => (

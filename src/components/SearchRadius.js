@@ -30,20 +30,20 @@ export default function SearchRadius(props) {
   }, []);
 
   const handleChange = event => {
-    setRadius(event.target.value);
-    props.parentCallback(event.target.value);
+    const val = event.target.value
+    setRadius(val);
+    props.parentCallback(val);
   };
 
-  // React.useEffect(() => {
-  //   if (props.loc && radius == -1) {
-  //     setRadius(25)
-  //     props.parentCallback(25);
-  //   }
-  //   if (!props.loc) {
-  //     setRadius(-1)
-  //     props.parentCallback(-1);
-  //   }
-  // }, [props.loc])
+  React.useEffect(() => {
+    if (!props.isDisabled && radius === -1) {
+      setRadius(25)
+      props.parentCallback(25);
+    }
+    else if (props.isDisabled) {
+      setRadius(-1);
+    }
+  }, [props.isDisabled])
 
   return (
     <div>
@@ -54,9 +54,11 @@ export default function SearchRadius(props) {
         <Select
           labelId="select-radius-label"
           id="select-radius"
-          value={radius}
+          value={(props.isDisabled) ? '' : radius}
           onChange={handleChange}
           labelWidth={labelWidth}
+          displayEmpty = {true}
+          disabled={props.isDisabled}
           fullWidth
         >
           <MenuItem value={-1}>
