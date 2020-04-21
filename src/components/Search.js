@@ -42,8 +42,8 @@ export default function Search(props) {
   const isMountedSort = useRef(false);
   const isMountedDist = useRef(false);
 
+  //Load docs from dashboard
   useEffect(() => {
-    console.log(1);
     let newSearchDocs = [];
     props_docs.forEach((doc) => {
       newSearchDocs.push({ dist: -1, data: doc });
@@ -54,7 +54,6 @@ export default function Search(props) {
   //Filters the results when search component values change
   useEffect(() => {
     if (isMountedFilter.current >= 2) {
-      console.log(2);
       let results = searchDocs.filter((searchDoc) => {
         const { tags, freeText } = tagSearchResults;
         const dat = searchDoc.data;
@@ -86,8 +85,6 @@ export default function Search(props) {
   //Sorts and returns the search results when either they or sortBy changes
   useEffect(() => {
     if (isMountedSort.current) {
-
-      console.log(3);
       let sortedResults = searchResults.slice();
       sortedResults.sort((a, b) => { return (a.data.dist - b.data.dist) });
 
@@ -123,7 +120,6 @@ export default function Search(props) {
   //Updates the distances of grants when location changes
   useEffect(() => {
     if (isMountedDist.current) {
-      console.log(4);
       searchDocs.forEach((searchDoc) => {
         if (location.address !== '') {
           searchDoc.dist = helper.calcDistance(location.lat, location.long, searchDoc.data.lat, searchDoc.data.long);

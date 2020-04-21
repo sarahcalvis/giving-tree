@@ -67,7 +67,6 @@ export default function DDashboard() {
 
   function searchCallback(results) {
     let newGrants = [];
-    console.log(results);
     results.forEach((searchDoc) => {
       newGrants.push(
         <SmallGrantCard
