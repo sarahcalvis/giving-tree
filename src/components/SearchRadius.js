@@ -34,16 +34,16 @@ export default function SearchRadius(props) {
     props.parentCallback(event.target.value);
   };
 
-  React.useEffect(() => {
-    if (props.loc && radius == -1) {
-      setRadius(25)
-      props.parentCallback(25);
-    }
-    if (!props.loc) {
-      setRadius(-1)
-      props.parentCallback(-1);
-    }
-  }, [props.loc])
+  // React.useEffect(() => {
+  //   if (props.loc && radius == -1) {
+  //     setRadius(25)
+  //     props.parentCallback(25);
+  //   }
+  //   if (!props.loc) {
+  //     setRadius(-1)
+  //     props.parentCallback(-1);
+  //   }
+  // }, [props.loc])
 
   return (
     <div>
