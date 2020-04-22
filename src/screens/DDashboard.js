@@ -6,6 +6,7 @@ import { useCollection } from 'react-firebase-hooks/firestore';
 import firebase from '../firebase.js';
 import Search from '../components/Search';
 import { makeStyles } from '@material-ui/core/styles';
+import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -19,7 +20,7 @@ export default function DDashboard() {
 
   // Initialize database and specific grant in database
   const db = firebase.firestore();
-  const [docs, setDocs] = React.useState();
+  const [docs, setDocs] = React.useState([]);
   const [snapshot, loading, error] = useCollection(db.collection('grants'));
 
   useEffect(() => {
@@ -29,9 +30,8 @@ export default function DDashboard() {
       snapshot.forEach(function (doc) {
         const fbData = doc.data();
         //comparing by seconds vs milliseconds
-        if (fbData.status === 'current') {   
+        if (fbData.status === 'current') {
           newDocs.push({
-            dist: -1,
             id: doc.id,
             title: fbData.title,
             cfName: fbData.cf_name,
@@ -65,20 +65,22 @@ export default function DDashboard() {
     }
   }, [snapshot, error, loading]);
 
-  function searchCallback(childData) {
-    var newGrants = [];
-    childData.forEach((meta) => {
+  function searchCallback(results) {
+    let newGrants = [];
+    results.forEach((searchDoc) => {
       newGrants.push(
         <SmallGrantCard
-          id={meta.grant.id}
-          title={meta.grant.title}
-          cfName={meta.grant.cfName}
-          nonprofitName={meta.grant.nonprofitName}
-          goalAmt={meta.grant.goalAmt}
-          moneyRaised={meta.grant.moneyRaised}
-          img={meta.grant.img} />
+          id={searchDoc.data.id}
+          title={searchDoc.data.title}
+          cfName={searchDoc.data.cfName}
+          nonprofitName={searchDoc.data.nonprofitName}
+          goalAmt={searchDoc.data.goalAmt}
+          moneyRaised={searchDoc.data.moneyRaised}
+          img={searchDoc.data.img} />
       );
     });
+    if (newGrants.length === 0) newGrants.push(<Typography component="h1" variant="h4" >Sorry, no results were found.</Typography>);
+
     setGrants(newGrants);
   }
 
@@ -86,7 +88,7 @@ export default function DDashboard() {
 
   return (
     <Container maxWidth='md' className={classes.container}>
-      {docs &&
+      {docs && docs?.length !== 0 &&
         <div>
           <Search docs={docs} parentCallback={searchCallback} />
           <Grid container spacing={2} >

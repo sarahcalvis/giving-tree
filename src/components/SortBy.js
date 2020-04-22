@@ -47,9 +47,10 @@ export default function SortBy(props) {
           </MenuItem>
           <MenuItem value={"deadline"}>Deadline</MenuItem>
           <MenuItem value={"posting"}>Posting Date</MenuItem>
-          <MenuItem value={"goalD"}>% of Goal Desc.</MenuItem>
-          <MenuItem value={"goalI"}>% of Goal Inc.</MenuItem>
-          <MenuItem value={"size"}>Goal Size</MenuItem>
+          <MenuItem value={"goalD"}>Goal % (Desc.)</MenuItem>
+          <MenuItem value={"goalI"}>Goal % (Asc.)</MenuItem>
+          <MenuItem value={"sizeD"}>Goal Size (Desc.)</MenuItem>
+          <MenuItem value={"sizeI"}>Goal Size (Asc.)</MenuItem>
         </Select>
       </FormControl>
     </div>
