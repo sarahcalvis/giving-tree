@@ -115,7 +115,6 @@ function FDashboard(props) {
         const fbData = doc.data();
         if (fbData.cf_id === user?.cfId) {
           newDocs.push({
-            dist: -1,
             id: doc.id,
             title: fbData.title,
             cfName: fbData.cf_name,
@@ -159,24 +158,25 @@ function FDashboard(props) {
     }
   }, [snapshot, error, loading]);
 
-  function searchCallback(childData) {
+  function searchCallback(results) {
     var curGrants = [];
     var exGrants = [];
     var drGrants = [];
-    childData.forEach((meta) => {
+    results.forEach((searchDoc) => {
+
       let grant = <SmallGrantCard
-        id={meta.grant.id}
-        title={meta.grant.title}
-        cfName={meta.grant.cfName}
-        nonprofitName={meta.grant.nonprofitName}
-        goalAmt={meta.grant.goalAmt}
-        moneyRaised={meta.grant.moneyRaised}
-        img={meta.grant.img} />
-      if (meta.grant.status === 'current') {
+          id={searchDoc.data.id}
+          title={searchDoc.data.title}
+          cfName={searchDoc.data.cfName}
+          nonprofitName={searchDoc.data.nonprofitName}
+          goalAmt={searchDoc.data.goalAmt}
+          moneyRaised={searchDoc.data.moneyRaised}
+          img={searchDoc.data.img} />
+      if (searchDoc.data.status === 'current') {
         curGrants.push(grant);
-      } else if (meta.grant.status === 'draft') {
+      } else if (searchDoc.data.status === 'draft') {
         drGrants.push(grant);
-      } else if (meta.grant.status === 'expired') {
+      } else if (searchDoc.data.status === 'expired') {
         exGrants.push(grant);
       }
     });
