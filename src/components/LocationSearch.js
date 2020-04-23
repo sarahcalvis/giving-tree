@@ -28,10 +28,10 @@ export default function LocationSearch(props) {
   const gck = k1+k2+k3;
   Geocode.setApiKey(gck);
   const [inputValue, setInputValue] = React.useState("");
+  const [locationVal, setLocationVal] = React.useState("");
   const [options, setOptions] = React.useState([]);
   const loaded = React.useRef(false);
   if (typeof window !== "undefined" && !loaded.current) {
-    //console.log(document.querySelector("#google-maps"));
     if (!document.querySelector("#google-maps")) {
       loadScript(
         "https://maps.googleapis.com/maps/api/js?key=AIzaSyA8f5dVQik-rPn3dyWa4-jS-A7tnZj5p5Y&libraries=places",
@@ -48,22 +48,23 @@ export default function LocationSearch(props) {
   }
 
   const handleChange = (event, value) => {
-    if (!(value === null)) {
-      console.log("event: ", event);
-      console.log("value: ", value);
+    setLocationVal(value);
+    if (value && typeof value !== 'undefined' && value.description.trim() !== '') {
       Geocode.fromAddress(value.description).then(
         response => {
           const { lat, lng } = response.results[0].geometry.location;
-          console.log("got into the change response? ");
           props.parentCallback({address: value, lat: lat, long: lng});
         },
         error => {
-          props.parentCallback({address: "1421 Bolling Avenue, Norfolk, VA, USA", lat: 80, long: -40});
-          console.log("didn't get a response :(");
-          console.error(error);
+          props.parentCallback({address: '', lat: 0, long: 0});
+          console.error("Error: Location could not be found.", error);
         }
       );
     }
+    else{
+      props.parentCallback({address: '', lat: 0, long: 0});
+    }
+
   };
 
   const fetch = React.useMemo(
@@ -112,6 +113,7 @@ export default function LocationSearch(props) {
       fullWidth
       includeInputInList
       disableOpenOnFocus
+      value={(props.clearLocationVal) ? '' : locationVal}
       defaultValue={props.address}
       onChange={handleChange}
       renderInput={params => (

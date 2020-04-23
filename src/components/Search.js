@@ -1,192 +1,171 @@
-import React, {Component} from 'react';
-import { withStyles } from '@material-ui/styles';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
+import { makeStyles } from "@material-ui/core/styles";
 import Grid from '@material-ui/core/Grid';
 
-import * as helper from '../helpers/SearchHelper.js'; 
+import * as helper from '../helpers/SearchHelper.js';
 
 import LocationSearch from "./LocationSearch";
 import SearchRadius from "./SearchRadius";
 import SortBy from "./SortBy";
 import TagSearch from "./TagSearch";
 
- const styles = theme => ({
+const useStyles = makeStyles(theme => ({
   searchWrapper: {
     display: 'flex',
     'flex-wrap': 'wrap',
+    padding: theme.spacing(2),
   },
   paper: {
     padding: theme.spacing(2),
     maxWidth: 400,
   },
-});
-class Search extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      radius: -1,
-      centerLoc: {
-        address: "no where",
-        lat : -1000, 
-        long : -1000,
-      },
-      sortBy: "",
-      tempMeta: [],
-      radiusResults: [],
-      tftResults: [],
-      sortedResults: [],
-      metaGrants: [],
-      tags: [],
-      freeText: [],
-    };
-  }
+}));
 
-  componentWillMount() {
-    var newMetaGrants = [];
-    this.props.docs.forEach((doc) => {
-      newMetaGrants.push({
-        dist: -1,
-        grant: doc,
+export default function Search(props) {
+  const classes = useStyles();
+
+  //State Variables
+  const [searchDocs, setSearchDocs] = useState([{ dist: -1, data: {} }]);
+  const [searchResults, setSearchResults] = useState([{ dist: -1, data: {} }]);
+  const [tagSearchResults, setTagSearchResults] = useState({ tags: [], freeText: [] });
+  const [radius, setRadius] = useState(-1);
+  const [location, setLocation] = useState({ address: '', lat: 0, long: 0 });
+  const [clearLocationVal, setClearLocationVal] = useState(false);
+  const [sortBy, setSortBy] = useState('');
+  const [updateDistCount, setUpdateDistCount] = useState(0);
+
+  //Destructure props
+  const props_docs = props.docs;
+  const memoizedParentCallback = useCallback(props.parentCallback, [props.parentCallback]);
+
+  //Heckin Hacky Code
+  const isMountedFilter = useRef(0);
+  const isMountedSort = useRef(false);
+  const isMountedDist = useRef(false);
+
+  //Load docs from dashboard
+  useEffect(() => {
+    let newSearchDocs = [];
+    props_docs.forEach((doc) => {
+      newSearchDocs.push({ dist: -1, data: doc });
+    });
+    setSearchDocs(newSearchDocs);
+  }, [props_docs]);
+
+  //Filters the results when search component values change
+  useEffect(() => {
+    if (isMountedFilter.current >= 2) {
+      let results = searchDocs.filter((searchDoc) => {
+        const { tags, freeText } = tagSearchResults;
+        const dat = searchDoc.data;
+        const dist = searchDoc.dist;
+
+        //Check that doc includes all tags in the search
+        if (tags.length !== 0) {
+          const lcTags = dat.tags.map(t => t.toLowerCase());
+          if (!tags.every(tag => (lcTags).includes(tag.toLowerCase()))) return false;
+        }
+        //Check that doc includes all free text in the search
+        if (freeText.length !== 0) {
+          const docText = (dat.desc + dat.title + dat.nonprofitName + dat.cfName).toLowerCase();
+          if (!freeText.every(el => (docText).includes(el.toLowerCase()))) return false;
+        }
+        //Check that doc is within the radius specified
+        if (radius !== -1 && dist > radius) return false;
+
+        return true;
       });
-    });
-    this.setState({
-      metaGrants: newMetaGrants, 
-      radiusResults: newMetaGrants, 
-      tftResults: newMetaGrants,
-      sortedResults: newMetaGrants
-    });
-  }
 
-  tagFreeTextCallback = (tagsAndFreeText) => {
-    this.setState({tags: tagsAndFreeText.tags, freeText: tagsAndFreeText.freeText}, () => {
-      //console.log("tags and free text: ", tagsAndFreeText);
-      if(!(this.state.tags === [] && this.state.freeText === [])) {
-        this.setByTags();
-      }
-    });
-  }
-
-  addByTag = (doc) => {
-    var tempTemp = this.state.tempMeta;
-    if((this.state.tags).every(tag => (doc.grant.tags).includes(tag))) {
-      tempTemp.push({dist: doc.dist, grant: doc.grant});
-      this.setState({tempMeta: tempTemp, tftResults: tempTemp});
-    }
-  }
-
-  setByTags = () => { 
-    var myMeta = this.state.metaGrants;
-    this.setState({tempMeta: [], tftResults: []}, () => {
-      (myMeta).forEach(this.addByTag);
-      this.setByFreeText();
-    });   
-  }
-
-  addByFreeText = (doc) => {
-    var tempTemp = this.state.tempMeta;
-    var docText = (doc.grant.desc + doc.grant.title + doc.grant.nonprofitName + doc.grant.cfName).toLowerCase();
-    if((this.state.freeText).every(freeText => (docText).includes(freeText.toLowerCase()))) {
-      //console.log("np name: ", doc.grant.nonprofitName);
-      tempTemp.push({dist: doc.dist, grant: doc.grant});
-      this.setState({tempMeta: tempTemp, tftResults: tempTemp});
-    }
-  }
-
-  setByFreeText = () => { 
-    var myMeta = this.state.tempMeta;
-    this.setState({tempMeta: [], tftResults: []}, () => {
-      (myMeta).forEach(this.addByFreeText);
-      this.locationCallback(this.state.radius);
-    });   
-  }
-
-  radiusCallback = (radius) => {  
-    //console.log("central location: ", this.state.centerLoc);  
-    var newRadRes = [];  
-    if(radius === -1) {
-      newRadRes = this.state.tftResults;
+      setSearchResults(results);
     }
     else {
-      this.state.tftResults.forEach((meta) => {
-        //console.log("distance from center: ", meta.dist);
-        //console.log("radius: ", radius);
-        //console.log("meta.dist < radius", meta.dist < radius);
-        if(meta.dist < radius) {
-          newRadRes.push(meta);
-          //console.log("radius grant results: ", newRadRes);
-        }
-      }); 
+      isMountedFilter.current += 1;
     }
-    this.setState({radiusResults: newRadRes}, ()=>{
-      this.sortByCallback(this.state.sortBy);
-    });
-    
-  }
+  }, [searchDocs, tagSearchResults, updateDistCount, radius]);
 
-  locationCallback = (location) => {
-    this.setState({centerLoc: location}, () => {
-      console.log("new location: ", location);
-      this.setDists();
-    });
-  }
+  //Sorts and returns the search results when either they or sortBy changes
+  useEffect(() => {
+    if (isMountedSort.current) {
+      let sortedResults = searchResults.slice();
+      sortedResults.sort((a, b) => { return (a.data.dist - b.data.dist) });
 
-  addDist = (doc) => {
-    let newDist = helper.calcDistance(this.state.centerLoc.lat, this.state.centerLoc.long, doc.grant.lat, doc.grant.long);
-    var tempTemp = this.state.tempMeta;
-    tempTemp.push({dist: newDist, grant: doc.grant});
-    tempTemp.sort((a, b) => { return (a.dist - b.dist)});
-    this.setState({tempMeta: tempTemp}
-    );
-  }
+      switch (sortBy) {
+        case "deadline":
+          sortedResults.sort((a, b) => { return (a.data.dateDeadline.seconds - b.data.dateDeadline.seconds) });
+          break;
+        case "posting":
+          sortedResults.sort((a, b) => { return (a.data.datePosted.seconds - b.data.datePosted.seconds) });
+          break;
+        case "goalD":
+          sortedResults.sort((a, b) => { return ((b.data.moneyRaised / b.data.goalAmt) - (a.data.moneyRaised / a.data.goalAmt)) });
+          break;
+        case "goalI":
+          sortedResults.sort((a, b) => { return ((a.data.moneyRaised / a.data.goalAmt) - (b.data.moneyRaised / b.data.goalAmt)) });
+          break;
+        case "sizeI":
+          sortedResults.sort((a, b) => { return (a.data.goalAmt - b.data.goalAmt) });
+          break;
+        case "sizeD":
+          sortedResults.sort((a, b) => { return (b.data.goalAmt - a.data.goalAmt) });
+          break;
+        default:
+      }
 
-  setDists = () => {
-    var localGrants = this.state.tftResults; 
-    this.setState({tempMeta: []}, () => {
-      localGrants.forEach(this.addDist); 
-      this.setState({tftResults: this.state.tempMeta}, ()=> {
-        this.radiusCallback(this.state.radius);
+      memoizedParentCallback(sortedResults);
+    }
+    else {
+      isMountedSort.current = true;
+    }
+  }, [sortBy, searchResults]);
+
+  //Updates the distances of grants when location changes
+  useEffect(() => {
+    if (isMountedDist.current) {
+      searchDocs.forEach((searchDoc) => {
+        if (location.address !== '') {
+          searchDoc.dist = helper.calcDistance(location.lat, location.long, searchDoc.data.lat, searchDoc.data.long);
+        }
+        else searchDoc.dist = -1;
       });
-    });
+      setUpdateDistCount(u => u + 1); //Bad practice
+    }
+    else {
+      isMountedDist.current = true;
+    }
+  }, [location, searchDocs]);
+
+
+  const tagFreeTextCallback = (tagsAndFreeText) => setTagSearchResults({ tags: tagsAndFreeText.tags, freeText: tagsAndFreeText.freeText });
+  const radiusCallback = (radius) => {
+    if (radius === -1) {
+      setLocation({ address: '', lat: 0, long: 0 });
+      setClearLocationVal(true);
+    }
+    setRadius(radius);
+  }
+  const sortByCallback = (sortBy) => setSortBy(sortBy);
+  const locationCallback = (location) => {
+    setClearLocationVal(false);
+    setLocation(location);
   }
 
-  sortByCallback = (sortBy) => {
-    var sortedBy = this.state.radiusResults; //[this.state.radiusResults || this.state.metaGrants];
-    if(sortBy === "deadline") { 
-      sortedBy.sort((a, b) => { return (a.grant.dateDeadline.seconds - b.grant.dateDeadline.seconds)});
-    } else if(sortBy === "posting") {
-      sortedBy.sort((a, b) => { return (a.grant.datePosted.seconds - b.grant.datePosted.seconds)});
-    } else if(sortBy === "goalD") {
-      sortedBy.sort((a, b) => { return ((b.grant.moneyRaised / b.grant.goalAmt) - (a.grant.moneyRaised / a.grant.goalAmt))});
-    } else if(sortBy === "goalI") {
-      sortedBy.sort((a, b) => { return ((a.grant.moneyRaised / a.grant.goalAmt) - (b.grant.moneyRaised / b.grant.goalAmt))});
-    } else if(sortBy === "size") {
-      sortedBy.sort((a, b) => { return (a.grant.goalAmt - b.grant.goalAmt)});
-    } else {console.log("nothing selected?");}
-    this.setState({sortedResults: sortedBy, sortBy: sortBy}, () => {
-      this.props.parentCallback(sortedBy);
-    });
-  }
-  
-  render() {
-    return (
-      <div className={styles.searchWrapper}>
-        <Grid container spacing={2} >
-          <Grid item xs={12} md={6} lg={4}>
-            <TagSearch parentCallback={this.tagFreeTextCallback}/>
-          </Grid>
-          <Grid item xs={12} md={6} lg={4}>
-            <LocationSearch parentCallback={this.locationCallback}/>
-          </Grid>
-          <Grid item xs={6} lg={2}>
-            <SearchRadius parentCallback={this.radiusCallback}/>
-          </Grid>
-          <Grid item xs={6} lg={2}>
-            <SortBy parentCallback={this.sortByCallback}/>
-          </Grid>
+  return (
+    <div className={classes.searchWrapper}>
+      <Grid container spacing={2} >
+        <Grid item xs={12} md={6} lg={4}>
+          <TagSearch parentCallback={tagFreeTextCallback} />
         </Grid>
-      </div>  
-    );
-  }
+        <Grid item xs={12} md={6} lg={4}>
+          <LocationSearch clearLocationVal={clearLocationVal} parentCallback={locationCallback} />
+        </Grid>
+        <Grid item xs={6} lg={2}>
+          <SearchRadius isDisabled={location.address === ''}
+            parentCallback={radiusCallback} />
+        </Grid>
+        <Grid item xs={6} lg={2}>
+          <SortBy parentCallback={sortByCallback} />
+        </Grid>
+      </Grid>
+    </div>
+  );
 }
-
-export default withStyles(styles)(Search);
-
