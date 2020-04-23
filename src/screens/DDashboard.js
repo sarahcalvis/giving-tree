@@ -5,7 +5,11 @@ import Container from '@material-ui/core/Container';
 import { useCollection } from 'react-firebase-hooks/firestore';
 import firebase from '../firebase.js';
 import Search from '../components/Search';
+import CustomizedExpansionPanels from '../components/CustomizedExpansionPanels.js'
 import { makeStyles } from '@material-ui/core/styles';
+//import { ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails } from '@material-ui/core';
+
+
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -86,6 +90,7 @@ export default function DDashboard() {
 
   return (
     <Container maxWidth='md' className={classes.container}>
+    <CustomizedExpansionPanels />
       {docs &&
         <div>
           <Search docs={docs} parentCallback={searchCallback} />
@@ -97,3 +102,12 @@ export default function DDashboard() {
     </Container>
   );
 }
+
+
+
+
+
+
+
+
+
