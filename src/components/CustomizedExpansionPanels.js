@@ -64,7 +64,7 @@ export default function CustomizedExpansionPanels() {
 
   return (
     <div>
-      <ExpansionPanel square onChange={handleChange('panel1')}>
+      <ExpansionPanel square defaultExpanded onChange={handleChange('panel1')}>
         <ExpansionPanelSummary  aria-controls="panel1d-content" id="panel1d-header" expandIcon={<ExpandMoreIcon/>}>
           <Typography  variant={'h5'}>Welcome to Giving Tree</Typography>
         </ExpansionPanelSummary>
