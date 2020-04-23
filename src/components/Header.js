@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
 
-import logo from '../iconSmall.png';
+import logo from '../gtIcon.png';
 import { withAuthConsumer } from '../auth';
 import firebase from '../firebase.js';
 
