@@ -70,10 +70,7 @@ export default function CustomizedExpansionPanels() {
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
           <Typography>
-          Giving Tree connects nonprofit foundations with potential donors. Foundations post giving 
-          opportunities and their details, so that donors can browse the various opportunities that 
-          have been made available. You can search for giving opportunities by tag, free-text, and/or 
-          location. We hope you will make a difference through this platform!
+          Giving Tree connects nonprofit organizations with potential donors through community foundations. A Community Foundation is a nonprofit organization which manages and distributes money for charitable giving. Foundations learn about the specific needs of nonprofits in their area and post these "giving opportunities" on Giving Tree, where they are visible to members of the community like yourself. You can search for, view, and donate to giving opportunities that interest you. Every dollar makes a difference!
           </Typography>
         </ExpansionPanelDetails>
       </ExpansionPanel>
