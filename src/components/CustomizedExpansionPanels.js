@@ -6,8 +6,14 @@ import { withStyles } from '@material-ui/core/styles';
 import MuiExpansionPanel from '@material-ui/core/ExpansionPanel';
 import MuiExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import MuiExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import { makeStyles } from '@material-ui/core/styles';
+import '../App.css';
 
-
+const useStyles = makeStyles(theme => ({
+  title: {
+    fontFamily: 'Fredericka the Great',
+  },
+}));
 
 const ExpansionPanel = withStyles({
   root: {
@@ -57,6 +63,7 @@ const ExpansionPanelDetails = withStyles((theme) => ({
 
 export default function CustomizedExpansionPanels() {
   const [expanded, setExpanded] = React.useState('panel1');
+  const classes = useStyles();
 
   const handleChange = (panel) => (event, newExpanded) => {
     setExpanded(newExpanded ? panel : false);
@@ -66,7 +73,7 @@ export default function CustomizedExpansionPanels() {
     <div>
       <ExpansionPanel square defaultExpanded onChange={handleChange('panel1')}>
         <ExpansionPanelSummary  aria-controls="panel1d-content" id="panel1d-header" expandIcon={<ExpandMoreIcon/>}>
-          <Typography  variant={'h5'}>Welcome to Giving Tree</Typography>
+          <Typography  variant={'h5'} className={classes.title}>Welcome to Giving Tree</Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
           <Typography>
