@@ -4,6 +4,7 @@ import { Link, withRouter } from 'react-router-dom';
 import logo from '../iconSmall.png';
 import { withAuthConsumer } from '../auth';
 import firebase from '../firebase.js';
+import '../App.css';
 
 import { makeStyles } from '@material-ui/core/styles';
 import { AppBar, Toolbar, IconButton, Typography, MenuItem, Menu } from '@material-ui/core';
@@ -18,6 +19,7 @@ const useStyles = makeStyles(theme => ({
   },
   title: {
     flexGrow: 1,
+    fontFamily: 'Fredericka the Great',
   },
   appBar: {
     position: "sticky",
