@@ -224,6 +224,7 @@ function Grant(props) {
                     tags={grantData.tags}
                     datePosted={formatDate(grantData.date_posted.seconds)}
                     dateDeadline={formatDate(grantData.date_deadline.seconds)}
+                    address={grantData.address}
                     img={img}
                     cfData={cfData}
                     nonprofitData={nonprofitData}
