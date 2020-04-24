@@ -76,9 +76,9 @@ export default function CustomizedExpansionPanels() {
           <Typography  variant={'h5'} className={classes.title}>Welcome to Giving Tree</Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
-          <Typography>
-          Giving Tree connects nonprofit organizations with potential donors through community foundations. A Community Foundation is a nonprofit organization which manages and distributes money for charitable giving. Foundations learn about the specific needs of nonprofits in their area and post these "giving opportunities" on Giving Tree, where they are visible to members of the community like yourself. You can search for, view, and donate to giving opportunities that interest you. Every dollar makes a difference!
-          </Typography>
+        <span style={{'fontWeight': 380, textAlign: 'center'}}>
+          Giving Tree connects nonprofit organizations with potential donors through community foundations (regional nonprofit organizations which manage and distribute money for charitable giving). Foundations learn about the specific needs of nonprofits in their area and post these "giving opportunities" on Giving Tree, where they are visible to members of the community like yourself. You can search for, view, and donate to giving opportunities that interest you. Every dollar makes a difference!
+          </span>
         </ExpansionPanelDetails>
       </ExpansionPanel>
     </div>

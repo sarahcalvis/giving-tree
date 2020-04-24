@@ -176,7 +176,7 @@ export default function EditGrant(props) {
         <Grid item xs={12} sm={6}>
           <div className={classes.padding}>
             <Text type='card-heading' text='Tags' />
-            <Text type='card-subheading' text={'Search for a tag or create a new tag to help donors find the grants they are looking for.'} />
+            <Text type='card-subheading' text={'Search for a tag or create a new tag to help donors find the grants they are looking for. Press enter after typing in each tag.'} />
             <TagSearch
               parentCallback={tagsCallback}
               textLabel="Select Tags"

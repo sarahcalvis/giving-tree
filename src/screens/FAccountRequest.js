@@ -203,8 +203,7 @@ class FAccountRequest extends Component {
           </Avatar>
           <Text type='card-heading' text={'Foundation Account Request'} />
 
-
-          {!authUser &&
+          {(authUser?.status !== 'current') &&
             <form className={classes.form} onSubmit={this.onSubmit} noValidate>
               <Grid container spacing={2}>
                 <Container maxWidth="xs" className={classes.marginBottom}>
@@ -397,7 +396,7 @@ class FAccountRequest extends Component {
               </Grid>
             </form>
           }
-          {!!authUser &&
+          {(authUser?.status === 'current') &&
             <Typography component="h1" variant="h4" className={classes.header}>You're already logged in!</Typography>
           }
         </div>

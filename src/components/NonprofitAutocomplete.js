@@ -37,7 +37,7 @@ export default function NonprofitAutocomplete(props) {
     }
     else {
       for (let i in nonprofits) {
-        if (nonprofits[i].id === props.initialNonprofit) {
+        if (nonprofits[i]?.id === props.initialNonprofit) {
           setSelected(i);
           break;
         }
@@ -47,7 +47,7 @@ export default function NonprofitAutocomplete(props) {
 
   // Map nonprofit objects to labels
   let transformedNonprofits = Object.values(nonprofits).map((item) => {
-    item.dataLabel = item.name;
+    item.dataLabel = item?.name;
     return item;
   })
 
@@ -101,10 +101,10 @@ export default function NonprofitAutocomplete(props) {
   // observe add nonprofit text boxes to see if they are ready for upload
   useEffect(() => {
     setValid(
-      helper.validateField('name', nonprofitData.name) === '' &&
-      helper.validateField('number', nonprofitData.number) === '' &&
-      helper.validateField('email', nonprofitData.email) === '' &&
-      helper.validateField('url', nonprofitData.url) === ''
+      helper.validateField('name', nonprofitData?.name) === '' &&
+      helper.validateField('number', nonprofitData?.number) === '' &&
+      helper.validateField('email', nonprofitData?.email) === '' &&
+      helper.validateField('url', nonprofitData?.url) === ''
     )
   }, [nonprofitData])
 
@@ -112,7 +112,7 @@ export default function NonprofitAutocomplete(props) {
     <div>
       {selected > -1 &&
         <div>
-          {!adding && nonprofits.length > 0 &&
+          {!adding && nonprofits?.length > 0 &&
             <Grid container
               direction='row'
               justify='space-between'
@@ -120,7 +120,7 @@ export default function NonprofitAutocomplete(props) {
               <Grid item xs='8'>
                 <Autocomplete
                   options={transformedNonprofits}
-                  getOptionLabel={nonprofits => nonprofits.name}
+                  getOptionLabel={nonprofits => nonprofits?.name}
                   autoHighlight
                   disableClearable
                   testid='dropdown'
@@ -150,7 +150,7 @@ export default function NonprofitAutocomplete(props) {
           }
           <Grid item>
             {
-              (adding || nonprofits.length === 0) &&
+              (adding || nonprofits?.length === 0) &&
               <Container>
                 <TextField
                   id='name'

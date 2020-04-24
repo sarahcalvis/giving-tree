@@ -71,14 +71,14 @@ function FStripeSetup() {
             <DialogContent>
               <DialogContentText id="alert-dialog-slide-description">
                 <span>Stripe is a third party payment platform that handles customer payment information and allows donors to contribute to your
-                  foundation's giving opportunities. </span>
+                  foundation's giving opportunities.&nbsp;</span>
                 <span>After clicking on the link above, you will be taken to a signup page, where you will be prompted to provide your
-                  foundation's basic information.</span>
+                  foundation's basic information.&nbsp;</span>
                 <span>Additionally, you will be given the opportunity to supply the information that will show up on the donors' banking and
-                  credit card statements.</span>
-                <span>Finally, you will be asked for your bank account number and routing number.</span>
+                  credit card statements.&nbsp;</span>
+                <span>Finally, you will be asked for your bank account number and routing number.&nbsp;</span>
                 <span>Once all the pertinent information has been provided, you can strengthen your account's security with a second step of
-                  authentication.</span>
+                  authentication.&nbsp;</span>
                 <span>If you still have questions about Stripe, please click "Learn More" below!</span>
               </DialogContentText>
             </DialogContent>
