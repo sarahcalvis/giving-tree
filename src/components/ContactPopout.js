@@ -74,9 +74,9 @@ export default function ContactPopout(props) {
             </Link>}
             {!props.nonprofitData?.url && <span>{props.nonprofitData.name}</span>}
             <br/>
-            {props.nonprofitData.phone && 
+            {props.nonprofitData.number && 
             <span>&emsp;&emsp;Call:&nbsp;
-              <Link href={'tel:' + props.nonprofitData.phone}> {props.nonprofitData.phone} </Link>
+              <Link href={'tel:' + props.nonprofitData.number}> {props.nonprofitData.number} </Link>
             </span>}
             {props.nonprofitData.email && 
             <span>&emsp;&emsp;Email:&nbsp;
