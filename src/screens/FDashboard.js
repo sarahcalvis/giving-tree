@@ -12,6 +12,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Link from '@material-ui/core/Link';
+import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import AddIcon from '@material-ui/icons/Add';
 import Button from '@material-ui/core/Button';
@@ -33,6 +34,11 @@ const useStyles = makeStyles(theme => ({
   link: {
     textDecoration: 'none',
   },
+  title: {
+    fontFamily: 'Fredericka the Great',
+    marginTop: '16px',
+    marginBottom: '13px',
+  },
 }));
 
 function FDashboard(props) {
@@ -51,6 +57,7 @@ function FDashboard(props) {
 
   // Foundation ID
   const user = useContext(UserAuthContext);
+  const [cfName, setCfName] = React.useState('');
 
   // Initialize database and specific grant in database
   const db = firebase.firestore();
@@ -114,6 +121,7 @@ function FDashboard(props) {
 
         const fbData = doc.data();
         if (fbData.cf_id === user?.cfId) {
+          if (cfName === '') setCfName(fbData.cf_name);
           newDocs.push({
             id: doc.id,
             title: fbData.title,
@@ -207,6 +215,7 @@ function FDashboard(props) {
       {docs &&
         <div>
           <Grid container spacing={2} direction="column" alignItems="center">
+          <Typography  variant={'h5'} className={classes.title}>{cfName}</Typography>
             <Grid item className={classes.toggleBar}>
               <ToggleButtonGroup id="toggle" size="small" value={toggleBarStatus} exclusive onChange={handleToggle}>
                 {buttonOptions}
